@@ -8,4 +8,10 @@ if(process.env.NODE_ENV === 'development'){
     url_config = 'https://*****.com/'
 }
 
-export default url_config
+//变速箱
+const transmissionConfig = ['不限', '手动', '自动'];
+
+export default {
+	url_config,
+	transmissionConfig
+	}

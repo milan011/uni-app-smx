@@ -31,8 +31,12 @@
 		},
 	}
 </script>
-
+<style>
+	/* uni.css - 通用组件、模板样式库，可以当作一套ui库应用 */
+	@import './common/uni.css';
+</style>
 <style lang='scss'>
+	
 	/*
 		全局公共样式和字体图标
 	*/

@@ -4,6 +4,7 @@ import App from './App'
 // import uniRequest from './common/request' //request封装
 
 import Json from './Json' //测试用数据
+import Config from './common/config' //配置数据
 /**
  *  因工具函数属于公司资产, 所以直接在Vue实例挂载几个常用的函数
  *  所有测试用数据均存放于根目录json.js
@@ -32,6 +33,15 @@ const json = type=>{
 	})
 }
 
+const config = type=>{
+	//模拟异步请求数据
+	return new Promise(resolve=>{
+		setTimeout(()=>{
+			resolve(Config[type]);
+		}, 500)
+	})
+}
+
 const prePage = ()=>{
 	let pages = getCurrentPages();
 	let prePage = pages[pages.length - 2];
@@ -46,7 +56,7 @@ Vue.config.productionTip = false
 Vue.prototype.$fire = new Vue();
 Vue.prototype.$store = store;
 // Vue.prototype.$request = uniRequest;
-Vue.prototype.$api = {msg, json, prePage};
+Vue.prototype.$api = {msg, json, prePage, config};
 
 App.mpType = 'app'
 

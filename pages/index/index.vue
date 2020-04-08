@@ -62,177 +62,69 @@
 			</view> -->
 		</view>
 		
-		<view class="ad-1">
+		<!-- <view class="ad-1">
 			<image src="/static/temp/ad1.jpg" mode="scaleToFill"></image>
-		</view>
-		
-		<!-- 秒杀楼层 -->
-		<view class="seckill-section m-t">
-			<view class="s-header">
-				<image class="s-img" src="/static/temp/secskill-img.jpg" mode="widthFix"></image>
-				<text class="tip">8点场</text>
-				<text class="hour timer">07</text>
-				<text class="minute timer">13</text>
-				<text class="second timer">55</text>
-				<text class="yticon icon-you"></text>
+		</view> -->
+		<!-- 快捷筛选 -->
+		<view class="order-section">
+			<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover"  :hover-stay-time="50">
+				<text>5万以下</text>
 			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-				</view>
-			</scroll-view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=1')"  hover-class="common-hover" :hover-stay-time="50">
+				<text>5-10万</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=2')" hover-class="common-hover"  :hover-stay-time="50">
+				<text>10-15万</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+				<text>15万以上</text>
+			</view>
 		</view>
-		
-		<!-- 团购楼层 -->
+		<view class="order-section">
+			<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover"  :hover-stay-time="50">
+				<!-- <icon type="success" size="16"/> -->
+				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<text>雪佛兰</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=1')"  hover-class="common-hover" :hover-stay-time="50">
+				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<text>大众</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=2')" hover-class="common-hover"  :hover-stay-time="50">
+				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<text>五菱</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<text>福特</text>
+			</view>		
+		</view>
+		<view class="order-section">			
+			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<text>奥迪</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<text>宝马</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<text>本田</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<text>更多</text>
+			</view>
+		</view>	
+		<!-- 车型推荐 -->
 		<view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
-				<text class="tit">精品团购</text>
-				<text class="tit2">Boutique Group Buying</text>
+				<text class="tit">好车推荐</text>
+				<text class="tit2">为您精选好车</text>
 			</view>
-			<text class="yticon icon-you"></text>
-		</view>
-		<view class="group-section">
-			<swiper class="g-swiper" :duration="500">
-				<swiper-item
-					class="g-swiper-item"
-					v-for="(item, index) in goodsList" :key="index"
-					v-if="index%2 === 0"
-					@click="navToDetailPage(item)"
-				>
-					<view class="g-item left">
-						<image :src="item.image" mode="aspectFill"></image>
-						<view class="t-box">
-							<text class="title clamp">{{item.title}}</text>
-							<view class="price-box">
-								<text class="price">￥{{item.price}}</text> 
-								<text class="m-price">￥188</text> 
-							</view>
-							
-							<view class="pro-box">
-							  	<view class="progress-box">
-							  		<progress percent="72" activeColor="#fa436a" active stroke-width="6" />
-							  	</view>
-								<text>6人成团</text>
-							</view>
-						</view>
-						            
-					</view>
-					<view class="g-item right">
-						<image :src="goodsList[index+1].image" mode="aspectFill"></image>
-						<view class="t-box">
-							<text class="title clamp">{{goodsList[index+1].title}}</text>
-							<view class="price-box">
-								<text class="price">￥{{goodsList[index+1].price}}</text> 
-								<text class="m-price">￥188</text> 
-							</view>
-							<view class="pro-box">
-							  	<view class="progress-box">
-							  		<progress percent="72" activeColor="#fa436a" active stroke-width="6" />
-							  	</view>
-								<text>10人成团</text>
-							</view>
-						</view>
-					</view>
-				</swiper-item>
-
-			</swiper>
-		</view>
-		
-		
-		
-		<!-- 分类推荐楼层 -->
-		<view class="f-header m-t">
-			<image src="/static/temp/h1.png"></image>
-			<view class="tit-box">
-				<text class="tit">分类精选</text>
-				<text class="tit2">Competitive Products For You</text>
-			</view>
-			<text class="yticon icon-you"></text>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409398864&di=4a12763adccf229133fb85193b7cc08f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201703%2F19%2F20170319150032_MNwmn.jpeg" mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409984228&di=dee176242038c2d545b7690b303d65ea&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F5ef4da9f17faaf4612f0d5046f4161e556e9bbcfdb5b-rHjf00_fw658" mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image3" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409794730&di=12b840ec4f5748ef06880b85ff63e34e&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01dc03589ed568a8012060c82ac03c.jpg%40900w_1l_2o_100sh.jpg" mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image2" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-
-		<!-- 猜你喜欢 -->
-		<view class="f-header m-t">
-			<image src="/static/temp/h1.png"></image>
-			<view class="tit-box">
-				<text class="tit">猜你喜欢</text>
-				<text class="tit2">Guess You Like It</text>
-			</view>
-			<text class="yticon icon-you"></text>
+			<!-- <text class="yticon icon-you"></text> -->
 		</view>
 		
 		<view class="guess-section">
@@ -242,10 +134,11 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="item.filename" mode="aspectFit"></image>
 				</view>
-				<text class="title clamp">{{item.title}}</text>
-				<text class="price">￥{{item.price}}</text>
+				<!-- <text class="title clamp">{{item.FullName}}</text> -->
+				<view>{{item.FullName}}</view>
+				<text class="price">￥{{item.SaleAMT}}</text>
 			</view>
 		</view>
 		
@@ -302,7 +195,9 @@
 			//详情页
 			navToDetailPage(item) {
 				//测试数据没有写id，用title代替
-				let id = item.title;
+				console.log(item)
+				// return false
+				let id = item.ID;
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
@@ -420,6 +315,41 @@
 			width: 100%;
 			height: 426upx;
 			transition: .4s;
+		}
+	}
+	// 快捷筛选
+	%flex-center {
+	 display:flex;
+	 flex-direction: column;
+	 justify-content: center;
+	 align-items: center;
+	}
+	%section {
+	  display:flex;
+	  justify-content: space-around;
+	  align-content: center;
+	  background: #fff;
+	  border-radius: 10upx;
+	}
+	.order-section{
+		@extend %section;
+		// padding: 28upx 0;
+		// margin-top: 20upx;
+		.order-item{
+			@extend %flex-center;
+			width: 200upx;
+			height: 100upx;
+			border-radius: 10upx;
+			font-size: $font-sm;
+			color: $font-color-dark;
+		}
+		.yticon{
+			font-size: 48upx;
+			margin-bottom: 18upx;
+			color: #fa436a;
+		}
+		.icon-shouhoutuikuan{
+			font-size:44upx;
 		}
 	}
 	.carousel {

@@ -142,7 +142,7 @@
 		 
 		methods: {
 			//获取订单列表
-			loadData(source){
+			loadData(source){				
 				//这里是将订单挂载到tab列表下
 				let index = this.tabCurrentIndex;
 				let navItem = this.navList[index];
