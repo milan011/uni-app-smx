@@ -141,8 +141,6 @@
 				<text class="price">￥{{item.SaleAMT}}</text>
 			</view>
 		</view>
-		
-
 	</view>
 </template>
 
@@ -201,6 +199,9 @@
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
+				/* uni.redirectTo({ //使用redirectTo跳转到页面会显示tabBar
+					url: `/pages/product/product?id=${id}`
+				}) */
 			},
 			searchCar(){
 				alert('sld')
@@ -242,6 +243,9 @@
 	}
 	.my-style /deep/ .uni-navbar__header-btns-left{
 		width:80px;
+	}
+	.my-style /deep/ .uni-navbar__content{
+		width:100%;
 	}
 </style>
 <style lang="scss">

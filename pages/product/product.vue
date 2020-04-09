@@ -119,7 +119,7 @@
 				</view>
 			</view>
 		</view>
-		
+		<!-- 基本信息begin -->
 		<view class="eva-section">
 			<view class="e-header">
 				<text class="tit">基本信息</text>
@@ -127,7 +127,6 @@
 				<text class="yticon icon-you"></text>
 			</view> 
 			<view class="eva-box">
-				<!-- <image class="portrait" src="http://img3.imgtn.bdimg.com/it/u=1150341365,1327279810&fm=26&gp=0.jpg" mode="aspectFill"></image> -->
 				<view class="right">
 					<view class="tj-sction">
 						<view class="tj-item">
@@ -140,7 +139,6 @@
 						</view>
 						<view class="tj-item">
 							<text class="num">{{ transmissionConfig[carDetail.cars.Transmission] }}</text>
-							<!-- <text class="num">{{ transmissionConfig[2] }}</text> -->
 							<text>变速箱</text>
 						</view>						
 					</view>
@@ -163,6 +161,7 @@
 				</view>
 			</view>
 		</view>
+		<!-- 基本信息end -->
 		<!-- <view v-if="allParamShow" class="c-list">
 			<view class="c-row b-b" @click="toggleSpec">
 				<text class="tit">全部参数配置</text>
@@ -181,6 +180,7 @@
 			</view>
 			<rich-text :nodes="carDetail.cars.Description"></rich-text>
 		</view> -->
+		<!-- 车况检测begin -->
 		<view class="eva-section">
 			<view class="e-header">
 				<text class="tit">车况检测</text>
@@ -194,8 +194,34 @@
 				</view>
 			</view>
 		</view>
+		<!-- 车况检测end -->
+		<!-- 猜你喜欢begin -->
+		<view class="eva-section">
+			<view class="e-header">
+				<text class="tit">猜你喜欢</text>
+			</view> 
+			<view class="eva-box">
+				<view class="right">
+					<view class="guess-section">
+						<view 
+							v-for="(item, index) in recomList" :key="index"
+							class="guess-item"
+							@click="navToDetailPage(item)"
+						>
+							<view class="image-wrapper">
+								<image :src="item.filename" mode="aspectFit"></image>
+							</view>
+							<!-- <text class="title clamp">{{item.FullName}}</text> -->
+							<view>{{item.FullName}}</view>
+							<text class="price">￥{{item.SaleAMT}}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 猜你喜欢end -->
 		<!-- 底部操作菜单 -->
-		<view class="page-bottom">
+		<!-- <view class="page-bottom">
 			<navigator url="/pages/index/index" open-type="switchTab" class="p-b-btn">
 				<text class="yticon icon-xiatubiao--copy"></text>
 				<text>首页</text>
@@ -213,7 +239,7 @@
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
 				<button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button>
 			</view>
-		</view>
+		</view> -->
 		
 		
 		<!-- 规格-模态层弹窗 -->
@@ -236,11 +262,11 @@
 			</view>
 		</view>
 		<!-- 分享 -->
-		<share 
+		<!-- <share 
 			ref="share" 
 			:contentHeight="580"
 			:shareList="shareList"
-		></share>
+		></share> -->
 	</view>
 </template>
 
@@ -278,110 +304,8 @@
 				transmissionConfig: [],
 				imgUrl: 'http://tclapi.simaxian.com',
 				tabCurrentIndex: 0,
-				navList: [{
-						state: 0,
-						text: '车辆参数',
-						loadingType: 'more',
-						paramList: []
-					},
-					{
-						state: 1,
-						text: '基本参数',
-						loadingType: 'more',
-						paramList: []
-					},
-					{
-						state: 2,
-						text: '发动机参数',
-						loadingType: 'more',
-						paramList: []
-					},
-					{
-						state: 3,
-						text: '底盘及制动',
-						loadingType: 'more',
-						paramList: []
-					}
-				],
-				favorite: true,
-				shareList: [],
-				imgList: [
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/TB1RPFPPFXXXXcNXpXXXXXXXXXX_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd2.alicdn.com/imgextra/i2/38832490/O1CN01IYq7gu1UGShvbEFnd_!!38832490.jpg_400x400.jpg'
-					}
-				],
-				desc: `
-					<div style="width:100%">
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i4/479184430/O1CN01nCpuLc1iaz4bcSN17_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd2.alicdn.com/imgextra/i2/479184430/O1CN01gwbN931iaz4TzqzmG_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i3/479184430/O1CN018wVjQh1iaz4aupv1A_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd4.alicdn.com/imgextra/i4/479184430/O1CN01tWg4Us1iaz4auqelt_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd1.alicdn.com/imgextra/i1/479184430/O1CN01Tnm1rU1iaz4aVKcwP_!!479184430.jpg_400x400.jpg" />
-					</div>
-				`,
-				specList: [
-					{
-						id: 1,
-						name: '尺寸',
-					},
-					{	
-						id: 2,
-						name: '颜色',
-					},
-				],
-				specChildList: [
-					{
-						id: 1,
-						pid: 1,
-						name: 'XS',
-					},
-					{
-						id: 2,
-						pid: 1,
-						name: 'S',
-					},
-					{
-						id: 3,
-						pid: 1,
-						name: 'M',
-					},
-					{
-						id: 4,
-						pid: 1,
-						name: 'L',
-					},
-					{
-						id: 5,
-						pid: 1,
-						name: 'XL',
-					},
-					{
-						id: 6,
-						pid: 1,
-						name: 'XXL',
-					},
-					{
-						id: 7,
-						pid: 2,
-						name: '白色',
-					},
-					{
-						id: 8,
-						pid: 2,
-						name: '珊瑚粉',
-					},
-					{
-						id: 9,
-						pid: 2,
-						name: '草木绿',
-					},
-				]
+				recomList: [],
+				favorite: true,			
 			};
 		},
 		async onLoad(options){
@@ -394,7 +318,7 @@
 			
 			
 			//规格 默认选中第一条
-			this.specList.forEach(item=>{
+			/* this.specList.forEach(item=>{
 				for(let cItem of this.specChildList){
 					if(cItem.pid === item.id){
 						this.$set(cItem, 'selected', true);
@@ -403,10 +327,11 @@
 					}
 				}
 			})
-			this.shareList = await this.$api.json('shareList');
+			this.shareList = await this.$api.json('shareList'); */
 			this.carDetail = await this.$api.json('carDetail');
 			this.carVin = await this.$api.json('carVin');
-			
+			this.carCheckStatus = await this.$api.json('checkStatus');
+			this.recomList = await this.$api.json('recomList');
 			this.transmissionConfig = await this.$api.config('transmissionConfig');
 				
 			if(Object.keys(this.carVin).length != 0){ //有vin码返回值时
@@ -414,7 +339,7 @@
 				this.$refs.sonVinInfo.sonAssginVin(this.carVin);
 			}
 			
-			this.$refs.sonStatusInfo.sonAssginStatus(this.carVin);
+			this.$refs.sonStatusInfo.sonAssginStatus(this.carCheckStatus);
 			
 			console.log('empty', Object.keys(this.carVin).length)
 			console.log('carVin', this.carVin)
@@ -480,6 +405,15 @@
 					url: `/pages/order/createOrder`
 				})
 			},
+			navToDetailPage(item) {
+				//测试数据没有写id，用title代替
+				console.log(item)
+				// return false
+				let id = item.ID;
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}`
+				})
+			},
 			stopPrevent(){}
 		},
 
@@ -502,7 +436,10 @@
 	}
 	page{
 		background: $page-color-base;
-		padding-bottom: 160upx;
+		padding-bottom: 160upx;	
+	}
+	uni-page-body{
+		padding-bottom:20px;
 	}
 	.icon-you{
 		font-size: $font-base + 2upx;
@@ -1043,5 +980,41 @@
 			}
 		}
 	}
-	
+	/* 猜你喜欢 */
+	.guess-section{
+		display:flex;
+		flex-wrap:wrap;
+		padding: 0 30upx;
+		background: #fff;
+		.guess-item{
+			display:flex;
+			flex-direction: column;
+			width: 48%;
+			padding-bottom: 40upx;
+			&:nth-child(2n+1){
+				margin-right: 4%;
+			}
+		}
+		.image-wrapper{
+			width: 100%;
+			height: 330upx;
+			border-radius: 3px;
+			overflow: hidden;
+			image{
+				width: 100%;
+				height: 100%;
+				opacity: 1;
+			}
+		}
+		.title{
+			font-size: $font-lg;
+			color: $font-color-dark;
+			line-height: 80upx;
+		}
+		.price{
+			font-size: $font-lg;
+			color: $uni-color-primary;
+			line-height: 1;
+		}
+	}
 </style>

@@ -11,9 +11,12 @@
 				:class="icon"
 			></text>
 			<text class="cell-tit clamp">{{title}}</text>
-			<text v-if="tips" class="cell-tip">{{tips}}</text>
+			<text v-if="tips" class="cell-tip">{{tips}}</text>		
 			<text class="cell-more yticon"
 				:class="typeList[navigateType]"
+				:style="[{
+					color: iconRightColor,
+				}]"
 			></text>
 		</view>
 
@@ -32,6 +35,8 @@
 					left: 'icon-zuo',
 					right: 'icon-you',
 					up: 'icon-shang',
+					success: 'icon-xuanzhong2',
+					waring: 'icon-bangzhu1',
 					down: 'icon-xia'
 				},
 			}
@@ -64,6 +69,10 @@
 			iconColor: {
 				type: String,
 				default: '#333'
+			},
+			iconRightColor:{
+				type: String,
+				default: '#06c638'
 			}
 		},
 		methods: {
