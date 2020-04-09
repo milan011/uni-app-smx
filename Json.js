@@ -1423,6 +1423,459 @@ const checkStatus = {
 	"HasAqCheck": false
 }
 
+const menuExam = [
+	{
+		// name:'智能排序',
+		"type": 'hierarchy',
+		"submenu": [{
+				"name": "智能排序",
+				"value": "智能排序"
+			},
+			{
+				"name": "离我最近",
+				"value": "离我最近"
+			},
+			{
+				"name": "人均从高到低",
+				"value": "人均从高到低"
+			},
+			{
+				"name": "人均从低到高",
+				"value": "人均从低到高"
+			}
+		]
+	},
+	{
+		// "name":'全部分类',
+		"type": 'hierarchy',
+		"submenu": [{
+				"name": '品牌',
+				"value": "品牌",
+				"submenu": [{
+					"name": "品牌",
+					"value": "品牌"
+				}, ]
+			},
+			{
+				"name": 'A',
+				"value": "A",
+				"submenu": [{
+						"name": "全部美食",
+						"value": "全部美食"
+					},
+					{
+						"name": "快餐小吃",
+						"value": "快餐小吃",
+						"submenu": [{
+							"name": "中式快餐",
+							"value": "中式快餐"
+						}, {
+							"name": "西式快餐",
+							"value": "西式快餐"
+						}, {
+							"name": "熟食",
+							"value": "熟食"
+						}, {
+							"name": "面馆面食",
+							"value": "面馆面食"
+						}, {
+							"name": "地方小吃",
+							"value": "地方小吃"
+						}, {
+							"name": "米粉米线",
+							"value": "米粉米线"
+						}, {
+							"name": "粥",
+							"value": "v"
+						}, {
+							"name": "汤",
+							"value": "汤"
+						}, {
+							"name": "麻辣烫",
+							"value": "麻辣烫"
+						}, {
+							"name": "素食轻餐",
+							"value": "素食轻餐"
+						}]
+					},
+					{
+						"name": "休闲茶饮",
+						"value": "休闲茶饮",
+						"submenu": [{
+							"name": "奶茶",
+							"value": "奶茶"
+						}, {
+							"name": "果汁饮品",
+							"value": "果汁饮品"
+						}, {
+							"name": "咖啡",
+							"value": "咖啡"
+						}, {
+							"name": "酒吧",
+							"value": "酒吧"
+						}, {
+							"name": "茶馆",
+							"value": "茶馆"
+						}]
+					},
+					{
+						"name": "面包甜点",
+						"value": "面包甜点",
+						"submenu": [{
+							"name": "面包蛋糕",
+							"value": "面包蛋糕"
+						}, {
+							"name": "甜点",
+							"value": "甜点"
+						}, {
+							"name": "冰淇淋",
+							"value": "冰淇淋"
+						}, {
+							"name": "中式点心",
+							"value": "中式点心"
+						}]
+					},
+					{
+						"name": "中餐地方菜",
+						"value": "中餐地方菜",
+						"submenu": [{
+							"name": "粤菜",
+							"value": "粤菜"
+						}, {
+							"name": "茶餐厅",
+							"value": "茶餐厅"
+						}, {
+							"name": "川菜",
+							"value": "川菜"
+						}, {
+							"name": "西北菜",
+							"value": "西北菜"
+						}, {
+							"name": "湘菜",
+							"value": "湘菜"
+						}, {
+							"name": "江浙菜",
+							"value": "江浙菜"
+						}, {
+							"name": "海鲜河鲜",
+							"value": "海鲜河鲜"
+						}, {
+							"name": "北京菜",
+							"value": "北京菜"
+						}, {
+							"name": "东北菜",
+							"value": "东北菜"
+						}, {
+							"name": "台湾菜",
+							"value": "台湾菜"
+						}, {
+							"name": "创意菜",
+							"value": "创意菜"
+						}, {
+							"name": "湖北菜",
+							"value": "湖北菜"
+						}, {
+							"name": "鲁菜",
+							"value": "鲁菜"
+						}, {
+							"name": "云南菜",
+							"value": "云南菜"
+						}, {
+							"name": "海南菜",
+							"value": "海南菜"
+						}, {
+							"name": "贵州菜",
+							"value": "贵州菜"
+						}, {
+							"name": "农家乐",
+							"value": "农家乐"
+						}, {
+							"name": "闽菜",
+							"value": "闽菜"
+						}, {
+							"name": "清真菜",
+							"value": "清真菜"
+						}, {
+							"name": "徽菜",
+							"value": "徽菜"
+						}, {
+							"name": "豫菜",
+							"value": "豫菜"
+						}]
+					},
+					{
+						"name": "异域料理",
+						"value": "异域料理",
+						"submenu": [{
+							"name": "西餐",
+							"value": "西餐"
+						}, {
+							"name": "日本料理",
+							"value": "日本料理"
+						}, {
+							"name": "东南亚菜",
+							"value": "东南亚菜"
+						}, {
+							"name": "泰国菜",
+							"value": "泰国菜"
+						}, {
+							"name": "印度菜",
+							"value": "印度菜"
+						}]
+					},
+					{
+						"name": "火锅",
+						"value": "火锅",
+						"submenu": [{
+							"name": "川味火锅",
+							"value": "川味火锅"
+						}, {
+							"name": "牛肉火锅",
+							"value": "牛肉火锅"
+						}, {
+							"name": "港式火锅",
+							"value": "港式火锅"
+						}, {
+							"name": "豆捞小火锅",
+							"value": "豆捞小火锅"
+						}, {
+							"name": "鱼火锅",
+							"value": "鱼火锅"
+						}, {
+							"name": "炭火锅",
+							"value": "炭火锅"
+						}, {
+							"name": "羊蝎子",
+							"value": "羊蝎子"
+						}, {
+							"name": "云南火锅",
+							"value": "云南火锅"
+						}]
+					},
+					{
+						"name": "生鲜水果",
+						"value": "生鲜水果"
+					},
+					{
+						"name": "烧烤/香锅",
+						"value": "烧烤/香锅",
+						"submenu": [{
+							"name": "中式烧烤",
+							"value": "中式烧烤"
+						}, {
+							"name": "麻辣香锅",
+							"value": "麻辣香锅"
+						}, {
+							"name": "烤鱼",
+							"value": "烤鱼"
+						}, {
+							"name": "韩式烧烤",
+							"value": "韩式烧烤"
+						}, {
+							"name": "日式烧烤",
+							"value": "日式烧烤"
+						}, {
+							"name": "拉美烧烤",
+							"value": "拉美烧烤"
+						}, {
+							"name": "铁板烧",
+							"value": "铁板烧"
+						}]
+					},
+					{
+						"name": "自助餐",
+						"value": "自助餐"
+					},
+					{
+						"name": "其他美食",
+						"value": "其他美食"
+					}
+				]
+			},
+			{
+				"name": 'B',
+				"value": "B",
+				"submenu": [{
+						"name": "全部超市",
+						"value": "全部超市"
+					},
+					{
+						"name": "超市便利店",
+						"value": "超市便利店"
+					},
+					{
+						"name": "母婴用品",
+						"value": "母婴用品"
+					},
+					{
+						"name": "综合特产",
+						"value": "综合特产"
+					},
+					{
+						"name": "个人护理",
+						"value": "个人护理"
+					}
+				]
+			},		
+		]
+	},
+	{
+		"name":'价格',
+		"type": 'filter',
+		"submenu": [{
+				"name": "优惠",
+				"type": 'radio',
+				"submenu": [{
+						"name": "满减活动",
+						"value": "满减活动"
+					},
+					{
+						"name": "打折优惠",
+						"value": "打折优惠"
+					},
+					{
+						"name": "会员专享",
+						"value": "会员专享"
+					}
+				]
+			},
+			{
+				"name": "服务",
+				"type": 'radio',
+				"submenu": [{
+						"name": "预定",
+						"value": "预定"
+					},
+					{
+						"name": "点餐",
+						"value": "点餐"
+					},
+					{
+						"name": "外卖",
+						"value": "外卖"
+					},
+					{
+						"name": "WIFI",
+						"value": "WIFI"
+					},
+					{
+						"name": "停车位",
+						"value": "停车位"
+					},
+					{
+						"name": "无烟区",
+						"value": "无烟区"
+					},
+					{
+						"name": "包厢",
+						"value": "包厢"
+					},
+					{
+						"name": "营业中",
+						"value": "营业中"
+					}
+				]
+			},
+			{
+				"name": "价格",
+				"submenu": [{
+						"name": "50以下",
+						"value": "50以下"
+					},
+					{
+						"name": "50-100",
+						"value": "50-100"
+					},
+					{
+						"name": "100-300",
+						"value": "100-300"
+					},
+					{
+						"name": "300以上",
+						"value": "300以上"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name":'筛选',
+		"type": 'radio',
+		"submenu": [{
+				"name": "优惠(单选)",
+				"submenu": [{
+						"name": "满减活动",
+						"value": "满减活动"
+					},
+					{
+						"name": "打折优惠",
+						"value": "打折优惠"
+					},
+					{
+						"name": "会员专享",
+						"value": "会员专享"
+					}
+				]
+			},
+			{
+				"name": "服务(单选)",
+				"submenu": [{
+						"name": "预定",
+						"value": "预定"
+					},
+					{
+						"name": "点餐",
+						"value": "点餐"
+					},
+					{
+						"name": "外卖",
+						"value": "外卖"
+					},
+					{
+						"name": "WIFI",
+						"value": "WIFI"
+					},
+					{
+						"name": "停车位",
+						"value": "停车位"
+					},
+					{
+						"name": "无烟区",
+						"value": "无烟区"
+					},
+					{
+						"name": "包厢",
+						"value": "包厢"
+					},
+					{
+						"name": "营业中",
+						"value": "营业中"
+					}
+				]
+			},
+			{
+				"name": "价格(单选)",
+				"submenu": [{
+						"name": "50以下",
+						"value": "50以下"
+					},
+					{
+						"name": "50-100",
+						"value": "50-100"
+					},
+					{
+						"name": "100-300",
+						"value": "100-300"
+					},
+					{
+						"name": "300以上",
+						"value": "300以上"
+					}
+				]
+			}
+		]
+	}
+]
 export default {
 	carouselList,
 	cartList,
@@ -1436,5 +1889,6 @@ export default {
 	carVin,
 	checkStatus,
 	recomList,
+	menuExam,
 	cateList
 }

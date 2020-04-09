@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view class="navbar" :style="{position:headerPosition,top:headerTop}">
+		<!-- <view class="navbar" :style="{position:headerPosition,top:headerTop}">
 			<view class="nav-item" :class="{current: filterIndex === 0}" @click="tabClick(0)">
 				综合排序
 			</view>
@@ -15,7 +15,8 @@
 				</view>
 			</view>
 			<text class="cate-item yticon icon-fenlei1" @click="toggleCateMask('show')"></text>
-		</view>
+		</view> -->
+		<HMfilterDropdown :filterData="menuData" :defaultSelected ="filterDropdownValue" :updateMenuName="true" @confirm="confirm"></HMfilterDropdown>
 		<view class="goods-list">
 			<view 
 				v-for="(item, index) in goodsList" :key="index"
@@ -56,9 +57,11 @@
 
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	import HMfilterDropdown from '@/components/HM-filterDropdown/HM-filterDropdown.vue';
 	export default {
 		components: {
-			uniLoadMore	
+			uniLoadMore,
+			HMfilterDropdown
 		},
 		data() {
 			return {
@@ -70,6 +73,8 @@
 				cateId: 0, //已选三级分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				cateList: [],
+				menuData:[],
+				filterDropdownValue:[],
 				goodsList: []
 			};
 		},
@@ -77,6 +82,14 @@
 		onLoad(options){
 			// #ifdef H5
 			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
+			// #endif
+			// #ifdef MP-WEIXIN
+			uni.authorize({
+			    scope: 'scope.userLocation',
+			    success() {
+			        uni.getLocation()
+			    }
+			})
 			// #endif
 			this.cateId = options.tid;
 			this.loadCateList(options.fid,options.sid);
@@ -121,7 +134,7 @@
 				}else{
 					this.loadingType = 'more'
 				}
-				
+				this.menuData = await this.$api.json('menuExam');
 				let goodsList = await this.$api.json('goodsList');
 				if(type === 'refresh'){
 					this.goodsList = [];
