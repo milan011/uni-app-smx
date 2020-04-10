@@ -695,7 +695,7 @@ export default {
 
 .filter {
   width: 100%;
-  height: 345px;
+  // height: 345px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -703,7 +703,7 @@ export default {
 
   .menu-box {
     width: 698rpx;
-    height: calc(345px - 75px);
+    max-height: calc(345px - 75px);
     flex-shrink: 1;
 
     .box {

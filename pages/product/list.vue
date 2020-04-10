@@ -105,10 +105,12 @@
 		},
 		//下拉刷新
 		onPullDownRefresh(){
+			console.log('哥,你下拉了')
 			this.loadData('refresh');
 		},
 		//加载更多
 		onReachBottom(){
+			console.log('哥,你上拉了')
 			this.loadData();
 		},
 		methods: {

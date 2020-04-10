@@ -1,11 +1,15 @@
 <template>
-	<view class="container">
+	<view class="content">
+	<!-- <view class="container"> -->
 		<!-- 小程序头部兼容 -->
 		<!-- #ifdef MP -->
-		<view class="mp-search-box">
+		<!-- <view class="carousel-section">
+		<view class="mp-search-box" style="display:blcok">
 			<input class="ser-input" type="text" value="输入关键字搜索" disabled />
 		</view>
+		</view> -->
 		<!-- #endif -->
+		<view class="carousel-section" style="padding-top:0px">
 		<uni-nav-bar 
 			left-text="石家庄" 
 			left-icon="location-filled"  
@@ -19,11 +23,25 @@
 				</uni-search-bar>
 				<view slot="right" style="width:0px"></view>
 		</uni-nav-bar>
+		</view>
 		<!-- 头部轮播 -->
-		<view class="carousel-section">
+		 <view class="carousel-section">
+		<!--	<uni-nav-bar
+				left-text="石家庄" 
+				left-icon="location-filled"  
+				fixed="true"
+				class="my-style"
+				>
+					<uni-search-bar
+						cancelButton="none"
+						@click.native="searchCar"
+						:radius="100" >
+					</uni-search-bar>
+					<view slot="right" style="width:0px"></view>
+			</uni-nav-bar> -->
 			<!-- 标题栏和状态栏占位符 -->
-			<view class="titleNview-placing">
-			</view>
+			<!-- <view class="titleNview-placing">
+			</view> -->
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular autoplay="true" @change="swiperChange">
@@ -204,7 +222,7 @@
 				}) */
 			},
 			searchCar(){
-				alert('sld')
+				// alert('sld')
 				uni.navigateTo({
 				    url: '/pages/search/search'
 				});
@@ -317,7 +335,7 @@
 			top: 0;
 			left: 0;
 			width: 100%;
-			height: 426upx;
+			// height: 426upx;
 			transition: .4s;
 		}
 	}

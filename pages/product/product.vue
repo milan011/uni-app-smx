@@ -441,6 +441,9 @@
 	uni-page-body{
 		padding-bottom:20px;
 	}
+	uni-page-body{
+		padding-bottom:20px;
+	}
 	.icon-you{
 		font-size: $font-base + 2upx;
 		color: #888;

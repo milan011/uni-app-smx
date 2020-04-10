@@ -1,0 +1,8 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "车源列表",
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "h-mfilter-dropdown": "/components/HM-filterDropdown/HM-filterDropdown"
+  }
+}

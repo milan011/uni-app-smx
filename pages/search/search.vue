@@ -2,9 +2,9 @@
 	<view class="container">
 		<!-- 小程序头部兼容 -->
 		<!-- #ifdef MP -->
-		<view class="mp-search-box">
+		<!-- <view class="mp-search-box">
 			<input class="ser-input" type="text" value="输入关键字搜索" disabled />
-		</view>
+		</view> -->
 		<!-- #endif -->
 			<uni-nav-bar
 				left-icon="back"

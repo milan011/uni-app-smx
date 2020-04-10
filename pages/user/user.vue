@@ -11,7 +11,7 @@
 					<text class="username">{{userInfo.nickname || '游客'}}</text>
 				</view>
 			</view>
-			<view class="vip-card-box">
+			<!-- <view class="vip-card-box">
 				<image class="card-bg" src="/static/vip-card-bg.png" mode=""></image>
 				<view class="b-btn">
 					立即开通
@@ -22,7 +22,7 @@
 				</view>
 				<text class="e-m">DCloud Union</text>
 				<text class="e-b">开通会员开发无bug 一测就上线</text>
-			</view>
+			</view> -->
 		</view>
 		
 		<view 
@@ -53,13 +53,13 @@
 			</view>
 			<!-- 订单 -->
 			<view class="order-section">
-				<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover"  :hover-stay-time="50">
+				<view class="order-item" @click="navTo('/pages/car/list')" hover-class="common-hover"  :hover-stay-time="50">
 					<text class="yticon icon-shouye"></text>
-					<text>全部订单</text>
+					<text>车源管理</text>
 				</view>
 				<view class="order-item" @click="navTo('/pages/order/order?state=1')"  hover-class="common-hover" :hover-stay-time="50">
 					<text class="yticon icon-daifukuan"></text>
-					<text>待付款</text>
+					<text>求购管理</text>
 				</view>
 				<view class="order-item" @click="navTo('/pages/order/order?state=2')" hover-class="common-hover"  :hover-stay-time="50">
 					<text class="yticon icon-yishouhuo"></text>

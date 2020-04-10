@@ -439,7 +439,9 @@
 			border: 0;
 		}
 	}
-
+	scroll-view [style*="overflow"]::-webkit-scrollbar {  
+	  display: none;  
+	} 
 	uni-button[type=default],
 	button[type=default] {
 		color: $font-color-dark;
