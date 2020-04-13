@@ -48,7 +48,7 @@ const goodsList = [{
 		shopcityname: "石家庄",
 	},
 	{
-		ID: 10290,
+		ID: 10291,
 		Code: "0010290",
 		VIN: "LSVRP41T4F2019728",
 		Area: "138",
@@ -67,7 +67,7 @@ const goodsList = [{
 		shopcityname: "石家庄",
 	},
 	{
-		ID: 10290,
+		ID: 10293,
 		Code: "0010290",
 		VIN: "LSVRP41T4F2019728",
 		Area: "138",
@@ -86,7 +86,7 @@ const goodsList = [{
 		shopcityname: "石家庄",
 	},
 	{
-		ID: 10290,
+		ID: 10294,
 		Code: "0010290",
 		VIN: "LSVRP41T4F2019728",
 		Area: "138",
@@ -105,7 +105,7 @@ const goodsList = [{
 		shopcityname: "石家庄",
 	},
 	{
-		ID: 10290,
+		ID: 10295,
 		Code: "0010290",
 		VIN: "LSVRP41T4F2019728",
 		Area: "138",
@@ -124,7 +124,7 @@ const goodsList = [{
 		shopcityname: "石家庄",
 	},
 	{
-		ID: 10290,
+		ID: 10297,
 		Code: "0010290",
 		VIN: "LSVRP41T4F2019728",
 		Area: "138",
@@ -143,7 +143,7 @@ const goodsList = [{
 		shopcityname: "石家庄",
 	},
 	{
-		ID: 10290,
+		ID: 10298,
 		Code: "0010290",
 		VIN: "LSVRP41T4F2019728",
 		Area: "138",
@@ -162,7 +162,7 @@ const goodsList = [{
 		shopcityname: "石家庄",
 	},
 	{
-		ID: 10290,
+		ID: 10230,
 		Code: "0010290",
 		VIN: "LSVRP41T4F2019728",
 		Area: "138",

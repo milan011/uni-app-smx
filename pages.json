@@ -94,7 +94,13 @@
 			"path": "pages/car/list",
 			"style": {
 				// "navigationStyle":"custom",
+				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "车源管理"
+			}
+		},{
+			"path": "pages/car/customer",
+			"style": {
+				"navigationBarTitleText": "车源客户"
 			}
 		}, {
 			"path": "pages/public/login",

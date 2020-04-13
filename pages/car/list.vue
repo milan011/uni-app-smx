@@ -9,7 +9,22 @@
 			</uni-swipe-action>
 		</view> -->
 		<view class="car-list">
-			<block v-for="(item, index) in cartList" :key="item.id">
+			<uni-list>
+				<uni-list-item :show-arrow="false" v-for="(item, index) in cartList" :key="index">
+					<template v-slot>
+					<uni-swipe-action >
+						<uni-swipe-action-item carId="23" :options="item.options" @click="onClick" @change="change">
+							<view class='cont'>{{ item.FullName }}</view>
+						</uni-swipe-action-item>
+					</uni-swipe-action>	
+					</template>
+					<template v-slot:right="">
+						<uni-tag style="padding:0 6px" text="正常" type="success"></uni-tag>
+						<!-- <uni-tag style="padding:0 6px" text="2020-03-01" type="success"></uni-tag> -->
+					</template>
+				</uni-list-item>
+			</uni-list>
+			<!-- <block v-for="(item, index) in cartList" :key="item.id">
 				<view
 					class="cart-item" 
 					:class="{'b-b': index!==cartList.length-1}"
@@ -29,7 +44,7 @@
 						></view>
 					</view>
 					<view class="item-right">
-						<text class="clamp title">{{item.title}}</text>
+						<text class="clamp title">{{item.title}}</text>				
 						<text class="attr">{{item.attr_val}}</text>
 						<text class="price">¥{{item.price}}</text>
 						<uni-number-box 
@@ -45,25 +60,11 @@
 					</view>
 					<text class="del-btn yticon icon-fork" @click="deleteCartItem(index)"></text>
 				</view>
-			</block>
+			</block> -->
 		</view>
 		<!-- 底部菜单栏 -->
-		<view class="action-section">
-			<view class="checkbox">
-				<image :src="allChecked?'/static/selected.png':'/static/select.png'" mode="aspectFit" @click="check('all')"></image>
-				<view class="clear-btn" :class="{show: allChecked}" @click="clearCart">
-					清空
-				</view>
-			</view>
-			<view class="total-box">
-				<text class="price">¥{{total}}</text>
-				<text class="coupon">
-					已优惠
-					<text>74.35</text>
-					元
-				</text>
-			</view>
-			<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
+		<view class="action-section">		
+			<button type="primary" style="width:100%" class="no-border confirm-btn" @click="createCar">添加车源</button>
 		</view>
 	</view>
 	</view>
@@ -77,11 +78,17 @@
 	import HMfilterDropdown from '@/components/HM-filterDropdown/HM-filterDropdown.vue';
 	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
 	import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue'
+	import uniList from '@/components/uni-list/uni-list';
+	import uniListItem from "@/components/uni-list-item/uni-list-item.vue"
+	import uniTag from "@/components/uni-tag/uni-tag.vue"
 	export default {
 		components: {
 			uniNumberBox,
 			uniSwipeAction,
 			uniSwipeActionItem,
+			uniList,
+			uniListItem,
+			uniTag,
 			HMfilterDropdown
 		},
 		data() {
@@ -92,21 +99,31 @@
 				cartList: [],
 				menuData: [],
 				filterDropdownValue:[],
-				options: [{
-					text: '取消',
+				options: [
+					{
+						text: '查看',
+						carId: 23,
+						style: {
+							backgroundColor: '#006c00'
+						}
+					},{
+					text: '编辑',
+					carId: 23,
 					style: {
-						backgroundColor: '#007aff'
-					}
-				}, {
-					text: '确认',
-					style: {
-						backgroundColor: '#dd524d'
+						backgroundColor: '#b5b55a'
 					}
 				}]
 			};
 		},
 		onLoad() {
 			this.loadData();
+		},
+		//下拉刷新
+		onPullDownRefresh(){
+			console.log('哥,你下拉了')
+			setTimeout(()=>{
+				uni.stopPullDownRefresh();
+			}, 3000)
 		},
 		//加载更多
 		onReachBottom(){
@@ -127,12 +144,29 @@
 		methods: {
 			//请求数据
 			async loadData() {
-				let list = await this.$api.json('cartList');
-				let cartList = list.map(item => {
-					item.checked = true;
-					return item;
-				});
+				let cartList = await this.$api.json('goodsList');
+				cartList.forEach(function(element,index){
+				  // console.log(element)
+					let options = [
+						{
+							text: '查看',
+							carId: 23,
+							style: {
+								backgroundColor: '#006c00'
+							}
+						},{
+							text: '编辑',
+							carId: 23,
+							style: {
+								backgroundColor: '#b5b55a'
+							}
+						}]
+					options[0].carId = element.ID
+					options[1].carId = element.ID
+					element.options = options
+				}) 
 				this.cartList = cartList;
+				console.log(this.cartList)
 				this.menuData = await this.$api.json('menuExam');
 				this.calcTotal(); //计算总价
 			},
@@ -151,12 +185,13 @@
 			},
 			onClick(e) {
 				console.log('当前点击的是第' + e.index + '个按钮，点击内容是' + e.content.text)
+				console.log('carId',e.content.carId)
 			},
 			change(open) {
 				console.log('当前开启状态：' + open)
 			},
 			//选中状态处理
-			check(type, index) {
+			/* check(type, index) {
 				if (type === 'item') {
 					this.cartList[index].checked = !this.cartList[index].checked;
 				} else {
@@ -168,7 +203,7 @@
 					this.allChecked = checked;
 				}
 				this.calcTotal(type);
-			},
+			}, */
 			//数量
 			numberChange(data) {
 				this.cartList[data.index].number = data.number;
@@ -215,8 +250,8 @@
 				this.total = Number(total.toFixed(2));
 			},
 			//创建订单
-			createOrder() {
-				let list = this.cartList;
+			createCar() {
+				/* let list = this.cartList;
 				let goodsData = [];
 				list.forEach(item => {
 					if (item.checked) {
@@ -225,13 +260,15 @@
 							number: item.number
 						})
 					}
-				})
-
+				}) */
 				uni.navigateTo({
+					url: '/pages/car/customer'
+				})
+				/* uni.navigateTo({
 					url: `/pages/order/createOrder?data=${JSON.stringify({
 						goodsData: goodsData
 					})}`
-				})
+				}) */
 				this.$api.msg('跳转下一页 sendData');
 			}
 		}

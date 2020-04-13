@@ -78,6 +78,7 @@
 			showArrow: {
 				// 是否显示箭头
 				type: [Boolean, String],
+				// type: Boolean,
 				default: true
 			},
 			showBadge: {
