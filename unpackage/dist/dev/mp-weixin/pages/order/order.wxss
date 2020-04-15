@@ -45,7 +45,7 @@ page, .content {
     position: relative;
 }
 .navbar .nav-item.current {
-      color: #fa436a;
+      color: #0055ff;
 }
 .navbar .nav-item.current:after {
         content: '';
@@ -56,7 +56,7 @@ page, .content {
                 transform: translateX(-50%);
         width: 44px;
         height: 0;
-        border-bottom: 2px solid #fa436a;
+        border-bottom: 2px solid #0055ff;
 }
 .uni-swiper-item {
   height: auto;
@@ -94,7 +94,7 @@ page, .content {
               flex: 1;
 }
 .order-item .i-top .state {
-      color: #fa436a;
+      color: #0055ff;
 }
 .order-item .i-top .del-btn {
       padding: 10rpx 0 10rpx 36rpx;
@@ -232,7 +232,7 @@ page, .content {
 }
 .order-item .action-btn.recom {
       background: #fff9f9;
-      color: #fa436a;
+      color: #0055ff;
 }
 .order-item .action-btn.recom:after {
         border-color: #f7bcc8;

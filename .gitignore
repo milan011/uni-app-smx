@@ -1,0 +1,9 @@
+/unpackage
+/node_modules
+Homestead.yaml
+Homestead.json
+/public
+.env
+bower_components
+/public/js/chunks
+/storage

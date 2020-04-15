@@ -90,7 +90,7 @@ uni-page-body {
     position: relative;
 }
 .navbar .nav-item.current {
-      color: #fa436a;
+      color: #0055ff;
 }
 .navbar .nav-item.current:after {
         content: '';
@@ -101,7 +101,7 @@ uni-page-body {
                 transform: translateX(-50%);
         width: 44px;
         height: 0;
-        border-bottom: 2px solid #fa436a;
+        border-bottom: 2px solid #0055ff;
 }
 .carousel {
   height: 722rpx;
@@ -568,7 +568,7 @@ uni-page-body {
       height: 66rpx;
       line-height: 66rpx;
       border-radius: 100rpx;
-      background: #fa436a;
+      background: #0055ff;
       font-size: 30rpx;
       color: #fff;
       margin: 30rpx auto 20rpx;

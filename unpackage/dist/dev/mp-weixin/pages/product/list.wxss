@@ -43,7 +43,7 @@ page, .content {
     position: relative;
 }
 .navbar .nav-item.current {
-      color: #fa436a;
+      color: #0055ff;
 }
 .navbar .nav-item.current:after {
         content: '';
@@ -54,7 +54,7 @@ page, .content {
                 transform: translateX(-50%);
         width: 120rpx;
         height: 0;
-        border-bottom: 4rpx solid #fa436a;
+        border-bottom: 4rpx solid #0055ff;
 }
 .navbar .p-box {
     display: -webkit-box;
@@ -83,7 +83,7 @@ page, .content {
       color: #888;
 }
 .navbar .p-box .yticon.active {
-        color: #fa436a;
+        color: #0055ff;
 }
 .navbar .p-box .xia {
       -webkit-transform: scaleY(-1);
@@ -177,7 +177,7 @@ page, .content {
     background: #f8f8f8;
 }
 .cate-list .active {
-    color: #fa436a;
+    color: #0055ff;
 }
 /* 商品列表 */
 .goods-list {

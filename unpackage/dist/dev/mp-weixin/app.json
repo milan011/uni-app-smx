@@ -7,6 +7,7 @@
     "pages/userinfo/userinfo",
     "pages/cart/cart",
     "pages/car/list",
+    "pages/car/customer",
     "pages/public/login",
     "pages/user/user",
     "pages/detail/detail",

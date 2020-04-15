@@ -6,7 +6,7 @@
 /* 图片加载中颜色 */
 /* 行为相关颜色 */
 .container {
-  padding-bottom: 134rpx;
+  padding-bottom: 0rpx;
   padding-top: 96rpx;
   /* 空白页 */
 }
@@ -54,7 +54,7 @@
   display: flex;
   -webkit-flex-wrap: wrap;
           flex-wrap: wrap;
-  padding: 0 30rpx;
+  padding: 0rpx;
 }
 /* 购物车列表项 */
 .cart-item {
