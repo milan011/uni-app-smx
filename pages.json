@@ -95,10 +95,15 @@
 			"style": {
 				// "navigationStyle":"custom",
 				"enablePullDownRefresh": true,
-				"navigationBarTitleText": "车源管理"
+				"navigationBarTitleText": "车源列表"
 			}
 		},{
 			"path": "pages/car/show",
+			"style": {
+				"navigationBarTitleText": "车源管理"
+			}
+		},{
+			"path": "pages/car/carDetail",
 			"style": {
 				"navigationBarTitleText": "车源详情"
 			}

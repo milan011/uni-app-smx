@@ -1,31 +1,63 @@
 <template>
 	<view class="container">
-		<!-- 浏览历史 -->
+		<!-- 基本情况Begin -->
 		<view class="history-section icon">
-			<list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="我的钱包" tips="您的会员还有3天过期"></list-cell>
-			<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" @eventClick="navTo('/pages/address/address')"></list-cell>
-			<list-cell icon="icon-share" iconColor="#9789f7" title="分享" tips="邀请好友赢10万大礼"></list-cell>
-			<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="晒单" tips="晒单抢红包"></list-cell>
-			<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏"></list-cell>
-			<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
+			<list-cell icon="icon-tuijian" iconColor="#e07472" title="名称" tips="奥迪A6L豪华型"></list-cell>
+			<!-- <list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" @eventClick="navTo('/pages/address/address')"></list-cell> -->
+			<list-cell icon="icon-share" iconColor="#9789f7" title="状态">
+				<view class="cu-tag round bg-green light">正常</view>
+				<view class="cu-tag round bg-orange light">未上架</view>
+			</list-cell>
+			<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="负责人" tips="小李"></list-cell>
+			<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="上传" tips="2020-03-10"></list-cell>
 		</view>
-		<!-- 订单 -->
+		<!-- 基本情况End -->
+		<!-- 操作组Begin -->
 		<view class="order-section">
-			<view class="order-item" @click="navTo('/pages/car/list')" hover-class="common-hover" :hover-stay-time="50">
+			<view class="order-item" @click="navTo('/pages/car/carDetail?id=' + '12')" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-shouye"></text>
-				<text>车源管理</text>
+				<text>查看</text>
 			</view>
 			<view class="order-item" @click="navTo('/pages/order/order?state=1')" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-daifukuan"></text>
-				<text>求购管理</text>
+				<text>编辑</text>
 			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=1')" hover-class="common-hover" :hover-stay-time="50">
+				<text class="yticon icon-daifukuan"></text>
+				<text>废弃/激活</text>
+			</view>
+		</view>
+		<view class="order-section">
 			<view class="order-item" @click="navTo('/pages/order/order?state=2')" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-yishouhuo"></text>
-				<text>待收货</text>
+				<text>评估</text>
 			</view>
 			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-shouhoutuikuan"></text>
-				<text>退款/售后</text>
+				<text>跟进</text>
+			</view>
+			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover" :hover-stay-time="50">
+				<text class="yticon icon-shouhoutuikuan"></text>
+				<text>交易</text>
+			</view>
+		</view>
+		<!-- 操作组End -->
+		<view class="eva-section">
+			<view class="e-header">
+				<text class="tit">最新跟踪</text>
+				<text @click="" class="tip">历史跟踪记录</text>
+				<text class="yticon icon-you"></text>
+			</view> 
+			<view class="eva-box">
+				<view class="right">
+					<view class="guess-section">
+						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪人员" tips="小李"></list-cell>
+						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪时间" tips="2020-03-10">		
+						</list-cell>
+						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪操作" tips="创建车源">
+						</list-cell>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -144,7 +176,9 @@
 		background: #fff;
 		border-radius: 10upx;
 	}
-
+	.container {
+		padding-top: 10upx;
+	}
 	.user-section {
 		height: 520upx;
 		padding: 100upx 30upx 0;
@@ -181,7 +215,61 @@
 			margin-left: 20upx;
 		}
 	}
-
+	.eva-section{
+		display: flex;
+		flex-direction: column;
+		padding: 20upx 30upx;
+		background: #fff;
+		margin-top: 16upx;
+		.e-header{
+			display: flex;
+			align-items: center;
+			height: 70upx;
+			font-size: $font-sm + 2upx;
+			color: $font-color-light;
+			.tit{
+				font-size: $font-base + 2upx;
+				color: $font-color-dark;
+				margin-right: 4upx;
+			}
+			.tip{
+				flex: 1;
+				text-align: right;
+			}
+			.icon-you{
+				margin-left: 10upx;
+			}
+		}
+	}
+	.eva-box{
+		display: flex;
+		padding: 20upx 0;
+		.portrait{
+			flex-shrink: 0;
+			width: 80upx;
+			height: 80upx;
+			border-radius: 100px;
+		}
+		.right{
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			font-size: $font-base;
+			color: $font-color-base;
+			padding-left: 26upx;
+			.con{
+				font-size: $font-base;
+				color: $font-color-dark;
+				padding: 20upx 0;
+			}
+			.bot{
+				display: flex;
+				justify-content: space-between;
+				font-size: $font-sm;
+				color:$font-color-light;
+			}
+		}
+	}
 	.vip-card-box {
 		display: flex;
 		flex-direction: column;
@@ -295,7 +383,7 @@
 	}
 
 	.history-section {
-		padding: 30upx 0 0;
+		/* padding: 30upx 0 0; */
 		margin-top: 20upx;
 		background: #fff;
 		border-radius: 10upx;

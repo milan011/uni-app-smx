@@ -11,6 +11,7 @@
 				:class="icon"
 			></text>
 			<text class="cell-tit clamp">{{title}}</text>
+			<slot />
 			<text v-if="tips" class="cell-tip">{{tips}}</text>		
 			<text class="cell-more yticon"
 				:class="typeList[navigateType]"

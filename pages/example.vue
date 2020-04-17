@@ -28,8 +28,7 @@
 		height: 100%;
 		background-color: #f8f8f8;
 	}
-
-	.content {
+	.content{
 		display: flex;
 	}
 </style>

@@ -46,7 +46,8 @@
 		font-family: yticon;
 		font-weight: normal;
 		font-style: normal;
-		src: url('https://at.alicdn.com/t/font_1078604_w4kpxh0rafi.ttf') format('truetype');
+		/* src: url('https://at.alicdn.com/t/font_1078604_w4kpxh0rafi.ttf') format('truetype'); */
+		src: url('~@/static/font_1078604_w4kpxh0rafi.ttf') format('truetype');
 	}
 
 	.yticon {
