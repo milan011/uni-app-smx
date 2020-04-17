@@ -21,7 +21,7 @@
 				</view>
 				<view class="cu-list menu">
 					<view v-for="(item, index) in cartList" :key="index" class="cu-item" :class="menuArrow?'arrow':''">
-						<navigator class="content" hover-class="none" url="../list/list" open-type="redirect">
+						<navigator class="content" hover-class="none" :url="'./show?carId='+item.ID" open-type="navigate">
 							<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
 							<text class="text-grey">{{ item.FullName }}</text>
 						</navigator>

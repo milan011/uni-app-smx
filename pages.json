@@ -98,6 +98,11 @@
 				"navigationBarTitleText": "车源管理"
 			}
 		},{
+			"path": "pages/car/show",
+			"style": {
+				"navigationBarTitleText": "车源详情"
+			}
+		},{
 			"path": "pages/car/customer",
 			"style": {
 				"navigationBarTitleText": "车源客户"
@@ -211,8 +216,14 @@
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "车源列表"
 			}
+		},{
+			"path": "pages/sell/sellCar",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "我要卖车"
+			}
 		}
-	],
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "驷马先二手车电商平台",

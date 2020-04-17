@@ -1,9 +1,0 @@
-{
-  "usingComponents": {
-    "uni-segmented-control": "/components/uni-segmented-control/uni-segmented-control",
-    "share": "/components/share",
-    "list-cell": "/components/mix-list-cell",
-    "status-car": "/pages/product/components/status-car",
-    "vin-car": "/pages/product/components/vin-car"
-  }
-}

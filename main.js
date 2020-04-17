@@ -57,6 +57,9 @@ Vue.prototype.$store = store;
 // Vue.prototype.$request = uniRequest;
 Vue.prototype.$api = {msg, json, prePage, config};
 
+import cuCustom from '@/common/colorui/components/cu-custom.vue'
+Vue.component('cu-custom',cuCustom)
+
 App.mpType = 'app'
 
 const app = new Vue({

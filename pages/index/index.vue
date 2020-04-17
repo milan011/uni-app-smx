@@ -62,7 +62,7 @@
 				<image src="/static/temp/c3.png"></image>
 				<text>我要买车</text>
 			</view>
-			<view class="cate-item">
+			<view class="cate-item" @click="toSell">
 				<image src="/static/temp/c5.png"></image>
 				<text>我要卖车</text>
 			</view>
@@ -215,6 +215,11 @@
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合
 			 */
+			toSell(){
+				uni.navigateTo({
+				    url: '../sell/sellCar'
+				});
+			},
 			async loadData() {
 				let carouselList = await this.$api.json('carouselList');
 				this.titleNViewBackground = carouselList[0].background;
@@ -273,8 +278,10 @@
 					url: '/pages/notice/notice'
 				})
 			}
-		}
+		},
 		// #endif
+		// 跳转卖车页面
+		
 	}
 </script>
 <style>
