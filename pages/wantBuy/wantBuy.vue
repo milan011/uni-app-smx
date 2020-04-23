@@ -13,15 +13,15 @@
 			<scroll-view scroll-y="true" class="page">
 				<view class="cu-bar bg-white solid-bottom">
 					<view class="action"> 
-						<text class="cuIcon-title text-orange"></text> 我的车源
+						<text class="cuIcon-title text-orange"></text> 我的求购
 					</view>
 					<view class="action">
-						<button class="cu-btn bg-green shadow" @tap="createCar" data-target="menuModal">添加车源</button>
+						<button class="cu-btn bg-green shadow" @tap="createCar" data-target="menuModal">添加求购</button>
 					</view>
 				</view>
 				<view class="cu-list menu">
 					<view v-for="(item, index) in cartList" :key="index" class="cu-item" :class="menuArrow?'arrow':''">
-						<navigator class="content" hover-class="none" :url="'./show?carId='+item.ID" open-type="navigate">
+						<navigator class="content" hover-class="none" :url="'./show/show?carId='+item.ID" open-type="navigate">
 							<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
 							<text class="text-grey">{{ item.FullName }}</text>
 						</navigator>
@@ -142,8 +142,7 @@
 				}]
 			};
 		},
-		onLoad(options) {
-			console.log(options)
+		onLoad() {
 			this.loadData();
 		},
 		//下拉刷新
@@ -197,25 +196,10 @@
 				this.menuData = await this.$api.json('menuExam');
 				this.calcTotal(); //计算总价
 			},
-			//监听image加载完成
-			onImageLoad(key, index) {
-				this.$set(this[key][index], 'loaded', 'loaded');
-			},
-			//监听image加载失败
-			onImageError(key, index) {
-				this[key][index].image = '/static/errorImage.jpg';
-			},
 			navToLogin() {
 				uni.navigateTo({
 					url: '/pages/public/login'
 				})
-			},
-			onClick(e) {
-				console.log('当前点击的是第' + e.index + '个按钮，点击内容是' + e.content.text)
-				console.log('carId', e.content.carId)
-			},
-			change(open) {
-				console.log('当前开启状态：' + open)
 			},
 			//选中状态处理
 			/* check(type, index) {
@@ -289,7 +273,7 @@
 					}
 				}) */
 				uni.navigateTo({
-					url: '/pages/car/customer'
+					url: './add/add'
 				})
 				/* uni.navigateTo({
 					url: `/pages/order/createOrder?data=${JSON.stringify({

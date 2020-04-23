@@ -400,7 +400,7 @@
 				@extend %section;
 
 				.uni-title {
-					font-size: 16upx;
+					font-size: 26upx;
 
 				}
 
@@ -410,7 +410,7 @@
 
 				.uni-input {
 					height: auto;
-					font-size: 14upx;
+					font-size: 26upx;
 					color: #888;
 				}
 
@@ -442,7 +442,7 @@
 
 					.question {
 						.Q {
-							font-size: 20upx;
+							font-size: 26upx;
 							background-color: #888;
 							color: #fff;
 							width: 28upx;
@@ -459,7 +459,7 @@
 						}
 
 						text {
-							font-size: 20upx;
+							font-size: 26upx;
 							line-height: 30upx;
 						}
 
@@ -487,7 +487,7 @@
 							.answers {
 								margin-left: 56upx;
 								display: inline-block;
-								font-size: 20upx;
+								font-size: 26upx;
 								margin-top: 4upx;
 								width: calc(100% - 56upx);
 								line-height: 1.5;
@@ -505,7 +505,7 @@
 
 			.box {
 				width: 100%;
-				height: 400upx;
+				height: 600upx;
 				display: flex;
 				justify-content: space-around;
 
@@ -520,20 +520,71 @@
 						line-height: 3;
 						font-weight: 700;
 					}
-					.text{
+
+					.text {
 						padding-left: 30upx;
-						font-size: 20upx;
+						font-size: 24upx;
 						line-height: 1.5;
 						color: #888;
 					}
-					image{
+
+					image {
+						margin-top: 30upx;
 						width: 100%;
+						height: 400upx;
 					}
 				}
 
 				.right {
 					width: 45%;
 					height: 100%;
+
+					.top {
+						width: 100%;
+						height: 42%;
+						.titles {
+							margin-top: 30upx;
+							padding-left: 30upx;
+							font-size: 28upx;
+							line-height: 3;
+							font-weight: 700;
+						}
+						.text {
+							padding-left: 30upx;
+							font-size: 24upx;
+							line-height: 1;
+							color: #888;
+						}
+						
+						image {
+							margin-top: 10upx;
+							width: 100%;
+							height: 130upx;
+						}
+					}
+					.bottom{
+						width: 100%;
+						height: 46%;
+						.titles {
+							margin-top: 30upx;
+							padding-left: 30upx;
+							font-size: 28upx;
+							line-height: 3;
+							font-weight: 700;
+						}
+						.text {
+							padding-left: 30upx;
+							font-size: 24upx;
+							line-height: 1.5;
+							color: #888;
+						}
+						
+						image {
+							margin-top: 30upx;
+							width: 100%;
+							height: 150upx;
+						}
+					}
 				}
 			}
 		}

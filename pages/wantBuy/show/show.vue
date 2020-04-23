@@ -2,25 +2,20 @@
 	<view class="container">
 		<!-- 基本情况Begin -->
 		<view class="history-section icon">
-			<list-cell icon="icon-tuijian" iconColor="#e07472" title="名称" :tips="detail.cars.FullName"></list-cell>
+			<list-cell icon="icon-tuijian" iconColor="#e07472" title="名称" tips="奥迪A6L豪华型"></list-cell>
 			<!-- <list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" @eventClick="navTo('/pages/address/address')"></list-cell> -->
-			<list-cell icon="icon-share" iconColor="#9789f7" title="状态">
-				<view v-if="detail.cars.Car_Status" :class="detail.cars.Car_Status | statusFilter" class="cu-tag round light">{{carStatusConfig[detail.cars.Car_Status]}}</view>
-				<view v-if="detail.cars.Car_Status ==1 && detail.cars.IsPutOn" class="cu-tag round bg-green light">已上架</view>
-				<view v-if="detail.cars.Car_Status ==1 && !detail.cars.IsPutOn" class="cu-tag round bg-red light">未上架</view>
-			</list-cell>
-			<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="负责人" :tips="detail.cars.CreateName"></list-cell>
-			<list-cell v-if="detail.cars.CreateDate" icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="上传" :tips="detail.cars.CreateDate.split('T')[0]"></list-cell>
+			<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="负责人" tips="小李"></list-cell>
+			<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="上传日期" tips="2020-03-10"></list-cell>
 		</view>
 		<!-- 基本情况End -->
 		<!-- 操作组Begin -->
 		<view class="order-section">
-			<view class="order-item" @click="navTo('/pages/car/carDetail?id=' + carId)" hover-class="common-hover"
+			<view class="order-item" @click="navTo('/pages/wantBuy/detail/detail?id=' + '12')" hover-class="common-hover"
 			 :hover-stay-time="50">
 				<text class="yticon icon-shouye"></text>
 				<text>查看</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/car/carEdit??id=' + carId)" hover-class="common-hover"
+			<view class="order-item" @click="navTo('/pages/wantBuy/edit/edit??id=' + '12')" hover-class="common-hover"
 			 :hover-stay-time="50">
 				<text class="yticon icon-daifukuan"></text>
 				<text>编辑</text>
@@ -29,25 +24,12 @@
 				<text class="yticon icon-daifukuan"></text>
 				<text>废弃/激活</text>
 			</view>
-		</view>
-		<view class="order-section">
-			<view class="order-item" @tap="showModal" data-target="ModalAssess" hover-class="common-hover" :hover-stay-time="50">
-				<text class="yticon icon-yishouhuo"></text>
-				<text>评估</text>
-			</view>
 			<view class="order-item" @tap="showModal" data-target="ModalFollow" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-shouhoutuikuan"></text>
 				<text>跟进</text>
 			</view>
-			<view class="order-item" @tap="showModal" data-target="ModalFollow" hover-class="common-hover" :hover-stay-time="50">
-				<text class="yticon icon-shouhoutuikuan"></text>
-				<text>上架</text>
-			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover" :hover-stay-time="50">
-				<text class="yticon icon-shouhoutuikuan"></text>
-				<text>交易</text>
-			</view>
 		</view>
+		
 		<!-- 操作组End -->
 		<!-- 跟踪信息Begin -->
 		<view class="eva-section">
@@ -57,12 +39,12 @@
 				<text class="yticon icon-you"></text>
 			</view>
 			<view class="eva-box">
-				<view class="right" style="padding:0px">
+				<view class="right">
 					<view class="guess-section">
-						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪人员" :tips="followInfo.user_name"></list-cell>
-						<list-cell v-if="followInfo.created_at" icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪时间" :tips="followInfo.created_at.split('T')[0]">
+						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪人员" tips="小李"></list-cell>
+						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪时间" tips="2020-03-10">
 						</list-cell>
-						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪操作" :tips="followInfo.description">
+						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" @eventClick="navTo('/pages/wantBuy/detail/detail?TabCur=2')" title="跟踪操作" tips="创建车源">
 						</list-cell>
 					</view>
 				</view>
@@ -129,7 +111,7 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group margin-top">
-						<textarea maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
+						<textarea maxlength="-1" @input="textareaAInput"  placeholder="跟进内容"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">
@@ -141,14 +123,10 @@
 			</view>
 		</view>
 		<!-- 跟进modal End -->
-		<!-- <uni-load-more :status="loadingType"></uni-load-more> -->
 	</view>
 </template>
 <script>
-	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
-	import { carStatusConfig, putOnStatusConfig } from '@/common/appConfig.js';
 	import listCell from '@/components/mix-list-cell';
-	import { getCarDetail,getCarFollow } from '@/api/carManage.js'
 	import {
 		mapState
 	} from 'vuex';
@@ -157,50 +135,17 @@
 		pageAtTop = true;
 	export default {
 		components: {
-			listCell,
-			uniLoadMore
+			listCell
 		},
-		filters: {
-		    statusFilter(status) {
-		      const statusMap = {
-		        1: 'bg-green',
-		        0: 'bg-red'
-		      }
-		      return statusMap[status]
-		    },
-		  },
 		data() {
 			return {
 				coverTransform: 'translateY(0px)',
 				coverTransition: '0s',
 				moving: false,
 				modalName:null,
-				carId: null,
-				loadingType: 'loading', //加载更多状态
-				detail: {
-					cars: {},
-					shop: {},
-					user: null,
-					customer: {},
-					carStatusConfig:{},
-					putOnStatusConfig: {},
-					carimages: []
-				},
-				followInfo: {}
 			}
 		},
-		onLoad(options) {
-			console.log(options)
-			/* this.carStatusConfig = this.$api.config('carStatusConfig');
-			this.inputStatusConfig = this.$api.config('inputStatusConfig'); */
-			this.carId = options.carId
-			this.carId = '9228'
-			this.carStatusConfig = carStatusConfig
-			this.putOnStatusConfig = putOnStatusConfig
-			console.log('status_config',carStatusConfig)
-			this.getCarDetailById()
-			this.getCarFollowById()
-		},
+		onLoad() {},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {
 			const index = e.index;
@@ -225,24 +170,7 @@
 			...mapState(['hasLogin', 'userInfo'])
 		},
 		methods: {
-			getCarDetailById(){ //获取车源详情
-				getCarDetail(this.carId).then(res => {
-					console.log('carDetail',res.data)
-					this.detail = res.data.Data
-					// this.loadingType = 'loading'
-				}).catch(err => {
-					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
-			},
-			getCarFollowById(){ //获取跟踪信息
-				getCarFollow(this.carId).then(res => {
-					console.log('carfollow',res.data)
-					this.followInfo = res.data.Data[0]
-					// this.loadingType = 'loading'
-				}).catch(err => {
-					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
-			},
+
 			/**
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view

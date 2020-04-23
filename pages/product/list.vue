@@ -18,20 +18,38 @@
 		</view> -->
 		<HMfilterDropdown :filterData="menuData" :defaultSelected ="filterDropdownValue" :updateMenuName="true" @confirm="confirm"></HMfilterDropdown>
 		<view class="goods-list">
-			<view 
+			<view style="width: 100%;" class="cu-card article no-card" v-for="(item, index) in goodsList" :key="index"
+				@click="navToDetailPage(item.ID)">
+				<view class="cu-item shadow">
+					<view class="content">
+						<image :src="item.filename" mode="aspectFill"></image>
+						<view class="desc">
+							<view class="text-content" style="padding-top: 0.8em;">{{item.FullName}}</view>
+							<view>
+								<view class="cu-tag bg-red light sm round">¥ {{item.SaleAMT}}万元</view>
+								<view class="cu-tag bg-green light sm round">10万公里</view>
+								<view class="cu-tag bg-green light sm round">石家庄</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<!-- <view 
 				v-for="(item, index) in goodsList" :key="index"
 				class="goods-item"
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="item.filename" mode="aspectFill"></image>
 				</view>
-				<text class="title clamp">{{item.title}}</text>
+				<text class="title clamp">{{item.FullName}}</text>
+				
 				<view class="price-box">
-					<text class="price">{{item.price}}</text>
+					<uni-tag style="padding:0 6px" text="正常" type="success"></uni-tag>
+					<text class="price">{{item.SaleAMT}}</text>
 					<text>已售 {{item.sales}}</text>
 				</view>
-			</view>
+			</view> -->
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>
 		
@@ -75,13 +93,14 @@
 				cateList: [],
 				menuData:[],
 				filterDropdownValue:[],
+				selectConditions: {},
 				goodsList: []
 			};
 		},
 		
 		onLoad(options){
 			// #ifdef H5
-			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
+			// this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
 			// #endif
 			// #ifdef MP-WEIXIN
 			uni.authorize({
@@ -94,6 +113,9 @@
 			this.cateId = options.tid;
 			this.loadCateList(options.fid,options.sid);
 			this.loadData();
+		},
+		onShow(){
+	
 		},
 		onPageScroll(e){
 			//兼容iOS端下拉时顶部漂移
@@ -124,6 +146,36 @@
 					item.child = tempList;
 				})
 				this.cateList = cateList;
+			},			
+			async selectCondInit(){
+				// const selectConditions = uni.getStorage('selectConditions');
+				/* await uni.getStorage({
+				  key: 'selectConditions',
+				  success: function (res) {
+						setTimeout(() => {
+							console.log(res.data);
+						}, 5050);			    
+				  }
+				}); */
+				return new Promise(resolve=>{
+					setTimeout(()=>{
+						// this.selectConditions = uni.getStorageSync('selectConditions');
+						 uni.getStorage({
+						    key: 'selectConditions',
+						    success: function (res) {
+						        console.log(res.data);
+						    }
+						});
+						// console.log('a, cond1')
+						// alert('wait')
+						// console.log('a, cond2')
+						resolve()
+					}, 500)	
+				})
+				/* setTimeout(() => {
+					this.selectConditions = uni.getStorageSync('selectConditions')
+				}, 5050);	 */
+				
 			},
 			//加载商品 ，带下拉刷新和上滑加载
 			async loadData(type='add', loading) {
@@ -137,6 +189,15 @@
 					this.loadingType = 'more'
 				}
 				this.menuData = await this.$api.json('menuExam');
+				// console.log('begin')
+				 let cond = await this.selectCondInit();
+				/*console.log('cond',this.selectConditions)
+				console.log('sdfsd')	 */
+				/* this.selectCondInit().then(() => {
+				  console.log('再获取列表a ')
+					alert('获取了')
+				  let goodsList = this.$api.json('goodsList');
+				})	 */
 				let goodsList = await this.$api.json('goodsList');
 				if(type === 'refresh'){
 					this.goodsList = [];
@@ -209,9 +270,8 @@
 				})
 			},
 			//详情
-			navToDetailPage(item){
+			navToDetailPage(id){
 				//测试数据没有写id，用title代替
-				let id = item.title;
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
@@ -220,7 +280,11 @@
 		},
 	}
 </script>
-
+<style>
+	.cu-card.article>.cu-item .content {
+			padding: 0px;
+	}
+</style>
 <style lang="scss">
 	page, .content{
 		background: $page-color-base;

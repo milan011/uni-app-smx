@@ -70,6 +70,7 @@ httpApi.validateStatus = (statusCode) => {
 httpApi.interceptor.request((config, cancel) => { /* 请求之前拦截器 */
   config.header = {
     ...config.header,
+    token:store.state.userInfo.token
     // b: 1
   }
   console.log('store',store.state)

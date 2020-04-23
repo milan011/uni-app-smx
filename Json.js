@@ -5,8 +5,10 @@ const userInfo = {
 		id: 1,
 		mobile: 18888888888,
 		nickname: 'Leo yo',
-		token: 'user-token',
-		portrait: 'http://img.61ef.cn/news/201409/28/2014092805595807.jpg'
+		token: "f52814bf-4f7d-4984-891d-6fd387b866f4",
+		// portrait: 'http://img.61ef.cn/news/201409/28/2014092805595807.jpg'
+		portrait: 'http://tclapi.simaxian.com//Upload/2020-04/a5d57f51-9916-4939-9262-1df7ac4b132b.jpg'
+		
 	},
 	msg: '提示'
 }

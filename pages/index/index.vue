@@ -9,8 +9,21 @@
 		</view>
 		</view> -->
 		<!-- #endif -->
+		<view class="header-search">
+			<view class="cu-bar search bg-white">
+				<view class="search-form round">
+					<text class="cuIcon-search"></text>
+					<input @click="toSearch"  :adjust-position="false" type="text" placeholder="搜索关键词"
+					 confirm-type="search"></input>
+				</view>
+				<view class="action" @click="toCitySelect">
+					<text>石家庄</text>
+					<text class="cuIcon-triangledownfill"></text>
+				</view>
+			</view>
+		</view>
 		<view class="carousel-section" style="padding-top:0px">
-		<uni-nav-bar 
+		<!-- <uni-nav-bar 
 			left-text="石家庄" 
 			left-icon="location-filled"  
 			fixed="true"
@@ -19,26 +32,13 @@
 				<uni-search-bar
 					cancelButton="none"
 					@click.native="searchCar"
-					:radius="100" >
+					:radius="5" >
 				</uni-search-bar>
 				<view slot="right" style="width:0px"></view>
-		</uni-nav-bar>
+		</uni-nav-bar> -->
 		</view>
 		<!-- 头部轮播 -->
 		 <view class="carousel-section">
-		<!--	<uni-nav-bar
-				left-text="石家庄" 
-				left-icon="location-filled"  
-				fixed="true"
-				class="my-style"
-				>
-					<uni-search-bar
-						cancelButton="none"
-						@click.native="searchCar"
-						:radius="100" >
-					</uni-search-bar>
-					<view slot="right" style="width:0px"></view>
-			</uni-nav-bar> -->
 			<!-- 标题栏和状态栏占位符 -->
 			<!-- <view class="titleNview-placing">
 			</view> -->
@@ -58,7 +58,7 @@
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
-			<view class="cate-item">
+			<view class="cate-item" @click="toBuy">
 				<image src="/static/temp/c3.png"></image>
 				<text>我要买车</text>
 			</view>
@@ -66,11 +66,11 @@
 				<image src="/static/temp/c5.png"></image>
 				<text>我要卖车</text>
 			</view>
-			<view class="cate-item">
+			<view class="cate-item" @click="toJoin">
 				<image src="/static/temp/c6.png"></image>
 				<text>我要加盟</text>
 			</view>
-			<view class="cate-item">
+			<view class="cate-item" @click="toAbout">
 				<image src="/static/temp/c7.png"></image>
 				<text>关于我们</text>
 			</view>
@@ -85,52 +85,52 @@
 		</view> -->
 		<!-- 快捷筛选 -->
 		<view class="order-section">
-			<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-price="0-5"  hover-class="common-hover"  :hover-stay-time="50">
 				<text>5万以下</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=1')"  hover-class="common-hover" :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-price="5-10"  hover-class="common-hover" :hover-stay-time="50">
 				<text>5-10万</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=2')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-price="10-15" hover-class="common-hover"  :hover-stay-time="50">
 				<text>10-15万</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-price="20-" hover-class="common-hover"  :hover-stay-time="50">
 				<text>15万以上</text>
 			</view>
 		</view>
 		<view class="order-section">
-			<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-factory="雪佛兰" hover-class="common-hover"  :hover-stay-time="50">
 				<!-- <icon type="success" size="16"/> -->
 				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
 				<text>雪佛兰</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=1')"  hover-class="common-hover" :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-factory="大众"  hover-class="common-hover" :hover-stay-time="50">
 				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
 				<text>大众</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=2')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-factory="五菱" hover-class="common-hover"  :hover-stay-time="50">
 				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
 				<text>五菱</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-factory="福特" hover-class="common-hover"  :hover-stay-time="50">
 				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
 				<text>福特</text>
 			</view>		
 		</view>
 		<view class="order-section">			
-			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-factory="奥迪" hover-class="common-hover"  :hover-stay-time="50">
 				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
 				<text>奥迪</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-factory="宝马" hover-class="common-hover"  :hover-stay-time="50">
 				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
 				<text>宝马</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-factory="本田" hover-class="common-hover"  :hover-stay-time="50">
 				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
 				<text>本田</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList"  data-factory="" hover-class="common-hover"  :hover-stay-time="50">
 				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
 				<text>更多</text>
 			</view>
@@ -155,7 +155,7 @@
 					<image :src="item.filename" mode="aspectFit"></image>
 				</view>
 				<!-- <text class="title clamp">{{item.FullName}}</text> -->
-				<view>{{item.FullName}}</view>
+				<view style="min-height:21%;">{{item.FullName}}</view>
 				<text class="price">￥{{item.SaleAMT}}</text>
 			</view>
 		</view>
@@ -163,12 +163,13 @@
 </template>
 
 <script>
-	import { getExampleList } from '@/api/example.js'
+	import { getExampleList, getCarList } from '@/api/car.js'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
+	import uniTag from "@/components/uni-tag/uni-tag.vue"
 	export default {
 		data() {
-			components: { uniNavBar, uniSearchBar }
+			components: { uniNavBar, uniSearchBar, uniTag }
 			return {
 				titleNViewBackground: '',
 				swiperCurrent: 0,
@@ -202,7 +203,12 @@
 			  }
 			});
 			// #endif
-			getExampleList().then(res => {
+			/* getExampleList().then(res => {
+				console.log('返回了',res)
+			}).catch(err => {
+				
+			}) */
+			getCarList().then(res => {
 				console.log('返回了',res)
 			}).catch(err => {
 				
@@ -220,6 +226,34 @@
 				    url: '../sell/sellCar'
 				});
 			},
+			toBuy(){
+				uni.switchTab({
+				    url: '/pages/product/list'
+				});
+			},
+			toCitySelect(){
+				uni.navigateTo({
+				    url: '../city/citySelect'
+				});
+			},
+			navToCarList(e){
+				console.log(e.currentTarget)
+				console.log(e.currentTarget.dataset)
+				// console.log(e.currentTarget.dataset.price)
+				// return false
+				var conditions = e.currentTarget.dataset
+				// uni.setStorage('selectConditions', conditions);
+				uni.setStorage({
+				  key: 'selectConditions',
+				  data: conditions,
+					success: function () {
+						// uni.switchTab({
+						uni.reLaunch({
+							url: `/pages/product/list`
+						})
+					}		    
+				});			
+			},
 			async loadData() {
 				let carouselList = await this.$api.json('carouselList');
 				this.titleNViewBackground = carouselList[0].background;
@@ -228,6 +262,24 @@
 				
 				let goodsList = await this.$api.json('goodsList');
 				this.goodsList = goodsList || [];
+			},
+			// 去搜索页面
+			toSearch(){
+				uni.navigateTo({
+					url: `/pages/search/search`
+				})
+			},
+			// 去加盟页
+			toJoin(){
+				uni.navigateTo({
+					url: `/pages/join/join`
+				})
+			},
+			// 去关于我们页面
+			toAbout(){
+				uni.navigateTo({
+					url: `/pages/about/about`
+				})
 			},
 			//轮播图切换修改背景色
 			swiperChange(e) {
@@ -289,7 +341,7 @@
 		width:100%;
 	}
 	.my-style /deep/ .uni-navbar__header-btns-left{
-		width:80px;
+		width:auto;
 	}
 	.my-style /deep/ .uni-navbar__content{
 		width:100%;
