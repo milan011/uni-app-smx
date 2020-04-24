@@ -17,8 +17,8 @@
 				<evan-form-item label="姓名：" prop="name">
 					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.name" placeholder="请输入姓名" />
 				</evan-form-item>
-				<evan-form-item label="手机号：" prop="phone">
-					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.phone" placeholder="请输入手机号" />
+				<evan-form-item label="手机号：" prop="telephone">
+					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.telephone" placeholder="请输入手机号" />
 				</evan-form-item>
 			</evan-form>
 			<!-- <button @click="save" class="evan-form-show__button">保存</button>
@@ -26,15 +26,15 @@
 					<button @click="validateSingle" class="evan-form-show__button">只验证邮箱</button>
 					<button @click="validateMultiple" class="evan-form-show__button">只验证邮箱和手机号</button>
 					<button @click="hideReqired" class="evan-form-show__button">{{hideRequiredAsterisk?'显示':'隐藏'}}*号</button> -->
-			<text class="mix-btn" @click="confirm">添加基本信息</text>
+			<text class="mix-btn" @click="confirmCustomer">添加基本信息</text>
 		</view>
 		<!-- 客户信息编辑End -->
 		<!-- 基本信息编辑Begin -->
 		<view v-show="carInfoEdit" class="pay-type-list" style="padding: 0px 60upx">
 			<view class="cu-form-group">
 				<view class="title">VIN码</view>
-				<input style="text-align: right;" placeholder="请扫描或输入VIN码" name="input"></input>
-				<text class='cuIcon-scan text-orange' style="font-size: x-large"></text>
+				<input @blur="getCarByVin" @input="vinChange" v-model="carData.VIN" style="text-align: right;margin-right: 1em;" placeholder="请扫描或输入VIN码" name="input"></input>
+				<text @tap="scanVin" class='cuIcon-scan text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">车型</view>
@@ -478,10 +478,30 @@
 		</view>
 
 		<!-- 车源图片编辑End -->
+		<!-- vin码返回信息选择Begin -->
+		<view class="cu-modal" :class="modalName=='vinChose'?'show':''" @tap="hideModal">
+					<view class="cu-dialog" @tap.stop="">
+						<radio-group class="block" @change="RadioChange">
+							<view class="cu-list menu text-left">
+								<view class="cu-item" v-for="(item,index) in vinCarList" :key="index">
+									<label class="flex justify-between align-center flex-sub">
+										<view class="flex-sub">{{item.psalename}}</view>
+										<radio class="round" :class="radio=='radio' + index?'checked':''" :checked="radio=='radio' + index?true:false"
+										 :value="'radio' + index"></radio>
+									</label>
+								</view>
+							</view>
+						</radio-group>
+						<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+					</view>
+				</view>
+		<!-- vin码返回信息选择End -->
 	</view>
 </template>
 
 <script>
+	import { createCustomer } from '@/api/user.js'
+	import { vinRepeatCheck, getCarInfoByWin } from '@/api/carManage.js'
 	import EvanForm from '@/components/evan-form/evan-form.vue'
 	import EvanFormItem from '@/components/evan-form/evan-form-item.vue'
 	import uniCollapse from '@/components/uni-collapse/uni-collapse.vue'
@@ -510,6 +530,7 @@
 				textareaAValue: '',
 				imgList: [],
 				TabCur: 0,
+				currentUser: null,
 				cuIconList: [{
 					cuIcon: 'cardboardfill',
 					color: 'red',
@@ -615,19 +636,45 @@
 				basics: 0,
 				// 表单的内容必须初始化
 				customer: {
+					id: null,
 					name: 'wcg',
-					phone: '13731080174',
+					telephone: '13731080174',
+					creater_id: null,
+					customer_res: 1,
+					shop_id: null,
 				},
-				carinfo: {
-					carname: '',
-					type: '',
+				vinChanged:false,
+				vinCarList: [],
+				carData: {
+					VIN: 'sss',
+					/* : ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: ,
+					: , */
 				},
 				rules: {
 					name: {
 						required: true,
 						message: '请输入姓名'
 					},
-					phone: [{
+					telephone: [{
 							required: true,
 							message: '请输入手机号'
 						},
@@ -652,13 +699,18 @@
 		mounted() {
 			// 这里必须放在mounted中，不然h5，支付宝小程序等会找不到this.$refs.form
 			this.$refs.customerform.setRules(this.rules)
-			console.log(Math.pow(1.05, 10))
+			// this.resetCustomer()
+			console.log(Math.pow(1.06, 10))
 		},
 		computed: {
 
 		},
 		onLoad(options) {
-
+			this.currentUser = uni.getStorageSync('userInfo') || '';
+			this.customer.creater_id = this.currentUser.id
+			this.customer.shop_id = this.currentUser.shopId
+			this.customer.id = null
+			console.log('currentUser', this.currentUser)
 		},
 
 		methods: {
@@ -758,15 +810,78 @@
 			DateChange(e) {
 				this.date = e.detail.value
 			},
-			confirm() {
-				this.$refs.customerform.validate((res) => {
-					if (res) {
-						uni.showToast({
-							title: '验证通过',
+			resetCustomer(){
+				this.customer = {
+					id: null,
+					name: '',
+					telephone: '',
+					creater_id: null,
+					customer_res: 1,
+					shop_id: null,
+				}
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
+			RadioChange(e) {
+				this.radio = e.detail.value
+			},
+			vinFocus(event){
+				console.log(event.detail)
+			},
+			vinChange(){ //vin码有变动
+				// console.log('狗子,你变了')
+				this.vinChanged = true
+			},
+			getCarByVin(event){ //根据vin码获取车型信息	
+				const vinCode = event.detail.value
+				if(this.vinChanged){ //vin码有变化
+					if (this.$utils.isRegVin(vinCode)) { //格式校验
+						console.log(vinCode)
+						if(this.isVinRepeat(vinCode)){ //vin码是否在平台上已存在
+							console.log('VIN码已被使用')
+						}else{
+							console.log('VIN码未被使用')
+							getCarInfoByWin(vinCode).then(res => {
+								console.log(res)
+								this.vinCarList = res.data.Data
+								this.modalName = 'vinChose'
+							}).catch(err => {
+								this.$api.msg(`获取数据失败,请刷新重试`);
+							})
+						}
+					} else {
+						console.log('VIN码必须是17位数字字母组成')
+						this.$api.msg(`VIN码必须是17位数字字母组成`, 7000);
+					}
+					this.vinChanged = false
+				}	
+			},
+			isVinRepeat(vinCode){ //Vin码是否重复
+				vinRepeatCheck(vinCode).then(res => {
+					console.log(res)
+					if(res.Data == true){
+						return true
+					}else{
+						return false
+					}
+				}).catch(err => {
+					this.$api.msg(`获取数据失败,请刷新重试`);
+				})
+			},
+			confirmCustomer() {
+				this.$refs.customerform.validate((valid) => {
+					if (valid) {
+						createCustomer(this.customer).then(res => {
+							console.log('customer',res.data)
+							this.customer = res.data.Data
+							this.customerEdit = false
+							this.carInfoEdit = true
+							this.basics = 1
+						}).catch(err => {
+							this.$api.msg(`获取数据失败,请刷新重试`);
 						})
-						this.customerEdit = false
-						this.carInfoEdit = true
-						this.basics = 1
+						
 					}
 				})
 			},

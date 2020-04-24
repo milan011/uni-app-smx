@@ -11,9 +11,9 @@
 			<view class="cu-item flex-sub" :class="2==TabCur?'text-green cur':''" @tap="tabSelect" data-id="2">
 				<view class="text">跟踪</view>
 			</view>
-			<view class="cu-item flex-sub" :class="3==TabCur?'text-green cur':''" @tap="tabSelect" data-id="3">
+			<!-- <view class="cu-item flex-sub" :class="3==TabCur?'text-green cur':''" @tap="tabSelect" data-id="3">
 				<view class="text">交易</view>
-			</view>
+			</view> -->
 			</view>	
 			<!-- 信息显示Begin -->
 			<view class="cu-list menu" v-if="TabCur==0">
@@ -283,20 +283,8 @@
 					</view>
 				</view>
 				<view class="grid col-4 grid-square flex-sub">
-					<view class="bg-img" @tap="ViewImage" data-url="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg">
-						<image src="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg" mode="aspectFit"></image>
-					</view>
-					<view class="bg-img" @tap="ViewImage" data-url="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg">
-						<image src="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg" mode="aspectFit"></image>
-					</view>
-					<view class="bg-img" @tap="ViewImage" data-url="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg">
-						<image src="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg" mode="aspectFit"></image>
-					</view>
-					<view class="bg-img" @tap="ViewImage" data-url="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg">
-						<image src="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg" mode="aspectFit"></image>
-					</view>
-					<view class="bg-img" @tap="ViewImage" data-url="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg">
-						<image src="http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg" mode="aspectFit"></image>
+					<view v-for="(img,index) in carImgAsse" :key="index" class="bg-img" @tap="ViewImage" :data-url="imgUrl + img.filename">
+						<image :src="imgUrl + img.filename" mode="aspectFit"></image>
 					</view>
 				</view>
 			</view>
@@ -314,7 +302,7 @@
 			</view>
 			<!-- 跟踪显示End -->
 			<!-- 交易信息Begin -->
-			<view v-if="TabCur==3" style="padding: 0px 60upx">
+			<!-- <view v-if="TabCur==3" style="padding: 0px 60upx">
 				<view  class="cu-bar bg-white solid-bottom">
 					<view class="action" style="margin:0px">
 						<text class="cuIcon-title text-orange "></text> 
@@ -432,7 +420,7 @@
 						<text class="text-grey text-sm">2020-03-21</text>
 					</view>
 				</view>
-			</view>
+			</view> -->
 			<!-- 交易信息End -->
 		</scroll-view>
 		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
@@ -465,7 +453,14 @@
 </template>
 
 <script>
-	import { getCarDetail, getCarFollow, getCarImgsNormal, getCarImgsExt ,getCarImgsCer } from '@/api/carManage.js'
+	import { 
+		getCarDetail, 
+		getCarFollow, 
+		getCarImgsNormal, 
+		getCarImgsExt,
+		getCarImgsCer, 
+		getCarImgsAsse 
+	} from '@/api/carManage.js'
 	import { 
 		transmissionConfig,
 		carStatusConfig, 
@@ -503,6 +498,7 @@
 				carImgNormal: [],
 				carImgExt: [],
 				carImgCer: [],
+				carImgAsse: [],
 				followInfo: {}
 			}
 		},
@@ -510,6 +506,9 @@
 			let userInfo = uni.getStorageSync('userInfo') || '';
 			console.log('userCurrent',userInfo)
 			console.log(options)
+			if(options.nav){
+				this.TabCur = options.nav
+			}
 			this.currentUserId = userInfo.id
 			this.carId = options.id
 			this.carStatusConfig = carStatusConfig
@@ -525,6 +524,7 @@
 			this.getCarImgsNormal()
 			this.getCarImgsExt()
 			this.getCarImgsCer()
+			this.getCarImgsAsse()
 			// this.loadData();
 		},
 		methods: {
@@ -567,10 +567,19 @@
 					this.$api.msg(`获取数据失败,请刷新重试`);
 				})
 			},
-			getCarImgsExt(){ //获取车源评估图片
+			getCarImgsExt(){ //获取车源附加图片
 				getCarImgsExt(this.carId).then(res => {
 					console.log('carimg_pg',res.data)
 					this.carImgExt = res.data.Data
+					// this.loadingType = 'loading'
+				}).catch(err => {
+					this.$api.msg(`获取数据失败,请刷新重试`);
+				})
+			},
+			getCarImgsAsse(){ //获取车源评估图片
+				getCarImgsAsse(this.carId).then(res => {
+					console.log('carimg_pg',res.data)
+					this.carImgAsse = res.data.Data
 					// this.loadingType = 'loading'
 				}).catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);

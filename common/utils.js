@@ -7,7 +7,15 @@ const utils = {
       return true
     }
     return false
-  }
+  },
+	//vin码格式是否正确
+	isRegVin(value){
+		var reg = new RegExp(/^[a-zA-Z0-9]{17}$/);
+		if (reg.test(value)) {
+		  return true
+		}
+		return false
+	}
 }
 
 Vue.prototype.$utils = utils

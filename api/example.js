@@ -1,6 +1,5 @@
 
 import urlConfig from '@/common/config.js'
-// import uniRequest from 'uni-request'
 import { httpApi } from '@/js_sdk/luch-request/index.js';
 
 

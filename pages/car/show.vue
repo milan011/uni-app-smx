@@ -53,7 +53,7 @@
 		<view class="eva-section">
 			<view class="e-header">
 				<text class="tit">最新跟踪</text>
-				<text @click="" class="tip">历史跟踪记录</text>
+				<text @click="toTrackHistory" class="tip">历史跟踪记录</text>
 				<text class="yticon icon-you"></text>
 			</view>
 			<view class="eva-box">
@@ -253,6 +253,11 @@
 				}
 				uni.navigateTo({
 					url
+				})
+			},
+			toTrackHistory(){
+				uni.navigateTo({
+					url: '/pages/car/carDetail?id='+this.carId+'&nav=2'
 				})
 			},
 			textareaAInput(e) {
