@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<HMfilterDropdown :filterData="menuData" :defaultSelected="filterDropdownValue" :updateMenuName="true" @confirm="confirm"></HMfilterDropdown>
+		<HMfilterDropdown :filterData="menuData" ref="filterDropdown" :defaultSelected="filterDropdownValue" :updateMenuName="true" @confirm="confirm"></HMfilterDropdown>
 		<!-- <view class="cart-list">
 			<uni-swipe-action>
 				<uni-swipe-action-item :options="options" @click="onClick" @change="change">
@@ -12,7 +12,7 @@
 		<view class="car-list">
 			<scroll-view scroll-y="true" class="page">
 				<view class="cu-bar bg-white solid-bottom">
-					<view class="action"> 
+					<view class="action">
 						<text class="cuIcon-title text-orange"></text> 我的车源
 					</view>
 					<view class="action">
@@ -33,63 +33,7 @@
 					</view>
 				</view>
 			</scroll-view>
-			<!-- <uni-list>
-				<uni-list-item :show-arrow="false" v-for="(item, index) in cartList" :key="index">
-					<template v-slot>
-					<uni-swipe-action >
-						<uni-swipe-action-item carId="23" :options="item.options" @click="onClick" @change="change">
-							<view class='cont'>{{ item.FullName }}</view>
-						</uni-swipe-action-item>
-					</uni-swipe-action>	
-					</template>
-					<template v-slot:right="">
-						<uni-tag style="padding:0 6px" text="正常" type="success"></uni-tag>
-						<uni-tag style="padding:0 6px" text="2020-03-01" type="success"></uni-tag>
-					</template>
-				</uni-list-item>
-			</uni-list> -->
-			<!-- <block v-for="(item, index) in cartList" :key="item.id">
-				<view
-					class="cart-item" 
-					:class="{'b-b': index!==cartList.length-1}"
-				>
-					<view class="image-wrapper">
-						<image :src="item.image" 
-							:class="[item.loaded]"
-							mode="aspectFill" 
-							lazy-load 
-							@load="onImageLoad('cartList', index)" 
-							@error="onImageError('cartList', index)"
-						></image>
-						<view 
-							class="yticon icon-xuanzhong2 checkbox"
-							:class="{checked: item.checked}"
-							@click="check('item', index)"
-						></view>
-					</view>
-					<view class="item-right">
-						<text class="clamp title">{{item.title}}</text>				
-						<text class="attr">{{item.attr_val}}</text>
-						<text class="price">¥{{item.price}}</text>
-						<uni-number-box 
-							class="step"
-							:min="1" 
-							:max="item.stock"
-							:value="item.number>item.stock?item.stock:item.number"
-							:isMax="item.number>=item.stock?true:false"
-							:isMin="item.number===1"
-							:index="index"
-							@eventChange="numberChange"
-						></uni-number-box>
-					</view>
-					<text class="del-btn yticon icon-fork" @click="deleteCartItem(index)"></text>
-				</view>
-			</block> -->
 		</view>
-		<!-- 底部菜单栏 -->
-		<!-- <view class="action-section">
-			<button type="primary" style="width:100%" class="no-border confirm-btn" @click="createCar">添加车源</button>
-		</view> -->
 	</view>
 	</view>
 </template>
@@ -98,6 +42,11 @@
 	import {
 		mapState
 	} from 'vuex';
+	import {
+		getCarList,
+		getCarTypeList,
+		getCarShopList
+	} from '@/api/car.js'
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	import HMfilterDropdown from '@/components/HM-filterDropdown/HM-filterDropdown.vue';
 	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
@@ -105,6 +54,7 @@
 	import uniList from '@/components/uni-list/uni-list';
 	import uniListItem from "@/components/uni-list-item/uni-list-item.vue"
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
+	import menuExam from '@/Json.js'
 	export default {
 		components: {
 			uniNumberBox,
@@ -139,23 +89,110 @@
 					style: {
 						backgroundColor: '#b5b55a'
 					}
-				}]
+				}],
+				car: {
+					PageIndex: 1,
+					PageSize: 14,
+					CityName: "",
+					CarAges: "",
+					Factory: "",
+					SaleAMTMin: "",
+					SaleAMTMax: "",
+					CarType: "",
+					Transmission: "",
+					Out_color: "",
+					UserKind: "",
+					OrderPriceMin: "",
+					OrderPriceMax: "",
+					OrderNew: "",
+					OrderKliMin: "",
+					OrderYearMin: "",
+					Car_Status: 1,
+					IsPutOn: 1,
+					Shop_Id: "",
+					Sale_number: -1
+				},
+				total: ""
 			};
 		},
 		onLoad(options) {
-			console.log(options)
+			let that = this
+			//#ifndef H5
+			uni.getStorage({
+				key: 'city',
+				success: function(res) {
+					that.city = res.data
+					let arr = res.data.split("")
+					let index = arr.length - 1
+					if (arr[index] == "市") {
+						let arr1 = arr.pop()
+						that.car.CityName = arr.join("")
+					} else {
+						that.car.CityName = res.data
+					}
+				}
+			});
+			//#endif
+			//#ifdef H5
+			uni.getStorage({
+				key: 'citys',
+				success: function(res) {
+					that.city = res.data
+					let arr = res.data.split("")
+					let index = arr.length - 1
+					if (arr[index] == "市") {
+						let arr1 = arr.pop()
+						that.car.CityName = arr.join("")
+					} else {
+						that.car.CityName = res.data
+					}
+				}
+			});
+			//#endif
 			this.loadData();
+			this.getCarTypelist()
+			this.getshoplist()
 		},
 		//下拉刷新
 		onPullDownRefresh() {
-			console.log('哥,你下拉了')
-			setTimeout(() => {
-				uni.stopPullDownRefresh();
-			}, 3000)
+			var that = this
+			this.$refs.filterDropdown.resetFilterData(2);
+			this.$refs.filterDropdown.resetFilterData(3);
+			this.car.OrderPriceMin = ""
+			this.car.OrderYearMin = ""
+			this.car.OrderNew = ""
+			this.car.Factory = ""
+			this.car.SaleAMTMin = ""
+			this.car.SaleAMTMax = ""
+			this.car.CarType = ""
+			this.car.Transmission = ""
+			this.car.Shop_Id = ""
+			this.car.PageIndex = 1
+			uni.removeStorage({
+				key: 'selectConditions',
+				success: (res) => {
+					that.car.SaleAMTMin = ""
+					that.car.SaleAMTMax = ""
+					getCarList({ ...that.car
+					}).then(res => {
+						that.cartList = res.data.Data.DataList;
+						that.total = res.data.Data.Total
+						// that.loadingType = that.goodsList.length >= that.total ? 'nomore' : 'more';
+						uni.stopPullDownRefresh()
+					})
+			
+				}
+			})
 		},
 		//加载更多
 		onReachBottom() {
-			console.log('哥,你上拉了')
+			let num = Math.ceil(this.total / this.car.PageSize)
+			if (this.car.PageIndex < num) {
+				this.car.PageIndex++
+				this.loadData();
+			} else {
+				return
+			}
 		},
 		watch: {
 			//显示空白页
@@ -172,7 +209,9 @@
 		methods: {
 			//请求数据
 			async loadData() {
-				let cartList = await this.$api.json('goodsList');
+				let list = await getCarList({ ...this.car
+				})
+				let cartList = list.data.Data.DataList
 				cartList.forEach(function(element, index) {
 					// console.log(element)
 					let options = [{
@@ -217,45 +256,95 @@
 			change(open) {
 				console.log('当前开启状态：' + open)
 			},
-			//选中状态处理
-			/* check(type, index) {
-				if (type === 'item') {
-					this.cartList[index].checked = !this.cartList[index].checked;
-				} else {
-					const checked = !this.allChecked
-					const list = this.cartList;
-					list.forEach(item => {
-						item.checked = checked;
+			// 获取车型
+			getCarTypelist() {
+				getCarTypeList().then(res => {
+					let list = res.data.Data
+					list.forEach(ele => {
+						ele.name = ele.CarTypeMark
+						ele.value = ele.CarTypeMark
+						ele.submenu = ele.BrandLst
+						ele.submenu.forEach(i => {
+							i.name = i.brand
+							i.value = i.brand
+						})
 					})
-					this.allChecked = checked;
+					menuExam.menuExam[1].submenu.push(...list)
+				})
+			},
+			// 商店列表
+			getshoplist() {
+				getCarShopList({
+					id: 1
+				}).then(res => {
+					let list = res.data.Data
+					list.forEach(ele => {
+						ele.value = ele.id
+						ele.submenu = []
+					})
+					menuExam.menuExam[3].submenu[2].submenu.push(...list)
+				})
+			},
+			// 筛选
+			confirm(val) {
+				let value = val.value
+				if (value[0] == '价格最低') {
+					this.car.OrderPriceMin = true
+					this.car.OrderYearMin = ""
+					this.car.OrderNew = ""
+				} else if (value[0] == '车龄最短') {
+					this.car.OrderYearMin = true
+					this.car.OrderPriceMin = ""
+					this.car.OrderNew = ""
+				} else if (value[0] == '里程最低') {
+					this.car.OrderNew = true
+					this.car.OrderPriceMin = ""
+					this.car.OrderYearMin = ""
+				} else {
+					this.car.OrderPriceMin = ""
+					this.car.OrderYearMin = ""
+					this.car.OrderNew = ""
 				}
-				this.calcTotal(type);
-			}, */
-			//数量
+				if (value[1][1] !== '品牌') {
+					this.car.Factory = value[1][1]
+				} else {
+					this.car.Factory = ""
+				}
+				if (value[2][0][0]) {
+					var price = value[2][0][0].split("-")
+					this.car.SaleAMTMin = price[0]
+					this.car.SaleAMTMax = price[1]
+				} else {
+					this.car.SaleAMTMin = ""
+					this.car.SaleAMTMax = ""
+				}
+				if (value[3][0][0]) {
+					this.car.CarType = value[3][0][0]
+				} else {
+					this.car.CarType = ""
+				}
+				if (value[3][1][0]) {
+					this.car.Transmission = value[3][1][0]
+				} else {
+					this.car.Transmission = ""
+				}
+				if (value[3][2][0]) {
+					this.car.Shop_Id = value[3][2][0]
+				} else {
+					this.car.Shop_Id = ""
+				}
+				this.car.PageIndex = 1
+				getCarList({ ...this.car
+					})
+					.then(res => {
+						this.cartList = res.data.Data.DataList;
+						this.total = res.data.Data.Total
+						// this.loadingType = this.goodsList.length >= this.total ? 'nomore' : 'more';
+					})
+			},
 			numberChange(data) {
 				this.cartList[data.index].number = data.number;
 				this.calcTotal();
-			},
-			//删除
-			deleteCartItem(index) {
-				let list = this.cartList;
-				let row = list[index];
-				let id = row.id;
-
-				this.cartList.splice(index, 1);
-				this.calcTotal();
-				uni.hideLoading();
-			},
-			//清空
-			clearCart() {
-				uni.showModal({
-					content: '清空购物车？',
-					success: (e) => {
-						if (e.confirm) {
-							this.cartList = [];
-						}
-					}
-				})
 			},
 			//计算总价
 			calcTotal() {
@@ -278,24 +367,9 @@
 			},
 			//创建订单
 			createCar() {
-				/* let list = this.cartList;
-				let goodsData = [];
-				list.forEach(item => {
-					if (item.checked) {
-						goodsData.push({
-							attr_val: item.attr_val,
-							number: item.number
-						})
-					}
-				}) */
 				uni.navigateTo({
 					url: '/pages/car/customer'
 				})
-				/* uni.navigateTo({
-					url: `/pages/order/createOrder?data=${JSON.stringify({
-						goodsData: goodsData
-					})}`
-				}) */
 				this.$api.msg('跳转下一页 sendData');
 			}
 		}
@@ -344,6 +418,13 @@
 		display: flex;
 		flex-wrap: wrap;
 		padding: 0upx;
+
+		.content {
+			width: 400upx;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 	}
 
 	/* 购物车列表项 */

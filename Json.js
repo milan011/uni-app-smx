@@ -9,7 +9,7 @@ const userInfo = {
 		shopId: 72,
 		// portrait: 'http://img.61ef.cn/news/201409/28/2014092805595807.jpg'
 		portrait: 'http://tclapi.simaxian.com//Upload/2020-04/a5d57f51-9916-4939-9262-1df7ac4b132b.jpg'
-		
+
 	},
 	msg: '提示'
 }
@@ -259,7 +259,7 @@ const goodsList = [{
 ]
 
 /* 购物车 */
-const cartList = [{
+	const cartList = [{
 		id: 1,
 		image: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553005139&di=3368549edf9eee769a9bcb3fbbed2504&imgtype=jpg&er=1&src=http%3A%2F%2Fimg002.hc360.cn%2Fy3%2FM01%2F5F%2FDB%2FwKhQh1T7iceEGRdWAAAAADQvqk8733.jpg',
 		attr_val: '春装款 L',
@@ -1454,8 +1454,7 @@ const checkStatus = {
 	"HasAqCheck": false
 }
 
-const menuExam = [
-	{
+const menuExam = [{
 		// name:'智能排序',
 		"type": 'hierarchy',
 		"submenu": [{
@@ -1464,15 +1463,15 @@ const menuExam = [
 			},
 			{
 				"name": "价格最低",
-				"value": "离我最近"
+				"value": "价格最低"
 			},
 			{
 				"name": "车龄最短",
-				"value": "人均从高到低"
+				"value": "车龄最短"
 			},
 			{
 				"name": "里程最低",
-				"value": "人均从低到高"
+				"value": "里程最低"
 			}
 		]
 	},
@@ -1480,128 +1479,67 @@ const menuExam = [
 		// "name":'品牌',
 		"type": 'hierarchy',
 		"submenu": [{
-				"name": '品牌',
-				"value": "品牌",
-				"submenu": [{
-					"name": "品牌",
-					"value": "品牌"
-				}, ]
-			},
-			{
-				"name": 'A',
-				"value": "A",
-				"submenu": [{
-						"name": "奥迪",
-						"value": "全部超市"
-					},
-					{
-						"name": "阿斯顿马丁",
-						"value": "超市便利店"
-					}
-				]
-			},
-			{
-				"name": 'B',
-				"value": "B",
-				"submenu": [{
-						"name": "本田",
-						"value": "全部超市"
-					},
-					{
-						"name": "奔驰",
-						"value": "超市便利店"
-					},
-					{
-						"name": "宝马",
-						"value": "母婴用品"
-					},
-					{
-						"name": "标致",
-						"value": "综合特产"
-					},
-					{
-						"name": "奔驰",
-						"value": "超市便利店"
-					},
-					{
-						"name": "宝马",
-						"value": "母婴用品"
-					},
-					{
-						"name": "标致",
-						"value": "综合特产"
-					},
-					{
-						"name": "奔驰",
-						"value": "超市便利店"
-					},
-					{
-						"name": "宝马",
-						"value": "母婴用品"
-					},
-					{
-						"name": "标致",
-						"value": "综合特产"
-					},
-					{
-						"name": "奔腾",
-						"value": "个人护理"
-					}
-				]
-			},		
-		]
+			"name": '品牌',
+			"value": "品牌",
+			"submenu": [{
+				"name": "品牌不限",
+				"value": "品牌"
+			}, ]
+		} ]
 	},
 	{
-		"name":'价格',
+		"name": '价格',
 		"type": 'filter',
-		"submenu": [
-			{
-				"name": "价格",
-				"type": 'radio',
-				"submenu": [{
-						"name": "3万以下",
-						"value": "50以下"
-					},
-					{
-						"name": "3-5万",
-						"value": "50-100"
-					},
-					{
-						"name": "5-15万",
-						"value": "100-300"
-					},
-					{
-						"name": "15万以上",
-						"value": "300以上"
-					}
-				]
-			}
-		]
+		"submenu": [{
+			"name": "价格",
+			"type": 'radio',
+			"submenu": [{
+					"name": "3万以下",
+					"value": "0-3"
+				},
+				{
+					"name": "3-5万",
+					"value": "3-5"
+				},
+				{
+					"name": "5-15万",
+					"value": "5-15"
+				},
+				{
+					"name": "15万以上",
+					"value": "15-400"
+				}
+			]
+		}]
 	},
 	{
-		"name":'筛选',
+		"name": '筛选',
 		"type": 'radio',
 		"submenu": [{
 				"name": "车辆类型",
 				"submenu": [{
 						"name": "轿车",
-						"value": "满减活动"
+						"value": "1"
 					},
 					{
 						"name": "SUV",
-						"value": "打折优惠"
+						"value": "2"
 					},
 					{
 						"name": "面包",
-						"value": "会员专享"
+						"value": "3"
 					},
 					{
 						"name": "客车",
-						"value": "打折优惠"
+						"value": "4"
+					},
+					{
+						"name": "货车",
+						"value": "5"
 					},
 					{
 						"name": "MPV",
-						"value": "会员专享"
+						"value": "6"
 					}
 				]
 			},
@@ -1609,93 +1547,17 @@ const menuExam = [
 				"name": "变速箱",
 				"submenu": [{
 						"name": "手动",
-						"value": "预定"
+						"value": "1"
 					},
 					{
 						"name": "自动",
-						"value": "点餐"
+						"value": "2"
 					}
 				]
 			},
 			{
 				"name": "所属门店",
-				"submenu": [{
-						"name": "旗舰店",
-						"value": "50以下"
-					},
-					{
-						"name": "众美",
-						"value": "50-100"
-					},
-					{
-						"name": "无极",
-						"value": "100-300"
-					},
-					{
-						"name": "赵县",
-						"value": "300以上"
-					},
-					{
-						"name": "平山",
-						"value": "50-100"
-					},
-					{
-						"name": "西散庄",
-						"value": "100-300"
-					},
-					{
-						"name": "邯郸旗舰",
-						"value": "300以上"
-					},
-					{
-						"name": "赵县",
-						"value": "300以上"
-					},
-					{
-						"name": "平山",
-						"value": "50-100"
-					},
-					{
-						"name": "西散庄",
-						"value": "100-300"
-					},
-					{
-						"name": "邯郸旗舰",
-						"value": "300以上"
-					},
-					{
-						"name": "赵县",
-						"value": "300以上"
-					},
-					{
-						"name": "平山",
-						"value": "50-100"
-					},
-					{
-						"name": "西散庄",
-						"value": "100-300"
-					},
-					{
-						"name": "邯郸旗舰",
-						"value": "300以上"
-					},
-					{
-						"name": "赵县",
-						"value": "300以上"
-					},
-					{
-						"name": "平山",
-						"value": "50-100"
-					},
-					{
-						"name": "西散庄",
-						"value": "100-300"
-					},
-					{
-						"name": "邯郸旗舰",
-						"value": "300以上"
-					}
-				]
+				"submenu": []
 			}
 		]
 	}

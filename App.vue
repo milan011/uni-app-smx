@@ -5,14 +5,22 @@
 	import {
 		mapMutations
 	} from 'vuex';
+	import amap from '@/common/amap-wx.js'
+	// import getIp from "@/api/postion.js"
 	export default {
+		data() {
+			return {
+				amapPlugin: null,
+				key: '23ebf335166547d686e8383326c7b375'
+			}
+		},
 		methods: {
 			...mapMutations(['login'])
 		},
 		onLaunch: function() {
 			let userInfo = uni.getStorageSync('userInfo') || '';
 			console.log(userInfo)
-			if(userInfo.id){
+			if (userInfo.id) {
 				//更新登陆状态
 				uni.getStorage({
 					key: 'userInfo',
@@ -21,7 +29,51 @@
 					}
 				});
 			}
-			
+			let amapPlugin = new amap.AMapWX({
+				key: '23ebf335166547d686e8383326c7b375'
+			});
+			//#ifndef H5
+			amapPlugin.getRegeo({
+				success: function(data) {
+					//成功回调
+					uni.setStorage({
+						key: 'city',
+						data: data[0].regeocodeData.addressComponent.city
+					})
+				},
+				fail: function(info) {
+					//失败回调
+					uni.showToast({
+						title:"定位失败,请点击右上角手动选择",
+						icon:"none",
+						duration:1500
+					})
+				}
+			})
+			//#endif
+			//#ifdef H5
+			uni.request({
+				url: 'https://restapi.amap.com/v3/ip?parameters',
+				data: {
+					key: 'b4480e225615b0754c5b8c6d1988cb3c'
+				},
+				method: "GET",
+				success: (res) => {
+					console.log(res.data);
+					uni.setStorage({
+						key: 'citys',
+						data: res.data.city
+					})
+				},
+				fail:()=>{
+					uni.showToast({
+						title:"定位失败,请点击右上角手动选择",
+						icon:"none",
+						duration:1500
+					})
+				}
+			})
+			//#endif
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -38,7 +90,6 @@
 	@import "./common/colorui/icon.css";
 </style>
 <style lang='scss'>
-	
 	/*
 		全局公共样式和字体图标
 	*/
@@ -372,6 +423,7 @@
 	video {
 		box-sizing: border-box;
 	}
+
 	/* 骨架屏替代方案 */
 	.Skeleton {
 		background: #f3f3f3;
@@ -442,9 +494,11 @@
 			border: 0;
 		}
 	}
-	scroll-view [style*="overflow"]::-webkit-scrollbar {  
-	  display: none;  
-	} 
+
+	scroll-view [style*="overflow"]::-webkit-scrollbar {
+		display: none;
+	}
+
 	uni-button[type=default],
 	button[type=default] {
 		color: $font-color-dark;

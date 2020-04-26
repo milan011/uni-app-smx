@@ -8,7 +8,7 @@
 		<view class="cu-form-group">
 			<text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
 			<view class="title">手机号码</view>
-			<input placeholder="请输入客户手机号" name="input" v-model="userInfo.tel" @blur="verificationTel"></input>
+			<input placeholder="请输入客户手机号" name="input" v-model="userInfo.telephone" @blur="verificationTel"></input>
 			<view class="cu-capsule radius">
 				<view class='cu-tag bg-blue '>
 					+86
@@ -20,23 +20,23 @@
 		</view>
 		<view class="cu-form-group margin-top">
 			<view class="title">客户来源</view>
-			<picker @change="PickerChange" :value="index" v-model="userInfo.source" :range="picker">
+			<picker @change="PickerChange" :value="index" v-model="userInfo.customer_res" :range="picker">
 				<view class="picker">
-					{{index>-1?picker[index]:'请选择客户来源'}}
+					{{userInfo.customer_res>-1?picker[userInfo.customer_res - 1]:'请选择客户来源'}}
 				</view>
 			</picker>
 		</view>
 		<view class="cu-form-group margin-top">
 			<view class="title">身份证</view>
-			<input placeholder="请输入客户身份证号" name="input" v-model="userInfo.IdCard" @blur="verificationId"></input>
+			<input placeholder="请输入客户身份证号" name="input" v-model="userInfo.indentily_card" @blur="verificationId"></input>
 		</view>
 		<view class="cu-form-group margin-top">
 			<view class="title">Q Q 号</view>
-			<input placeholder="请输入客户Q Q 号" name="input" v-model="userInfo.QQ"></input>
+			<input placeholder="请输入客户Q Q 号" name="input" v-model="userInfo.qq_number"></input>
 		</view>
 		<view class="cu-form-group margin-top">
 			<view class="title">微信号</view>
-			<input placeholder="请输入客户微信号" name="input" v-model="userInfo.WX"></input>
+			<input placeholder="请输入客户微信号" name="input" v-model="userInfo.wx_number"></input>
 		</view>
 		<view class="cu-form-group margin-top">
 			<view class="title">详细地址</view>
@@ -51,46 +51,62 @@
 		</view>
 	</view>
 </template>
-
 <script>
+	import {
+		editCustomer
+	} from "@/api/user.js"
 	export default {
 		data() {
 			return {
 				userInfo: {
 					name: "",
-					tel: "",
-					source: "",
-					IdCard: "",
-					QQ: "",
-					WX: "",
+					telephone: "",
 					address: "",
-					remark: ""
+					indentily_card: "",
+					qq_number: "",
+					wx_number: "",
+					remark: "",
+					type: "",
+					customer_res: -1, //客户来源
+					creater_id: "1", //创建者id
+					shopid: "1", //店id
+					status: "1", //状态
+					id: ""
 				},
-				index: -1,
-				picker: ["客户来电", "网上预约", "...."],
+				// index: -1,
+				picker: ["来电", "进店", "朋友介绍", "车商", "广告", "其他"],
 				textareaAValue: "",
-				aaa: ""
+
 			};
-		},
-		onShow() {
-			// console.log(this.aaa
-			this.a()
 		},
 		onLoad(options) {
 			console.log(options)
-			this.aaa = options.index
+			this.userInfo.id = options.id
+			let that = this
+			uni.getStorage({
+				key:"customer",
+				success:function(res){
+					that.userInfo.name = res.data.name
+					that.userInfo.telephone = res.data.telephone
+					that.userInfo.address = res.data.address
+					that.userInfo.indentily_card = res.data.indentily_card
+					that.userInfo.qq_number = res.data.qq_number
+					that.userInfo.wx_number = res.data.wx_number
+					that.userInfo.remark = res.data.remark
+					that.userInfo.customer_res = res.data.customer_res
+					that.userInfo.creater_id = res.data.creater_id
+					that.userInfo.shopid = res.data.shop_id
+					that.userInfo.status = res.data.status
+				}
+			})
 		},
 		methods: {
-			a(){
-				console.log("a==>",this.aaa)
-			},
 			PickerChange(e) {
 				this.index = e.detail.value
-				this.userInfo.source = this.picker[e.detail.value]
+				this.userInfo.customer_res = e.detail.value + 1
 			},
 			textareaAInput(e) {
 				this.textareaAValue = e.detail.value
-
 			},
 			// 表单验证
 			verificationName(e) {
@@ -127,7 +143,7 @@
 			},
 			doSave() {
 				var reg = /^[1]([3-9])[0-9]{9}$/;
-				if (this.userInfo.name == "" || !reg.test(this.userInfo.tel)) {
+				if (this.userInfo.name == "" || !reg.test(this.userInfo.telephone)) {
 					uni.showToast({
 						title: '请输入必填项',
 						icon: "none",
@@ -135,11 +151,20 @@
 					});
 					return false
 				} else {
-					console.log(this.userInfo)
-					uni.showToast({
-						title: '保存成功',
-						duration: 1500
-					});
+					editCustomer({ ...this.userInfo
+					}).then(res => {
+						uni.showToast({
+							title: '保存成功',
+							duration: 1500
+						});
+						setTimeout(() => {
+							uni.navigateTo({
+								url: "../../customer/customer"
+							})
+						}, 1500)
+					})
+					return false
+					
 					setTimeout(() => {
 						uni.navigateBack({
 							delta: 1

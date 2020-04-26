@@ -500,7 +500,7 @@
 </template>
 
 <script>
-	import { createCustomer } from '@/api/user.js'
+	import { editCustomer } from '@/api/user.js'
 	import { vinRepeatCheck, getCarInfoByWin } from '@/api/carManage.js'
 	import EvanForm from '@/components/evan-form/evan-form.vue'
 	import EvanFormItem from '@/components/evan-form/evan-form-item.vue'
@@ -872,7 +872,7 @@
 			confirmCustomer() {
 				this.$refs.customerform.validate((valid) => {
 					if (valid) {
-						createCustomer(this.customer).then(res => {
+						editCustomer(this.customer).then(res => {
 							console.log('customer',res.data)
 							this.customer = res.data.Data
 							this.customerEdit = false

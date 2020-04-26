@@ -1,121 +1,41 @@
 <template>
 	<view class="container">
 		<view class="carousel">
-			<!-- <swiper indicator-dots circular=true duration="400">
-				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
-					<view class="image-wrapper">
-						<image
-							:src="item.src" 
-							class="loaded" 
-							mode="aspectFill"
-						></image>
-					</view>
-				</swiper-item>
-			</swiper> -->
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in carDetail.carimages" :key="index">
 					<view class="image-wrapper">
-						<image
-							:src="imgUrl + item.filename" 
-							class="loaded" 
-							mode="aspectFit"
-						></image>
+						<image :src="imgUrl + item.filename" class="loaded" mode="aspectFit"></image>
 					</view>
 				</swiper-item>
 			</swiper>
 		</view>
-		
+
 		<view class="introduce-section">
 			<text class="title">{{ carDetail.cars.FullName }}</text>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
 				<text class="price">{{ carDetail.cars.InitPrice/10000 }}万</text>
-				<!-- <text class="m-price">¥488</text> -->
-				<!-- <text class="coupon-tip">7折</text> -->
 			</view>
-			<!-- <view class="bot-row">
-				<text>销售顾问: {{ carDetail.EvalName}}</text>
-				<text>门店地址: {{ carDetail.shop.name}}</text>
-				<text>发布时间: {{ carDetail.CreateDate}}</text>
-				<text>联系电话: {{ carDetail.Telephone}}</text>
-			</view> -->
 			<view class="c-list">
-			<view class="c-row b-b">
-			<view class="con-list">
-				<text>销售顾问: {{ carDetail.EvalName}}({{ carDetail.shop.name }})</text>
-				<text>门店地址: {{ carDetail.shop.address}}</text>
-				<text>发布时间: {{ carDetail.CreateDate}}</text>
-				<text>联系电话: {{ carDetail.Telephone}}</text>
-			</view>
-			</view>
+				<view class="c-row b-b">
+					<view class="con-list">
+						<text>销售顾问: {{ carDetail.EvalName}}({{ carDetail.shop.name }})</text>
+						<text>门店地址: {{ carDetail.shop.address}}</text>
+						<text>发布时间: {{ carDetail.CreateDate}}</text>
+						<text>联系电话: {{ carDetail.Telephone}}</text>
+					</view>
+				</view>
 			</view>
 		</view>
-		
-		<!--  分享 -->
-		<!-- <view class="share-section" @click="share">
-			<view class="share-icon">
-				<text class="yticon icon-xingxing"></text>
-				 返
-			</view>
-			<text class="tit">该商品分享可领49减10红包</text>
-			<text class="yticon icon-bangzhu1"></text>
-			<view class="share-btn">
-				立即分享
-				<text class="yticon icon-you"></text>
-			</view>
-			
-		</view> -->
-		
-		<!-- <view class="c-list">
-			<view class="c-row b-b" @click="toggleSpec">
-				<text class="tit">购买类型</text>
-				<view class="con">
-					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
-						{{sItem.name}}
-					</text>
-				</view>
-				<text class="yticon icon-you"></text>
-			</view>
-			<view class="c-row b-b">
-				<text class="tit">优惠券</text>
-				<text class="con t-r red">领取优惠券</text>
-				<text class="yticon icon-you"></text>
-			</view>
-			<view class="c-row b-b">
-				<text class="tit">促销活动</text>
-				<view class="con-list">
-					<text>新人首单送20元无门槛代金券</text>
-					<text>订单满50减10</text>
-					<text>订单满100减30</text>
-					<text>单笔购买满两件免邮费</text>
-				</view>
-			</view>
-			<view class="c-row b-b">
-				<text class="tit">服务</text>
-				<view class="bz-list con">
-					<text>7天无理由退换货 ·</text>
-					<text>假一赔十 ·</text>
-				</view>
-			</view>
-		</view> -->
-		
+
 		<!-- 评价 -->
 		<view class="eva-section">
 			<view class="e-header">
 				<text class="tit">车辆介绍</text>
-				<!-- <text>(86)</text> -->
-				<!-- <text class="tip">好评率 100%</text> -->
-				<!-- <text class="yticon icon-you"></text> -->
-			</view> 
+			</view>
 			<view class="eva-box">
-				<!-- <image class="portrait" src="http://img3.imgtn.bdimg.com/it/u=1150341365,1327279810&fm=26&gp=0.jpg" mode="aspectFill"></image> -->
 				<view class="right">
-					<!-- <text class="name">Leo yo</text> -->
 					<rich-text :nodes="carDetail.cars.Description"></rich-text>
-					<!-- <view class="bot">
-						<text class="attr">购买类型：XL 红色</text>
-						<text class="time">2019-04-01 19:21</text>
-					</view> -->
 				</view>
 			</view>
 		</view>
@@ -125,13 +45,13 @@
 				<text class="tit">基本信息</text>
 				<text v-if="allParamShow" @click="toggleSpec" class="tip">全部参数配置</text>
 				<text class="yticon icon-you"></text>
-			</view> 
+			</view>
 			<view class="eva-box">
 				<view class="right">
 					<view class="tj-sction">
 						<view class="tj-item">
 							<text class="num">{{ carDetail.cars.Mileage }}</text>
-							<text>里程</text>
+							<text>里程(万)</text>
 						</view>
 						<view class="tj-item">
 							<text class="num">{{ carDetail.cars.CityName }}</text>
@@ -140,7 +60,7 @@
 						<view class="tj-item">
 							<text class="num">{{ transmissionConfig[carDetail.cars.Transmission] }}</text>
 							<text>变速箱</text>
-						</view>						
+						</view>
 					</view>
 					<view class="tj-sction">
 						<view class="tj-item">
@@ -153,41 +73,24 @@
 						</view>
 						<view class="tj-item">
 							<text if="carDetail.cars.BuyDate" class="num">
-								{{ carDetail.cars.BuyDate }}
+								{{ carDetail.cars.BuyDate.substring(0,carDetail.cars.BuyDate.indexOf('T')) }}
 							</text>
 							<text>上牌时间</text>
-						</view>						
+						</view>
 					</view>
 				</view>
 			</view>
 		</view>
 		<!-- 基本信息end -->
-		<!-- <view v-if="allParamShow" class="c-list">
-			<view class="c-row b-b" @click="toggleSpec">
-				<text class="tit">全部参数配置</text>
-				<view class="con">
-					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
-						{{sItem.name}}
-					</text>
-					<text style="text-align:center;margin-right: 5px;">全部参数配置</text>
-					<text class="yticon icon-you"></text>
-				</view>	
-			</view>
-		</view> -->
-		<!-- <view class="detail-desc">
-			<view class="d-header">
-				<text>车辆介绍</text>
-			</view>
-			<rich-text :nodes="carDetail.cars.Description"></rich-text>
-		</view> -->
 		<!-- 车况检测begin -->
 		<view class="eva-section">
 			<view class="e-header">
 				<text class="tit">车况检测</text>
-			</view> 
+			</view>
 			<view class="eva-box">
 				<view class="right">
-					<uni-segmented-control :current="currentStatus" :values="itemStatus" @clickItem="onClickStatusItem" style-type="button" active-color="#909090"></uni-segmented-control>
+					<uni-segmented-control :current="currentStatus" :values="itemStatus" @clickItem="onClickStatusItem" style-type="button"
+					 active-color="#909090"></uni-segmented-control>
 					<view class="content">
 						<status-car ref="sonStatusInfo"></status-car>
 					</view>
@@ -199,74 +102,36 @@
 		<view class="eva-section">
 			<view class="e-header">
 				<text class="tit">猜你喜欢</text>
-			</view> 
+			</view>
 			<view class="eva-box">
 				<view class="right">
 					<view class="guess-section">
-						<view 
-							v-for="(item, index) in recomList" :key="index"
-							class="guess-item"
-							@click="navToDetailPage(item)"
-						>
+						<view v-for="(item, index) in recomList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 							<view class="image-wrapper">
-								<image :src="item.filename" mode="aspectFit"></image>
+								<image :src="imgUrl+item.filename" mode="aspectFit"></image>
 							</view>
 							<!-- <text class="title clamp">{{item.FullName}}</text> -->
 							<view>{{item.FullName}}</view>
-							<text class="price">￥{{item.SaleAMT}}</text>
+							<text class="price">￥{{item.InitPrice/10000}}万</text>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
-		<!-- 猜你喜欢end -->
-		<!-- 底部操作菜单 -->
-		<!-- <view class="page-bottom">
-			<navigator url="/pages/index/index" open-type="switchTab" class="p-b-btn">
-				<text class="yticon icon-xiatubiao--copy"></text>
-				<text>首页</text>
-			</navigator>
-			<navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn">
-				<text class="yticon icon-gouwuche"></text>
-				<text>购物车</text>
-			</navigator>
-			<view class="p-b-btn" :class="{active: favorite}" @click="toFavorite">
-				<text class="yticon icon-shoucang"></text>
-				<text>收藏</text>
-			</view>
-			
-			<view class="action-btn-group">
-				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
-				<button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button>
-			</view>
-		</view> -->
-		
-		
-		<!-- 规格-模态层弹窗 -->
-		<view 
-			class="popup spec" 
-			:class="specClass"
-			@touchmove.stop.prevent="stopPrevent"
-			@click="toggleSpec"
-		>
+		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="stopPrevent" @click="toggleSpec">
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
-			<view class="layer attr-content" @click.stop="stopPrevent">	
+			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view>
-				   <uni-segmented-control :current="currentCard" :values="items" @clickItem="onClickItem" style-type="button" active-color="#909090"></uni-segmented-control>
-				   <view class="content">
-				     <vin-car ref="sonVinInfo"></vin-car>  
-				   </view>
+					<uni-segmented-control :current="currentCard" :values="items" @clickItem="onClickItem" style-type="button"
+					 active-color="#909090"></uni-segmented-control>
+					<view class="content">
+						<vin-car ref="sonVinInfo"></vin-car>
+					</view>
 				</view>
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
-		<!-- 分享 -->
-		<!-- <share 
-			ref="share" 
-			:contentHeight="580"
-			:shareList="shareList"
-		></share> -->
 	</view>
 </template>
 
@@ -276,7 +141,15 @@
 	import listCell from '@/components/mix-list-cell';
 	import vinCar from './components/vin-car';
 	import statusCar from './components/status-car';
-	export default{
+	import {
+		getCarDetail,
+		getCarCheckStatus,
+		getCarModelConfigByTid,
+		getCarTypeByVin,
+		getCarList
+	} from '@/api/car.js'
+	import Config from '@/common/config.js'
+	export default {
 		components: {
 			share,
 			uniSegmentedControl,
@@ -287,134 +160,164 @@
 		data() {
 			return {
 				specClass: 'none',
-				specSelected:[],
+				specSelected: [],
 				carDetail: {
-					"cars" : {},
-					"shop" : {},
-					"user" : {},
-					"customer" : {},
-					"carimages" : [],
+					"cars": {},
+					"shop": {},
+					"user": {},
+					"customer": {},
+					"carimages": [],
 				},
 				allParamShow: false,
-				items: ['车辆参数','发动机参数','底盘及制动','其他配置'],
-				itemStatus: ['非常规技术检查','静态检查','动态检查'],
+				items: ['车辆参数', '发动机参数', '底盘及制动', '其他配置'],
+				itemStatus: ['非常规技术检查', '静态检查', '动态检查'],
 				currentCard: 0,
 				currentStatus: 0,
 				carVin: {},
 				transmissionConfig: [],
-				imgUrl: 'http://tclapi.simaxian.com',
+				imgUrl: Config.img_url,
 				tabCurrentIndex: 0,
 				recomList: [],
-				favorite: true,			
+				favorite: true,
+				car: {
+					PageIndex: 1,
+					PageSize: 4,
+					SaleAMTMin: "",
+					SaleAMTMax: "",
+					city_name: "",
+					Car_Status: 1,
+					Sale_number: -1,
+					IsPutOn: 1,
+					Carid: ""
+				}
 			};
 		},
-		async onLoad(options){
-			
+		async onLoad(options) {
+
 			//接收传值,id里面放的是标题，因为测试数据并没写id 
-			let id = options.id;
-			if(id){
-				this.$api.msg(`点击了${id}`);
-			}
-			
-			
-			//规格 默认选中第一条
-			/* this.specList.forEach(item=>{
-				for(let cItem of this.specChildList){
-					if(cItem.pid === item.id){
-						this.$set(cItem, 'selected', true);
-						this.specSelected.push(cItem);
-						break; //forEach不能使用break
-					}
-				}
+			// 车辆详情
+			uni.showLoading({
+				title:"加载中"
 			})
-			this.shareList = await this.$api.json('shareList'); */
-			this.carDetail = await this.$api.json('carDetail');
-			this.carVin = await this.$api.json('carVin');
-			this.carCheckStatus = await this.$api.json('checkStatus');
-			this.recomList = await this.$api.json('recomList');
-			this.transmissionConfig = await this.$api.config('transmissionConfig');
-				
-			if(Object.keys(this.carVin).length != 0){ //有vin码返回值时
+			let id = options.id;
+			let carDetail = await getCarDetail({
+				id
+			})
+			this.carDetail = carDetail.data.Data;
+
+			// 全部参数配置 
+			let plevelid = "";
+			if (this.carDetail.cars.plevelid) {
+				console.log(plevelid)
+				plevelid = this.carDetail.cars.plevelid
+			} else {
+				await getCarTypeByVin({
+					vin: this.carDetail.cars.VIN
+				}).then(res => {
+					let msg = JSON.parse(res.data.LogMessage).message
+					if (msg) {
+						uni.showToast({
+							title: msg,
+							icon: "none",
+							duration: 2000
+						})
+					} else {	
+						let list = JSON.parse(res.data.LogMessage).data;
+						let obj = list.find(ele => this.carDetail.cars.FullName == ele.psalename)
+						plevelid = obj.plevelid
+					}
+				})
+			}
+			let carVin = await getCarModelConfigByTid({
+				tid: plevelid
+			})
+			this.carVin = JSON.parse(carVin.data.LogMessage).result[0]
+			if (Object.keys(this.carVin).length != 0) {
 				this.allParamShow = true
 				this.$refs.sonVinInfo.sonAssginVin(this.carVin);
 			}
-			
+			// 车况检测
+			let carCheckStatus = await getCarCheckStatus({
+				carid: id
+			})
+			this.carCheckStatus = carCheckStatus.data.Data
 			this.$refs.sonStatusInfo.sonAssginStatus(this.carCheckStatus);
-			
-			console.log('empty', Object.keys(this.carVin).length)
-			console.log('carVin', this.carVin)
-			console.log(this.carDetail)
-			console.log(this.transmissionConfig)
+			// 猜你喜欢
+			this.car.Carid = options.id
+			this.car.SaleAMTMin = await this.carDetail.cars.InitPrice / 10000 - 5 > 0 ? this.carDetail.cars.InitPrice / 10000 -
+				5 : 1
+			this.car.SaleAMTMax = await this.carDetail.cars.InitPrice / 10000 + 5
+			var that = this
+			//#ifndef H5
+			uni.getStorage({
+				key: 'city',
+				success: function(res) {
+					that.city = res.data
+					let arr = res.data.split("")
+					let index = arr.length - 1
+					if (arr[index] == "市") {
+						let arr1 = arr.pop()
+						that.car.city_name = arr.join("")
+					} else {
+						that.car.city_name = res.data
+					}
+				}
+			});
+			//#endif
+			//#ifdef H5
+			uni.getStorage({
+				key: 'citys',
+				success: function(res) {
+					that.city = res.data
+					let arr = res.data.split("")
+					let index = arr.length - 1
+					if (arr[index] == "市") {
+						let arr1 = arr.pop()
+						that.car.city_name = arr.join("")
+					} else {
+						that.car.city_name = res.data
+					}
+				}
+			});
+			//#endif
+			let recomList = await getCarList({ ...this.car
+			});
+			this.recomList = recomList.data.Data.DataList
+			this.transmissionConfig = await this.$api.config('transmissionConfig');
+			await  uni.hideLoading()
 		},
-		methods:{
+		methods: {
 			//规格弹窗开关
 			toggleSpec() {
-				if(this.specClass === 'show'){
+				if (this.specClass === 'show') {
 					this.specClass = 'hide';
 					setTimeout(() => {
 						this.specClass = 'none';
 					}, 250);
-				}else if(this.specClass === 'none'){
+				} else if (this.specClass === 'none') {
 					this.specClass = 'show';
 				}
 			},
 			onClickItem(e) {
-			  if (this.$refs.sonVinInfo.currentCard !== e.currentIndex) {
-			      this.$refs.sonVinInfo.currentCard = e.currentIndex;
-			  }
-			},
-			onClickStatusItem(e){
-				if (this.$refs.sonStatusInfo.currentStatus !== e.currentIndex) {
-				    this.$refs.sonStatusInfo.currentStatus = e.currentIndex;
+				if (this.$refs.sonVinInfo.currentCard !== e.currentIndex) {
+					this.$refs.sonVinInfo.currentCard = e.currentIndex;
 				}
 			},
-			//选择规格
-			selectSpec(index, pid){
-				let list = this.specChildList;
-				list.forEach(item=>{
-					if(item.pid === pid){
-						this.$set(item, 'selected', false);
-					}
-				})
-
-				this.$set(list[index], 'selected', true);
-				//存储已选择
-				/**
-				 * 修复选择规格存储错误
-				 * 将这几行代码替换即可
-				 * 选择的规格存放在specSelected中
-				 */
-				this.specSelected = []; 
-				list.forEach(item=>{ 
-					if(item.selected === true){ 
-						this.specSelected.push(item); 
-					} 
-				})
-				
+			onClickStatusItem(e) {
+				if (this.$refs.sonStatusInfo.currentStatus !== e.currentIndex) {
+					this.$refs.sonStatusInfo.currentStatus = e.currentIndex;
+				}
 			},
 			//分享
-			share(){
-				this.$refs.share.toggleMask();	
-			},
-			//收藏
-			toFavorite(){
-				this.favorite = !this.favorite;
-			},
-			buy(){
-				uni.navigateTo({
-					url: `/pages/order/createOrder`
-				})
+			share() {
+				this.$refs.share.toggleMask();
 			},
 			navToDetailPage(item) {
-				//测试数据没有写id，用title代替
-				console.log(item)
-				// return false
 				let id = item.ID;
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
-			},
-			stopPrevent(){}
+			}
 		},
 
 	}
@@ -422,57 +325,67 @@
 
 <style lang='scss'>
 	%flex-center {
-	 display:flex;
-	 flex-direction: column;
-	 justify-content: center;
-	 align-items: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
+
 	%section {
-	  display:flex;
-	  justify-content: space-around;
-	  align-content: center;
-	  background: #fff;
-	  border-radius: 10upx;
+		display: flex;
+		justify-content: space-around;
+		align-content: center;
+		background: #fff;
+		border-radius: 10upx;
 	}
-	page{
+
+	page {
 		background: $page-color-base;
-		padding-bottom: 160upx;	
+		padding-bottom: 160upx;
 	}
-	uni-page-body{
-		padding-bottom:20px;
+
+	uni-page-body {
+		padding-bottom: 20px;
 	}
-	uni-page-body{
-		padding-bottom:20px;
+
+	uni-page-body {
+		padding-bottom: 20px;
 	}
-	.icon-you{
+
+	.icon-you {
 		font-size: $font-base + 2upx;
 		color: #888;
 	}
-	.tj-sction{
+
+	.tj-sction {
 		@extend %section;
-		.tj-item{
+
+		.tj-item {
 			@extend %flex-center;
 			flex-direction: column;
 			height: 140upx;
 			font-size: $font-sm;
 			color: #75787d;
-			width:30%;
+			width: 30%;
 		}
-		.num{
+
+		.num {
 			font-size: $font-lg;
 			color: $font-color-dark;
 			margin-bottom: 8upx;
 		}
 	}
-	.navbar{
+
+	.navbar {
 		display: flex;
 		height: 40px;
 		padding: 0 5px;
 		background: #fff;
-		box-shadow: 0 1px 5px rgba(0,0,0,.06);
+		box-shadow: 0 1px 5px rgba(0, 0, 0, .06);
 		position: relative;
 		z-index: 10;
-		.nav-item{
+
+		.nav-item {
 			flex: 1;
 			display: flex;
 			justify-content: center;
@@ -481,9 +394,11 @@
 			font-size: 15px;
 			color: $font-color-dark;
 			position: relative;
-			&.current{
+
+			&.current {
 				color: $base-color;
-				&:after{
+
+				&:after {
 					content: '';
 					position: absolute;
 					left: 50%;
@@ -496,58 +411,67 @@
 			}
 		}
 	}
+
 	.carousel {
 		height: 722upx;
-		position:relative;
-		swiper{
+		position: relative;
+
+		swiper {
 			height: 100%;
 		}
-		.image-wrapper{
+
+		.image-wrapper {
 			width: 100%;
 			height: 100%;
 		}
+
 		.swiper-item {
 			display: flex;
 			justify-content: center;
 			align-content: center;
 			height: 750upx;
 			overflow: hidden;
+
 			image {
 				width: 100%;
 				height: 100%;
 			}
 		}
-		
+
 	}
-	
+
 	/* 标题简介 */
-	.introduce-section{
+	.introduce-section {
 		background: #fff;
 		padding: 20upx 30upx;
-		
-		.title{
+
+		.title {
 			font-size: 32upx;
 			color: $font-color-dark;
 			height: 50upx;
 			line-height: 50upx;
 		}
-		.price-box{
-			display:flex;
-			align-items:baseline;
+
+		.price-box {
+			display: flex;
+			align-items: baseline;
 			height: 64upx;
 			padding: 10upx 0;
 			font-size: 26upx;
-			color:$uni-color-primary;
+			color: $uni-color-primary;
 		}
-		.price{
+
+		.price {
 			font-size: $font-lg + 2upx;
 		}
-		.m-price{
-			margin:0 12upx;
+
+		.m-price {
+			margin: 0 12upx;
 			color: $font-color-light;
 			text-decoration: line-through;
 		}
-		.coupon-tip{
+
+		.coupon-tip {
 			align-items: center;
 			padding: 4upx 10upx;
 			background: $uni-color-primary;
@@ -555,51 +479,57 @@
 			color: #fff;
 			border-radius: 6upx;
 			line-height: 1;
-			transform: translateY(-4upx); 
+			transform: translateY(-4upx);
 		}
-		.bot-row{
-			display:flex;
-			align-items:center;
+
+		.bot-row {
+			display: flex;
+			align-items: center;
 			height: 50upx;
 			font-size: $font-sm;
 			color: $font-color-light;
-			text{
+
+			text {
 				flex: 1;
 			}
 		}
 	}
+
 	/* 分享 */
-	.share-section{
-		display:flex;
-		align-items:center;
+	.share-section {
+		display: flex;
+		align-items: center;
 		color: $font-color-base;
 		background: linear-gradient(left, #fdf5f6, #fbebf6);
 		padding: 12upx 30upx;
-		.share-icon{
-			display:flex;
-			align-items:center;
+
+		.share-icon {
+			display: flex;
+			align-items: center;
 			width: 70upx;
 			height: 30upx;
 			line-height: 1;
 			border: 1px solid $uni-color-primary;
 			border-radius: 4upx;
-			position:relative;
+			position: relative;
 			overflow: hidden;
 			font-size: 22upx;
 			color: $uni-color-primary;
-			&:after{
+
+			&:after {
 				content: '';
 				width: 50upx;
 				height: 50upx;
 				border-radius: 50%;
 				left: -20upx;
 				top: -12upx;
-				position:absolute;
+				position: absolute;
 				background: $uni-color-primary;
 			}
 		}
-		.icon-xingxing{
-			position:relative;
+
+		.icon-xingxing {
+			position: relative;
 			z-index: 1;
 			font-size: 24upx;
 			margin-left: 2upx;
@@ -607,130 +537,153 @@
 			color: #fff;
 			line-height: 1;
 		}
-		.tit{
+
+		.tit {
 			font-size: $font-base;
-			margin-left:10upx;
+			margin-left: 10upx;
 		}
-		.icon-bangzhu1{
+
+		.icon-bangzhu1 {
 			padding: 10upx;
 			font-size: 30upx;
 			line-height: 1;
 		}
-		.share-btn{
+
+		.share-btn {
 			flex: 1;
-			text-align:right;
+			text-align: right;
 			font-size: $font-sm;
 			color: $uni-color-primary;
 		}
-		.icon-you{
+
+		.icon-you {
 			font-size: $font-sm;
 			margin-left: 4upx;
 			color: $uni-color-primary;
 		}
 	}
-	
-	.c-list{
+
+	.c-list {
 		font-size: $font-sm + 2upx;
 		color: $font-color-base;
 		background: #fff;
-		.c-row{
-			display:flex;
-			align-items:center;
+
+		.c-row {
+			display: flex;
+			align-items: center;
 			padding: 20upx 30upx;
-			position:relative;
+			position: relative;
 		}
-		.tit{
+
+		.tit {
 			width: 140upx;
 		}
-		.con{
+
+		.con {
 			flex: 1;
 			color: $font-color-dark;
-			.selected-text{
+
+			.selected-text {
 				margin-right: 10upx;
 			}
 		}
-		.bz-list{
+
+		.bz-list {
 			height: 40upx;
 			font-size: $font-sm+2upx;
 			color: $font-color-dark;
-			text{
+
+			text {
 				display: inline-block;
 				margin-right: 30upx;
 			}
 		}
-		.con-list{
+
+		.con-list {
 			flex: 1;
-			display:flex;
+			display: flex;
 			flex-direction: column;
 			color: $font-color-dark;
 			line-height: 40upx;
 		}
-		.red{
+
+		.red {
 			color: $uni-color-primary;
 		}
 	}
-	
+
 	/* 评价 */
-	.eva-section{
+	.eva-section {
 		display: flex;
 		flex-direction: column;
 		padding: 20upx 30upx;
 		background: #fff;
 		margin-top: 16upx;
-		.e-header{
+
+		.e-header {
 			display: flex;
 			align-items: center;
 			height: 70upx;
 			font-size: $font-sm + 2upx;
 			color: $font-color-light;
-			.tit{
+
+			.tit {
 				font-size: $font-base + 2upx;
 				color: $font-color-dark;
 				margin-right: 4upx;
 			}
-			.tip{
+
+			.tip {
 				flex: 1;
 				text-align: right;
 			}
-			.icon-you{
+
+			.icon-you {
 				margin-left: 10upx;
 			}
 		}
 	}
-	.eva-box{
+
+	.eva-box {
 		display: flex;
 		padding: 20upx 0;
-		.portrait{
+
+		.portrait {
 			flex-shrink: 0;
 			width: 80upx;
 			height: 80upx;
 			border-radius: 100px;
 		}
-		.right{
+
+		.right {
 			flex: 1;
 			display: flex;
 			flex-direction: column;
 			font-size: $font-base;
 			color: $font-color-base;
 			padding-left: 26upx;
-			.con{
+
+			.con {
 				font-size: $font-base;
 				color: $font-color-dark;
 				padding: 20upx 0;
 			}
-			.bot{
+
+			.bot {
 				display: flex;
 				justify-content: space-between;
 				font-size: $font-sm;
-				color:$font-color-light;
+				color: $font-color-light;
 			}
 		}
 	}
+
 	/*  详情 */
-	.detail-desc{
+	.detail-desc {
 		background: #fff;
 		margin-top: 16upx;
-		.d-header{
+
+		.d-header {
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -738,14 +691,15 @@
 			font-size: $font-base + 2upx;
 			color: $font-color-dark;
 			position: relative;
-				
-			text{
+
+			text {
 				padding: 0 20upx;
 				background: #fff;
 				position: relative;
 				z-index: 1;
 			}
-			&:after{
+
+			&:after {
 				position: absolute;
 				left: 50%;
 				top: 50%;
@@ -753,41 +707,48 @@
 				width: 300upx;
 				height: 0;
 				content: '';
-				border-bottom: 1px solid #ccc; 
+				border-bottom: 1px solid #ccc;
 			}
 		}
 	}
-	
+
 	/* 规格选择弹窗 */
-	.attr-content{
+	.attr-content {
 		padding: 10upx 30upx;
-		.a-t{
+
+		.a-t {
 			display: flex;
-			image{
+
+			image {
 				width: 170upx;
 				height: 170upx;
 				flex-shrink: 0;
 				margin-top: -40upx;
-				border-radius: 8upx;;
+				border-radius: 8upx;
+				;
 			}
-			.right{
+
+			.right {
 				display: flex;
 				flex-direction: column;
 				padding-left: 24upx;
 				font-size: $font-sm + 2upx;
 				color: $font-color-base;
 				line-height: 42upx;
-				.price{
+
+				.price {
 					font-size: $font-lg;
 					color: $uni-color-primary;
 					margin-bottom: 10upx;
 				}
-				.selected-text{
+
+				.selected-text {
 					margin-right: 10upx;
 				}
 			}
 		}
-		.attr-list{
+
+		.attr-list {
 			display: flex;
 			flex-direction: column;
 			font-size: $font-base + 2upx;
@@ -795,11 +756,13 @@
 			padding-top: 30upx;
 			padding-left: 10upx;
 		}
-		.item-list{
+
+		.item-list {
 			padding: 20upx 0 0;
 			display: flex;
 			flex-wrap: wrap;
-			text{
+
+			text {
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -813,13 +776,14 @@
 				font-size: $font-base;
 				color: $font-color-dark;
 			}
-			.selected{
+
+			.selected {
 				background: #fbebee;
 				color: $uni-color-primary;
 			}
 		}
 	}
-	
+
 	/*  弹出层 */
 	.popup {
 		position: fixed;
@@ -828,28 +792,34 @@
 		right: 0;
 		bottom: 0;
 		z-index: 99;
-		
+
 		&.show {
 			display: block;
-			.mask{
+
+			.mask {
 				animation: showPopup 0.2s linear both;
 			}
+
 			.layer {
 				animation: showLayer 0.2s linear both;
 			}
 		}
+
 		&.hide {
-			.mask{
+			.mask {
 				animation: hidePopup 0.2s linear both;
 			}
+
 			.layer {
 				animation: hideLayer 0.2s linear both;
 			}
 		}
+
 		&.none {
 			display: none;
 		}
-		.mask{
+
+		.mask {
 			position: fixed;
 			top: 0;
 			width: 100%;
@@ -857,6 +827,7 @@
 			z-index: 1;
 			background-color: rgba(0, 0, 0, 0.4);
 		}
+
 		.layer {
 			position: fixed;
 			z-index: 99;
@@ -866,7 +837,8 @@
 			max-height: 60vh;
 			border-radius: 10upx 10upx 0 0;
 			background-color: #fff;
-			.btn{
+
+			.btn {
 				height: 66upx;
 				line-height: 66upx;
 				border-radius: 100upx;
@@ -876,57 +848,65 @@
 				margin: 30upx auto 20upx;
 			}
 		}
+
 		@keyframes showPopup {
 			0% {
 				opacity: 0;
 			}
+
 			100% {
 				opacity: 1;
 			}
 		}
+
 		@keyframes hidePopup {
 			0% {
 				opacity: 1;
 			}
+
 			100% {
 				opacity: 0;
 			}
 		}
+
 		@keyframes showLayer {
 			0% {
 				transform: translateY(120%);
 			}
+
 			100% {
 				transform: translateY(0%);
 			}
 		}
+
 		@keyframes hideLayer {
 			0% {
 				transform: translateY(0);
 			}
+
 			100% {
 				transform: translateY(120%);
 			}
 		}
 	}
-	
+
 	/* 底部操作菜单 */
-	.page-bottom{
-		position:fixed;
+	.page-bottom {
+		position: fixed;
 		left: 30upx;
-		bottom:30upx;
+		bottom: 30upx;
 		z-index: 95;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		width: 690upx;
 		height: 100upx;
-		background: rgba(255,255,255,.9);
-		box-shadow: 0 0 20upx 0 rgba(0,0,0,.5);
+		background: rgba(255, 255, 255, .9);
+		box-shadow: 0 0 20upx 0 rgba(0, 0, 0, .5);
 		border-radius: 16upx;
-		
-		.p-b-btn{
-			display:flex;
+
+		.p-b-btn {
+			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
@@ -934,87 +914,102 @@
 			color: $font-color-base;
 			width: 96upx;
 			height: 80upx;
-			.yticon{
+
+			.yticon {
 				font-size: 40upx;
 				line-height: 48upx;
 				color: $font-color-light;
 			}
-			&.active, &.active .yticon{
+
+			&.active,
+			&.active .yticon {
 				color: $uni-color-primary;
 			}
-			.icon-fenxiang2{
+
+			.icon-fenxiang2 {
 				font-size: 42upx;
 				transform: translateY(-2upx);
 			}
-			.icon-shoucang{
+
+			.icon-shoucang {
 				font-size: 46upx;
 			}
 		}
-		.action-btn-group{
+
+		.action-btn-group {
 			display: flex;
 			height: 76upx;
 			border-radius: 100px;
 			overflow: hidden;
 			box-shadow: 0 20upx 40upx -16upx #fa436a;
 			box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
-			background: linear-gradient(to right, #ffac30,#fa436a,#F56C6C);
+			background: linear-gradient(to right, #ffac30, #fa436a, #F56C6C);
 			margin-left: 20upx;
-			position:relative;
-			&:after{
+			position: relative;
+
+			&:after {
 				content: '';
-				position:absolute;
+				position: absolute;
 				top: 50%;
 				right: 50%;
 				transform: translateY(-50%);
 				height: 28upx;
 				width: 0;
-				border-right: 1px solid rgba(255,255,255,.5);
+				border-right: 1px solid rgba(255, 255, 255, .5);
 			}
-			.action-btn{
-				display:flex;
+
+			.action-btn {
+				display: flex;
 				align-items: center;
 				justify-content: center;
 				width: 180upx;
 				height: 100%;
-				font-size: $font-base ;
+				font-size: $font-base;
 				padding: 0;
 				border-radius: 0;
 				background: transparent;
 			}
 		}
 	}
+
 	/* 猜你喜欢 */
-	.guess-section{
-		display:flex;
-		flex-wrap:wrap;
+	.guess-section {
+		display: flex;
+		flex-wrap: wrap;
 		padding: 0 30upx;
 		background: #fff;
-		.guess-item{
-			display:flex;
+
+		.guess-item {
+			display: flex;
 			flex-direction: column;
 			width: 48%;
 			padding-bottom: 40upx;
-			&:nth-child(2n+1){
+
+			&:nth-child(2n+1) {
 				margin-right: 4%;
 			}
 		}
-		.image-wrapper{
+
+		.image-wrapper {
 			width: 100%;
 			height: 330upx;
 			border-radius: 3px;
 			overflow: hidden;
-			image{
+
+			image {
 				width: 100%;
 				height: 100%;
 				opacity: 1;
 			}
 		}
-		.title{
+
+		.title {
 			font-size: $font-lg;
 			color: $font-color-dark;
 			line-height: 80upx;
 		}
-		.price{
+
+		.price {
 			font-size: $font-lg;
 			color: $uni-color-primary;
 			line-height: 1;
