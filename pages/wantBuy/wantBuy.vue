@@ -1,95 +1,106 @@
 <template>
 	<view class="container">
-		<HMfilterDropdown :filterData="menuData" :defaultSelected="filterDropdownValue" :updateMenuName="true" @confirm="confirm"></HMfilterDropdown>
-		<!-- <view class="cart-list">
-			<uni-swipe-action>
-				<uni-swipe-action-item :options="options" @click="onClick" @change="change">
-					<view class='cont'>SwipeAction 基础使用场景</view>
-				</uni-swipe-action-item>
-			</uni-swipe-action>
-		</view> -->
-
 		<view class="car-list">
 			<scroll-view scroll-y="true" class="page">
 				<view class="cu-bar bg-white solid-bottom">
-					<view class="action"> 
+					<view class="action">
 						<text class="cuIcon-title text-orange"></text> 我的求购
 					</view>
 					<view class="action">
-						<button class="cu-btn bg-green shadow" @tap="createCar" data-target="menuModal">添加求购</button>
+						<button class="cu-btn bg-green shadow" @tap="showModal" data-target="RadioModal">搜索</button>
+					</view>
+					<view class="action">
+						<button class="cu-btn bg-blue shadow" @tap="createCar" data-target="menuModal">添加求购</button>
 					</view>
 				</view>
 				<view class="cu-list menu">
 					<view v-for="(item, index) in cartList" :key="index" class="cu-item" :class="menuArrow?'arrow':''">
-						<navigator class="content" hover-class="none" :url="'./show/show?carId='+item.ID" open-type="navigate">
+						<navigator class="content" hover-class="none" :url="'./show/show?carId='+item.want.id" open-type="navigate">
 							<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
-							<text class="text-grey">{{ item.FullName }}</text>
+							<text class="text-grey">{{ item.want.carcate }}</text>
 						</navigator>
 						<view class="action">
 							<!-- <view class="cu-tag round bg-orange light">正常</view> -->
-							<view class="cu-tag round bg-olive light">正常</view>
-							<view class="cu-tag round bg-blue light">2020-03-01</view>
+							<view class="cu-tag round bg-olive light">{{item.want.want_status}}</view>
+							<view class="cu-tag round bg-blue light">{{item.want.created_at}}</view>
 						</view>
 					</view>
 				</view>
+				<uni-load-more :status="loadingType"></uni-load-more>
 			</scroll-view>
-			<!-- <uni-list>
-				<uni-list-item :show-arrow="false" v-for="(item, index) in cartList" :key="index">
-					<template v-slot>
-					<uni-swipe-action >
-						<uni-swipe-action-item carId="23" :options="item.options" @click="onClick" @change="change">
-							<view class='cont'>{{ item.FullName }}</view>
-						</uni-swipe-action-item>
-					</uni-swipe-action>	
-					</template>
-					<template v-slot:right="">
-						<uni-tag style="padding:0 6px" text="正常" type="success"></uni-tag>
-						<uni-tag style="padding:0 6px" text="2020-03-01" type="success"></uni-tag>
-					</template>
-				</uni-list-item>
-			</uni-list> -->
-			<!-- <block v-for="(item, index) in cartList" :key="item.id">
-				<view
-					class="cart-item" 
-					:class="{'b-b': index!==cartList.length-1}"
-				>
-					<view class="image-wrapper">
-						<image :src="item.image" 
-							:class="[item.loaded]"
-							mode="aspectFill" 
-							lazy-load 
-							@load="onImageLoad('cartList', index)" 
-							@error="onImageError('cartList', index)"
-						></image>
-						<view 
-							class="yticon icon-xuanzhong2 checkbox"
-							:class="{checked: item.checked}"
-							@click="check('item', index)"
-						></view>
-					</view>
-					<view class="item-right">
-						<text class="clamp title">{{item.title}}</text>				
-						<text class="attr">{{item.attr_val}}</text>
-						<text class="price">¥{{item.price}}</text>
-						<uni-number-box 
-							class="step"
-							:min="1" 
-							:max="item.stock"
-							:value="item.number>item.stock?item.stock:item.number"
-							:isMax="item.number>=item.stock?true:false"
-							:isMin="item.number===1"
-							:index="index"
-							@eventChange="numberChange"
-						></uni-number-box>
-					</view>
-					<text class="del-btn yticon icon-fork" @click="deleteCartItem(index)"></text>
+			<view class="cu-modal" :class="modalName=='RadioModal'?'show':''" @tap="hideModal">
+				<view class="cu-dialog" @tap.stop="">
+					<radio-group class="block" @change="RadioChange">
+						<view class="cu-list menu text-left">
+							<view class="cu-bar bg-white">
+								<view class='action'>
+									<text class='cuIcon-title text-blue'></text>车辆状态
+								</view>
+							</view>
+							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
+								<view class='cu-tag radius' :class="want.wantstatus===1?'bg-orange':''" @click="changeType(1)">正常</view>
+								<view class='cu-tag radius' :class="want.wantstatus===0?'bg-orange':''" @click="changeType(0)">废弃</view>
+								<view class='cu-tag radius' :class="want.wantstatus===4?'bg-orange':''" @click="changeType(4)">已交易</view>
+							</view>
+							<view class="cu-bar bg-white">
+								<view class='action'>
+									<text class='cuIcon-title text-blue'></text>变速箱
+								</view>
+							</view>
+							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
+								<view class='cu-tag radius' :class="want.bsx===0?'bg-orange':''" @click="changeBsx(0)">不限</view>
+								<view class='cu-tag radius' :class="want.bsx==1?'bg-orange':''" @click="changeBsx(1)">手动</view>
+								<view class='cu-tag radius' :class="want.bsx==2?'bg-orange':''" @click="changeBsx(2)">自动</view>
+							</view>
+							<view class="cu-bar bg-white">
+								<view class='action'>
+									<text class='cuIcon-title text-blue'></text>价格区间
+								</view>
+							</view>
+							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
+								<view class='cu-tag radius' :class="want.pricemin===0 && want.pricemax==3?'bg-orange':''" @click="changePrice(0,3)">三万以下</view>
+								<view class='cu-tag radius' :class="want.pricemin===3 && want.pricemax==5?'bg-orange':''" @click="changePrice(3,5)">3-5万</view>
+								<view class='cu-tag radius' :class="want.pricemin===5 && want.pricemax==15?'bg-orange':''" @click="changePrice(5,15)">5-15万</view>
+								<view class='cu-tag radius' :class="want.pricemin===15 && want.pricemax==500?'bg-orange':''" @click="changePrice(15,500)">15万以上</view>
+							</view>
+							<view class="cu-bar bg-white">
+								<view class='action'>
+									<text class='cuIcon-title text-blue'></text>日期
+								</view>
+							</view>
+							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
+								<view class="uni-list">
+									<view class="uni-list-cell">
+										<view class="uni-list-cell-left">
+											开始日期
+										</view>
+										<view class="uni-list-cell-db">
+											<picker mode="date" :value="startDate" @change="bindDateChange">
+												<view class="uni-input">{{startDate==""?"请选择开始日期":startDate}}</view>
+											</picker>
+										</view>
+									</view>
+									<view class="uni-list-cell" style="margin-top: 30upx;">
+										<view class="uni-list-cell-left">
+											结束日期
+										</view>
+										<view class="uni-list-cell-db">
+											<picker mode="date" :value="endDate" @change="bindEndDateChange">
+												<view class="uni-input">{{endDate==""?"请选择结束日期":endDate}}</view>
+											</picker>
+										</view>
+									</view>
+								</view>
+							</view>
+						</view>
+						<view class="padding flex flex-direction">
+							<view class="cu-btn bg-blue lg" @tap="doSeach">确定</view>
+							<view class="cu-btn bg-grey margin-tb-sm lg" @tap="hideModal">取消</view>
+						</view>
+					</radio-group>
 				</view>
-			</block> -->
+			</view>
 		</view>
-		<!-- 底部菜单栏 -->
-		<!-- <view class="action-section">
-			<button type="primary" style="width:100%" class="no-border confirm-btn" @click="createCar">添加车源</button>
-		</view> -->
 	</view>
 	</view>
 </template>
@@ -99,12 +110,15 @@
 		mapState
 	} from 'vuex';
 	import uniNumberBox from '@/components/uni-number-box.vue'
-	import HMfilterDropdown from '@/components/HM-filterDropdown/HM-filterDropdown.vue';
 	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
 	import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue'
 	import uniList from '@/components/uni-list/uni-list';
 	import uniListItem from "@/components/uni-list-item/uni-list-item.vue"
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
+	import {
+		getWantList
+	} from "@/api/want.js"
+		import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
 		components: {
 			uniNumberBox,
@@ -113,20 +127,13 @@
 			uniList,
 			uniListItem,
 			uniTag,
-			HMfilterDropdown
+			uniLoadMore
 		},
 		data() {
 			return {
-				total: 0, //总价格
-				allChecked: false, //全选状态  true|false
+				menuArrow: false,
 				empty: false, //空白页现实  true|false
 				cartList: [],
-				menuData: [],
-				menuBorder: false,
-				menuArrow: false,
-				menuCard: false,
-				skin: false,
-				filterDropdownValue: [],
 				options: [{
 					text: '查看',
 					carId: 23,
@@ -139,22 +146,110 @@
 					style: {
 						backgroundColor: '#b5b55a'
 					}
-				}]
+				}],
+				modalName: null,
+				type: [{
+						value: "正常",
+						isAct: false,
+					},
+					{
+						value: "废弃",
+						isAct: false,
+					},
+					{
+						value: "已交易",
+						isAct: false,
+					}
+				],
+				transmission: [{
+						value: "不限",
+						isAct: false,
+					},
+					{
+						value: "手动",
+						isAct: false,
+					},
+					{
+						value: "自动",
+						isAct: false,
+					}
+				],
+				price: [{
+						value: "3万以下",
+						isAct: false,
+					},
+					{
+						value: "3-5万",
+						isAct: false,
+					},
+					{
+						value: "5-15万",
+						isAct: false,
+					}, {
+						value: "15万以上",
+						isAct: false,
+					}
+				],
+				startDate: "",
+				endDate: "",
+				want: {
+					PageSize: 14,
+					pageIndex: 1,
+					cartype: "",
+					carbak1: "",
+					carbak2: "",
+					bsx: 0,
+					pricemin: "",
+					pricemax: "",
+					describ: "",
+					userid: "",
+					shopid: "",
+					wantstatus: "",
+					updatetime: "",
+					rolename: "",
+					startTime: "",
+					endTime: ""
+				},
+				total: "",
+				loadingType: 'more', //参数loading加载,nomore
 			};
 		},
 		onLoad() {
+			uni.getStorage({
+				key: 'userInfo',
+				success: (res) => {
+					this.want.shopid = res.data.shop_id;
+					this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
+					this.want.userid = res.data.id;
+					console.log(this.want)
+				}
+			})
 			this.loadData();
 		},
 		//下拉刷新
 		onPullDownRefresh() {
-			console.log('哥,你下拉了')
-			setTimeout(() => {
-				uni.stopPullDownRefresh();
-			}, 3000)
+			this.want.pageIndex = 1
+			this.want.wantstatus = "";
+			this.want.bsx = 0;
+			this.want.pricemin = "";
+			this.want.pricemax = "";
+			this.want.startTime = "";
+			this.want.endTime = "";
+			this.loadData()
+			uni.stopPullDownRefresh();
+
 		},
 		//加载更多
 		onReachBottom() {
-			console.log('哥,你上拉了')
+			let num = Math.ceil(this.total / this.want.PageSize)
+			if (this.want.pageIndex == num || this.want.pageIndex > num) {
+				this.want.pageIndex = 1
+				return
+			} else {
+				this.want.pageIndex++
+				console.log(this.want.pageIndex)
+				this.loadData();
+			}
 		},
 		watch: {
 			//显示空白页
@@ -171,115 +266,92 @@
 		methods: {
 			//请求数据
 			async loadData() {
-				let cartList = await this.$api.json('goodsList');
-				cartList.forEach(function(element, index) {
-					// console.log(element)
-					let options = [{
-						text: '查看',
-						carId: 23,
-						style: {
-							backgroundColor: '#006c00'
-						}
-					}, {
-						text: '编辑',
-						carId: 23,
-						style: {
-							backgroundColor: '#b5b55a'
-						}
-					}]
-					options[0].carId = element.ID
-					options[1].carId = element.ID
-					element.options = options
+				this.loadingType = "loading"
+				this.cartList = []
+				let cartList = await getWantList({ ...this.want
 				})
-				this.cartList = cartList;
-				console.log(this.cartList)
-				this.menuData = await this.$api.json('menuExam');
-				this.calcTotal(); //计算总价
+			    this.cartList = cartList.data.Data.DataList;
+				this.total = cartList.data.Data.Total;
+				this.cartList.forEach(ele => {
+					if (ele.want.want_status == 0) {
+						ele.want.want_status = "废弃"
+					} else if (ele.want.want_status == 1) {
+						ele.want.want_status = "正常"
+					} else if (ele.want.want_status == 4) {
+						ele.want.want_status = "已交易"
+					}
+					if (ele.want.created_at) {
+						ele.want.created_at = ele.want.created_at.substring(0, ele.want.created_at.indexOf("T"))
+					}
+				})
+				if (this.want.pageIndex < this.total/this.want.PageSize) {
+					this.loadingType = "more"
+				} else {
+					this.loadingType = "nomore"
+				}
 			},
 			navToLogin() {
 				uni.navigateTo({
 					url: '/pages/public/login'
 				})
 			},
-			//选中状态处理
-			/* check(type, index) {
-				if (type === 'item') {
-					this.cartList[index].checked = !this.cartList[index].checked;
-				} else {
-					const checked = !this.allChecked
-					const list = this.cartList;
-					list.forEach(item => {
-						item.checked = checked;
-					})
-					this.allChecked = checked;
-				}
-				this.calcTotal(type);
-			}, */
-			//数量
-			numberChange(data) {
-				this.cartList[data.index].number = data.number;
-				this.calcTotal();
+			doSeach() {
+				this.loadData();
+				this.hideModal();
 			},
-			//删除
-			deleteCartItem(index) {
-				let list = this.cartList;
-				let row = list[index];
-				let id = row.id;
+			// 时间选择器
+			getDate(type) {
+				const date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
 
-				this.cartList.splice(index, 1);
-				this.calcTotal();
-				uni.hideLoading();
-			},
-			//清空
-			clearCart() {
-				uni.showModal({
-					content: '清空购物车？',
-					success: (e) => {
-						if (e.confirm) {
-							this.cartList = [];
-						}
-					}
-				})
-			},
-			//计算总价
-			calcTotal() {
-				let list = this.cartList;
-				if (list.length === 0) {
-					this.empty = true;
-					return;
+				if (type === 'start') {
+					year = year - 60;
+				} else if (type === 'end') {
+					year = year + 2;
 				}
-				let total = 0;
-				let checked = true;
-				list.forEach(item => {
-					if (item.checked === true) {
-						total += item.price * item.number;
-					} else if (checked === true) {
-						checked = false;
-					}
-				})
-				this.allChecked = checked;
-				this.total = Number(total.toFixed(2));
+				month = month > 9 ? month : '0' + month;;
+				day = day > 9 ? day : '0' + day;
+				return `${year}-${month}-${day}`;
 			},
-			//创建订单
+			// 底部栏显示
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			RadioChange(e) {
+				this.radio = e.detail.value
+			},
+			// 底部栏隐藏
+			hideModal(e) {
+				this.modalName = null
+			},
+			// 车辆状态点击时间
+			changeType(val) {
+				this.want.wantstatus = val
+			},
+			// 点击选择变速箱
+			changeBsx(val) {
+				this.want.bsx = val
+			},
+			// 点击选择价格
+			changePrice(min, max) {
+				this.want.pricemin = min
+				this.want.pricemax = max
+			},
+			// 时间选择器确定
+			bindDateChange: function(e) {
+				this.startDate = e.target.value
+				this.want.startTime = e.target.value
+			},
+			bindEndDateChange: function(e) {
+				this.endDate = e.target.value
+				this.want.endTime = e.target.value
+			},
 			createCar() {
-				/* let list = this.cartList;
-				let goodsData = [];
-				list.forEach(item => {
-					if (item.checked) {
-						goodsData.push({
-							attr_val: item.attr_val,
-							number: item.number
-						})
-					}
-				}) */
 				uni.navigateTo({
 					url: './add/add'
 				})
-				/* uni.navigateTo({
-					url: `/pages/order/createOrder?data=${JSON.stringify({
-						goodsData: goodsData
-					})}`
-				}) */
 				this.$api.msg('跳转下一页 sendData');
 			}
 		}
@@ -289,7 +361,7 @@
 <style lang='scss'>
 	.container {
 		padding-bottom: 0upx;
-		padding-top: 96upx;
+		padding-top: 15upx;
 
 		/* 空白页 */
 		.empty {
@@ -394,6 +466,30 @@
 			font-size: 34upx;
 			height: 50upx;
 			color: $font-color-light;
+		}
+	}
+
+	.cu-modal {
+		z-index: 1 !important;
+
+		.padding {
+			padding: 10upx 40upx;
+		}
+
+		.uni-input {
+			line-height: 20upx;
+		}
+
+		.uni-list::before {
+			height: 0;
+		}
+
+		.uni-list::after {
+			height: 0;
+		}
+
+		.uni-list-cell::after {
+			height: 0;
 		}
 	}
 

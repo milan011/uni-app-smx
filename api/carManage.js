@@ -5,7 +5,7 @@ import { httpApi } from '@/js_sdk/luch-request/index.js';
 //获取车源详情
 export function getCarDetail(carId) {
 	
-	const requestUrl = Config.url_config + '/car/detail'
+	const requestUrl = Config.url_config + '/car/htdetail'
 	return httpApi.get(
 		requestUrl, { params: { id: carId } }
 	)

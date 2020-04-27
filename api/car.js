@@ -6,7 +6,7 @@ import {
 
 export function getCarList(data) {
 	const requestUrl = Config.url_config + '/car/jypage'
-	return httpApi.get(requestUrl,{...data})
+	return httpApi.post(requestUrl,{...data})
 }
 export function getCarTypeList() {
 	const requestUrl = Config.url_config + '/common/getAllSeries'

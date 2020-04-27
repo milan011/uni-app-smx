@@ -32,7 +32,7 @@
 						<text class="text-grey">状态</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{carStatusConfig[detail.cars.Car_Status]}}</text>
+						<text class="text-grey text-sm">{{carStatusConfig[detail.cars.Car_Status].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -50,7 +50,7 @@
 						<text class="text-grey">车型类别</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{carTypeConfig[detail.cars.CarType]}}</text>
+						<text class="text-grey text-sm">{{carTypeConfig[detail.cars.CarType].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -113,7 +113,7 @@
 						<text class="text-grey">变速箱</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{transmissionConfig[detail.cars.Transmission]}}</text>
+						<text class="text-grey text-sm">{{transmissionConfig[detail.cars.Transmission].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -158,7 +158,7 @@
 						<text class="text-grey">保险类别</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{safetypeConfig[detail.cars.Safe_type]}}</text>
+						<text class="text-grey text-sm">{{safetypeConfig[detail.cars.Safe_type].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -176,7 +176,7 @@
 						<text class="text-grey">外观颜色</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{outcolorConfig[detail.cars.Out_color]}}</text>
+						<text class="text-grey text-sm">{{outcolorConfig[detail.cars.Out_color].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -185,7 +185,7 @@
 						<text class="text-grey">内饰颜色</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{insidecolorConfig[detail.cars.Inside_color]}}</text>
+						<text class="text-grey text-sm">{{insidecolorConfig[detail.cars.Inside_color].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -485,16 +485,16 @@
 					cars: {},
 					shop: {},
 					user: null,
-					customer: {},
-					carStatusConfig:{},
-					putOnStatusConfig: {},
-					carTypeConfig: {},
-					insidecolorConfig: {},
-					outcolorConfig: {},
-					safetypeConfig: {},
-					transmissionConfig: {},
+					customer: {},					
 					carimages: []
 				},
+				carStatusConfig:{},
+				putOnStatusConfig: {},
+				carTypeConfig: {},
+				insidecolorConfig: {},
+				outcolorConfig: {},
+				safetypeConfig: {},
+				transmissionConfig: {},
 				carImgNormal: [],
 				carImgExt: [],
 				carImgCer: [],

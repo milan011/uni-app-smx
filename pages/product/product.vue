@@ -14,7 +14,7 @@
 			<text class="title">{{ carDetail.cars.FullName }}</text>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
-				<text class="price">{{ carDetail.cars.InitPrice/10000 }}万</text>
+				<text class="price">{{ carDetail.cars.SaleAMT }}万</text>
 			</view>
 			<view class="c-list">
 				<view class="c-row b-b">
@@ -112,7 +112,7 @@
 							</view>
 							<!-- <text class="title clamp">{{item.FullName}}</text> -->
 							<view>{{item.FullName}}</view>
-							<text class="price">￥{{item.InitPrice/10000}}万</text>
+							<text class="price">￥{{item.SaleAMT}}万</text>
 						</view>
 					</view>
 				</view>
@@ -244,9 +244,8 @@
 			this.$refs.sonStatusInfo.sonAssginStatus(this.carCheckStatus);
 			// 猜你喜欢
 			this.car.Carid = options.id
-			this.car.SaleAMTMin = await this.carDetail.cars.InitPrice / 10000 - 5 > 0 ? this.carDetail.cars.InitPrice / 10000 -
-				5 : 1
-			this.car.SaleAMTMax = await this.carDetail.cars.InitPrice / 10000 + 5
+			this.car.SaleAMTMin = await this.carDetail.cars.SaleAMT - 5 > 0 ? this.carDetail.cars.SaleAMT - 5 : 1
+			this.car.SaleAMTMax = await this.carDetail.cars.SaleAMT + 5
 			var that = this
 			//#ifndef H5
 			uni.getStorage({

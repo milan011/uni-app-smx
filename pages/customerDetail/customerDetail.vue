@@ -161,7 +161,7 @@
 								<text class="text-grey">状态：</text>
 							</view>
 							<view class="action">
-								<text v-if="detail.cars.length>=1" class="text-grey text-sm">{{item.Car_Status==="0"?"废弃":"激活"}}</text>
+								<text v-if="detail.cars.length>=1" class="text-grey text-sm">{{item.Car_Status?item.Car_Status:"暂无数据"}}</text>
 								<text v-else class="text-grey text-sm">暂无数据</text>
 							</view>
 						</view>
@@ -378,7 +378,6 @@
 				customer_res_index: "",
 				transmissionConfig: ['不限', '手动', '自动'],
 				color: ["其他", "黑色", "白色", "银白", "红色", `蓝色`, '银色', '橙色', '深灰色', '香槟金', '灰色', '棕色', '绿色', '紫色', '黄色'],
-				color_index: ""
 			};
 		},
 		onLoad: function(option) {
@@ -395,8 +394,16 @@
 					id: this.id
 				}).then(res => {
 					this.detail = res.data.Data
-					this.customer_res_index = this.detail.customer.customer_res - 1
-					this.color_index = this.detail.cars[0].Out_color
+					this.customer_res_index = this.detail.customer.customer_res - 1;
+					this.detail.cars.forEach(ele=>{
+						if(ele.Car_Status==0){
+							ele.Car_Status = "废弃"
+						}else if(ele.Car_Status==1){
+							ele.Car_Status = "正常"
+						}else{
+							ele.Car_Status = "已交易"
+						}
+					})
 				})
 			},
 			toEdit() {

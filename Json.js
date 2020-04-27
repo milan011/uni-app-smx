@@ -5,7 +5,7 @@ const userInfo = {
 		id: 1,
 		mobile: 18888888888,
 		nickname: 'Leo yo',
-		token: "95f3c25d-42d8-4004-b09c-011114060472",
+		token: "e33bd333-118d-406c-b922-fb5de53a0d61",
 		shopId: 72,
 		// portrait: 'http://img.61ef.cn/news/201409/28/2014092805595807.jpg'
 		portrait: 'http://tclapi.simaxian.com//Upload/2020-04/a5d57f51-9916-4939-9262-1df7ac4b132b.jpg'

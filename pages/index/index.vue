@@ -138,9 +138,10 @@
 				</view>
 				<!-- <text class="title clamp">{{item.FullName}}</text> -->
 				<view style="min-height:21%;">{{item.FullName}}</view>
-				<text class="price">￥{{item.InitPrice/10000}}万</text>
+				<text class="price">￥{{item.SaleAMT}}万</text>
 			</view>
 		</view>
+		<uni-load-more :status="loadingType"></uni-load-more>
 	</view>
 </template>
 
@@ -152,14 +153,16 @@
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	const Qs = require('qs');
 	export default {
+		components: {
+			uniNavBar,
+			uniSearchBar,
+			uniTag,
+			uniLoadMore,
+		},
 		data() {
-			components: {
-				uniNavBar,
-				uniSearchBar,
-				uniTag
-			}
 			return {
 				titleNViewBackground: '',
 				swiperCurrent: 0,
@@ -190,7 +193,8 @@
 					Sale_number: -1
 				},
 				city: "",
-				total: ""
+				total: "",
+				loadingType: 'more', //参数loading加载,nomore
 			};
 		},
 
@@ -308,6 +312,7 @@
 				});
 			},
 			async loadData() {
+				this.loadingType = "loading"
 				let carouselList = await this.$api.json('carouselList');
 				this.titleNViewBackground = carouselList[0].background;
 				this.swiperLength = carouselList.length;
@@ -320,12 +325,12 @@
 				let goodsList = await getCarList({ ...params
 				})
 				this.goodsList = this.goodsList.concat(goodsList.data.Data.DataList);
-
-				// this.goodsList = goodsList.data.Data.DataList || [];
 				this.total = goodsList.data.Data.Total
-				//this.goodsList.push(goodsList.data.Data.DataList)
-
-				console.log('this.goodsList==>', this.goodsList)
+				if (this.car.pageindex < this.total/this.car.pagesize) {
+					this.loadingType = "more"
+				} else {
+					this.loadingType = "nomore"
+				}
 			},
 			// 去搜索页面
 			toSearch() {

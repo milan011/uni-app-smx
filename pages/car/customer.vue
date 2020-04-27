@@ -38,108 +38,138 @@
 			</view>
 			<view class="cu-form-group">
 				<view class="title">车型</view>
-				<input style="text-align: right;" disabled placeholder="车型由您输入的VIN码确定" name="input"></input>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">车辆类型</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
+				<input v-model="carData.FullName" style="text-align: right;" disabled placeholder="车型由您输入的VIN码确定" name="input"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">排量</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
+				<input v-model="carData.Capacity" style="text-align: right;" disabled placeholder="排量由您输入的VIN码确定" name="input"></input>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">车辆类型</view>
+				<picker @change="PickerChange" :value="carData.CarType" :range="carTypeConfig" range-key="name">
 					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
+						{{carTypeConfig[carData.CarType].name}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">变速箱</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
+				<picker @change="PickerTransChange" :value="carData.Transmission" :range="transmissionConfig" range-key="name">
 					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
+						{{transmissionConfig[carData.Transmission].name}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">外观</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
+				<picker @change="PickerOutChange" :value="carData.Out_color" :range="outcolorConfig" range-key="name">
 					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
+						{{outcolorConfig[carData.Out_color].name}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">内饰</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
+				<picker @change="PickerInChange" :value="carData.Inside_color" :range="insidecolorConfig" range-key="name">
 					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
+						{{insidecolorConfig[carData.Inside_color].name}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">车险</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
+				<picker @change="PickerSafeChange" :value="carData.Safe_type" :range="safetypeConfig" range-key="name">
 					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
+						{{safetypeConfig[carData.Safe_type].name}}
+					</view>
+				</picker>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">过户次数</view>
+				<picker @change="PickerSaleNumChange" :value="carData.Sale_number" :range="saleNumConfig" range-key="name">
+					<view class="picker">
+						{{saleNumConfig[carData.Sale_number].name}}
+					</view>
+				</picker>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">车辆用途</view>
+				<picker @change="PickerCarUseChange" :value="carData.CarUse" :range="carUseConfig" range-key="name">
+					<view class="picker">
+						{{carUseConfig[carData.CarUse].name}}
+					</view>
+				</picker>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">使用条件</view>
+				<picker @change="PickerUseconditionsChange" :value="carData.Useconditions" :range="useconditionsConfig" range-key="name">
+					<view class="picker">
+						{{useconditionsConfig[carData.Useconditions].name}}
+					</view>
+				</picker>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">维护保养</view>
+				<picker @change="PickerMaintainingChange" :value="carData.Maintaining" :range="maintainingConfig" range-key="name">
+					<view class="picker">
+						{{maintainingConfig[carData.Maintaining].name}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">上牌日期</view>
-				<picker mode="date" :value="date" start="2015-09" end="2020-09" @change="DateChange">
+				<picker mode="date" :value="carData.BuyDate" :start="pickerStart" :end="pickerEnd" @change="DateChangePlate">
 					<view class="picker">
-						{{date}}
+						{{carData.BuyDate}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">到捡日期</view>
-				<picker mode="date" :value="date" start="2015-09" end="2020-09" @change="DateChange">
+				<picker mode="date" :value="dateCheck" :start="pickerStart" :end="pickerEnd" @change="DateChangeCheck">
 					<view class="picker">
-						{{date}}
+						{{carData.InspectionTime}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">到保日期</view>
-				<picker mode="date" :value="date" start="2015-09" end="2020-09" @change="DateChange">
+				<picker mode="date" :value="dateSafe" :start="pickerStart" :end="pickerEnd" @change="DateChangeSafe">
 					<view class="picker">
-						{{date}}
+						{{carData.Safe_end}}
 					</view>
 				</picker>
 			</view>
 			<!-- #ifndef MP-ALIPAY -->
 			<view class="cu-form-group">
 				<view class="title">所属城市</view>
-				<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray">
+				<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray" range-key="name">
 					<view class="picker">
-						{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
+						{{multiArray[0][multiIndex[0]].name}}，{{multiArray[1][multiIndex[1]].name}}
 					</view>
 				</picker>
 			</view>
 			<!-- #endif -->
-			<view class="cu-form-group">
-				<view class="title">过户次数</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
+			<view class="cu-form-group nu-style">
+				<view class="title">行驶里程(万)</view>
+				<input v-model="carData.Mileage" style="text-align: right;" type="number" placeholder="请输入行驶里程" name="input"></input>
+				<text class='cuIcon-taxi text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group nu-style">
-				<view class="title">期望价格</view>
-				<input style="text-align: right;" placeholder="请输入期望价格" name="input"></input>
+				<view class="title">期望底价(万)</view>
+				<input v-model="carData.BasePrice" style="text-align: right;" type="number" placeholder="请输入期望价格" name="input"></input>
+				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
+			</view>
+			<view class="cu-form-group nu-style">
+				<view class="title">期望高价(万)</view>
+				<input v-model="carData.SaleAMT" style="text-align: right;" type="number" placeholder="请输入期望价格" name="input"></input>
 				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group margin-top">
-				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" placeholder="客户描述"></textarea>
+				<textarea v-model="carData.Description" maxlength="-1" :disabled="modalName!=null" @input="dsInput" placeholder="客户描述"></textarea>
 			</view>
 			<view class="cu-form-group margin-top">
-				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" placeholder="销售描述"></textarea>
+				<textarea v-model="carData.XS_description" maxlength="-1" :disabled="modalName!=null" @input="xsInput" placeholder="销售描述"></textarea>
 			</view>
 			<!-- <button @click="save" class="evan-form-show__button">保存</button>
 					<button @click="utilsSave" class="evan-form-show__button">直接调用utils验证</button>
@@ -486,21 +516,32 @@
 								<view class="cu-item" v-for="(item,index) in vinCarList" :key="index">
 									<label class="flex justify-between align-center flex-sub">
 										<view class="flex-sub">{{item.psalename}}</view>
-										<radio class="round" :class="radio=='radio' + index?'checked':''" :checked="radio=='radio' + index?true:false"
-										 :value="'radio' + index"></radio>
+										<radio class="round" 
+											:class="vinCarCheck == index+''?'checked':''" 
+											:checked="vinCarCheck == index+''?true:false" 
+											:value="index + ''">
+										</radio>
 									</label>
 								</view>
 							</view>
 						</radio-group>
-						<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+						<button class="cu-btn bg-green margin-left" @tap="carVinConf">确定</button>
 					</view>
 				</view>
 		<!-- vin码返回信息选择End -->
+		<!-- vin码接口加载Loading Begin -->
+		<!-- <view class="cu-load load-modal" v-if="vinReturnModal">
+			<view class="cuIcon-emojifill text-orange"></view>
+			<image src="/static/logo.png" mode="aspectFit"></image>
+			<view class="gray-text">加载中...</view>
+		</view> -->
+		<!-- vin码接口加载Loading End -->
 	</view>
 </template>
 
 <script>
 	import { editCustomer } from '@/api/user.js'
+	import moment from 'moment' 
 	import { vinRepeatCheck, getCarInfoByWin } from '@/api/carManage.js'
 	import EvanForm from '@/components/evan-form/evan-form.vue'
 	import EvanFormItem from '@/components/evan-form/evan-form-item.vue'
@@ -508,6 +549,20 @@
 	import uniCollapseItem from '@/components/uni-collapse-item/uni-collapse-item.vue'
 	// import utils from '@/components/evan-form/utils.js'
 	import '@/common/utils'
+	import { getAllProvince, getCityByProvince } from '@/api/city.js'
+	import {
+		transmissionConfig,
+		carStatusConfig, 
+		putOnStatusConfig, 
+		carTypeConfig,
+		insidecolorConfig,
+		outcolorConfig,
+		saleNumConfig,
+		carUseConfig,
+		useconditionsConfig,
+		maintainingConfig,
+		safetypeConfig, 
+	} from '@/common/appConfig.js';
 	export default {
 		components: {
 			EvanForm,
@@ -523,101 +578,25 @@
 				customerEdit: true,
 				carInfoEdit: false,
 				carImgEdit: false,
-				carTypeIndex: -1,
-				carType: ['轿车', 'SUV', '客车'],
-				date: '2018-12-25',
+				vinReturnModal: true,
+				/* carTypeIndex: 1,
+				transIndex: 1,
+				outColorIndex: 1,
+				inColorIndex: 0,
+				safeColorIndex: 0,
+				carUseIndex: 0,
+				useconditionsIndex: 0,
+				maintainingIndex: 0,
+				saleNumIndex: 0, */
 				modalName: null,
 				textareaAValue: '',
 				imgList: [],
 				TabCur: 0,
 				currentUser: null,
-				cuIconList: [{
-					cuIcon: 'cardboardfill',
-					color: 'red',
-					badge: 120,
-					name: 'VR'
-				}, {
-					cuIcon: 'recordfill',
-					color: 'orange',
-					badge: 1,
-					name: '录像'
-				}, {
-					cuIcon: 'picfill',
-					color: 'yellow',
-					badge: 0,
-					name: '图像'
-				}, {
-					cuIcon: 'noticefill',
-					color: 'olive',
-					badge: 22,
-					name: '通知'
-				}, {
-					cuIcon: 'upstagefill',
-					color: 'cyan',
-					badge: 0,
-					name: '排行榜'
-				}, {
-					cuIcon: 'clothesfill',
-					color: 'blue',
-					badge: 0,
-					name: '皮肤'
-				}, {
-					cuIcon: 'discoverfill',
-					color: 'purple',
-					badge: 0,
-					name: '发现'
-				}, {
-					cuIcon: 'questionfill',
-					color: 'mauve',
-					badge: 0,
-					name: '帮助'
-				}, {
-					cuIcon: 'commandfill',
-					color: 'purple',
-					badge: 0,
-					name: '问答'
-				}, {
-					cuIcon: 'brandfill',
-					color: 'mauve',
-					badge: 0,
-					name: '版权'
-				}],
 				multiArray: [
-					['北京', '河北'],
-					['北京'],
+					[{id: 2, name:'北京'}],
+					[{id: 52, name:'北京'}],
 					// ['猪肉绦虫', '吸血虫']
-				],
-				objectMultiArray: [
-					[{
-							id: 0,
-							name: '北京'
-						},
-						{
-							id: 1,
-							name: '河北'
-						}
-					],
-					[{
-							id: 0,
-							name: '北京'
-						},
-						{
-							id: 1,
-							name: '石家庄'
-						},
-						{
-							id: 2,
-							name: '保定'
-						},
-						{
-							id: 3,
-							name: '唐山'
-						},
-						{
-							id: 4,
-							name: '张家口'
-						}
-					]
 				],
 				multiIndex: [0, 0],
 				basicsList: [{
@@ -643,31 +622,60 @@
 					customer_res: 1,
 					shop_id: null,
 				},
+				carStatusConfig:{},
+				putOnStatusConfig: {},
+				carTypeConfig: {},
+				insidecolorConfig: {},
+				outcolorConfig: {},
+				safetypeConfig: {},
+				saleNumConfig: [],
+				transmissionConfig: {},
+				carUseConfig: [],
+				useconditionsConfig: [],
+				maintainingConfig: [],
 				vinChanged:false,
 				vinCarList: [],
+				vinCarCheck: '0',
+				/* datePlate: '',
+				dateSafe: '',
+				dateCheck: '', */
+				pickerStart: '',
+				pickerEnd: '',
 				carData: {
-					VIN: 'sss',
-					/* : ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: ,
-					: , */
+					VIN: '',
+					FullName : '',
+					plevelid: '',
+					Capacity: '',
+					ProvenceId: 2,
+					CityName: '北京',
+					BasePrice: '',
+					SaleAMT: '',
+					Transmission: 1,
+					CarType: 1,
+					Out_color: 0,
+					Inside_color: 0,
+					BuyDate: '点击选择',
+					Safe_end: '点击选择',
+					InspectionTime: '点击选择',
+					CarUse: 0,
+					Useconditions: 0,
+					Maintaining: 0,
+					Area: '',
+					Safe_type: 0,
+					Mileage: '',
+					Sale_number: 0,
+					Description: '',
+					XS_description: '',
+					Customer_Id: null,
+					CreateID: '',
+					CreateName: '',
+					Shop_Id: '',
+					UserKind: '',
+					CarModel: "",
+					InitPrice: 0,
+					Capacity: '',
+					Factory: '',
+					BuyPrice: 0,
 				},
 				rules: {
 					name: {
@@ -708,9 +716,34 @@
 		onLoad(options) {
 			this.currentUser = uni.getStorageSync('userInfo') || '';
 			this.customer.creater_id = this.currentUser.id
-			this.customer.shop_id = this.currentUser.shopId
+			this.customer.shop_id = this.currentUser.shop_id
+			this.carData.CreateID = this.currentUser.id
+			this.carData.CreateName = this.currentUser.nick_name
+			this.carData.Shop_Id = this.currentUser.shop_id
+			this.carData.UserKind = this.currentUser.userkind
 			this.customer.id = null
-			console.log('currentUser', this.currentUser)
+			this.carStatusConfig = carStatusConfig
+			this.putOnStatusConfig = putOnStatusConfig
+			this.carTypeConfig = carTypeConfig
+			this.insidecolorConfig = insidecolorConfig
+			this.outcolorConfig = outcolorConfig
+			this.safetypeConfig = safetypeConfig
+			this.transmissionConfig = transmissionConfig  
+			this.saleNumConfig = saleNumConfig   
+			this.carUseConfig = carUseConfig   
+			this.useconditionsConfig = useconditionsConfig   
+			this.maintainingConfig = maintainingConfig   
+			let nowTime = moment()
+			this.datePlate = nowTime.format('YYYY-MM-DD')
+			this.dateSafe = nowTime.format('YYYY-MM-DD')
+			this.dateCheck = nowTime.format('YYYY-MM-DD')
+			this.pickerStart = moment().add(-20, 'y').format('YYYY-MM-DD')
+      this.pickerEnd = moment().add(466, 'd').format('YYYY-MM-DD')
+			this.getProvince()
+			/* console.log('now', nowTime.format('YYYY-MM-DD'))
+			console.log('一年后', moment().add(366, 'd').format('YYYY-MM-DD'))
+			console.log('currentUser', this.currentUser) */
+			// console.log('city',uni.getStorageSync('citys'))
 		},
 
 		methods: {
@@ -720,14 +753,48 @@
 			scanVin() {
 				console.log('gan jin sao')
 			},
-			PickerChange(e) {
-				this.carTypeIndex = e.detail.value
+			PickerChange(e) {//车辆类型选择
+				// this.carTypeIndex = e.detail.value
+				this.carData.CarType = e.detail.value
 			},
-			MultiChange(e) {
-				this.multiIndex = e.detail.value
+			PickerTransChange(e){//变速箱选择
+				// this.transIndex = e.detail.value
+				this.carData.Transmission = e.detail.value
+				console.log(this.carData.Transmission)
 			},
-			textareaAInput(e) {
-				this.textareaAValue = e.detail.value
+			PickerOutChange(e){//车身颜色选择
+				// this.outColorIndex = e.detail.value
+				this.carData.Out_color = e.detail.value
+			},
+			PickerInChange(e){//内饰颜色选择
+				// this.inColorIndex = e.detail.value
+				this.carData.Inside_color = e.detail.value
+			},
+			PickerSafeChange(e){//保险类型选择
+				// this.safeColorIndex = e.detail.value
+				this.carData.Safe_type = e.detail.value
+			},
+			PickerSaleNumChange(e){//过户次数选择
+				// this.saleNumIndex = e.detail.value
+				this.carData.Sale_number = e.detail.value
+			},
+			PickerCarUseChange(e){//车辆用途选择
+				// this.carUseIndex = e.detail.value
+				this.carData.CarUse = e.detail.value
+			},
+			PickerUseconditionsChange(e){//使用条件选择
+				// this.useconditionsIndex = e.detail.value
+				this.carData.Useconditions = e.detail.value
+			},
+			PickerMaintainingChange(e){ //维修保养选择
+				// this.maintainingIndex = e.detail.value
+				this.carData.Maintaining = e.detail.value
+			},
+			dsInput(e) { //客户描述
+				this.carData.Description = e.detail.value
+			},
+			xsInput(e) { //销售描述
+				this.carData.XS_description = e.detail.value
 			},
 			tabSelect(e) { //标签切换
 				this.TabCur = e.currentTarget.dataset.id;
@@ -776,6 +843,35 @@
 					}
 				})
 			},
+			getProvince(){
+				getAllProvince().then(res => {
+					console.log('省',res.data)
+					this.multiArray[0] = res.data.Data
+				}).catch(err => {
+					this.$api.msg(`获取城市,请刷新重试`);
+				})
+			},
+			getCitys(pid){
+				this.multiArray[1] = []
+				getCityByProvince(pid).then(res => {
+					console.log('市',res.data)
+					this.multiArray[1] = res.data.Data
+					this.multiIndex.splice(1, 0)
+					// return res.data.Data
+				}).catch(err => {
+					this.$api.msg(`获取城市,请刷新重试`);
+				})
+			},
+			MultiChange(e) {
+				this.multiIndex = e.detail.value
+				const choseInfo = e.detail.value 
+				this.carData.ProvenceId = this.multiArray[0][choseInfo[0]].id
+				this.carData.CityName = this.multiArray[1][choseInfo[1]].name
+				this.carData.Area = this.multiArray[1][choseInfo[1]].name
+				console.log(e.detail.value)
+				console.log('省',this.multiArray[0][choseInfo[0]])
+				console.log('市',this.multiArray[1][choseInfo[1]])
+			},
 			MultiColumnChange(e) {
 
 				let data = {
@@ -784,13 +880,15 @@
 				};
 				const column = e.detail.column;
 				const value = e.detail.value;
-				/* console.log('哥,你滚了')
+				const pid = this.multiArray[0][value].id
+				console.log('哥,你滚了')
 				console.log('column',column)
-				console.log('value',value) */
+				console.log('value',value)
+				console.log(this.multiArray[0][value])
 				data.multiIndex[column] = value;
 				switch (column) {
 					case 0:
-						switch (data.multiIndex[0]) {
+						/* switch (data.multiIndex[0]) {
 							case 0:
 								// console.log('你选了首都')
 								this.multiArray[1] = ['北京'];
@@ -799,16 +897,29 @@
 								// console.log('你选了河北省')
 								this.multiArray[1] = ['石家庄', '保定', '唐山', '张家口'];
 								break;
-						}
-						this.multiIndex.splice(1, 0)
-						// console.log('你咋不选')
+						} */
+						// this.multiArray[1] = this.getCitys(pid)
+						this.getCitys(pid)
+						console.log(this.multiArray)
+						// this.multiIndex.splice(1, 0)
+						console.log('1',this.multiIndex)
 						break;
 				}
-				this.multiArray = data.multiArray;
+				/* this.multiArray = data.multiArray;
 				this.multiIndex = data.multiIndex;
+				console.log('2',this.multiIndex) */
 			},
-			DateChange(e) {
-				this.date = e.detail.value
+			DateChangePlate(e) {
+				this.datePlate = e.detail.value
+				this.carData.BuyDate = e.detail.value
+			},
+			DateChangeCheck(e) {
+				this.dateCheck = e.detail.value
+				this.carData.InspectionTime = e.detail.value
+			},
+			DateChangeSafe(e) {
+				this.dateSafe = e.detail.value
+				this.carData.Safe_end = e.detail.value
 			},
 			resetCustomer(){
 				this.customer = {
@@ -820,11 +931,25 @@
 					shop_id: null,
 				}
 			},
-			hideModal(e) {
-				this.modalName = null
+			carVinConf(e) {
+				if(this.vinCarCheck == ''){
+					this.$api.msg(`请选择车型`, 2000);
+				}else{
+					const carVinInfo = this.vinCarList[this.vinCarCheck]
+					this.carData.FullName = carVinInfo.psalename
+					this.carData.plevelid = carVinInfo.plevelid
+					this.carData.Capacity = carVinInfo.pvolume
+					this.carData.CarModel = carVinInfo.ptype
+					this.carData.Factory = carVinInfo.pbrand
+					this.carData.BuyPrice = carVinInfo.factoryprice
+					this.carData.InitPrice = carVinInfo.factoryprice					
+					this.modalName = null
+				}	
 			},
 			RadioChange(e) {
-				this.radio = e.detail.value
+				this.vinCarCheck = e.detail.value
+				console.log(e.detail.value)
+				console.log('choseCar', this.vinCarList[this.vinCarCheck])
 			},
 			vinFocus(event){
 				console.log(event.detail)
@@ -845,7 +970,9 @@
 							getCarInfoByWin(vinCode).then(res => {
 								console.log(res)
 								this.vinCarList = res.data.Data
+								this.vinCarCheck = '0'
 								this.modalName = 'vinChose'
+								
 							}).catch(err => {
 								this.$api.msg(`获取数据失败,请刷新重试`);
 							})
@@ -875,6 +1002,7 @@
 						editCustomer(this.customer).then(res => {
 							console.log('customer',res.data)
 							this.customer = res.data.Data
+							this.carData.Customer_Id = res.data.Data.id
 							this.customerEdit = false
 							this.carInfoEdit = true
 							this.basics = 1
@@ -886,10 +1014,12 @@
 				})
 			},
 			confirmInfo() {
-				this.customerEdit = false
+				console.log(this.carData)
+				this.$utils.carInfoLegitimate(this.carData)
+				/* this.customerEdit = false
 				this.carInfoEdit = false
 				this.carImgEdit = true
-				this.basics = 2
+				this.basics = 2 */
 			},
 			confirmImg() {
 

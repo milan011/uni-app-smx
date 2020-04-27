@@ -11,11 +11,10 @@
 			</view>
 			<view class="input-content">
 				<view class="input-item">
-					<text class="tit">手机号码</text>
-					<input 
-						type="number" 
+					<text class="tit">用户名</text>
+					<input  
 						:value="mobile" 
-						placeholder="请输入手机号码"
+						placeholder="请输入用户名"
 						maxlength="11"
 						data-key="mobile"
 						@input="inputChange"
@@ -23,10 +22,9 @@
 				</view>
 				<view class="input-item">
 					<text class="tit">密码</text>
-					<input 
-						type="mobile" 
-						value="" 
-						placeholder="8-18位不含特殊字符的数字、字母组合"
+					<input  
+						:value="password" 
+						placeholder="请输入密码"
 						placeholder-class="input-empty"
 						maxlength="20"
 						password 
@@ -56,8 +54,8 @@
 	export default{
 		data(){
 			return {
-				mobile: '',
-				password: '',
+				mobile: 'yz',
+				password: '123456',
 				logining: false
 			}
 		},
@@ -89,24 +87,32 @@
 				}
 				*/
 				const sendData = {
-					mobile,
-					password
+					UserPhone: this.mobile,
+					NewPassword: this.password,
 				};
 				const result = await this.$api.json('userInfo');
 
-				loginByUser().then(res => {
+				loginByUser(sendData).then(res => {
 					console.log('登录了',res)
-					console.log(res)
+					if(res.data.ResultType === 0){ //登录成功
+						this.login(res.data.Data);
+						// uni.navigateBack();
+						uni.switchTab({
+							url: '/pages/user/user'
+						});
+					}else{ //登录失败
+						this.$api.msg(res.data.Message);
+					}
 				}).catch(err => {
-				
+					this.$api.msg('登录失败,请刷新后重试');
 				})
-				if(result.status === 1){
+				/* if(result.status === 1){
 					this.login(result.data);
           uni.navigateBack();  
 				}else{
 					this.$api.msg(result.msg);
 					this.logining = false;
-				}
+				} */
 			}
 		},
 

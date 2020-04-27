@@ -20,9 +20,9 @@
 		</view>
 		<view class="cu-form-group margin-top">
 			<view class="title">客户来源</view>
-			<picker @change="PickerChange" :value="index" v-model="userInfo.customer_res" :range="picker">
+			<picker @change="PickerChange" :value="userInfo.customer_res" v-model="userInfo.customer_res - 1" :range="picker">
 				<view class="picker">
-					{{userInfo.customer_res>-1?picker[userInfo.customer_res - 1]:'请选择客户来源'}}
+					{{userInfo.customer_res>=-1?picker[userInfo.customer_res - 1]:'请选择客户来源'}}
 				</view>
 			</picker>
 		</view>
@@ -102,7 +102,6 @@
 		},
 		methods: {
 			PickerChange(e) {
-				this.index = e.detail.value
 				this.userInfo.customer_res = e.detail.value + 1
 			},
 			textareaAInput(e) {
@@ -131,7 +130,7 @@
 			// 身份证验证
 			verificationId(e) {
 				let reg = /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-				if (e.detail.value == "") {
+				if (e.detail.value == "") {	
 					return false
 				} else if (!reg.test(e.detail.value)) {
 					uni.showToast({
@@ -159,17 +158,11 @@
 						});
 						setTimeout(() => {
 							uni.navigateTo({
-								url: "../../customer/customer"
+								url: "../customerDetail?id="+this.userInfo.id
 							})
 						}, 1500)
 					})
 					return false
-					
-					setTimeout(() => {
-						uni.navigateBack({
-							delta: 1
-						});
-					}, 1500)
 				}
 			}
 		}

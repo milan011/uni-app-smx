@@ -9,7 +9,7 @@
 						<view class="desc">
 							<view class="text-content" style="padding-top: 0.8em;">{{item.FullName}}</view>
 							<view>
-								<view class="cu-tag bg-red light sm round">¥ {{item.InitPrice/10000}}万元</view>
+								<view class="cu-tag bg-red light sm round">¥ {{item.SaleAMT}}万元</view>
 								<view class="cu-tag bg-green light sm round">{{item.Mileage}}万公里</view>
 								<view class="cu-tag bg-green light sm round">{{item.shopcityname}}</view>
 							</view>
@@ -286,9 +286,6 @@
 				if (this.goodsList.length == 0) {
 					this.goodsList = goodsList
 				} else {
-					this.goodsList.forEach(ele => {
-
-					})
 					this.goodsList = this.goodsList.concat(goodsList);
 				}
 				//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
