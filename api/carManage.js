@@ -10,6 +10,14 @@ export function getCarDetail(carId) {
 		requestUrl, { params: { id: carId } }
 	)
 }
+//车源基本信息保存
+export function editCarInfo(data) {
+	
+	const requestUrl = Config.url_config + '/car/edit'
+	return httpApi.post(
+		requestUrl, { ...data }
+	)
+}
 //获取车源跟踪信息
 export function getCarFollow(carId) {
 	

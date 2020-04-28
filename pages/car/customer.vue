@@ -33,7 +33,7 @@
 		<view v-show="carInfoEdit" class="pay-type-list" style="padding: 0px 60upx">
 			<view class="cu-form-group">
 				<view class="title">VIN码</view>
-				<input @blur="getCarByVin" @input="vinChange" v-model="carData.VIN" style="text-align: right;margin-right: 1em;" placeholder="请扫描或输入VIN码" name="input"></input>
+				<input @blur="handlerVin" @input="vinChange" v-model="carData.VIN" style="text-align: right;margin-right: 1em;" placeholder="请扫描或输入VIN码" name="input"></input>
 				<text @tap="scanVin" class='cuIcon-scan text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group">
@@ -536,13 +536,77 @@
 			<view class="gray-text">加载中...</view>
 		</view> -->
 		<!-- vin码接口加载Loading End -->
+		<!-- 手动输入车型 Begin -->
+		<view style="z-index: 110;" class="cu-modal" :class="modalName=='Manual'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">车型输入</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view> 
+				<view class="padding-xl">
+					<view class="cu-form-group">
+						<view class="title">品牌</view>
+						<input v-model="manualData.brand" style="text-align: right;margin-right: 1em;" placeholder="奥迪" name="input"></input>
+					</view>	
+					<view class="cu-form-group">
+						<view class="title">车系</view>
+						<input v-model="manualData.category" style="text-align: right;margin-right: 1em;" placeholder="奥迪A4L" name="input"></input>
+					</view>	
+					<view class="cu-form-group">
+						<view class="title">车型名称</view>
+						<input v-model="manualData.name" style="text-align: right;margin-right: 1em;" placeholder="35 TFSI 时尚动感型 " name="input"></input>
+					</view>
+					<view class="cu-form-group">
+						<view class="title">年款</view>
+						<input v-model="manualData.year" style="text-align: right;margin-right: 1em;" placeholder="2020" name="input"></input>
+					</view>
+					<view class="cu-form-group">
+						<view class="title">排量</view>
+						<input v-model="manualData.Transmission" style="text-align: right;margin-right: 1em;" placeholder="2.0L" name="input"></input>
+					</view>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="manualConf">确定</button>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 手动输入车型 End -->
+		<!-- 校验信息显示 Begin -->
+		<view class="cu-modal" :class="modalName=='validateModal'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">请您完善车型信息</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view> 
+				<view class="padding-xl">
+					<view class="padding bg-white">
+						<view class="text-center text-orange"  v-for="(item,index) in validateInfo" :key="index">
+							{{ item.message}}
+						</view>
+					</view>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 校验信息显示 End -->
 	</view>
 </template>
 
 <script>
 	import { editCustomer } from '@/api/user.js'
 	import moment from 'moment' 
-	import { vinRepeatCheck, getCarInfoByWin } from '@/api/carManage.js'
+	import { vinRepeatCheck, getCarInfoByWin, editCarInfo } from '@/api/carManage.js'
 	import EvanForm from '@/components/evan-form/evan-form.vue'
 	import EvanFormItem from '@/components/evan-form/evan-form-item.vue'
 	import uniCollapse from '@/components/uni-collapse/uni-collapse.vue'
@@ -641,6 +705,14 @@
 				dateCheck: '', */
 				pickerStart: '',
 				pickerEnd: '',
+				validateInfo: [],
+				manualData: {
+					brand: '',
+					category: '',
+					name: '',
+					year: '',
+					Transmission: '',
+				},
 				carData: {
 					VIN: '',
 					FullName : '',
@@ -650,7 +722,7 @@
 					CityName: '北京',
 					BasePrice: '',
 					SaleAMT: '',
-					Transmission: 1,
+					Transmission: 0,
 					CarType: 1,
 					Out_color: 0,
 					Inside_color: 0,
@@ -660,7 +732,7 @@
 					CarUse: 0,
 					Useconditions: 0,
 					Maintaining: 0,
-					Area: '',
+					Area: '北京',
 					Safe_type: 0,
 					Mileage: '',
 					Sale_number: 0,
@@ -931,6 +1003,21 @@
 					shop_id: null,
 				}
 			},
+			hideModal(e) {
+				this.modalName = null
+			},
+			manualConf(){ //手动输入车型
+				console.log('手动输入',this.manualData)
+				if(!this.manualData.category || !this.manualData.year || !this.manualData.Transmission || !this.manualData.name){
+					this.$api.msg(`请填写完整信息`, 2000);
+				}else{
+					this.carData.FullName = this.manualData.category + ' ' + this.manualData.year  + this.manualData.Transmission + ' ' + this.manualData.name
+					this.carData.Capacity = this.manualData.Transmission
+					this.carData.CarModel = this.manualData.category
+					this.carData.Factory = this.manualData.brand
+					this.modalName = null
+				}			
+			},
 			carVinConf(e) {
 				if(this.vinCarCheck == ''){
 					this.$api.msg(`请选择车型`, 2000);
@@ -958,25 +1045,47 @@
 				// console.log('狗子,你变了')
 				this.vinChanged = true
 			},
+			handlerVin(event){
+				const vinCode = event.detail.value
+				vinRepeatCheck(vinCode).then(res => {				
+					if(res.data.Data){
+						this.$api.msg(`您输入的vin码已存在`, 2000)
+					}else{
+						console.log('vin不存在',res.data)
+						this.getCarByVin(event)
+					}
+				}).catch(err => {
+					this.$api.msg(`获取数据失败,请刷新重试`);
+				})
+			},
 			getCarByVin(event){ //根据vin码获取车型信息	
 				const vinCode = event.detail.value
 				if(this.vinChanged){ //vin码有变化
 					if (this.$utils.isRegVin(vinCode)) { //格式校验
-						console.log(vinCode)
-						if(this.isVinRepeat(vinCode)){ //vin码是否在平台上已存在
-							console.log('VIN码已被使用')
-						}else{
-							console.log('VIN码未被使用')
-							getCarInfoByWin(vinCode).then(res => {
-								console.log(res)
+						getCarInfoByWin(vinCode).then(res => {
+							console.log(res)
+							if(res.data.ResultType == 0){
 								this.vinCarList = res.data.Data
 								this.vinCarCheck = '0'
 								this.modalName = 'vinChose'
-								
-							}).catch(err => {
-								this.$api.msg(`获取数据失败,请刷新重试`);
-							})
-						}
+							}else{
+								this.$api.msg(`您输入的vin码无对应车型,请重新输入或使用手动输入车型`, 2000);
+								this.carData.FullName = ""								
+								setTimeout(()=>{
+									this.modalName = 'Manual'
+								}, 2000)
+							}								
+					}).catch(err => {
+						this.$api.msg(`获取数据失败,请刷新重试`);
+					})
+						/* console.log(vinCode)
+						const isRepeat = await this.isVinRepeat(vinCode)
+						console.log('re', isRepeat) */
+						/* if(this.isVinRepeat(vinCode)){ //vin码是否在平台上已存在
+							this.$api.msg(`您输入的vin码已存在`, 2000)
+						}else{
+							console.log('VIN码未被使用')
+						} */
 					} else {
 						console.log('VIN码必须是17位数字字母组成')
 						this.$api.msg(`VIN码必须是17位数字字母组成`, 7000);
@@ -984,18 +1093,26 @@
 					this.vinChanged = false
 				}	
 			},
-			isVinRepeat(vinCode){ //Vin码是否重复
+			/* isVinRepeat(vinCode){ //Vin码是否重复
 				vinRepeatCheck(vinCode).then(res => {
-					console.log(res)
-					if(res.Data == true){
-						return true
+					console.log('vin存在',res.data)
+					if(res.Data === true){
+						new Promise(resolve=>{
+							setTimeout(()=>{
+								resolve('1');
+							}, 500)
+						})
 					}else{
-						return false
+						new Promise(resolve=>{
+							setTimeout(()=>{
+								resolve('2');
+							}, 500)
+						})
 					}
 				}).catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
 				})
-			},
+			}, */
 			confirmCustomer() {
 				this.$refs.customerform.validate((valid) => {
 					if (valid) {
@@ -1015,7 +1132,26 @@
 			},
 			confirmInfo() {
 				console.log(this.carData)
-				this.$utils.carInfoLegitimate(this.carData)
+				const checkValidate = this.$utils.carInfoLegitimate(this.carData)
+				console.log('validate',checkValidate)
+				if(checkValidate.validateType == false){ //校验失败
+					this.validateInfo = checkValidate.validateInfo
+					this.modalName = 'validateModal'
+				}else{
+					if(this.carData.Mileage > 200 || this.carData.BasePrice > 200 || this.carData.SaleAMT > 200){
+						this.$api.msg(`您输入的里程或价格过高,请确认`, 3000);
+					}
+					editCarInfo(this.carData).then(res => {
+						console.log(res)
+						if(res.data.ResultType !== 0){
+							this.$api.msg(res.data.Message);
+						}else{
+							
+						}
+					}).catch(err => {
+						this.$api.msg(`车源信息添加失败,请刷新重试`);
+					})
+				}
 				/* this.customerEdit = false
 				this.carInfoEdit = false
 				this.carImgEdit = true
