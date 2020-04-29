@@ -1,50 +1,45 @@
 <template>
-	<view class="app">	
-	<scroll-view scroll-x class="bg-white nav" style="width: 90%;margin: 0 auto;">
-		<!-- 基本信息编辑Begin -->
+	<view class="app">
+		<scroll-view scroll-x class="bg-white nav" style="width: 90%;margin: 0 auto;">
+			<!-- 基本信息编辑Begin -->
 			<view class="cu-form-group">
+				<text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
 				<view class="title">期望车型</view>
-				<input style="text-align: right;" placeholder="请输入期望车型" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入期望车型" v-model="form.carcate" @blur="verification" name="input"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">备选车型1</view>
-				<input style="text-align: right;" placeholder="请输入备选车型" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入备选车型" v-model="form.alternate_car" name="input"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">备选车型2</view>
-				<input style="text-align: right;" placeholder="请输入备选车型" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入备选车型" v-model="form.alternate_car_another" name="input"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">变速箱</view>
 				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
 					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择变速箱类型'}}
+						{{carType[form.gearbox]}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group nu-style">
+				<text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
 				<view class="title">最低期望价格(万元)</view>
-				<input style="text-align: right;" placeholder="请输入最低期望价格" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入最低期望价格" v-model="form.bottom_price" @blur="verification" @ name="input"></input>
 				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group nu-style">
+				<text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
 				<view class="title">最高期望价格(万元)</view>
-				<input style="text-align: right;" placeholder="请输入最高期望价格" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入最高期望价格" v-model="form.top_price" @blur="verification" @ name="input"></input>
 				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group margin-top">
-				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" placeholder="客户描述"></textarea>
+				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" :value="textareaAValue" placeholder="客户描述"></textarea>
 			</view>
-			<view class="cu-form-group margin-top">
-				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" placeholder="销售描述"></textarea>
-			</view>
-			<!-- <button @click="save" class="evan-form-show__button">保存</button>
-					<button @click="utilsSave" class="evan-form-show__button">直接调用utils验证</button>
-					<button @click="validateSingle" class="evan-form-show__button">只验证邮箱</button>
-					<button @click="validateMultiple" class="evan-form-show__button">只验证邮箱和手机号</button>
-					<button @click="hideReqired" class="evan-form-show__button">{{hideRequiredAsterisk?'显示':'隐藏'}}*号</button> -->
 			<text class="mix-btn" @click="confirmInfo">提交修改</text>
-		<!-- 车源图片编辑End -->
+			<!-- 车源图片编辑End -->
 		</scroll-view>
 	</view>
 </template>
@@ -55,6 +50,10 @@
 	import uniCollapse from '@/components/uni-collapse/uni-collapse.vue'
 	import uniCollapseItem from '@/components/uni-collapse-item/uni-collapse-item.vue'
 	// import utils from '@/components/evan-form/utils.js'
+	import {
+		getWant,
+		aveWant
+	} from "@/api/want.js"
 	import '@/common/utils'
 	export default {
 		components: {
@@ -65,81 +64,78 @@
 		},
 		data() {
 			return {
-				payType: 1,
-				orderInfo: {},
-				hideRequiredAsterisk: false,
 				carTypeIndex: -1,
-				carType: ['轿车', 'SUV', '客车'],
-				date: '2018-12-25',
+				carType: ['不限', '手动', '自动'],
 				modalName: null,
 				textareaAValue: '',
-				TabCur: 0,
-				TabCurPicture: 0,
-				multiArray: [
-					['北京', '河北'],
-					['北京'],
-					// ['猪肉绦虫', '吸血虫']
-				],
-				objectMultiArray: [
-					[{
-							id: 0,
-							name: '北京'
-						},
-						{
-							id: 1,
-							name: '河北'
-						}
-					],
-					[{
-							id: 0,
-							name: '北京'
-						},
-						{
-							id: 1,
-							name: '石家庄'
-						},
-						{
-							id: 2,
-							name: '保定'
-						},
-						{
-							id: 3,
-							name: '唐山'
-						},
-						{
-							id: 4,
-							name: '张家口'
-						}
-					]
-				],
 				multiIndex: [0, 0],
-				
-				// 表单的内容必须初始化
-				customer: {
-					name: 'wcg',
-					phone: '13731080174',
-				},
-				carinfo: {
-					carname: '',
-					type: '',
-				}			
+				id: "",
+				// 表单的内容必须初始化	
+				form: {
+					id: '',
+					want_code: "",
+					carcate: '',
+					alternate_car: "",
+					alternate_car_another: "",
+					want_type: '',
+					brand_id: '',
+					categorey_id: '',
+					car_factory: '',
+					cate_id: '',
+					capacity: '',
+					gearbox: 0,
+					bottom_price: '',
+					top_price: '',
+					age: '',
+					mileage: '',
+					out_color: '',
+					inside_color: '',
+					customer_id: '',
+					creater_id: '',
+					shop_id: '',
+					want_area: '',
+					remark: '',
+					xs_remark: '',
+					recommend: '',
+					is_top: '',
+					sale_number: '',
+					want_status: '',
+					created_at: '',
+					updated_at: '',
+					deleted_at: '',
+					creater_name: '',
+					customer_name: '',
+					shop_name: '',
+				}
 			};
 		},
-		mounted() {
-			// 这里必须放在mounted中，不然h5，支付宝小程序等会找不到this.$refs.form
-			// this.$refs.customerform.setRules(this.rules)
-			console.log(Math.pow(1.05, 10))
-		},
-		computed: {
-
-		},
 		onLoad(options) {
+			this.id = options.id
 			console.log(options)
+			this.init()
 		},
 
 		methods: {
-			scanVin() {
-				console.log('gan jin sao')
+			init() {
+				getWant({
+					id: this.id
+				}).then(res => {
+					let data = res.data.Data
+					this.form.id = this.id;
+					this.form.carcate = data.want.carcate;
+					this.form.alternate_car = data.want.alternate_car;
+					this.form.alternate_car_another = data.want.alternate_car_another;
+					this.form.gearbox = data.want.gearbox;
+					this.form.bottom_price = data.want.bottom_price;
+					this.form.top_price = data.want.top_price;
+					this.form.customer_id = data.want.customer_id;
+					this.form.creater_id = data.want.creater_id;
+					this.form.shop_id = data.customer.shop_id;
+					this.form.want_status = data.want.want_status;
+					this.form.created_at = data.want.created_at;
+					this.form.updated_at = data.want.updated_at
+					this.textareaAValue = data.want.xs_remark;
+				})
 			},
 			PickerChange(e) {
 				this.carTypeIndex = e.detail.value
@@ -148,67 +144,41 @@
 				this.multiIndex = e.detail.value
 			},
 			textareaAInput(e) {
-				this.textareaAValue = e.detail.value
+				this.form.xs_remark = e.detail.value
 			},
-			tabSelect(e) { //标签切换
-				this.TabCur = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-			},			
-			tabSelectP(e){ //图片编辑标签切换
-				this.TabCurPicture = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-			},
-			MultiColumnChange(e) {
-
-				let data = {
-					multiArray: this.multiArray,
-					multiIndex: this.multiIndex
-				};
-				const column = e.detail.column;
-				const value = e.detail.value;
-				/* console.log('哥,你滚了')
-				console.log('column',column)
-				console.log('value',value) */
-				data.multiIndex[column] = value;
-				switch (column) {
-					case 0:
-						switch (data.multiIndex[0]) {
-							case 0:
-								// console.log('你选了首都')
-								this.multiArray[1] = ['北京'];
-								break;
-							case 1:
-								// console.log('你选了河北省')
-								this.multiArray[1] = ['石家庄', '保定', '唐山', '张家口'];
-								break;
-						}
-						this.multiIndex.splice(1, 0)
-						// console.log('你咋不选')
-						break;
+			verification(e) {
+				console.log(e)
+				if (e.detail.value == "") {
+					uni.showToast({
+						title: '请输入带 * 号的必填项',
+						icon: "none",
+						duration: 1000
+					});
 				}
-				this.multiArray = data.multiArray;
-				this.multiIndex = data.multiIndex;
-			},
-			DateChange(e) {
-				this.date = e.detail.value
-			},
-			confirm() {
-				this.$refs.customerform.validate((res) => {
-					if (res) {
-						uni.showToast({
-							title: '验证通过',
-						})
-						this.customerEdit = false
-						this.carInfoEdit = true
-						this.basics = 1
-					}
-				})
 			},
 			confirmInfo() {
-				this.customerEdit = false
-				this.carInfoEdit = false
-				this.carImgEdit = true
-				this.basics = 2
+				if (this.form.carcate =='' || this.form.top_price ==='' || this.form.bottom_price === '') {
+					uni.showToast({
+						title: '请输入带 * 号的必填项',
+						icon: "none",
+						duration: 1000
+					});
+					return false
+				} else {
+					aveWant({ ...this.form
+					}).then(res => {
+						uni.showToast({
+							title: '提交成功',
+							icon: "none",
+							duration: 1500
+						})
+						setTimeout(() => {
+							uni.navigateBack({
+								delta: 1
+							})
+						}, 1500)
+					})
+				}
 			}
 		}
 	}
@@ -221,9 +191,11 @@
 	.nu-style /deep/ .uni-numbox__value {
 		border: none;
 		text-align: right;
-	}	
-	.tStyle{
-		display: flex; margin-top: 3.5em;
+	}
+
+	.tStyle {
+		display: flex;
+		margin-top: 3.5em;
 	}
 </style>
 <style lang='scss'>
@@ -234,12 +206,14 @@
 	.cu-form-group {
 		padding: 0px;
 	}
-	.nav{
+
+	.nav {
 		.cu-item {
 			height: 65upx;
 			/* display: inline-block; */
 		}
 	}
+
 	.price-box {
 		background-color: #fff;
 		height: 265upx;

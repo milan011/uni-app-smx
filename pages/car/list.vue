@@ -108,7 +108,7 @@
 					OrderKliMin: "",
 					OrderYearMin: "",
 					Car_Status: 1,
-					IsPutOn: 1,
+					IsPutOn: -1,
 					Shop_Id: "",
 					Sale_number: -1
 				},

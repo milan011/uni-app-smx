@@ -73,10 +73,10 @@ httpApi.interceptor.request((config, cancel) => { /* 请求之前拦截器 */
     token:store.state.userInfo.token
     // b: 1
   }
-  console.log('store',store.state)
+  // console.log('store',store.state)
   
   if (!store.state.userInfo.token) { // 如果token不存在，调用cancel 会取消本次请求，但是该函数的catch() 仍会执行
-    alert('token none')
+    // alert('token none')
     cancel('token 不存在') // 接收一个参数，会传给catch((err) => {}) err.errMsg === 'token 不存在'
   }
   
@@ -90,8 +90,8 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
   // if (response.config.custom.verification) { // 演示自定义参数的作用
   //   return response.data
   // }
-  console.log('且慢')
-  console.log('大圣收了神通吧')
+  // console.log('且慢')
+  // console.log('大圣收了神通吧')
   // return false
   return response
 }, (response) => { // 请求错误做点什么

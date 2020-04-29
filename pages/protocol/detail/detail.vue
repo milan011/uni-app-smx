@@ -20,16 +20,16 @@
 				<view class="row" style="margin-top: 20upx;">丙方：<text class="red">{{formdata.p_name}}</text></view>
 				<view class="row" style="margin: 20upx 0; font-weight: 600;">交易车辆基本情况</view>
 				<view class="row">产权登记人：<text class="red">{{formdata.propertyown}}</text></view>
-				<view class="row">车辆类型：<text class="red">{{formdata.cartype}}</text></view>
+				<view class="row">车辆类型：<text class="red">{{carType[formdata.cartype]}}</text></view>
 				<view class="row">车牌号码：<text class="red">{{formdata.carnumber}}</text></view>
 				<view class="row">厂牌型号：<text class="red">{{formdata.carmodel}}</text></view>
 				<view class="row">初次登记日期：<text class="red">{{formdata.carmodel}}</text></view>
 				<view class="row">发动机号：<text class="red">{{formdata.enginecode}}</text></view>
 				<view class="row">车架号：<text class="red">{{formdata.vin}}</text></view>
-				<view class="row">保险有效期至：<text class="red">{{formdata.endinsuredate.split("T")[0]}}</text></view>
-				<view class="row">最近一次年检时间：<text class="red">{{formdata.endinsuredate.split("T")[0]}}</text></view>
-				<view class="row">颜色：<text class="red">{{formdata.bodycolor}}</text></view>
-				<view class="row">车辆使用性质：<text class="red">{{formdata.carnature}}</text></view>
+				<view class="row">保险有效期至：<text class="red">{{formdata.endinsuredate.substring(0,formdata.endinsuredate.indexOf('T'))}}</text></view>
+				<view class="row">最近一次年检时间：<text class="red">{{formdata.lastcheckdate.substring(0,formdata.lastcheckdate.indexOf('T'))}}</text></view>
+				<view class="row">颜色：<text class="red">{{outcolorConfig[formdata.bodycolor].name}}</text></view>
+				<view class="row">车辆使用性质：<text class="red">{{carNature[formdata.carnature-1]}}</text></view>
 				<view class="row" style="margin: 20upx 0; font-weight: 600;">其他根据旧机动车现状及交易的实际情况，经甲乙双方协商一致，资源达成如下协议：</view>
 				<view class="row" style="font-weight: 600;">第一条 声明保证</view>
 				<view class="row" style="margin-top: 20upx;">1、甲方应当保证对出卖车辆享有所有权或处分权且该车符合国家有关可以上路或交易的规定，保证该车辆能依法办理过户、转籍手续。</view>
@@ -123,9 +123,9 @@
 				</view>
 				<view class="row" style="margin: 20upx 0 0;">
 					1、甲乙双方协商同意在
-					<text class="red">
+					<!-- <text class="red">
 						{{formdata.days}}
-					</text>
+					</text> -->
 					<text class="red">
 						{{formdata.starttime.split("-")[0]}}
 					</text>年
@@ -232,19 +232,19 @@
 				<view class="row" style="margin-top: 20upx;">
 					1、支付时间约定为在
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split(" ")[0].split("-")[0]:""}}
+						{{formdata.getcartime?formdata.getcartime.split("-")[0]:""}}
 					</text>年
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split(" ")[1].split("-")[0]:""}}
+						{{formdata.getcartime?formdata.getcartime.split("-")[1]:""}}
 					</text>月
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split(" ")[2].split("-")[0]:""}}
+						{{formdata.getcartime?formdata.getcartime.split("-")[2].split("T")[1].split(':')[0]:""}}
 					</text>日
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split(" ")[3].split("-")[0]:""}}
+						{{formdata.getcartime?formdata.getcartime.split("-")[2].split("T")[1].split(':')[1]:""}}
 					</text>时
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split(" ")[3].split("-")[0]:""}}
+						{{formdata.getcartime?formdata.getcartime.split("-")[2].split("T")[1].split(':')[2]:""}}
 					</text>分
 				</view>
 				<view class="row" style="margin-top: 20upx;">
@@ -363,14 +363,34 @@
 					</view>
 				</view>
 			</view>
+		<view class="padding flex flex-direction">
+			<view class="cu-btn bg-red lg" @tap="doDel">删除</view>
+		</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {deleteContract} from "@/api/contract.js"
 	export default {
 		data() {
 			return {
+				outcolorConfig : [
+					{key: 0, name: '其它'},
+					{key: 1, name: '黑'},
+					{key: 2, name: '白'},
+					{key: 3, name: '银白'},
+					{key: 4, name: '红'},
+					{key: 5, name: '蓝'},
+					{key: 6, name: '银'},
+					{key: 7, name: '橙'},
+					{key: 8, name: '深灰'},
+					{key: 9, name: '香槟金'},
+					{key: 10, name: '灰'},
+					{key: 11, name: '棕'},
+					{key: 12, name: '绿'},
+					{key: 13, name: '紫'},
+				],
 				formdata: {
 					code: "000003",
 					s_name: "张三", //甲方姓名
@@ -408,8 +428,8 @@
 					p_way_2_money_b: "",
 					p_way_2_lastmoney: "",
 					days: "1", //协商几日内
-					starttime: "2020-09-20", //开始年月日
-					endtime: "2020-09-20", //结束年月日
+					starttime: "2019-12-17T15:52:14", //开始年月日
+					endtime: "2019-12-17T15:52:14", //结束年月日
 					assigned: "丙", //办理方
 					commission: "1000", //交易佣金金额
 					s_assume: "500", //甲方承担金额
@@ -417,7 +437,7 @@
 					forcommission: "", //代办
 					servermoney: "200", //代办费用
 					serveruser: "张三", //代办费用承担人
-					serverovertime: "2020-09-30", //代办费用付清时间
+					serverovertime: "", //代办费用付清时间
 					othercost: "",
 					othername: "",
 					othermoney: "", //其他费用
@@ -425,15 +445,40 @@
 					othermoney_s: "", //甲方承担的
 					assignmoney: "", //过户费
 					assignuser: "", //承担过户费方
-					assigndatetime: "", //其他费用结清时间
-					getcartime: "2020 10 20-00 00", //支付时间
+					assigndatetime: "2019-12-17T15:52:14", //其他费用结清时间
+					getcartime: "2019-12-17T15:52:14", //支付时间
 					getcarcontent: "", //交付项目
 					cert_numbe: "", //身份证复印件
 					key_number: "", //钥匙数量
 					issureone: true, //过户方式
 					signadress: "石家庄市", //签约地址
-				}
+				},
+				carType:['不限','轿车','SUV','面包车','客车','货车','MPV'],
+				carNature:['私用','公用/商务','运营']
 			};
+		},
+		onLoad() {
+			uni.getStorage({
+				key:'contractDetail',
+				success:(res)=>{
+					this.formdata = res.data
+				}
+			})
+		},
+		methods:{
+			doDel(){
+				uni.showModal({
+				    title: '是否删除?',
+				    content: '确定删除此条合同吗?注：删除后将无法恢复!',
+				    success: function (res) {
+				        if (res.confirm) {
+				            deleteContract({id:this.formdata.id})
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			}
 		}
 	}
 </script>

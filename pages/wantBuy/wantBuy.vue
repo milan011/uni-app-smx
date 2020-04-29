@@ -134,62 +134,7 @@
 				menuArrow: false,
 				empty: false, //空白页现实  true|false
 				cartList: [],
-				options: [{
-					text: '查看',
-					carId: 23,
-					style: {
-						backgroundColor: '#006c00'
-					}
-				}, {
-					text: '编辑',
-					carId: 23,
-					style: {
-						backgroundColor: '#b5b55a'
-					}
-				}],
 				modalName: null,
-				type: [{
-						value: "正常",
-						isAct: false,
-					},
-					{
-						value: "废弃",
-						isAct: false,
-					},
-					{
-						value: "已交易",
-						isAct: false,
-					}
-				],
-				transmission: [{
-						value: "不限",
-						isAct: false,
-					},
-					{
-						value: "手动",
-						isAct: false,
-					},
-					{
-						value: "自动",
-						isAct: false,
-					}
-				],
-				price: [{
-						value: "3万以下",
-						isAct: false,
-					},
-					{
-						value: "3-5万",
-						isAct: false,
-					},
-					{
-						value: "5-15万",
-						isAct: false,
-					}, {
-						value: "15万以上",
-						isAct: false,
-					}
-				],
 				startDate: "",
 				endDate: "",
 				want: {
@@ -221,10 +166,10 @@
 					this.want.shopid = res.data.shop_id;
 					this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
 					this.want.userid = res.data.id;
-					console.log(this.want)
+					this.loadData();
 				}
 			})
-			this.loadData();
+			
 		},
 		//下拉刷新
 		onPullDownRefresh() {
@@ -267,10 +212,14 @@
 			//请求数据
 			async loadData() {
 				this.loadingType = "loading"
-				this.cartList = []
 				let cartList = await getWantList({ ...this.want
 				})
-			    this.cartList = cartList.data.Data.DataList;
+			    // this.cartList = cartList.data.Data.DataList;
+				if (this.cartList.length == 0) {
+					this.cartList = cartList.data.Data.DataList;
+				} else {
+					this.cartList = this.cartList.concat(cartList.data.Data.DataList);
+				}
 				this.total = cartList.data.Data.Total;
 				this.cartList.forEach(ele => {
 					if (ele.want.want_status == 0) {
@@ -296,6 +245,8 @@
 				})
 			},
 			doSeach() {
+				this.want.pageIndex = 1
+				this.cartList = []
 				this.loadData();
 				this.hideModal();
 			},

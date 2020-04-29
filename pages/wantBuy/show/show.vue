@@ -2,49 +2,49 @@
 	<view class="container">
 		<!-- 基本情况Begin -->
 		<view class="history-section icon">
-			<list-cell icon="icon-tuijian" iconColor="#e07472" title="名称" tips="奥迪A6L豪华型"></list-cell>
+			<list-cell icon="icon-tuijian" iconColor="#e07472" iconRightColor='rgba(0,0,0,0)' title="求购车辆名称" :tips="wantInfo.want.carcate"></list-cell>
 			<!-- <list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" @eventClick="navTo('/pages/address/address')"></list-cell> -->
-			<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="负责人" tips="小李"></list-cell>
-			<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="上传日期" tips="2020-03-10"></list-cell>
+			<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" iconRightColor='rgba(0,0,0,0)' title="负责人" :tips="wantInfo.want.creater_name"></list-cell>
+			<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" iconRightColor='rgba(0,0,0,0)' title="上传日期" :tips="wantInfo.want.created_at"></list-cell>
 		</view>
 		<!-- 基本情况End -->
 		<!-- 操作组Begin -->
 		<view class="order-section">
-			<view class="order-item" @click="navTo('/pages/wantBuy/detail/detail?id=' + '12')" hover-class="common-hover"
+			<view class="order-item" @click="navTo('/pages/wantBuy/detail/detail?id=' + Id)" hover-class="common-hover"
 			 :hover-stay-time="50">
 				<text class="yticon icon-shouye"></text>
 				<text>查看</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/wantBuy/edit/edit??id=' + '12')" hover-class="common-hover"
+			<view class="order-item" @click="navTo('/pages/wantBuy/edit/edit?id=' + Id)" hover-class="common-hover"
 			 :hover-stay-time="50">
 				<text class="yticon icon-daifukuan"></text>
 				<text>编辑</text>
 			</view>
 			<view class="order-item" @tap="showModal" data-target="ModalScrap" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-daifukuan"></text>
-				<text>废弃/激活</text>
+				<text>废弃</text>
 			</view>
 			<view class="order-item" @tap="showModal" data-target="ModalFollow" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-shouhoutuikuan"></text>
 				<text>跟进</text>
 			</view>
 		</view>
-		
+
 		<!-- 操作组End -->
 		<!-- 跟踪信息Begin -->
 		<view class="eva-section">
 			<view class="e-header">
 				<text class="tit">最新跟踪</text>
-				<text @click="" class="tip">历史跟踪记录</text>
+				<text @click="navTo('/pages/wantBuy/detail/detail?TabCur=2&id='+Id)" class="tip">历史跟踪记录</text>
 				<text class="yticon icon-you"></text>
 			</view>
 			<view class="eva-box">
 				<view class="right">
 					<view class="guess-section">
-						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪人员" tips="小李"></list-cell>
-						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪时间" tips="2020-03-10">
+						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" iconRightColor='rgba(0,0,0,0)' title="跟踪人员" :tips="follow[0].user_name"></list-cell>
+						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" iconRightColor='rgba(0,0,0,0)' title="跟踪时间" :tips="follow[0].created_at.substring(0,follow[0].created_at.indexOf('T'))">
 						</list-cell>
-						<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" @eventClick="navTo('/pages/wantBuy/detail/detail?TabCur=2')" title="跟踪操作" tips="创建车源">
+						<list-cell @eventClick="navTo('/pages/wantBuy/detail/detail?TabCur=2&id='+Id)" icon="icon-pinglun-copy" iconColor="#ee883b" title="跟踪操作" :tips="follow[0].description">
 						</list-cell>
 					</view>
 				</view>
@@ -66,7 +66,7 @@
 				<view class="cu-bar bg-white justify-end">
 					<view class="action">
 						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-						<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+						<button class="cu-btn bg-green margin-left" @tap="doSave">确定</button>
 					</view>
 				</view>
 			</view>
@@ -111,13 +111,13 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group margin-top">
-						<textarea maxlength="-1" @input="textareaAInput"  placeholder="跟进内容"></textarea>
+						<textarea maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">
 					<view class="action">
 						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-						<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+						<button class="cu-btn bg-green margin-left" @tap="doFollow">确定</button>
 					</view>
 				</view>
 			</view>
@@ -128,44 +128,47 @@
 <script>
 	import listCell from '@/components/mix-list-cell';
 	import {
+		getWant,
+		getwantfollow,
+		statusWant,
+		wantFollow
+	} from '@/api/want.js'
+	import {
 		mapState
 	} from 'vuex';
-	let startY = 0,
-		moveY = 0,
-		pageAtTop = true;
 	export default {
 		components: {
 			listCell
 		},
 		data() {
 			return {
-				coverTransform: 'translateY(0px)',
-				coverTransition: '0s',
-				moving: false,
-				modalName:null,
+				modalName: null,
+				Id: '',
+				wantInfo: {
+					want: {
+						carcate: ""
+					}
+				},
+				follow: [{
+					user_name: "",
+					created_at: ""
+				}],
+				status: "",
+				textareaAValue: "",
+				follow_type: "",
+				user_name: "",
+				user_id: ""
 			}
 		},
-		onLoad() {},
-		// #ifndef MP
-		onNavigationBarButtonTap(e) {
-			const index = e.index;
-			if (index === 0) {
-				this.navTo('/pages/set/set');
-			} else if (index === 1) {
-				// #ifdef APP-PLUS
-				const pages = getCurrentPages();
-				const page = pages[pages.length - 1];
-				const currentWebview = page.$getAppWebview();
-				currentWebview.hideTitleNViewButtonRedDot({
-					index
-				});
-				// #endif
-				uni.navigateTo({
-					url: '/pages/notice/notice'
-				})
-			}
+		onLoad(options) {
+			this.Id = options.carId;
+			this.getInfo();
+			this.getFollow();
 		},
-		// #endif
+		onShow() {
+			this.getInfo();
+			this.getFollow();
+		},
 		computed: {
 			...mapState(['hasLogin', 'userInfo'])
 		},
@@ -185,6 +188,7 @@
 			},
 			textareaAInput(e) {
 				this.textareaAValue = e.detail.value
+				console.log(this.textareaAValue)
 			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
@@ -192,43 +196,60 @@
 			hideModal(e) {
 				this.modalName = null
 			},
-			/**
-			 *  会员卡下拉和回弹
-			 *  1.关闭bounce避免ios端下拉冲突
-			 *  2.由于touchmove事件的缺陷（以前做小程序就遇到，比如20跳到40，h5反而好很多），下拉的时候会有掉帧的感觉
-			 *    transition设置0.1秒延迟，让css来过渡这段空窗期
-			 *  3.回弹效果可修改曲线值来调整效果，推荐一个好用的bezier生成工具 http://cubic-bezier.com/
-			 */
-			coverTouchstart(e) {
-				if (pageAtTop === false) {
-					return;
-				}
-				this.coverTransition = 'transform .1s linear';
-				startY = e.touches[0].clientY;
+			// 获取详情
+			getInfo() {
+				getWant({
+					Id: this.Id
+				}).then(res => {
+					this.wantInfo = res.data.Data
+					this.wantInfo.want.created_at = this.wantInfo.want.created_at.substring(0, this.wantInfo.want.created_at.indexOf(
+						"T"))
+					this.status = res.data.Data.want.want_status
+				})
 			},
-			coverTouchmove(e) {
-				moveY = e.touches[0].clientY;
-				let moveDistance = moveY - startY;
-				if (moveDistance < 0) {
-					this.moving = false;
-					return;
-				}
-				this.moving = true;
-				if (moveDistance >= 80 && moveDistance < 100) {
-					moveDistance = 80;
-				}
+			// 获取跟踪记录
+			getFollow() {
+				getwantfollow({
+					wid: this.Id
+				}).then(res => {
+					this.follow = res.data.Data
+					this.follow_type = res.data.Data[0].follow_type
+					this.user_name = res.data.Data[0].user_name
+					this.user_id = res.data.Data[0].user_id
+				})
+			},
+			// 废弃车源
+			doSave() {
+				statusWant({
+					Id: this.Id,
+					status: this.status
+				}).then(res => {
 
-				if (moveDistance > 0 && moveDistance <= 80) {
-					this.coverTransform = `translateY(${moveDistance}px)`;
-				}
+					this.hideModal()
+					uni.showToast({
+						title: "操作成功",
+						icon: "none",
+						duration: 1500
+					})
+				})
 			},
-			coverTouchend() {
-				if (this.moving === false) {
-					return;
-				}
-				this.moving = false;
-				this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
-				this.coverTransform = 'translateY(0px)';
+			// 添加跟进
+			doFollow() {
+				wantFollow({
+					want_id: this.Id,
+					follow_type: this.follow_type,
+					user_name: this.user_name,
+					user_id: this.user_id,
+					description: this.textareaAValue
+				}).then(res => {
+					this.getFollow();
+					this.hideModal()
+					uni.showToast({
+						title: "操作成功",
+						icon: "none",
+						duration: 1500
+					})
+				})
 			}
 		}
 	}

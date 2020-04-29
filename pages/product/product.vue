@@ -162,7 +162,9 @@
 				specClass: 'none',
 				specSelected: [],
 				carDetail: {
-					"cars": {},
+					"cars": {
+						BuyDate: "",
+					},
 					"shop": {},
 					"user": {},
 					"customer": {},
@@ -197,14 +199,56 @@
 			//接收传值,id里面放的是标题，因为测试数据并没写id 
 			// 车辆详情
 			uni.showLoading({
-				title:"加载中"
+				title: "加载中",
+				mask: true
 			})
 			let id = options.id;
 			let carDetail = await getCarDetail({
 				id
 			})
 			this.carDetail = carDetail.data.Data;
-
+			// 浏览历史
+			let browseList = [];
+			uni.getStorage({
+				key: 'browseList',
+				success: (res) => {
+					browseList = res.data
+					let index = res.data.findIndex(ele => {
+						return this.carDetail.cars.ID == ele.cars.ID
+					})
+					console.log('index1==>', res.data.findIndex(ele => {
+						return ele.cars.ID == this.carDetail.cars.ID
+					}))
+					if (index == -1) {
+						browseList.unshift(this.carDetail)
+						uni.setStorage({
+							key: 'browseList',
+							data: browseList,
+							success: () => {
+								console.log('set')
+							}
+						})
+					} else {
+						browseList.splice(index, 1)
+						browseList.unshift(this.carDetail)
+						uni.setStorage({
+							key: 'browseList',
+							data: browseList,
+							success: () => {}
+						})
+					}
+				},
+				fail: () => {
+					browseList.unshift(this.carDetail)
+					uni.setStorage({
+						key: 'browseList',
+						data: browseList,
+						success: () => {
+							console.log('set')
+						}
+					})
+				}
+			})
 			// 全部参数配置 
 			let plevelid = "";
 			if (this.carDetail.cars.plevelid) {
@@ -221,7 +265,7 @@
 							icon: "none",
 							duration: 2000
 						})
-					} else {	
+					} else {
 						let list = JSON.parse(res.data.LogMessage).data;
 						let obj = list.find(ele => this.carDetail.cars.FullName == ele.psalename)
 						plevelid = obj.plevelid
@@ -231,7 +275,9 @@
 			let carVin = await getCarModelConfigByTid({
 				tid: plevelid
 			})
-			this.carVin = JSON.parse(carVin.data.LogMessage).result[0]
+			if (JSON.parse(carVin.data.LogMessage).result[0]) {
+				this.carVin = JSON.parse(carVin.data.LogMessage).result[0]
+			}
 			if (Object.keys(this.carVin).length != 0) {
 				this.allParamShow = true
 				this.$refs.sonVinInfo.sonAssginVin(this.carVin);
@@ -283,7 +329,7 @@
 			});
 			this.recomList = recomList.data.Data.DataList
 			this.transmissionConfig = await this.$api.config('transmissionConfig');
-			await  uni.hideLoading()
+			await uni.hideLoading()
 		},
 		methods: {
 			//规格弹窗开关

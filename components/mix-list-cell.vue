@@ -124,6 +124,12 @@
 		.cell-tip{
 			font-size: $font-sm+2upx;
 			color: $font-color-light;
+			display: inline-block;
+			width: 200upx;
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+			text-align: right;
 		}
 	}
 </style>

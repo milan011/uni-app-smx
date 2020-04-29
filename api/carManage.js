@@ -18,6 +18,43 @@ export function editCarInfo(data) {
 		requestUrl, { ...data }
 	)
 }
+//车源图片上传
+export function imgUpload(data) {
+	
+	const requestUrl = Config.url_config + '/car/uploadimage'
+	return httpApi.upload(requestUrl, {
+	  params: {shopid: data.shopid, pshopid: data.pshopid},  //会加在url上 
+	  files: [], // 仅5+App支持
+	  fileType: 'image/video/audio', // 仅支付宝小程序，且必填。
+	  filePath: data.path, // 要上传文件资源的路径。
+	  name: 'file', // 文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
+	  header: {}, // 如填写，会覆盖全局header,
+	  custom: {}, // 自定义参数
+	  formData: {}, // HTTP 请求中其他额外的 form data
+	  // 返回当前请求的task, options。请勿在此处修改options。非必填
+	  getTask: (task, options) => {
+	    // setTimeout(() => {
+	    //   task.abort()
+	    // }, 500)
+	  }
+	})
+}
+//车源图片添加
+export function imgAdd(data) {
+	
+	const requestUrl = Config.url_config + '/car/addcarimage'
+	return httpApi.post(
+		requestUrl, { ...data }
+	)
+}
+//车源图片删除
+export function imgDelete(data) {
+	
+	const requestUrl = Config.url_config + '/car/deleteimagepart'
+	return httpApi.get(
+		requestUrl, { params: { ...data } }
+	)
+}
 //获取车源跟踪信息
 export function getCarFollow(carId) {
 	

@@ -18,7 +18,14 @@
 					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.name" placeholder="请输入姓名" />
 				</evan-form-item>
 				<evan-form-item label="手机号：" prop="phone">
-					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.phone" placeholder="请输入手机号" />
+					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.telephone" placeholder="请输入手机号" />
+				</evan-form-item>
+				<evan-form-item label="客户来源：">
+						<picker @change="PickerChanges" :value="index" :range="picker">
+							<view class="picker">
+								{{picker[customer.customer_res]}}
+							</view>
+						</picker>
 				</evan-form-item>
 			</evan-form>
 			<text class="mix-btn" @click="confirm">添加求购信息</text>
@@ -28,39 +35,37 @@
 		<view v-show="carInfoEdit" class="pay-type-list" style="padding: 0px 60upx">
 			<view class="cu-form-group">
 				<view class="title">期望车型</view>
-				<input style="text-align: right;" placeholder="请输入期望车型" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入期望车型" v-model="wantInfo.carcate" name="input"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">备选车型1</view>
-				<input style="text-align: right;" placeholder="请输入备选车型" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入备选车型" v-model="wantInfo.alternate_car" name="input"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">备选车型2</view>
-				<input style="text-align: right;" placeholder="请输入备选车型" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入备选车型" v-model="wantInfo.alternate_car_another" name="input"></input>
 			</view>
 			<view class="cu-form-group">
-				<view class="title">变速箱</view>
+				<view class="title">变速箱类型</view>
 				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
 					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择变速箱类型'}}
+						{{carType[wantInfo.gearbox]}}
 					</view>
 				</picker>
 			</view>
 			<view class="cu-form-group nu-style">
 				<view class="title">最低期望价格(万元)</view>
-				<input style="text-align: right;" placeholder="请输入最低期望价格" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入最低期望价格" v-model="wantInfo.bottom_price" name="input"></input>
 				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group nu-style">
 				<view class="title">最高期望价格(万元)</view>
-				<input style="text-align: right;" placeholder="请输入最高期望价格" name="input"></input>
+				<input style="text-align: right;" placeholder="请输入最高期望价格" v-model="wantInfo.top_price" name="input"></input>
 				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group margin-top">
-				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" placeholder="客户描述"></textarea>
-			</view>
-			<view class="cu-form-group margin-top">
-				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" placeholder="销售描述"></textarea>
+				<textarea maxlength="-1" :disabled="modalName!=null" v-model="wantInfo.xs_remark" @input="textareaAInput"
+				 placeholder="客户描述"></textarea>
 			</view>
 			<text class="mix-btn" @click="confirmInfo">完成</text>
 		</view>
@@ -80,7 +85,10 @@
 	import EvanFormItem from '@/components/evan-form/evan-form-item.vue'
 	import uniCollapse from '@/components/uni-collapse/uni-collapse.vue'
 	import uniCollapseItem from '@/components/uni-collapse-item/uni-collapse-item.vue'
-	// import utils from '@/components/evan-form/utils.js'
+	import {
+		editCustomer,
+		saveWant
+	} from "@/api/want.js"
 	import '@/common/utils'
 	export default {
 		components: {
@@ -98,49 +106,12 @@
 				carInfoEdit: false,
 				selectEdit: false,
 				carTypeIndex: -1,
-				carType: ['轿车', 'SUV', '客车'],
+				carType: ['不限', '手动', '自动'],
 				date: '2018-12-25',
 				modalName: null,
 				textareaAValue: '',
-				TabCur: 0,
-				multiArray: [
-					['北京', '河北'],
-					['北京'],
-					// ['猪肉绦虫', '吸血虫']
-				],
-				objectMultiArray: [
-					[{
-							id: 0,
-							name: '北京'
-						},
-						{
-							id: 1,
-							name: '河北'
-						}
-					],
-					[{
-							id: 0,
-							name: '北京'
-						},
-						{
-							id: 1,
-							name: '石家庄'
-						},
-						{
-							id: 2,
-							name: '保定'
-						},
-						{
-							id: 3,
-							name: '唐山'
-						},
-						{
-							id: 4,
-							name: '张家口'
-						}
-					]
-				],
-				multiIndex: [0, 0],
+				index: -1,
+				picker: ["来电", "进店", "朋友介绍", "车商", "广告", "其他"],
 				basicsList: [{
 					cuIcon: 'people',
 					name: '客户信息'
@@ -154,37 +125,40 @@
 				basics: 0,
 				// 表单的内容必须初始化
 				customer: {
-					name: 'wcg',
-					phone: '13731080174',
-				},
-				carinfo: {
-					carname: '',
-					type: '',
+					id: null,
+					name: '',
+					telephone: '',
+					creater_id: null,
+					customer_res: 0,
+					shop_id: null,
 				},
 				rules: {
 					name: {
 						required: true,
 						message: '请输入姓名'
 					},
-					phone: [{
+					telephone: [{
 							required: true,
 							message: '请输入手机号'
 						},
-						/* {
-							validator: (rule, value, callback) => {
-								// 注意这里如果用的是methods里的isMobilePhone将不生效
-								if (this.$utils.isMobilePhone(value)) {
-									callback()
-								} else {
-									callback(new Error('手机号格式不正确'))
-								}
-							}
-						}, */
-						// 或者这样也是可以的
 						{
 							validator: this.isMobile
 						}
 					],
+				},
+				wantInfo: {
+					carcate: "", //期望车型
+					alternate_car: "", //期望车型1
+					alternate_car_another: "", //期望车型2
+					gearbox: 0, //变速箱类型
+					bottom_price: "", //低价
+					top_price: "", //顶价
+					xs_remark: "", //备注
+					customer_id: "", //客户id
+					creater_name: "", //创建者名字
+					creater_id: "", //创建者id
+					shop_id: "", //旗舰店id
+					customer_name: "" //客户名
 				}
 			};
 		},
@@ -197,62 +171,32 @@
 
 		},
 		onLoad(options) {
-
+			uni.getStorage({
+				key: "userInfo",
+				success: (res) => {
+					this.customer.creater_id = res.data.id
+					this.customer.shop_id = res.data.shop_id
+					this.wantInfo.creater_name = res.data.nick_name
+				}
+			})
 		},
 
 		methods: {
-			BasicsSteps() {
-				this.basics = this.basics == this.basicsList.length - 1 ? 0 : this.basics + 1
-			},
-			scanVin() {
-				console.log('gan jin sao')
+			PickerChanges(e) {
+				this.index = e.detail.value
+				if (e.detail.value >= 0) {
+					this.customer.customer_res = e.detail.value
+				}
+				console.log(e.target.value)
 			},
 			PickerChange(e) {
-				this.carTypeIndex = e.detail.value
-			},
-			MultiChange(e) {
-				this.multiIndex = e.detail.value
+				// this.carTypeIndex = e.detail.value
+				if (e.detail.value >= 0) {
+					this.wantInfo.gearbox = e.detail.value
+				}
 			},
 			textareaAInput(e) {
 				this.textareaAValue = e.detail.value
-			},
-			tabSelect(e) { //标签切换
-				this.TabCur = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-			},
-			MultiColumnChange(e) {
-
-				let data = {
-					multiArray: this.multiArray,
-					multiIndex: this.multiIndex
-				};
-				const column = e.detail.column;
-				const value = e.detail.value;
-				/* console.log('哥,你滚了')
-				console.log('column',column)
-				console.log('value',value) */
-				data.multiIndex[column] = value;
-				switch (column) {
-					case 0:
-						switch (data.multiIndex[0]) {
-							case 0:
-								// console.log('你选了首都')
-								this.multiArray[1] = ['北京'];
-								break;
-							case 1:
-								// console.log('你选了河北省')
-								this.multiArray[1] = ['石家庄', '保定', '唐山', '张家口'];
-								break;
-						}
-						this.multiIndex.splice(1, 0)
-						// console.log('你咋不选')
-						break;
-				}
-				this.multiArray = data.multiArray;
-				this.multiIndex = data.multiIndex;
-			},
-			DateChange(e) {
-				this.date = e.detail.value
 			},
 			confirm() {
 				this.$refs.customerform.validate((res) => {
@@ -260,27 +204,43 @@
 						uni.showToast({
 							title: '验证通过',
 						})
-						this.customerEdit = false
-						this.carInfoEdit = true
-						this.basics = 1
+						editCustomer({ ...this.customer
+						}).then(res => {
+							console.log(res.data)
+							this.wantInfo.customer_id = res.data.Data.id;
+							this.wantInfo.creater_id = res.data.Data.creater_id
+							this.wantInfo.shop_id = res.data.Data.shop_id
+							this.wantInfo.customer_name = res.data.Data.name
+							this.customerEdit = false
+							this.carInfoEdit = true
+							this.basics = 1
+						})
 					}
 				})
 			},
 			confirmInfo() {
-				this.customerEdit = false
-				this.carInfoEdit = false
-				this.selectEdit = true
-				this.basics = 2
-				uni.showToast({
-					title: '已完成将返回上一级',
-					duration: 2000,
-					icon:"none"
+				console.log(this.wantInfo)
+				saveWant({ ...this.wantInfo
+				}).then(res => {
+					this.customerEdit = false
+					this.carInfoEdit = false
+					this.selectEdit = true
+					this.basics = 2
+					uni.showToast({
+						title: '已完成将返回上一级',
+						duration: 2000,
+						icon: "none"
+					})
+					setTimeout(() => {
+						uni.navigateTo({
+							url: '../wantBuy'
+						})
+					}, 2000)
 				})
-				setTimeout(() => {
-					uni.navigateBack({
-						delta: 1
-					});
-				}, 2000)
+				return
+
+
+
 			},
 			isMobile(rule, value, callback) {
 				if (this.$utils.isMobilePhone(value)) {

@@ -208,49 +208,49 @@
 			</view>
 			<view v-if="TabCur==0" class="cu-form-group">
 				<view class="grid col-4 grid-square flex-sub">
-					<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-						<image :src="imgList[0]" mode="aspectFill"></image>
-						<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
+					<view v-if="img.carpart" v-for="(img, index) in imgList"  class="bg-img" @tap="ViewImage" :data-url="img.imgUrl">
+						<image :src="img.imgUrl" mode="aspectFill"></image>
+						<view class="cu-tag bg-red" @tap.stop="DelImg" data-imgtype="101" :data-carpart="img.carpart">
 							<text class='cuIcon-close'></text>
 						</view>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['正面']" class="solids" @tap="ChooseImage" data-carpart="正面" data-imagetype="101">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1.5em;">正 面</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['左前45度']" data-carpart="左前45度" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<view class='tStyle' style="margin-left: 0.5em;"><text>左前45度</text></view>	
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['左后45度']" data-carpart="左后45度" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">左后45度</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['发动机舱']" data-carpart="发动机舱" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">发动机舱</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['仪表']" data-carpart="仪表" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1.5em;">仪 表</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['内饰']" data-carpart="内饰" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1.5em;">内 饰</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['后备箱']" data-carpart="后备箱" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1em;">后备箱</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['右前45度']" data-carpart="右前45度" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">右前45度</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['右后45度']" data-carpart="右后45度" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">右后45度</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['正后']" data-carpart="正后" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1.5em;">正 后</text>
 					</view>
@@ -263,29 +263,29 @@
 			</view>
 			<view v-if="TabCur==1" class="cu-form-group">
 				<view class="grid col-4 grid-square flex-sub">
-					<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-						<image :src="imgList[0]" mode="aspectFill"></image>
-						<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
+					<view v-for="(img, index) in imgListPaper" class="bg-img" @tap="ViewImage" :data-url="imgListPaper[0]">
+						<image :src="img.imgUrl" mode="aspectFill"></image>
+						<view class="cu-tag bg-red" @tap.stop="DelImg" data-imgtype="0" :data-carpart="img.carpart">
 							<text class='cuIcon-close'></text>
 						</view>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['登记证书']" data-carpart="登记证书" data-imagetype="0" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">登记证书</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['行使证']" data-carpart="行使证" data-imagetype="0" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1em;">行使证</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['身份证']" data-carpart="身份证" data-imagetype="0" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1em;">身份证</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['购车发票']" data-carpart="购车发票" data-imagetype="0" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">购车发票</text>
 					</view>
-					<view class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['保险证明']" data-carpart="保险证明" data-imagetype="0" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">保险证明</text>
 					</view>
@@ -298,9 +298,9 @@
 			</view>
 			<view v-if="TabCur==2" class="cu-form-group">
 				<view class="grid col-4 grid-square flex-sub">
-					<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
+					<view v-if="!img.carpart" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
 						<image :src="imgList[0]" mode="aspectFill"></image>
-						<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
+						<view class="cu-tag bg-red" @tap.stop="DelImg" data-imgtype="101" data-carpart="">
 							<text class='cuIcon-close'></text>
 						</view>
 					</view>
@@ -606,7 +606,7 @@
 <script>
 	import { editCustomer } from '@/api/user.js'
 	import moment from 'moment' 
-	import { vinRepeatCheck, getCarInfoByWin, editCarInfo } from '@/api/carManage.js'
+	import { vinRepeatCheck, getCarInfoByWin, editCarInfo, imgUpload, imgAdd, imgDelete } from '@/api/carManage.js'
 	import EvanForm from '@/components/evan-form/evan-form.vue'
 	import EvanFormItem from '@/components/evan-form/evan-form-item.vue'
 	import uniCollapse from '@/components/uni-collapse/uni-collapse.vue'
@@ -643,6 +643,23 @@
 				carInfoEdit: false,
 				carImgEdit: false,
 				vinReturnModal: true,
+				imgUpShow: {
+					'正面': true,
+					'左前45度': true,
+					'左后45度': true,
+					'发动机舱': true,
+					'仪表': true,
+					'内饰': true,
+					'后备箱': true,
+					'右前45度': true,
+					'右后45度': true,
+					'正后': true,	
+					'登记证书': true,
+					'行使证': true,
+					'身份证': true,
+					'购车发票': true,
+					'保险证明': true,
+				},
 				/* carTypeIndex: 1,
 				transIndex: 1,
 				outColorIndex: 1,
@@ -654,7 +671,6 @@
 				saleNumIndex: 0, */
 				modalName: null,
 				textareaAValue: '',
-				imgList: [],
 				TabCur: 0,
 				currentUser: null,
 				multiArray: [
@@ -714,7 +730,8 @@
 					Transmission: '',
 				},
 				carData: {
-					VIN: '',
+					ID: '0',
+					VIN: 'LVSHFFAL8FS949373',
 					FullName : '',
 					plevelid: '',
 					Capacity: '',
@@ -726,6 +743,7 @@
 					CarType: 1,
 					Out_color: 0,
 					Inside_color: 0,
+					MakeDate: '',
 					BuyDate: '点击选择',
 					Safe_end: '点击选择',
 					InspectionTime: '点击选择',
@@ -736,8 +754,8 @@
 					Safe_type: 0,
 					Mileage: '',
 					Sale_number: 0,
-					Description: '',
-					XS_description: '',
+					Description: '客户说',
+					XS_description: '销售说',
 					Customer_Id: null,
 					CreateID: '',
 					CreateName: '',
@@ -749,6 +767,17 @@
 					Factory: '',
 					BuyPrice: 0,
 				},
+				imgData: {
+					ID: 0,
+					Carid: 9240,
+					ImageType: null,
+					ImageUrl: '',
+					carpart: '',
+				},
+				imgList: [],
+				imgListPaper: [],
+				imgListOther: [],
+				imgListAsess: [],
 				rules: {
 					name: {
 						required: true,
@@ -872,9 +901,14 @@
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
-			ChooseImage() {
+			ChooseImage(e) {  //基本信息图片添加
+				console.log(e.currentTarget.dataset.carpart)
+				console.log(e.currentTarget.dataset.imagetype)
+				this.imgData.carpart = e.currentTarget.dataset.carpart
+				this.imgData.ImageType = e.currentTarget.dataset.imagetype
+				// return false
 				uni.chooseImage({
-					count: 4, //默认9
+					count: 1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera', 'album'], //从相册选择
 					success: (res) => {
@@ -883,16 +917,61 @@
 						} else {
 							this.imgList = res.tempFilePaths
 						} */
-						this.imgList = res.tempFilePaths
-						console.log(res)
+						const imgParam = {
+							path:res.tempFilePaths[0],
+							shopid: this.currentUser.shop_id,
+							pshopid: this.currentUser.pshop_id,
+						}
+						imgUpload(imgParam).then(resImg => {
+							console.log('图片上传',resImg.data)
+							this.imgData.ImageUrl = resImg.data.LogMessage
+							imgAdd(this.imgData).then(resImgAdd => {
+								console.log('图片添加',resImgAdd.data)
+								const imgReturn = [{
+									imgUrl: res.tempFilePaths[0],
+									carpart: resImgAdd.data.Data.carpart
+								}]
+								console.log('图片类型', this.imgData.ImageType)
+								if(this.imgData.ImageType == 101){ //基本图片
+									if (this.imgList.length != 0) {
+										this.imgList = this.imgList.concat(imgReturn)
+									} else {
+										this.imgList = imgReturn
+									}
+								}
+								if(this.imgData.ImageType == 0){ //证件图片
+									if (this.imgListPaper.length != 0) {
+										this.imgListPaper = this.imgListPaper.concat(imgReturn)
+									} else {
+										this.imgListPaper = imgReturn
+									}
+								}
+								if(this.imgData.ImageType != 101 && this.imgData.ImageType != 0){ //评估图片
+									if (this.imgListOther.length != 0) {
+										this.imgListOther = this.imgListOther.concat(imgReturn)
+									} else {
+										this.imgListOther = imgReturn
+									}
+								}
+								console.log('imlist', this.imgList)
+								this.imgUpShow[resImgAdd.data.Data.carpart] = false
+							}).catch(err => {
+								this.$api.msg(`图片添加失败,请刷新重试`);
+							})
+						}).catch(err => {
+							this.$api.msg(`图片上传失败,请刷新重试`);
+						})
+						// this.imgList = res.tempFilePaths
+						/* console.log(res)
 						console.log(res.tempFilePaths)
-						uni.getImageInfo({
+						console.log(JSON.stringify(res.tempFilePaths)); */
+						/* uni.getImageInfo({
 							src: res.tempFilePaths[0],
 							success: function(image) {
 								console.log(image.width);
 								console.log(image.height);
 							}
-						});
+						}); */
 					}
 				});
 			},
@@ -902,22 +981,52 @@
 					current: e.currentTarget.dataset.url
 				});
 			},
-			DelImg(e) {
+			DelImg(e) { //基本图片删除
 				uni.showModal({
-					title: '召唤师',
-					content: '确定要删除这段回忆吗？',
-					cancelText: '再看看',
-					confirmText: '再见',
+					title: '图片删除',
+					content: '确定要删除图片吗？',
+					cancelText: '取消',
+					confirmText: '删除',
 					success: res => {
 						if (res.confirm) {
-							this.imgList.splice(e.currentTarget.dataset.index, 1)
+							// this.imgList.splice(e.currentTarget.dataset.index, 1)
+							const param = {
+								cid: this.imgData.Carid,
+								carpart: e.currentTarget.dataset.carpart,
+							}
+							
+							imgDelete(param).then(res => {
+								const imgtype = e.currentTarget.dataset.imgtype
+								/* console.log(res)
+								console.log(e.currentTarget.dataset)
+								console.log(imgtype) */
+								if(res.data.ResultType === 0){
+									if(imgtype == 101){ //基本图片
+										this.imgList.splice(this.imgList.findIndex(item => item.carpart === param.carpart), 1)
+									}
+									if(imgtype == 0){ //证件图片
+										this.imgListPaper.splice(this.imgListPaper.findIndex(item => item.carpart === param.carpart), 1)
+									}
+									if(imgtype != 0 && imgtype != 101){ //评估图片
+										// this.imgList.splice(this.imgList.findIndex(item => item.carpart === param.carpart), 1)
+									}
+									// console.log(this.imgList.findIndex(item => item.carpart === param.carpart))
+									this.imgUpShow[param.carpart] = true
+								}else{
+									this.$api.msg(`图片删除失败,请刷新重试`);
+								}
+							}).catch(err => {
+								this.$api.msg(`图片删除失败,请刷新重试`);
+							})
+							console.log('部位',e.currentTarget.dataset.carpart)
+							console.log('carid',this.imgData.Carid)
 						}
 					}
 				})
 			},
 			getProvince(){
 				getAllProvince().then(res => {
-					console.log('省',res.data)
+					// console.log('省',res.data)
 					this.multiArray[0] = res.data.Data
 				}).catch(err => {
 					this.$api.msg(`获取城市,请刷新重试`);
@@ -939,7 +1048,7 @@
 				const choseInfo = e.detail.value 
 				this.carData.ProvenceId = this.multiArray[0][choseInfo[0]].id
 				this.carData.CityName = this.multiArray[1][choseInfo[1]].name
-				this.carData.Area = this.multiArray[1][choseInfo[1]].name
+				this.carData.Area = this.multiArray[1][choseInfo[1]].id
 				console.log(e.detail.value)
 				console.log('省',this.multiArray[0][choseInfo[0]])
 				console.log('市',this.multiArray[1][choseInfo[1]])
@@ -1134,7 +1243,7 @@
 				console.log(this.carData)
 				const checkValidate = this.$utils.carInfoLegitimate(this.carData)
 				console.log('validate',checkValidate)
-				if(checkValidate.validateType == false){ //校验失败
+				/* if(checkValidate.validateType == false){ //校验失败
 					this.validateInfo = checkValidate.validateInfo
 					this.modalName = 'validateModal'
 				}else{
@@ -1145,20 +1254,21 @@
 						console.log(res)
 						if(res.data.ResultType !== 0){
 							this.$api.msg(res.data.Message);
+							this.imgData.Carid = res.data.Data.ID
 						}else{
 							
 						}
 					}).catch(err => {
 						this.$api.msg(`车源信息添加失败,请刷新重试`);
 					})
-				}
-				/* this.customerEdit = false
+				} */
+				this.customerEdit = false
 				this.carInfoEdit = false
 				this.carImgEdit = true
-				this.basics = 2 */
+				this.basics = 2
 			},
 			confirmImg() {
-
+				console.log(this.imgList.length)
 			},
 			isMobile(rule, value, callback) {
 				if (this.$utils.isMobilePhone(value)) {

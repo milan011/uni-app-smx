@@ -14,68 +14,58 @@
 			</view>
 			<!-- 信息显示Begin -->
 			<view class="cu-list menu" v-if="TabCur==0">
-				<view class="cu-item arrow">
+				<view class="cu-item ">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">期望车型</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">奥迪A4L进取型</text>
+						<text class="text-grey text-sm">{{wantInfo.want.carcate}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item ">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">期望车型1</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">-</text>
+						<text class="text-grey text-sm">{{wantInfo.want.alternate_car}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item ">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">期望车型2</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">-</text>
+						<text class="text-grey text-sm">{{wantInfo.want.alternate_car_another}}</text>
 					</view>
 				</view>
-
-				<view class="cu-item arrow">
-					<view class="content">
-						<text class="cuIcon-message text-green"></text>
-						<text class="text-grey">期望价格(万)</text>
-					</view>
-					<view class="action">
-						<text class="text-grey text-sm">2.75-2.75</text>
-					</view>
-				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item ">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">变速箱</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">手动</text>
+						<text class="text-grey text-sm">{{transmission[wantInfo.want.gearbox]}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item ">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">最低期望价格(万)</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">1.8</text>
+						<text class="text-grey text-sm">{{wantInfo.want.bottom_price}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item ">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">最高期望价格(万)</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">3.8</text>
+						<text class="text-grey text-sm">{{wantInfo.want.top_price}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow" @click="showModal" data-target="Modal">
@@ -84,75 +74,18 @@
 						<text class="text-grey">客户描述</text>
 					</view>
 					<view class="action text-cut">
-						<text style="margin: 1.2em;" class="text-grey text-sm">个人一手车，大屏导航，车主一手开下来都是原车漆。日本车发动机确实是经久耐用的。有日粉或者找练手车的朋友来咨询吧</text>
-					</view>
-				</view>
-				<view class="cu-item arrow" @click="showModal" data-target="ModalS">
-					<view class="content">
-						<text class="cuIcon-message text-green"></text>
-						<text class="text-grey">销售顾问备注</text>
-					</view>
-					<view class="action text-cut">
-						<text class="text-grey text-sm">浅色</text>
+						<text style="margin: 1.2em;" class="text-grey text-sm">{{wantInfo.want.xs_remark}}</text>
 					</view>
 				</view>
 			</view>
 			<!-- 信息显示End -->
 			<!-- 跟踪显示Begin -->
 			<view v-if="TabCur==2">
-				<view class="cu-timeline">
-					<view class="cu-time my-style">2020-06-17</view>
+				<view class="cu-timeline" v-for="item in follow" :key="item.id">
+					<view class="cu-time my-style">{{item.created_at.substring(0,item.created_at.indexOf("T"))}}</view>
 					<view class="cu-item">
 						<view class="content" style="white-space: initial;">
-							<text>【喵星】 MX-12138 已揽收，准备发往银河系</text>
-						</view>
-					</view>
-				</view>
-				<view class="cu-timeline">
-					<view class="cu-time my-style">06-17</view>
-					<view class="cu-item">
-						<view class="content" style="white-space: initial;">
-							【喵星】 MX-12138 已揽收，准备发往银河系
-						</view>
-					</view>
-				</view>
-				<view class="cu-timeline">
-					<view class="cu-time my-style">06-17</view>
-					<view class="cu-item">
-						<view class="content" style="white-space: initial;">
-							<text>【喵星】 MX-12138 已揽收，准备发往银河系</text>
-						</view>
-					</view>
-				</view>
-				<view class="cu-timeline">
-					<view class="cu-time my-style">06-17</view>
-					<view class="cu-item">
-						<view class="content" style="white-space: initial;">
-							<text>【喵星】 MX-12138 已揽收，准备发往银河系</text>
-						</view>
-					</view>
-				</view>
-				<view class="cu-timeline">
-					<view class="cu-time my-style">06-17</view>
-					<view class="cu-item">
-						<view class="content" style="white-space: initial;">
-							<text>【喵星】 MX-12138 已揽收，准备发往银河系</text>
-						</view>
-					</view>
-				</view>
-				<view class="cu-timeline">
-					<view class="cu-time my-style">06-17</view>
-					<view class="cu-item">
-						<view class="content" style="white-space: initial;">
-							<text>【喵星】 MX-12138 已揽收，准备发往银河系</text>
-						</view>
-					</view>
-				</view>
-				<view class="cu-timeline">
-					<view class="cu-time my-style">06-17</view>
-					<view class="cu-item">
-						<view class="content" style="white-space: initial;">
-							<text>【喵星】 MX-12138 已揽收，准备发往银河系</text>
+							<text>{{item.user_name}} 添加了跟踪记录：{{item.description}}</text>
 						</view>
 					</view>
 				</view>
@@ -289,7 +222,7 @@
 					</view>
 				</view>
 				<view class="padding-xl">
-					个人一手车，大屏导航，车主一手开下来都是原车漆。日本车发动机确实是经久耐用的。有日粉或者找练手车的朋友来咨询吧.
+					{{wantInfo.want.xs_remark}}
 				</view>
 			</view>
 		</view>
@@ -310,23 +243,47 @@
 </template>
 
 <script>
+	import {
+		getWant,
+		getwantfollow
+	} from "@/api/want.js"
 	export default {
 		data() {
 			return {
 				TabCur: 0,
 				modalName: null,
-				imgList: ['http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg'],
+				id: "",
+				wantInfo: {
+					want: {
+						carcate: ""
+					}
+				},
+				transmission: ['不限', '手动', '自动'],
+				follow: []
 			}
 		},
-		async onLoad(options) {
-			console.log(options)
+		onLoad(options) {
+			this.id = options.id
 			if (options.TabCur) {
 				this.TabCur = options.TabCur
 			}
 			this.loadData();
 		},
 		methods: {
-			async loadData() {
+			loadData() {
+				getWant({
+					Id: this.id
+				}).then(res => {
+					this.wantInfo = res.data.Data
+					this.wantInfo.want.created_at = this.wantInfo.want.created_at.substring(0, this.wantInfo.want.created_at.indexOf(
+						"T"))
+					this.status = res.data.Data.want.want_status
+				})
+				getwantfollow({
+					wid: this.id
+				}).then(res => {
+					this.follow = res.data.Data
+				})
 
 			},
 			tabSelect(e) { //标签切换
@@ -338,12 +295,6 @@
 			},
 			hideModal(e) {
 				this.modalName = null
-			},
-			ViewImage(e) {
-				uni.previewImage({
-					urls: this.imgList,
-					current: e.currentTarget.dataset.url
-				});
 			},
 		}
 	}

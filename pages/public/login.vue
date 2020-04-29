@@ -54,7 +54,7 @@
 	export default{
 		data(){
 			return {
-				mobile: 'yz',
+				mobile: 'wcg',
 				password: '123456',
 				logining: false
 			}

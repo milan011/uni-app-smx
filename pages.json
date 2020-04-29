@@ -270,6 +270,7 @@
         ,{
             "path" : "pages/protocol/protocol",
             "style" : {
+				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "协议管理"
 			}
         }
