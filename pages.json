@@ -121,6 +121,11 @@
 				"navigationBarTitleText": "车源编辑"
 			}
 		},{
+			"path": "pages/car/carCreate",
+			"style": {
+				"navigationBarTitleText": "新增车源"
+			}
+		},{
 			"path": "pages/car/customer",
 			"style": {
 				"navigationBarTitleText": "车源客户"

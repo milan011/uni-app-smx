@@ -368,7 +368,8 @@
 			//创建订单
 			createCar() {
 				uni.navigateTo({
-					url: '/pages/car/customer'
+					// url: '/pages/car/customer'
+					url: '/pages/car/carCreate'
 				})
 				this.$api.msg('跳转下一页 sendData');
 			}

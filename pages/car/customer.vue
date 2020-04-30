@@ -36,6 +36,7 @@
 				<input @blur="handlerVin" @input="vinChange" v-model="carData.VIN" style="text-align: right;margin-right: 1em;" placeholder="请扫描或输入VIN码" name="input"></input>
 				<text @tap="scanVin" class='cuIcon-scan text-orange' style="font-size: x-large"></text>
 			</view>
+			<!-- <car-info></car-info> -->
 			<view class="cu-form-group">
 				<view class="title">车型</view>
 				<input v-model="carData.FullName" style="text-align: right;" disabled placeholder="车型由您输入的VIN码确定" name="input"></input>
@@ -632,7 +633,7 @@
 			EvanForm,
 			EvanFormItem,
 			uniCollapse,
-			uniCollapseItem
+			uniCollapseItem,
 		},
 		data() {
 			return {

@@ -55,6 +55,14 @@ export function imgDelete(data) {
 		requestUrl, { params: { ...data } }
 	)
 }
+//车源图片删除BY-id
+export function imgDeleteById(imgId) {
+	
+	const requestUrl = Config.url_config + '/car/deleteimage'
+	return httpApi.get(
+		requestUrl, { params: { id: imgId } }
+	)
+}
 //获取车源跟踪信息
 export function getCarFollow(carId) {
 	
