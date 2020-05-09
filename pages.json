@@ -105,7 +105,7 @@
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "车源列表"
 			}
-		},{
+		}, {
 			"path": "pages/car/show",
 			"style": {
 				"navigationBarTitleText": "车源管理"
@@ -115,12 +115,12 @@
 			"style": {
 				"navigationBarTitleText": "车源详情"
 			}
-		},{
+		}, {
 			"path": "pages/car/carEdit",
 			"style": {
 				"navigationBarTitleText": "车源编辑"
 			}
-		},{
+		}, {
 			"path": "pages/car/carCreate",
 			"style": {
 				"navigationBarTitleText": "新增车源"
@@ -131,6 +131,16 @@
 				"navigationBarTitleText": "车源客户"
 			}
 		}, {
+			"path": "pages/public/hongbao",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false,
+					"animationType": "slide-in-bottom"
+				}
+			}
+		},{
 			"path": "pages/public/login",
 			"style": {
 				"navigationBarTitleText": "",
@@ -199,14 +209,16 @@
 				"navigationBarTitleText": "创建订单"
 			}
 		}, {
-			"path": "pages/address/address",
+			"path": "pages/business/business",
 			"style": {
-				"navigationBarTitleText": "收货地址"
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "商机管理"
 			}
 		}, {
-			"path": "pages/address/addressManage",
+			"path": "pages/business/add/add",
 			"style": {
-				"navigationBarTitleText": ""
+				// "enablePullDownRefresh": true,
+				"navigationBarTitleText": "新建商机"
 			}
 		}, {
 			"path": "pages/money/pay",
@@ -259,73 +271,68 @@
 			"style": {
 				"navigationBarTitleText": "客户管理"
 			}
-		}
-	    ,{
-            "path" : "pages/customerDetail/customerDetail",
-            "style" : {
+		}, {
+			"path": "pages/customerDetail/customerDetail",
+			"style": {
 				"navigationBarTitleText": "客户详情"
 			}
-        }
-        ,{
-            "path" : "pages/customerDetail/edit/edit",
-            "style" : {
+		}, {
+			"path": "pages/customerDetail/edit/edit",
+			"style": {
 				"navigationBarTitleText": "编辑客户详情"
 			}
-        }
-        ,{
-            "path" : "pages/protocol/protocol",
-            "style" : {
+		}, {
+			"path": "pages/protocol/protocol",
+			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "协议管理"
 			}
-        }
-        ,{
-            "path" : "pages/protocol/detail/detail",
-            "style" : {
+		}, {
+			"path": "pages/protocol/detail/detail",
+			"style": {
 				"navigationBarTitleText": "协议详情"
 			}
-        }
-        ,{
-            "path" : "pages/wantBuy/wantBuy",
-            "style" : {
+		}, {
+			"path": "pages/wantBuy/wantBuy",
+			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "求购管理"
 			}
-        }
-        ,{
-            "path" : "pages/wantBuy/show/show",
-            "style" : {
-					"navigationBarTitleText": "求购详情"
-			}
-        }
-        ,{
-            "path" : "pages/wantBuy/add/add",
-            "style" : {
-				"navigationBarTitleText": "添加求购"
-			}
-        }
-        ,{
-            "path" : "pages/wantBuy/detail/detail",
-            "style" : {
+		}, {
+			"path": "pages/wantBuy/show/show",
+			"style": {
 				"navigationBarTitleText": "求购详情"
 			}
-        }
-        ,{
-            "path" : "pages/wantBuy/edit/edit",
-            "style" : {
+		}, {
+			"path": "pages/wantBuy/add/add",
+			"style": {
+				"navigationBarTitleText": "添加求购"
+			}
+		}, {
+			"path": "pages/wantBuy/detail/detail",
+			"style": {
+				"navigationBarTitleText": "求购详情"
+			}
+		}, {
+			"path": "pages/wantBuy/edit/edit",
+			"style": {
 				"navigationBarTitleText": "求购编辑"
 			}
-        }
-        ,{
-            "path" : "pages/join/join",
-            "style" : {
+		}, {
+			"path": "pages/join/join",
+			"style": {
 				"navigationBarTitleText": "我要加盟"
 			}
-        }
-        ,{
-            "path" : "pages/about/about",
-            "style" : {
+		}, {
+			"path": "pages/about/about",
+			"style": {
 				"navigationBarTitleText": "关于我们"
+			}
+		}
+	    ,{
+            "path" : "pages/business/edit/edit",
+            "style" : {
+				"navigationBarTitleText": "修改商机"
 			}
         }
     ],

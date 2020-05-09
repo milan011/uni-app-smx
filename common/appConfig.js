@@ -92,6 +92,109 @@ const maintainingConfig = [
 	{key: 4, name: '差'},
 ]
 
+//评估部位-非常规技术检查
+const pgPartFConfig = [
+	{
+		title: '疑似泡水车检查', 
+		showBage: false,
+		part: [
+			{name: '内饰', showBage: false, imagetype: 11},
+			{name: '发动机舱', showBage: false, imagetype: 12},
+			{name: '行李箱', showBage: false, imagetype: 13},
+			{name: '底盘', showBage: false, imagetype: 14},
+		]
+	},
+	{
+		title: '疑似火烧车检查',
+		 showBage: false,
+		part: [
+			{name: '车身覆盖件', showBage: false, imagetype: 21},
+			{name: '发动机舱', showBage: false, imagetype: 22},
+			{name: '保险盒', showBage: false, imagetype: 23},
+			{name: '排气管', showBage: false, imagetype: 24},
+			{name: '车辆门柱', showBage: false, imagetype: 25},
+		]
+	},
+	{
+		title: '疑似重大事故车检查', 
+		showBage: false,
+		part: [
+			{name: '纵梁', showBage: false, imagetype: 31},
+			{name: '横梁', showBage: false, imagetype: 32},
+		]
+	},
+]
+
+//评估部位-静态检测
+const pgPartJConfig = [
+	{
+		title: '外观检查',
+		 showBage: false,
+		part: [
+			{name: '车身', showBage: false, imagetype: 41},
+			{name: 'ABC柱', showBage: false, imagetype: 42},
+			{name:'漆面——碰撞痕迹', showBage: false, imagetype: 43},
+		]
+	},
+	{
+		title: '驾驶舱检查', 
+		showBage: false,
+		part: [
+			{name: '仪表盘', showBage: false, imagetype: 51},
+			{name: '内饰', showBage: false, imagetype: 52},
+			{name: '座椅', showBage: false, imagetype: 53},
+			{name: '灯光', showBage: false, imagetype: 54},
+		]
+	},
+	{
+		title: '发动机舱检查',
+		 showBage: false,
+		part: [
+			{name: '发动机', showBage: false, imagetype: 61},
+			{name: '四液', showBage: false, imagetype: 62},
+		]
+	},
+	{
+		title: '底盘检查', 
+		showBage: false,
+		part: [
+			{name: '轮胎', showBage: false, imagetype: 71},
+			{name: '油底壳', showBage: false, imagetype: 72},
+			{name: '排气筒', showBage: false, imagetype: 73},
+			{name: '底盘',  showBage: false, imagetype: 74},
+		]
+	},
+]
+
+//评估部位-动态检测
+const pgPartDConfig = [
+	{
+		name: '动力性', 
+		showBage: false,
+		imagetype: 81
+		/* part: [
+			{name: '', imagetype: 0},
+			{name: '', imagetype: 0},
+			{name:'', imagetype: 0},
+			{name:'', imagetype: 0},
+		] */
+	},
+	{
+		name: '制动性',
+		showBage: false,
+		imagetype: 82
+	},
+	{
+		name: '操控性',
+		showBage: false,
+		imagetype: 83
+	},
+	{
+		name: '安全性',
+		showBage: false,
+		imagetype: 84
+	},
+]
 export {
 	transmissionConfig,
 	carStatusConfig,
@@ -103,5 +206,8 @@ export {
 	carUseConfig,
 	useconditionsConfig,
 	maintainingConfig,
-	inputStatusConfig
+	inputStatusConfig,
+	pgPartFConfig,
+	pgPartJConfig,
+	pgPartDConfig
 }

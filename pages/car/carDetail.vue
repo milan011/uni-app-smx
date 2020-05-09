@@ -32,7 +32,7 @@
 						<text class="text-grey">状态</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{carStatusConfig[detail.cars.Car_Status].name}}</text>
+						<text v-if="detail.cars.Car_Status" class="text-grey text-sm">{{carStatusConfig[detail.cars.Car_Status].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -50,7 +50,7 @@
 						<text class="text-grey">车型类别</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{carTypeConfig[detail.cars.CarType].name}}</text>
+						<text v-if="detail.cars.CarType" class="text-grey text-sm">{{carTypeConfig[detail.cars.CarType].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -113,7 +113,7 @@
 						<text class="text-grey">变速箱</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{transmissionConfig[detail.cars.Transmission].name}}</text>
+						<text v-if="detail.cars.Transmission" class="text-grey text-sm">{{transmissionConfig[detail.cars.Transmission].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -158,7 +158,7 @@
 						<text class="text-grey">保险类别</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{safetypeConfig[detail.cars.Safe_type].name}}</text>
+						<text v-if="detail.cars.Safe_type" class="text-grey text-sm">{{safetypeConfig[detail.cars.Safe_type].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -176,7 +176,7 @@
 						<text class="text-grey">外观颜色</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{outcolorConfig[detail.cars.Out_color].name}}</text>
+						<text v-if="detail.cars.Out_color" class="text-grey text-sm">{{outcolorConfig[detail.cars.Out_color].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -185,7 +185,7 @@
 						<text class="text-grey">内饰颜色</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{insidecolorConfig[detail.cars.Inside_color].name}}</text>
+						<text v-if="detail.cars.Inside_color" class="text-grey text-sm">{{insidecolorConfig[detail.cars.Inside_color].name}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow">
@@ -273,7 +273,7 @@
 					</view>
 				</view>
 				<view class="grid col-4 grid-square flex-sub">
-					<view v-if="index<10" v-for="(img,index) in carImgExt" :key="index" class="bg-img" @tap="ViewImage" :data-url="imgUrl + img.filename">
+					<view v-if="index >= 10" v-for="(img,index) in carImgNormal" :key="index" class="bg-img" @tap="ViewImage" :data-url="imgUrl + img.filename">
 						<image :src="imgUrl + img.filename" mode="aspectFit"></image>
 					</view>
 				</view>
@@ -522,7 +522,7 @@
 			this.getCarDetailById()
 			this.getCarFollowById()
 			this.getCarImgsNormal()
-			this.getCarImgsExt()
+			// this.getCarImgsExt()
 			this.getCarImgsCer()
 			this.getCarImgsAsse()
 			// this.loadData();

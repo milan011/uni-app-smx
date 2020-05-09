@@ -1,5 +1,5 @@
 <template>
-	<view >
+	<view>
 		<scroll-view scroll-x class="bg-white nav">
 				<view class="flex text-center">
 				<view class="cu-item flex-sub" :class="0==TabCur?'text-green cur':''" @tap="tabSelect" data-id="0">
@@ -15,7 +15,7 @@
 					<view class="text">评估</view>
 				</view>
 				</view>
-			</scroll-view>
+		</scroll-view>
 			<view v-if="TabCur==0" class="cu-bar bg-white solid-bottom">
 				<view class="action" style="margin:0px">
 					<text class="cuIcon-title text-orange "></text> 车辆照片
@@ -131,203 +131,119 @@
 				</view>
 			</view>
 			<uni-collapse v-if="TabCur==3" accordion="true">
-			    <uni-collapse-item :showBage="true" title="疑似过火车">
-						<uni-collapse style="padding:5px" accordion="true">
-							<uni-collapse-item title="车身覆盖件">
-			        <view style="padding: 30rpx;">
-			          <view class="grid col-4 grid-square flex-sub">
-			          	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			          		<image :src="imgList[0]" mode="aspectFill"></image>
-			          		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			          			<text class='cuIcon-close'></text>
-			          		</view>
-			          	</view>
-			          	<view class="solids" @tap="ChooseImage">
-			          		<text class='cuIcon-cameraadd'></text>
-			          	</view>
-			          </view>
-			        </view>
-							</uni-collapse-item>
-							<uni-collapse-item title="发动机舱">
+				<uni-collapse-item v-for="(pgpro, index) in pgPartFConfig" :key="index"  :showBage="pgpro.showBage" :title="pgpro.title">
+					<uni-collapse style="padding:5px" accordion="true">
+						<uni-collapse-item v-for="(part,index) in pgpro.part" :showBage="part.showBage"  :key="index" :title="part.name">
 							<view style="padding: 30rpx;">
-							  <view class="grid col-4 grid-square flex-sub">
-							  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-							  		<image :src="imgList[0]" mode="aspectFill"></image>
-							  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							  			<text class='cuIcon-close'></text>
-							  		</view>
-							  	</view>
-							  	<view class="solids" @tap="ChooseImage">
-							  		<text class='cuIcon-cameraadd'></text>
-							  	</view>
-							  </view>
+								<view class="grid col-4 grid-square flex-sub">
+									<view v-if="part.imagetype == img.ImageType" v-for="(img, index) in imgListPgCurrent" :key="index" class="bg-img" @tap="ViewImage">
+										<image :src="img.imgUrl" mode="aspectFill"></image>
+										<view class="cu-tag bg-red" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
+											<text class='cuIcon-close'></text>
+										</view>
+									</view>
+									<view class="solids" @tap="ChooseImagePg" :data-imagetype="part.imagetype" v-if="imgListPgCurrent.length<4">
+										<text class='cuIcon-cameraadd'></text>
+									</view>
+								</view>
 							</view>
-							</uni-collapse-item>
-							<uni-collapse-item title="保险盒">
-							<view style="padding: 30rpx;">
-							  <view class="grid col-4 grid-square flex-sub">
-							  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-							  		<image :src="imgList[0]" mode="aspectFill"></image>
-							  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							  			<text class='cuIcon-close'></text>
-							  		</view>
-							  	</view>
-							  	<view class="solids" @tap="ChooseImage">
-							  		<text class='cuIcon-cameraadd'></text>
-							  	</view>
-							  </view>
-							</view>
-							</uni-collapse-item>
-							<uni-collapse-item title="排气管">
-							<view style="padding: 30rpx;">
-							  <view class="grid col-4 grid-square flex-sub">
-							  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-							  		<image :src="imgList[0]" mode="aspectFill"></image>
-							  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							  			<text class='cuIcon-close'></text>
-							  		</view>
-							  	</view>
-							  	<view class="solids" @tap="ChooseImage">
-							  		<text class='cuIcon-cameraadd'></text>
-							  	</view>
-							  </view>
-							</view>
-							</uni-collapse-item>
-							<uni-collapse-item title="车辆门柱">
-							<view style="padding: 30rpx;">
-							  <view class="grid col-4 grid-square flex-sub">
-							  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-							  		<image :src="imgList[0]" mode="aspectFill"></image>
-							  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							  			<text class='cuIcon-close'></text>
-							  		</view>
-							  	</view>
-							  	<view class="solids" @tap="ChooseImage">
-							  		<text class='cuIcon-cameraadd'></text>
-							  	</view>
-							  </view>
-							</view>
-							</uni-collapse-item>
-						</uni-collapse>
-			    </uni-collapse-item>
-			    <uni-collapse-item title="疑似过水车">
-			      <uni-collapse style="padding:5px" accordion="true">
-			      	<uni-collapse-item title="内饰">
-			        <view style="padding: 30rpx;">
-			          <view class="grid col-4 grid-square flex-sub">
-			          	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			          		<image :src="imgList[0]" mode="aspectFill"></image>
-			          		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			          			<text class='cuIcon-close'></text>
-			          		</view>
-			          	</view>
-			          	<view class="solids" @tap="ChooseImage">
-			          		<text class='cuIcon-cameraadd'></text>
-			          	</view>
-			          </view>
-			        </view>
-			      	</uni-collapse-item>
-			      	<uni-collapse-item title="发动机舱">
-			      	<view style="padding: 30rpx;">
-			      	  <view class="grid col-4 grid-square flex-sub">
-			      	  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			      	  		<image :src="imgList[0]" mode="aspectFill"></image>
-			      	  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			      	  			<text class='cuIcon-close'></text>
-			      	  		</view>
-			      	  	</view>
-			      	  	<view class="solids" @tap="ChooseImage">
-			      	  		<text class='cuIcon-cameraadd'></text>
-			      	  	</view>
-			      	  </view>
-			      	</view>
-			      	</uni-collapse-item>
-			      	<uni-collapse-item title="行李箱">
-			      	<view style="padding: 30rpx;">
-			      	  <view class="grid col-4 grid-square flex-sub">
-			      	  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			      	  		<image :src="imgList[0]" mode="aspectFill"></image>
-			      	  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			      	  			<text class='cuIcon-close'></text>
-			      	  		</view>
-			      	  	</view>
-			      	  	<view class="solids" @tap="ChooseImage">
-			      	  		<text class='cuIcon-cameraadd'></text>
-			      	  	</view>
-			      	  </view>
-			      	</view>
-			      	</uni-collapse-item>
-			      	<uni-collapse-item title="底盘">
-			      	<view style="padding: 30rpx;">
-			      	  <view class="grid col-4 grid-square flex-sub">
-			      	  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			      	  		<image :src="imgList[0]" mode="aspectFill"></image>
-			      	  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			      	  			<text class='cuIcon-close'></text>
-			      	  		</view>
-			      	  	</view>
-			      	  	<view class="solids" @tap="ChooseImage">
-			      	  		<text class='cuIcon-cameraadd'></text>
-			      	  	</view>
-			      	  </view>
-			      	</view>
-			      	</uni-collapse-item>
-			      </uni-collapse>
-			    </uni-collapse-item>
-			    <uni-collapse-item title="疑似重大事故车">
-			      <uni-collapse style="padding:5px" accordion="true">
-			      	<uni-collapse-item title="纵梁">
-			        <view style="padding: 30rpx;">
-			          <view class="grid col-4 grid-square flex-sub">
-			          	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			          		<image :src="imgList[0]" mode="aspectFill"></image>
-			          		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			          			<text class='cuIcon-close'></text>
-			          		</view>
-			          	</view>
-			          	<view class="solids" @tap="ChooseImage">
-			          		<text class='cuIcon-cameraadd'></text>
-			          	</view>
-			          </view>
-			        </view>
-			      	</uni-collapse-item>
-			      	<uni-collapse-item title="横梁">
-			      	<view style="padding: 30rpx;">
-			      	  <view class="grid col-4 grid-square flex-sub">
-			      	  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			      	  		<image :src="imgList[0]" mode="aspectFill"></image>
-			      	  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			      	  			<text class='cuIcon-close'></text>
-			      	  		</view>
-			      	  	</view>
-			      	  	<view class="solids" @tap="ChooseImage">
-			      	  		<text class='cuIcon-cameraadd'></text>
-			      	  	</view>
-			      	  </view>
-			      	</view>
-			      	</uni-collapse-item>
-			      </uni-collapse>
-			    </uni-collapse-item>
+						</uni-collapse-item>
+					</uni-collapse>
+				</uni-collapse-item>
 			</uni-collapse>
 			<view v-if="TabCur==3" class="cu-bar bg-white solid-bottom">
 				<view class="action" style="margin:0px">
 					<text class="cuIcon-title text-orange "></text> 静态检查
 				</view>
 			</view>
+			<uni-collapse v-if="TabCur==3" accordion="true">
+				<uni-collapse-item v-for="(pgpro, index) in pgPartJConfig" :key="index" :showBage="pgpro.showBage" :title="pgpro.title">
+					<uni-collapse style="padding:5px" accordion="true">
+						<uni-collapse-item v-for="(part,index) in pgpro.part" :showBage="part.showBage" :key="index" :title="part.name">
+							<view style="padding: 30rpx;">
+								<view class="grid col-4 grid-square flex-sub">
+									<view v-if="part.imagetype == img.ImageType" v-for="(img, index) in imgListPgCurrent" :key="index" class="bg-img" @tap="ViewImage">
+										<image :src="img.imgUrl" mode="aspectFill"></image>
+										<view class="cu-tag bg-red" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
+											<text class='cuIcon-close'></text>
+										</view>
+									</view>
+									<view class="solids" @tap="ChooseImagePg" :data-imagetype="part.imagetype" v-if="imgListPgCurrent.length<4">
+										<text class='cuIcon-cameraadd'></text>
+									</view>
+								</view>
+							</view>
+						</uni-collapse-item>
+					</uni-collapse>
+				</uni-collapse-item>
+			</uni-collapse>
 			<view v-if="TabCur==3" class="cu-bar bg-white solid-bottom">
 				<view class="action" style="margin:0px">
 					<text class="cuIcon-title text-orange "></text> 动态检查
 				</view>
 			</view>
+			<uni-collapse v-if="TabCur==3" accordion="true">
+				<uni-collapse-item v-for="(part,index) in pgPartDConfig" :showBage="part.showBage" :key="index" :title="part.name">
+					<view style="padding: 30rpx;">
+						<view class="grid col-4 grid-square flex-sub">
+							<view v-if="part.imagetype == img.ImageType" v-for="(img, ind) in imgListPgCurrent" :key="ind" class="bg-img" @tap="ViewImage">
+								<image :src="img.imgUrl" mode="aspectFill"></image>
+								<view class="cu-tag bg-red" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="ind" :data-imgtype="img.ImageType" data-part="pgPartDConfig">
+									<text class='cuIcon-close'></text>
+								</view>
+							</view>
+							<view class="solids"  @tap="ChooseImagePg" :data-imagetype="part.imagetype" v-if="imgListPgCurrent.length<4">
+								<text class='cuIcon-cameraadd'></text>
+							</view>
+						</view>
+					</view>
+				</uni-collapse-item>
+			</uni-collapse>
 			<text class="mix-btn" @click="confirmImg">预览上架</text>
-		</view>
+			<!-- 手动输入车型 Begin -->
+			<view style="z-index: 110;" class="cu-modal" :class="modalName=='Comment'?'show':''">
+				<view class="cu-dialog">
+					<view class="bg-img" :style="{backgroundImage: 'url(' + pgBackImg + ')' }" style="height:200px">
+						<view class="cu-bar justify-end text-white">
+							<view class="action" @tap="hideModal">
+								<text class="cuIcon-close "></text>
+							</view>
+						</view>
+					</view>
+					<!-- <view class="cu-bar bg-white justify-end">
+						<view class="content">点评</view>
+						<view class="action" @tap="hideModal">
+							<text class="cuIcon-close text-red"></text>
+						</view>
+					</view> -->
+					<view class="padding-xl">
+						<view class="cu-form-group margin-top">
+							<uni-rate size="18" :value="imgPgData.ImageLevel" active-color="#565656" @change="rateChange"></uni-rate>
+						</view>
+						<view class="cu-form-group margin-top">
+							<textarea style="text-align: left;" v-model="imgPgData.ImageContent" maxlength="-1" @input="dpInput" placeholder="点评描述">
+							</textarea>
+						</view>
+					</view>
+					<view class="cu-bar bg-white justify-end">
+						<view class="action">
+							<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+							<button class="cu-btn bg-green margin-left" @tap="addPgImg">确定</button>
+						</view>
+					</view>
+				</view>
+			</view>
+			<!-- 手动输入车型 End -->
 	</view>
 </template>
 
 <script>
 	import { imgUpload, imgAdd, imgDelete, imgDeleteById } from '@/api/carManage.js'
+	import {pgPartFConfig, pgPartJConfig, pgPartDConfig} from '@/common/appConfig.js'
+	import uniRate from '@/components/uni-rate/uni-rate.vue'
 	export default {
 		name: 'CarImg',
+		components: {uniRate},
 		data(){
 			return {
 				imgUpShow: {
@@ -347,6 +263,10 @@
 					'购车发票': true,
 					'保险证明': true,
 				},
+				modalName: null,
+				pgPartFConfig: [],
+				pgPartJConfig: [],
+				pgPartDConfig: [],
 				TabCur: 0,
 				imgData: {
 					ID: 0,
@@ -355,18 +275,32 @@
 					ImageUrl: '',
 					carpart: '',
 				},
+				imgPgData: { //评估图片
+					ID: 0,
+					Carid: null,
+					ImageType: null,
+					ImageUrl: '',
+					IsTop: 0,
+					ImageLevel: 3,
+					ImageContent: ''
+				},
+				pgBackImg: '',
 				imgList: [],
 				imgListPaper: [],
 				imgListOther: [],
 				imgListAsess: [],
+				imgListPg: [],
+				imgListPgCurrent: [],
 				imgUser: {
-					shop_id: '',
-					pshop_id: '',
+					shop_id: '72',
+					pshop_id: '71',
 				},
 			}
 		},
 		created(){
-
+			this.pgPartFConfig = pgPartFConfig
+			this.pgPartJConfig = pgPartJConfig
+			this.pgPartDConfig = pgPartDConfig
 		},
 		props: {
 			title: {
@@ -455,122 +389,336 @@
 					}
 				})
 			},
-			ChooseImageOther(e){ //其他图片添加
-				console.log(e.currentTarget.dataset.carpart)
+			DelImgPg(e) { //评估图片删除
+				uni.showModal({
+					title: '图片删除',
+					content: '确定要删除图片吗？',
+					cancelText: '取消',
+					confirmText: '删除',
+					success: res => {
+						if (res.confirm) {
+							// this.imgList.splice(e.currentTarget.dataset.index, 1)	
+							const imgId = e.currentTarget.dataset.imgid
+							const imgIndex = e.currentTarget.dataset.index
+							const imgType = e.currentTarget.dataset.imgtype 
+							const imgPart = e.currentTarget.dataset.pgPartDConfig 
+							imgDeleteById(imgId).then(res => {
+								if(res.data.ResultType === 0){
+									// this.imgList.splice(this.imgList.findIndex(item => item.carpart === param.carpart), 1)
+									/* this.imgListPgCurrent.forEach(ele => {
+										console.log(ele)
+										if(ele.ImageType)
+									}) */
+									this.imgListPgCurrent.splice(imgIndex, 1)
+									// console.log(this.imgListPgCurrent)
+									this.hideBageDell(imgType)
+								}else{
+									this.$api.msg(`图片删除失败,请刷新重试`);
+								}
+							}).catch(err => {
+								console.log('err', err)
+								this.$api.msg(`图片删除失败,请刷新重试`);
+							})
+							console.log('部位',e.currentTarget.dataset.carpart)
+							console.log('carid',this.imgData.Carid)
+						}
+					}
+				})
+			},
+			hideBageDell(imgType){
+				if(this.imgListPgCurrent.length == 0){ //无评估图片
+					this.hideBageDel(imgType)
+				}else{
+					this.imgListPgCurrent.forEach((ele, ind) => {
+						console.log('hide',ele)
+						if(ele.ImageType == imgType){ //该评估项仍有图片
+							console.log('have')
+							return true 
+						}else{ //该评估项已无图片
+							console.log('not have')
+							this.hideBageDel(imgType)
+						}
+					})
+				}	
+			},
+			hideBageDel(imgType){ //showBage 红点处理
+				// console.log(this.imgListPgCurrent)
+				this.pgPartDConfig.forEach(ele => { //动态评估项
+					if(ele.imagetype == imgType){		
+						console.log(ele)
+						return ele.showBage = false
+					}
+				})
+				this.pgPartJConfig.forEach(ele => { //静态评估项
+					ele.part.forEach((el, ind) => {
+						if(el.imagetype == imgType){		
+							// ele.showBage = false
+							el.showBage = false
+							console.log(this.pgPartJConfig)
+							return true
+						}
+					})
+				})
+				this.pgPartFConfig.forEach(ele => { //非常规评估项
+					ele.part.forEach((el, ind) => {
+						if(el.imagetype == imgType){		
+							// ele.showBage = false
+							el.showBage = false
+							console.log(this.pgPartJConfig)
+							return true
+						}
+					})
+				})
+			},
+			rateChange(e){ //评估图片评级
+				console.log(e)
+				this.imgPgData.ImageLevel = e.value
+			},
+			dpInput(e){ //评估图片描述
+				console.log(e)
+				this.imgPgData.ImageContent = e.detail.value
+			},
+			ChooseImagePg(e){ //评估图片添加
+				var _this = this
 				console.log(e.currentTarget.dataset.imagetype)
-				this.imgData.carpart = e.currentTarget.dataset.carpart
-				this.imgData.ImageType = e.currentTarget.dataset.imagetype
+				_this.imgPgData.ImageType = e.currentTarget.dataset.imagetype
 				// return false
 				uni.chooseImage({
 					count: 1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera', 'album'], //从相册选择
 					success: (res) => {
-						const imgParam = {
-							path:res.tempFilePaths[0],
-							shopid: this.imgUser.shop_id,
-							pshopid: this.imgUser.pshop_id,
-						}
-						imgUpload(imgParam).then(resImg => {
-							console.log('图片上传',resImg.data)
-							this.imgData.ImageUrl = resImg.data.LogMessage
-							imgAdd(this.imgData).then(resImgAdd => {
-								console.log('图片添加',resImgAdd.data)
-								const imgReturn = [{
-									imgUrl: res.tempFilePaths[0],
-									carpart: resImgAdd.data.Data.carpart,
-									id: resImgAdd.data.Data.id,
-								}]
-								console.log('图片类型', this.imgData.ImageType)
-								if (this.imgListOther.length != 0) {
-									this.imgListOther = this.imgListOther.concat(imgReturn)
-								} else {
-									this.imgListOther = imgReturn
+						uni.getImageInfo({
+							src: res.tempFilePaths[0],
+							success: function(image) {
+								if(image.width/image.height < 1){
+									_this.$api.msg(`请上传横拍图片`, 2000);
+									return false
+								}	
+								const imgParam = {
+									path:res.tempFilePaths[0],
+									shopid: _this.imgUser.shop_id,
+									pshopid: _this.imgUser.pshop_id,
 								}
-								console.log('imlist', this.imgListOther)
-							}).catch(err => {
-								this.$api.msg(`图片添加失败,请刷新重试`);
-							})
-						}).catch(err => {
-							this.$api.msg(`图片上传失败,请刷新重试`);
+								_this.pgBackImg = res.tempFilePaths[0]
+								// console.log(_this.pgBackImg)
+								imgUpload(imgParam).then(resImg => {			
+									_this.imgPgData.ImageUrl = resImg.data.LogMessage
+									_this.imgPgData.ImageContent = ''
+									console.log('图片上传',resImg.data)
+									console.log(_this.imgPgData)
+									_this.modalName = 'Comment'
+									// return false								
+								}).catch(err => {
+									_this.$api.msg(`图片上传失败,请刷新重试`);
+								})
+							}
+						})
+					}
+				});
+			},
+			addPgImg(){
+				var _this = this
+				if(!_this.imgPgData.ImageContent){
+					_this.$api.msg(`请填写描述`);
+					return false
+				}
+				imgAdd(_this.imgPgData).then(resImgAdd => {
+					console.log('图片添加',resImgAdd.data)
+					const imgReturn = [{
+						imgUrl: _this.pgBackImg,
+						carpart: resImgAdd.data.Data.carpart,
+						id: resImgAdd.data.Data.id,
+						ImageType: resImgAdd.data.Data.imagetype
+					}]
+					console.log('图片类型', _this.imgPgData.ImageType)
+					if (_this.imgListPgCurrent.length != 0) {
+						_this.imgListPgCurrent = _this.imgListPgCurrent.concat(imgReturn)
+					} else {
+						_this.imgListPgCurrent = imgReturn
+					}
+					console.log('imlist', _this.imgListPgCurrent)
+					//根据添加到评估部位确定showBage状态
+					_this.showBageDel(imgReturn[0].ImageType)
+					_this.modalName = null
+				}).catch(err => {
+					console.log('err=>',err)
+					_this.modalName = null
+					_this.$api.msg(`图片添加失败,请刷新重试`);
+				})
+			},
+			showBageDel(ImageType){ //showBage 红点处理
+				console.log(ImageType)
+				this.pgPartDConfig.forEach(ele => { //动态评估项
+					if(ele.imagetype == ImageType){		
+						console.log(ele)
+						return ele.showBage = true
+					}
+				})
+				this.pgPartJConfig.forEach(ele => { //静态评估项
+					ele.part.forEach((el, ind) => {
+						if(el.imagetype == ImageType){		
+							ele.showBage = true
+							el.showBage = true
+							console.log(this.pgPartJConfig)
+							return true
+						}
+					})
+				})
+				this.pgPartFConfig.forEach(ele => { //非常规评估项
+					ele.part.forEach((el, ind) => {
+						if(el.imagetype == ImageType){		
+							ele.showBage = true
+							el.showBage = true
+							console.log(this.pgPartJConfig)
+							return true
+						}
+					})
+				})
+			},
+			ChooseImageOther(e){ //其他图片添加
+				var _this = this
+				console.log(e.currentTarget.dataset.carpart)
+				console.log(e.currentTarget.dataset.imagetype)
+				_this.imgData.carpart = e.currentTarget.dataset.carpart
+				_this.imgData.ImageType = e.currentTarget.dataset.imagetype
+				// return false
+				uni.chooseImage({
+					count: 1, //默认9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['camera', 'album'], //从相册选择
+					success: (res) => {
+						uni.getImageInfo({
+							src: res.tempFilePaths[0],
+							success: function(image) {
+								if(image.width/image.height < 1){
+									_this.$api.msg(`请上传横拍图片`, 2000);
+									return false
+								}	
+								const imgParam = {
+									path:res.tempFilePaths[0],
+									shopid: _this.imgUser.shop_id,
+									pshopid: _this.imgUser.pshop_id,
+								}
+								imgUpload(imgParam).then(resImg => {
+									console.log('图片上传',resImg.data)
+									_this.imgData.ImageUrl = resImg.data.LogMessage
+									imgAdd(_this.imgData).then(resImgAdd => {
+										console.log('图片添加',resImgAdd.data)
+										const imgReturn = [{
+											imgUrl: res.tempFilePaths[0],
+											carpart: resImgAdd.data.Data.carpart,
+											id: resImgAdd.data.Data.id,
+										}]
+										console.log('图片类型', _this.imgData.ImageType)
+										if (_this.imgListOther.length != 0) {
+											_this.imgListOther = _this.imgListOther.concat(imgReturn)
+										} else {
+											_this.imgListOther = imgReturn
+										}
+										console.log('imlist', _this.imgListOther)
+									}).catch(err => {
+										console.log('1',err)
+										_this.$api.msg(`图片添加失败,请刷新重试`);
+									})
+								}).catch(err => {
+									// console.log('2',err)
+									_this.$api.msg(`图片上传失败,请刷新重试`);
+								})
+							}
 						})
 					}
 				});
 			}, 
 			ChooseImage(e) {  //基本信息图片添加
+			 var _this = this
 				console.log(e.currentTarget.dataset.carpart)
 				console.log(e.currentTarget.dataset.imagetype)
-				this.imgData.carpart = e.currentTarget.dataset.carpart
-				this.imgData.ImageType = e.currentTarget.dataset.imagetype
-				console.log(this.imgData)
+				_this.imgData.carpart = e.currentTarget.dataset.carpart
+				_this.imgData.ImageType = e.currentTarget.dataset.imagetype
+				console.log(_this.imgData)
 				// return false
 				uni.chooseImage({
 					count: 1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera', 'album'], //从相册选择
 					success: (res) => {
-						/* if (this.imgList.length != 0) {
-							this.imgList = this.imgList.concat(res.tempFilePaths)
-						} else {
-							this.imgList = res.tempFilePaths
-						} */
-						const imgParam = {
-							path:res.tempFilePaths[0],
-							shopid: this.imgUser.shop_id,
-							pshopid: this.imgUser.pshop_id,
-						}
-						imgUpload(imgParam).then(resImg => {
-							console.log('图片上传',resImg.data)
-							this.imgData.ImageUrl = resImg.data.LogMessage
-							imgAdd(this.imgData).then(resImgAdd => {
-								console.log('图片添加',resImgAdd.data)
-								const imgReturn = [{
-									imgUrl: res.tempFilePaths[0],
-									carpart: resImgAdd.data.Data.carpart
-								}]
-								console.log('图片类型', this.imgData.ImageType)
-								if(this.imgData.ImageType == 101){ //基本图片
-									if (this.imgList.length != 0) {
-										this.imgList = this.imgList.concat(imgReturn)
-									} else {
-										this.imgList = imgReturn
-									}
-								}
-								if(this.imgData.ImageType == 0){ //证件图片
-									if (this.imgListPaper.length != 0) {
-										this.imgListPaper = this.imgListPaper.concat(imgReturn)
-									} else {
-										this.imgListPaper = imgReturn
-									}
-								}
-								if(this.imgData.ImageType != 101 && this.imgData.ImageType != 0){ //评估图片
-									if (this.imgListOther.length != 0) {
-										this.imgListOther = this.imgListOther.concat(imgReturn)
-									} else {
-										this.imgListOther = imgReturn
-									}
-								}
-								console.log('imlist', this.imgList)
-								this.imgUpShow[resImgAdd.data.Data.carpart] = false
-							}).catch(err => {
-								this.$api.msg(`图片添加失败,请刷新重试`);
-							})
-						}).catch(err => {
-							this.$api.msg(`图片上传失败,请刷新重试`);
-						})
-						// this.imgList = res.tempFilePaths
-						/* console.log(res)
-						console.log(res.tempFilePaths)
-						console.log(JSON.stringify(res.tempFilePaths)); */
-						/* uni.getImageInfo({
+						uni.getImageInfo({
 							src: res.tempFilePaths[0],
 							success: function(image) {
 								console.log(image.width);
 								console.log(image.height);
+								console.log(image.width/image.height)
+								if(image.width/image.height < 1){
+									_this.$api.msg(`请上传横拍图片`, 2000);
+									return false
+								}			
+								const imgParam = {
+									path:res.tempFilePaths[0],
+									shopid: _this.imgUser.shop_id,
+									pshopid: _this.imgUser.pshop_id,
+								}
+								imgUpload(imgParam).then(resImg => {
+									console.log('图片上传',resImg.data)
+									_this.imgData.ImageUrl = resImg.data.LogMessage
+									imgAdd(_this.imgData).then(resImgAdd => {
+										console.log('图片添加',resImgAdd.data)
+										const imgReturn = [{
+											imgUrl: res.tempFilePaths[0],
+											carpart: resImgAdd.data.Data.carpart
+										}]
+										console.log('图片类型', _this.imgData.ImageType)
+										if(_this.imgData.ImageType == 101){ //基本图片
+											if (_this.imgList.length != 0) {
+												_this.imgList = _this.imgList.concat(imgReturn)
+											} else {
+												_this.imgList = imgReturn
+											}
+										}
+										if(_this.imgData.ImageType == 0){ //证件图片
+											if (_this.imgListPaper.length != 0) {
+												_this.imgListPaper = _this.imgListPaper.concat(imgReturn)
+											} else {
+												_this.imgListPaper = imgReturn
+											}
+										}
+										if(_this.imgData.ImageType != 101 && _this.imgData.ImageType != 0){ //评估图片
+											if (_this.imgListOther.length != 0) {
+												_this.imgListOther = _this.imgListOther.concat(imgReturn)
+											} else {
+												_this.imgListOther = imgReturn
+											}
+										}
+										console.log('imlist', _this.imgList)
+										_this.imgUpShow[resImgAdd.data.Data.carpart] = false
+									}).catch(err => {
+										_this.$api.msg(`图片添加失败,请刷新重试`);
+									})
+								}).catch(err => {
+									_this.$api.msg(`图片上传失败,请刷新重试`);
+								})
 							}
-						}); */
+						});
+						// this.imgList = res.tempFilePaths
+						/* console.log(res)
+						console.log(res.tempFilePaths)
+						console.log(JSON.stringify(res.tempFilePaths)); */
+						/* */
 					}
 				});
+			},
+			confirmImg() { //预览上架
+				console.log(this.imgData)
+				console.log(this.imgList)
+				if(this.imgList.length != 10){
+					this.$api.msg(`请将车辆基本照片补充完整`, 3000);
+				}else{
+					this.$emit("goPreviewForm", this.imgData.Carid);
+				}
+				// 
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 		}
 	}
@@ -599,5 +747,8 @@
 		background-color: $base-color;
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+	}
+	.padding-xl {
+	  padding: 10px;
 	}
 </style>

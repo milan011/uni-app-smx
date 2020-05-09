@@ -99,7 +99,7 @@
 		</view>
 		<!-- 车况检测end -->
 		<!-- 猜你喜欢begin -->
-		<view class="eva-section">
+		<view v-if="!ispreview" class="eva-section">
 			<view class="e-header">
 				<text class="tit">猜你喜欢</text>
 			</view>
@@ -117,6 +117,10 @@
 					</view>
 				</view>
 			</view>
+		</view>
+		<view v-else class="padding flex flex-wrap justify-between align-center bg-white">
+			<button class="cu-btn bg-olive" @tap="goPutOn">确认上架</button>
+			<button class="cu-btn bg-orange" @tap="reEdit">返回修改</button>
 		</view>
 		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="stopPrevent" @click="toggleSpec">
 			<!-- 遮罩层 -->
@@ -170,6 +174,7 @@
 					"customer": {},
 					"carimages": [],
 				},
+				ispreview: false,
 				allParamShow: false,
 				items: ['车辆参数', '发动机参数', '底盘及制动', '其他配置'],
 				itemStatus: ['非常规技术检查', '静态检查', '动态检查'],
@@ -195,9 +200,11 @@
 			};
 		},
 		async onLoad(options) {
-
+			console.log(options)
 			//接收传值,id里面放的是标题，因为测试数据并没写id 
 			// 车辆详情
+			this.ispreview = options.ispreview == 1 ? true : false
+			console.log(this.ispreview)
 			uni.showLoading({
 				title: "加载中",
 				mask: true
@@ -362,6 +369,17 @@
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
+			},
+			goPutOn(){
+				uni.navigateTo({
+					url: `/pages/car/list`
+				})
+			},
+			reEdit(){
+				console.log(this.car.Carid)
+				uni.navigateTo({
+					url: `/pages/car/list`
+				})
 			}
 		},
 
@@ -468,8 +486,7 @@
 		.image-wrapper {
 			width: 100%;
 			height: 100%;
-		}
-
+		}		
 		.swiper-item {
 			display: flex;
 			justify-content: center;
@@ -482,9 +499,20 @@
 				height: 100%;
 			}
 		}
-
 	}
-
+	.mix-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 630upx;
+		height: 80upx;
+		margin: 80upx auto 30upx;
+		font-size: $font-lg;
+		color: #fff;
+		background-color: $base-color;
+		border-radius: 10upx;
+		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+	}
 	/* 标题简介 */
 	.introduce-section {
 		background: #fff;

@@ -165,7 +165,7 @@
 						that.loadData();
 					} else {
 						that.car.Factory = res.data.factory
-
+						that.loadData();
 					}
 				},
 				fail: function() {

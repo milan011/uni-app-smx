@@ -85,39 +85,39 @@
 			</view>
 		</view>
 		<view class="order-section">
-			<view class="order-item" @tap="navToCarList" data-factory="雪佛兰" hover-class="common-hover" :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList" data-factory="本田" hover-class="common-hover" :hover-stay-time="50">
 				<!-- <icon type="success" size="16"/> -->
-				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
-				<text>雪佛兰</text>
+				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/honda.png" mode="aspectFit"></image>
+				<text>本田</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="大众" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/dazhong.png" mode="aspectFit"></image>
 				<text>大众</text>
 			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="五菱" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
-				<text>五菱</text>
+			<view class="order-item" @tap="navToCarList" data-factory="奔驰" hover-class="common-hover" :hover-stay-time="50">
+				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/benz.png" mode="aspectFit"></image>
+				<text>奔驰</text>
 			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="福特" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
-				<text>福特</text>
+			<view class="order-item" @tap="navToCarList" data-factory="丰田" hover-class="common-hover" :hover-stay-time="50">
+				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/toyota.png" mode="aspectFit"></image>
+				<text>丰田</text>
 			</view>
 		</view>
 		<view class="order-section">
 			<view class="order-item" @tap="navToCarList" data-factory="奥迪" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/audi.png" mode="aspectFit"></image>
 				<text>奥迪</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="宝马" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/bmw.png" mode="aspectFit"></image>
 				<text>宝马</text>
 			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="本田" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
-				<text>本田</text>
+			<view class="order-item" @tap="navToCarList" data-factory="福特" hover-class="common-hover" :hover-stay-time="50">
+				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/ford.png" mode="aspectFit"></image>
+				<text>福特</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://image.guazistatic.com/files/brand/1207.png" mode="aspectFit"></image>
+				<image src="../../static/index/more.png" mode="aspectFit"></image>
 				<text>更多</text>
 			</view>
 		</view>

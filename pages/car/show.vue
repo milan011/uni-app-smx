@@ -2,7 +2,7 @@
 	<view class="container">
 		<!-- 基本情况Begin -->
 		<view class="history-section icon">
-			<list-cell icon="icon-tuijian" iconColor="#e07472" title="名称" :tips="detail.cars.FullName"></list-cell>
+			<list-cell id="mystyle" icon="icon-tuijian" iconColor="#e07472" title="名称" :tips="detail.cars.FullName"></list-cell>
 			<!-- <list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" @eventClick="navTo('/pages/address/address')"></list-cell> -->
 			<list-cell icon="icon-share" iconColor="#9789f7" title="状态">
 				<view v-if="detail.cars.Car_Status == 0" class="cu-tag round bg-red light">{{carStatusConfig[detail.cars.Car_Status].name}}</view>
@@ -232,7 +232,7 @@
 					this.detail = res.data.Data
 					// this.loadingType = 'loading'
 				}).catch(err => {
-					this.$api.msg(`获取数据失败,请刷新重试`);
+					this.$api.msg(`获取车源数据失败,请刷新重试`);
 				})
 			},
 			getCarFollowById(){ //获取跟踪信息
@@ -241,7 +241,7 @@
 					this.followInfo = res.data.Data[0]
 					// this.loadingType = 'loading'
 				}).catch(err => {
-					this.$api.msg(`获取数据失败,请刷新重试`);
+					this.$api.msg(`获取跟踪数据失败,请刷新重试`);
 				})
 			},
 			/**
@@ -311,6 +311,11 @@
 		}
 	}
 </script>
+<style>
+	#mystyle /deep/ .cell-tip{
+		width:18em;
+	}
+</style>
 <style lang='scss'>
 	%flex-center {
 		display: flex;

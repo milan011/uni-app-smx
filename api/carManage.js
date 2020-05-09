@@ -1,7 +1,11 @@
 
 import Config from '@/common/config.js'
 import { httpApi } from '@/js_sdk/luch-request/index.js';
-
+//获取车源列表
+export function getCarList(data) {
+	const requestUrl = Config.url_config + '/car/page'
+	return httpApi.post(requestUrl,{...data})
+}
 //获取车源详情
 export function getCarDetail(carId) {
 	
@@ -84,7 +88,7 @@ export function getCarImgsCer(carId) {
 	
 	const requestUrl = Config.url_config + '/car/cerimglist'
 	return httpApi.get(
-		requestUrl, { params: { id: carId, imagetype:101 } }
+		requestUrl, { params: { id: carId, imagetype:0 } }
 	)
 }
 //获取车源附加图片

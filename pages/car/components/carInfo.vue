@@ -465,7 +465,7 @@
 					this.validateInfo = checkValidate.validateInfo
 					this.modalName = 'validateModal'
 				}else{
-					/* if(this.carData.Mileage > 200 || this.carData.BasePrice > 200 || this.carData.SaleAMT > 200){
+					if(this.carData.Mileage > 200 || this.carData.BasePrice > 200 || this.carData.SaleAMT > 200){
 						this.$api.msg(`您输入的里程或价格过高,请确认`, 3000);
 					}
 					editCarInfo(this.carData).then(res => {
@@ -479,10 +479,10 @@
 						}
 					}).catch(err => {
 						this.$api.msg(`车源信息添加失败,请刷新重试`);
-					}) */
+					})
 				}
 				// this.customerEdit = false
-				this.$emit("goImgForm", 9243);
+				// this.$emit("goImgForm", 9247);
 			},
 			getProvince(){
 				getAllProvince().then(res => {

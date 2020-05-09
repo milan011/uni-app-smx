@@ -31,7 +31,7 @@
 		<!-- 基本信息编辑End -->
 		<!-- 车源图片编辑Begin -->
 		<view v-show="carImgEdit" class="pay-type-list" style="padding: 0px 60upx">
-			<car-img ref="carImgSon"></car-img>
+			<car-img ref="carImgSon" v-on:goPreviewForm="goPreview"></car-img>
 		</view>
 		<!-- 车源图片编辑End -->
 	</view>
@@ -193,11 +193,17 @@
 			goImg(carId){
 				console.log("触发了父页面内的方法", carId);
 				this.$refs.carImgSon.imgData.Carid = carId
+				this.$refs.carImgSon.imgPgData.Carid = carId
 				this.customerEdit = false
 				this.carInfoEdit = false
 				this.carImgEdit = true
 				this.basics = 2
 			},
+			goPreview(carId){
+				uni.navigateTo({
+					url: '/pages/product/product?ispreview=1&id=' + carId
+				});
+			}
 		}
 	}
 </script>

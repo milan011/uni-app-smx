@@ -30,7 +30,13 @@ const store = new Vuex.Store({
 		}
 	},
 	actions: {
-	
+		logout(state) {
+			state.hasLogin = false;
+			state.userInfo = {};
+			uni.removeStorage({  
+		    key: 'userInfo'  
+		  })
+		}
 	}
 })
 

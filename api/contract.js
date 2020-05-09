@@ -2,6 +2,7 @@ import Config from '@/common/config.js'
 import {
 	httpApi
 } from '@/js_sdk/luch-request/index.js';
+// 获取列表
 export function getContractList(data) {
 	const requestUrl = Config.url_config + '/contract/page'
 	return httpApi.post(requestUrl,{...data})

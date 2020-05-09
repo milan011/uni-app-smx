@@ -38,7 +38,7 @@
 					//成功回调
 					uni.setStorage({
 						key: 'city',
-						data: data[0].regeocodeData.addressComponent.city
+						data: data[0].regeocodeData.addressComponent.city.split("市")[0]
 					})
 				},
 				fail: function(info) {
@@ -62,7 +62,7 @@
 					console.log(res.data);
 					uni.setStorage({
 						key: 'citys',
-						data: res.data.city
+						data: res.data.city.split("市")[0]
 					})
 				},
 				fail:()=>{
