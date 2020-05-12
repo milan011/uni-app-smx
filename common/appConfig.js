@@ -129,7 +129,7 @@ const pgPartFConfig = [
 const pgPartJConfig = [
 	{
 		title: '外观检查',
-		 showBage: false,
+		showBage: false,
 		part: [
 			{name: '车身', showBage: false, imagetype: 41},
 			{name: 'ABC柱', showBage: false, imagetype: 42},

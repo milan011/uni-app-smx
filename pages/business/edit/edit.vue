@@ -134,8 +134,8 @@
 							duration: 1500
 						})
 						setTimeout(() => {
-							uni.navigateTo({
-								url: '../business'
+							uni.navigateBack({
+								delta:1
 							})
 						}, 1500)
 					})
@@ -157,8 +157,8 @@
 									duration: 1500
 								})
 								setTimeout(() => {
-									uni.navigateTo({
-										url: '../business'
+									uni.navigateBack({
+										delta:1
 									})
 								}, 1500)
 							})
@@ -182,8 +182,8 @@
 						duration:1500
 					})
 					setTimeout(() => {
-						uni.navigateTo({
-							url: '../business'
+						uni.navigateBack({
+							delta:1
 						})
 					}, 1500)
 				})
@@ -196,18 +196,17 @@
 				uni.getStorage({
 					key: "userInfo",
 					success: (res) => {
-						id = res.data.shop_id
+						getShopList({
+							id:res.data.shop_id
+						}).then(res => {
+							this.shopList = res.data.Data
+							this.shopList.forEach(ele=>{
+								if(ele.address == '元氏县'){
+									ele.name = '元氏2店'
+								}
+							})
+						})
 					}
-				})
-				getShopList({
-					id
-				}).then(res => {
-					this.shopList = res.data.Data
-					this.shopList.forEach(ele=>{
-						if(ele.address == '元氏县'){
-							ele.name = '元氏2店'
-						}
-					})
 				})
 			},
 

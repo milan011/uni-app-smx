@@ -384,6 +384,9 @@
 			this.id = option.id;
 			this.getDetail();
 		},
+		onShow() {
+			this.getDetail();
+		},
 		methods: {
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
@@ -394,7 +397,7 @@
 					id: this.id
 				}).then(res => {
 					this.detail = res.data.Data
-					this.customer_res_index = this.detail.customer.customer_res - 1;
+					this.customer_res_index = this.detail.customer.customer_res ;
 					this.detail.cars.forEach(ele=>{
 						if(ele.Car_Status==0){
 							ele.Car_Status = "废弃"

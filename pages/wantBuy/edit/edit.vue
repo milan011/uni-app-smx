@@ -135,6 +135,14 @@
 					this.form.created_at = data.want.created_at;
 					this.form.updated_at = data.want.updated_at
 					this.textareaAValue = data.want.xs_remark;
+					this.form.inside_color = data.want.inside_color
+					this.form.want_area = data.want.want_area
+					this.form.is_top = data.want.is_top
+					this.form.sale_number = data.want.sale_number
+					this.form.deleted_at = data.want.deleted_at
+					this.form.creater_name = data.want.creater_name
+					this.form.customer_name = data.want.customer_name
+					this.form.shop_name = data.shopname
 				})
 			},
 			PickerChange(e) {
@@ -210,7 +218,6 @@
 	.nav {
 		.cu-item {
 			height: 65upx;
-			/* display: inline-block; */
 		}
 	}
 

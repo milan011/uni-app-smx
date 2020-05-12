@@ -22,7 +22,7 @@
 			<view class="title">客户来源</view>
 			<picker @change="PickerChange" :value="userInfo.customer_res" v-model="userInfo.customer_res - 1" :range="picker">
 				<view class="picker">
-					{{userInfo.customer_res>=-1?picker[userInfo.customer_res - 1]:'请选择客户来源'}}
+					{{userInfo.customer_res>=-1?picker[userInfo.customer_res]:'请选择客户来源'}}
 				</view>
 			</picker>
 		</view>
@@ -157,8 +157,8 @@
 							duration: 1500
 						});
 						setTimeout(() => {
-							uni.navigateTo({
-								url: "../customerDetail?id="+this.userInfo.id
+							uni.navigateBack({
+								delta:1
 							})
 						}, 1500)
 					})

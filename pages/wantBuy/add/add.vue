@@ -17,15 +17,15 @@
 				<evan-form-item label="姓名：" prop="name">
 					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.name" placeholder="请输入姓名" />
 				</evan-form-item>
-				<evan-form-item label="手机号：" prop="phone">
+				<evan-form-item label="手机号：" prop="telephone">
 					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.telephone" placeholder="请输入手机号" />
 				</evan-form-item>
 				<evan-form-item label="客户来源：">
-						<picker @change="PickerChanges" :value="index" :range="picker">
-							<view class="picker">
-								{{picker[customer.customer_res]}}
-							</view>
-						</picker>
+					<picker @change="PickerChanges" :value="index" :range="picker">
+						<view class="picker">
+							{{picker[customer.customer_res]}}
+						</view>
+					</picker>
 				</evan-form-item>
 			</evan-form>
 			<text class="mix-btn" @click="confirm">添加求购信息</text>
@@ -219,27 +219,32 @@
 				})
 			},
 			confirmInfo() {
-				console.log(this.wantInfo)
-				saveWant({ ...this.wantInfo
-				}).then(res => {
-					this.customerEdit = false
-					this.carInfoEdit = false
-					this.selectEdit = true
-					this.basics = 2
+				console.log(this.wantInfo.bottom_price , this.wantInfo.top_price)
+				if (this.wantInfo.bottom_price-0 >= this.wantInfo.top_price-0) {
 					uni.showToast({
-						title: '已完成将返回上一级',
-						duration: 2000,
-						icon: "none"
+						title: '输入的最低价格不能大于最高价格',
+						icon: 'none'
 					})
-					setTimeout(() => {
-						uni.navigateTo({
-							url: '../wantBuy'
+					return
+				} else {
+					saveWant({ ...this.wantInfo
+					}).then(res => {
+						this.customerEdit = false
+						this.carInfoEdit = false
+						this.selectEdit = true
+						this.basics = 2
+						uni.showToast({
+							title: '已完成将返回上一级',
+							duration: 2000,
+							icon: "none"
 						})
-					}, 2000)
-				})
-				return
-
-
+						setTimeout(() => {
+							uni.navigateBack({
+								delta: 1
+							})
+						}, 2000)
+					})
+				}
 
 			},
 			isMobile(rule, value, callback) {

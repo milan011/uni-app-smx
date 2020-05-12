@@ -19,11 +19,13 @@
 							<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
 							<text class="text-grey">{{ item.want.carcate }}</text>
 						</navigator>
-						<view class="action">
-							<!-- <view class="cu-tag round bg-orange light">正常</view> -->
-							<view class="cu-tag round bg-olive light">{{item.want.want_status}}</view>
-							<view class="cu-tag round bg-blue light">{{item.want.created_at}}</view>
-						</view>
+						<navigator hover-class="none" :url="'./show/show?carId='+item.want.id" open-type="navigate">
+							<view class="action">
+								<!-- <view class="cu-tag round bg-orange light">正常</view> -->
+								<view class="cu-tag round bg-olive light">{{item.want.want_status1}}</view>
+								<view class="cu-tag round bg-blue light">{{item.want.created_at}}</view>
+							</view>
+						</navigator>
 					</view>
 				</view>
 				<uni-load-more :status="loadingType"></uni-load-more>
@@ -118,7 +120,7 @@
 	import {
 		getWantList
 	} from "@/api/want.js"
-		import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
 		components: {
 			uniNumberBox,
@@ -149,7 +151,7 @@
 					describ: "",
 					userid: "",
 					shopid: "",
-					wantstatus: "",
+					wantstatus: 1,
 					updatetime: "",
 					rolename: "",
 					startTime: "",
@@ -160,7 +162,8 @@
 			};
 		},
 		onLoad() {
-			uni.getStorage({
+
+				uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
 					this.want.shopid = res.data.shop_id;
@@ -171,10 +174,46 @@
 			})
 			
 		},
+		onShow() {
+			// this.want.pageIndex = 1
+			uni.getStorage({
+				key: 'userInfo',
+				success: (res) => {
+					this.cartList = []
+					this.want.shopid = res.data.shop_id;
+					this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
+					this.want.userid = res.data.id;
+					this.loadingType = 'loading'
+					getWantList({ ...this.want
+					}).then(res => {
+						this.cartList = res.data.Data.DataList
+						this.cartList.forEach(ele => {
+							if (ele.want.want_status === '0') {
+								ele.want.want_status1 = "废弃"
+							} else if (ele.want.want_status === '1') {
+								ele.want.want_status1 = "正常"
+							} else {
+								ele.want.want_status1 = "已交易"
+							}
+							if (ele.want.created_at) {
+								ele.want.created_at = ele.want.created_at.split('T')[0]
+							}
+						})
+						this.total = res.data.Data.Total;
+						if (this.want.pageIndex < this.total / this.want.PageSize) {
+							this.loadingType = "more"
+						} else {
+							this.loadingType = "nomore"
+						}
+					})
+				}
+			})
+		},
 		//下拉刷新
 		onPullDownRefresh() {
+			this.cartList = []
 			this.want.pageIndex = 1
-			this.want.wantstatus = "";
+			this.want.wantstatus = 1;
 			this.want.bsx = 0;
 			this.want.pricemin = "";
 			this.want.pricemax = "";
@@ -187,8 +226,9 @@
 		//加载更多
 		onReachBottom() {
 			let num = Math.ceil(this.total / this.want.PageSize)
-			if (this.want.pageIndex == num || this.want.pageIndex > num) {
-				this.want.pageIndex = 1
+			console.log(this.want.pageIndex , num)
+			console.log(this.want.pageIndex >= num)
+			if (this.want.pageIndex >= num) {
 				return
 			} else {
 				this.want.pageIndex++
@@ -214,7 +254,7 @@
 				this.loadingType = "loading"
 				let cartList = await getWantList({ ...this.want
 				})
-			    // this.cartList = cartList.data.Data.DataList;
+				// this.cartList = cartList.data.Data.DataList;
 				if (this.cartList.length == 0) {
 					this.cartList = cartList.data.Data.DataList;
 				} else {
@@ -222,18 +262,18 @@
 				}
 				this.total = cartList.data.Data.Total;
 				this.cartList.forEach(ele => {
-					if (ele.want.want_status == 0) {
-						ele.want.want_status = "废弃"
-					} else if (ele.want.want_status == 1) {
-						ele.want.want_status = "正常"
-					} else if (ele.want.want_status == 4) {
-						ele.want.want_status = "已交易"
+					if (ele.want.want_status === '0') {
+						ele.want.want_status1 = "废弃"
+					} else if (ele.want.want_status === '1') {
+						ele.want.want_status1 = "正常"
+					} else {
+						ele.want.want_status1 = "已交易"
 					}
 					if (ele.want.created_at) {
-						ele.want.created_at = ele.want.created_at.substring(0, ele.want.created_at.indexOf("T"))
+						ele.want.created_at = ele.want.created_at.split('T')[0]
 					}
 				})
-				if (this.want.pageIndex < this.total/this.want.PageSize) {
+				if (this.want.pageIndex < this.total / this.want.PageSize) {
 					this.loadingType = "more"
 				} else {
 					this.loadingType = "nomore"
@@ -303,7 +343,6 @@
 				uni.navigateTo({
 					url: './add/add'
 				})
-				this.$api.msg('跳转下一页 sendData');
 			}
 		}
 	}

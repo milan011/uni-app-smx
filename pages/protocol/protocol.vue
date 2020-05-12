@@ -142,12 +142,28 @@
 					this.init();
 				}
 			})
-			
+
+		},
+		onShow() {
+			this.list = []
+			uni.getStorage({
+				key: 'userInfo',
+				success: (res) => {
+					this.contract.rolename = res.data.rolename
+					this.contract.shopid = res.data.shop_id
+					this.contract.userid = res.data.id
+					getContractList({
+						...this.contract
+					}).then(res => {
+						this.list = res.data.Data.DataList
+					})
+				}
+			})
+
 		},
 		onReachBottom() {
 			let num = Math.ceil(this.total / this.contract.pagesize)
 			if (this.contract.pageindex == num || this.contract.pageindex > num) {
-				this.contract.pageindex = 1
 				return
 			} else {
 				this.contract.pageindex++
@@ -157,21 +173,25 @@
 		},
 		methods: {
 			init() {
+				this.loadingType = 'loading'
 				getContractList({
 					...this.contract
 				}).then(res => {
 					if (this.list.length == 0) {
 						this.list = res.data.Data.DataList
+						console.log(this.list)
 					} else {
 						this.list = this.list.concat(res.data.Data.DataList);
+						console.log(this.list)
 					}
 					this.total = res.data.Data.Total
+					if (this.contract.pageindex < this.total / this.contract.pagesize) {
+						this.loadingType = "more"
+					} else {
+						this.loadingType = "nomore"
+					}
 				})
-				if (this.contract.pageindex < this.total / this.contract.pagesize) {
-					this.loadingType = "more"
-				} else {
-					this.loadingType = "nomore"
-				}
+
 			},
 			toDetail(item) {
 				uni.setStorage({
@@ -221,11 +241,12 @@
 	.uni-input-input {
 		text-align: right !important;
 	}
+
 	.protocol-main {
 		.cu-modal {
 			z-index: 1 !important;
 		}
-		
+
 		.card {
 			border-bottom: 4upx solid #CCCCCC;
 

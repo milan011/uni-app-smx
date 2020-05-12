@@ -26,7 +26,7 @@
 			<!-- 城市列表(搜索后)  -->
 			<view class="citys" v-if="serachCity">
 				<view v-for="(item, index) in searchDatas" :key="index">
-					<view class="citys-item" :key="inx" @click="cityTrigger(item)">{{ item.name }}</view>
+					<view class="citys-item" :key="index" @click="cityTrigger(item)">{{ item.name }}</view>
 				</view>
 			</view>
 		</scroll-view>

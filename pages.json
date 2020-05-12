@@ -125,12 +125,12 @@
 			"style": {
 				"navigationBarTitleText": "新增车源"
 			}
-		},{
+		},/* {
 			"path": "pages/car/customer",
 			"style": {
 				"navigationBarTitleText": "车源客户"
 			}
-		}, {
+		}, */ {
 			"path": "pages/public/hongbao",
 			"style": {
 				"navigationBarTitleText": "",
@@ -259,6 +259,7 @@
 		}, {
 			"path": "pages/myTransaction/transaction",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "我的交易"
 			}
 		}, {
@@ -333,6 +334,12 @@
             "path" : "pages/business/edit/edit",
             "style" : {
 				"navigationBarTitleText": "修改商机"
+			}
+        }
+        ,{
+            "path" : "pages/collect/collect",
+            "style" : {
+				"navigationBarTitleText": "我的收藏"
 			}
         }
     ],

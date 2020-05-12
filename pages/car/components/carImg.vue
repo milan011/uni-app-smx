@@ -25,7 +25,7 @@
 				<view class="grid col-4 grid-square flex-sub">
 					<view v-if="img.carpart" v-for="(img, index) in imgList"  class="bg-img" @tap="ViewImage" :data-url="img.imgUrl">
 						<image :src="img.imgUrl" mode="aspectFill"></image>
-						<view class="cu-tag bg-red" @tap.stop="DelImg" data-imgtype="101" :data-carpart="img.carpart">
+						<view class="cu-tag bg-red" @tap.stop="DelImg" data-imgtype="101" data-itype='N' :data-carpart="img.carpart">
 							<text class='cuIcon-close'></text>
 						</view>
 					</view>
@@ -80,27 +80,27 @@
 				<view class="grid col-4 grid-square flex-sub">
 					<view v-for="(img, index) in imgListPaper" class="bg-img" @tap="ViewImage" :data-url="imgListPaper[0]">
 						<image :src="img.imgUrl" mode="aspectFill"></image>
-						<view class="cu-tag bg-red" @tap.stop="DelImg" data-imgtype="0" :data-carpart="img.carpart">
+						<view class="cu-tag bg-red" @tap.stop="DelImg" data-itype='P' data-imgtype="101" :data-carpart="img.carpart">
 							<text class='cuIcon-close'></text>
 						</view>
 					</view>
-					<view v-if="imgUpShow['登记证书']" data-carpart="登记证书" data-imagetype="0" class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['登记证书']" data-carpart="登记证书" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">登记证书</text>
 					</view>
-					<view v-if="imgUpShow['行使证']" data-carpart="行使证" data-imagetype="0" class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['机动车行使证']" data-carpart="机动车行使证" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1em;">行使证</text>
 					</view>
-					<view v-if="imgUpShow['身份证']" data-carpart="身份证" data-imagetype="0" class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['身份证/营业执照']" data-carpart="身份证/营业执照" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 1em;">身份证</text>
 					</view>
-					<view v-if="imgUpShow['购车发票']" data-carpart="购车发票" data-imagetype="0" class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['购车发票']" data-carpart="购车发票" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">购车发票</text>
 					</view>
-					<view v-if="imgUpShow['保险证明']" data-carpart="保险证明" data-imagetype="0" class="solids" @tap="ChooseImage">
+					<view v-if="imgUpShow['保险证明']" data-carpart="保险证明" data-imagetype="101" class="solids" @tap="ChooseImage">
 						<text class='cuIcon-cameraadd'></text>
 						<text class='tStyle' style="margin-left: 0.5em;">保险证明</text>
 					</view>
@@ -136,13 +136,13 @@
 						<uni-collapse-item v-for="(part,index) in pgpro.part" :showBage="part.showBage"  :key="index" :title="part.name">
 							<view style="padding: 30rpx;">
 								<view class="grid col-4 grid-square flex-sub">
-									<view v-if="part.imagetype == img.ImageType" v-for="(img, index) in imgListPgCurrent" :key="index" class="bg-img" @tap="ViewImage">
+									<view v-if="part.imagetype == img.ImageType" v-for="(img, index) in imgListPgCurrentF" :key="index" class="bg-img" @tap="ViewImage">
 										<image :src="img.imgUrl" mode="aspectFill"></image>
-										<view class="cu-tag bg-red" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
+										<view class="cu-tag bg-red" data-ipart="F" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
 											<text class='cuIcon-close'></text>
 										</view>
 									</view>
-									<view class="solids" @tap="ChooseImagePg" :data-imagetype="part.imagetype" v-if="imgListPgCurrent.length<4">
+									<view class="solids" @tap="ChooseImagePg" data-ipart="F" :data-imagetype="part.imagetype">
 										<text class='cuIcon-cameraadd'></text>
 									</view>
 								</view>
@@ -162,13 +162,13 @@
 						<uni-collapse-item v-for="(part,index) in pgpro.part" :showBage="part.showBage" :key="index" :title="part.name">
 							<view style="padding: 30rpx;">
 								<view class="grid col-4 grid-square flex-sub">
-									<view v-if="part.imagetype == img.ImageType" v-for="(img, index) in imgListPgCurrent" :key="index" class="bg-img" @tap="ViewImage">
+									<view v-if="part.imagetype == img.ImageType" v-for="(img, index) in imgListPgCurrentJ" :key="index" class="bg-img" @tap="ViewImage">
 										<image :src="img.imgUrl" mode="aspectFill"></image>
-										<view class="cu-tag bg-red" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
+										<view class="cu-tag bg-red" data-ipart="J" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
 											<text class='cuIcon-close'></text>
 										</view>
 									</view>
-									<view class="solids" @tap="ChooseImagePg" :data-imagetype="part.imagetype" v-if="imgListPgCurrent.length<4">
+									<view class="solids" @tap="ChooseImagePg" data-ipart="J" :data-imagetype="part.imagetype" >
 										<text class='cuIcon-cameraadd'></text>
 									</view>
 								</view>
@@ -186,20 +186,21 @@
 				<uni-collapse-item v-for="(part,index) in pgPartDConfig" :showBage="part.showBage" :key="index" :title="part.name">
 					<view style="padding: 30rpx;">
 						<view class="grid col-4 grid-square flex-sub">
-							<view v-if="part.imagetype == img.ImageType" v-for="(img, ind) in imgListPgCurrent" :key="ind" class="bg-img" @tap="ViewImage">
+							<view v-if="part.imagetype == img.ImageType" v-for="(img, ind) in imgListPgCurrentD" :key="ind" class="bg-img" @tap="ViewImage">
 								<image :src="img.imgUrl" mode="aspectFill"></image>
-								<view class="cu-tag bg-red" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="ind" :data-imgtype="img.ImageType" data-part="pgPartDConfig">
+								<view class="cu-tag bg-red" data-ipart="D" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="ind" :data-imgtype="img.ImageType" data-part="pgPartDConfig">
 									<text class='cuIcon-close'></text>
 								</view>
 							</view>
-							<view class="solids"  @tap="ChooseImagePg" :data-imagetype="part.imagetype" v-if="imgListPgCurrent.length<4">
+							<view class="solids"  @tap="ChooseImagePg" data-ipart="D" :data-imagetype="part.imagetype">
 								<text class='cuIcon-cameraadd'></text>
 							</view>
 						</view>
 					</view>
 				</uni-collapse-item>
 			</uni-collapse>
-			<text class="mix-btn" @click="confirmImg">预览上架</text>
+			<text class="mix-btn"  v-if="isEdit" @click="confirmImg">提交修改</text>
+			<text class="mix-btn" v-else @click="confirmImg">预览上架</text>
 			<!-- 手动输入车型 Begin -->
 			<view style="z-index: 110;" class="cu-modal" :class="modalName=='Comment'?'show':''">
 				<view class="cu-dialog">
@@ -258,15 +259,20 @@
 					'右后45度': true,
 					'正后': true,	
 					'登记证书': true,
-					'行使证': true,
-					'身份证': true,
+					'机动车行使证': true,
+					'身份证/营业执照': true,
 					'购车发票': true,
 					'保险证明': true,
 				},
+				isEdit: false,
+				imgPgPart: '',
 				modalName: null,
 				pgPartFConfig: [],
 				pgPartJConfig: [],
 				pgPartDConfig: [],
+				pgPartFTypeArr: [],
+				pgPartJTypeArr: [],
+				pgPartDTypeArr: [],
 				TabCur: 0,
 				imgData: {
 					ID: 0,
@@ -289,8 +295,10 @@
 				imgListPaper: [],
 				imgListOther: [],
 				imgListAsess: [],
-				imgListPg: [],
-				imgListPgCurrent: [],
+				imgPgList: [],
+				imgListPgCurrentF: [],
+				imgListPgCurrentJ: [],
+				imgListPgCurrentD: [],
 				imgUser: {
 					shop_id: '72',
 					pshop_id: '71',
@@ -301,6 +309,7 @@
 			this.pgPartFConfig = pgPartFConfig
 			this.pgPartJConfig = pgPartJConfig
 			this.pgPartDConfig = pgPartDConfig
+			this.pgImgInit()
 		},
 		props: {
 			title: {
@@ -328,6 +337,7 @@
 					success: res => {
 						if (res.confirm) {
 							// this.imgList.splice(e.currentTarget.dataset.index, 1)
+							const itype = e.currentTarget.dataset.itype
 							const param = {
 								cid: this.imgData.Carid,
 								carpart: e.currentTarget.dataset.carpart,
@@ -339,11 +349,16 @@
 								console.log(e.currentTarget.dataset)
 								console.log(imgtype) */
 								if(res.data.ResultType === 0){
-									if(imgtype == 101){ //基本图片
-										this.imgList.splice(this.imgList.findIndex(item => item.carpart === param.carpart), 1)
+									if(imgtype == 101){ 
+										if(itype == 'N'){//基本图片
+											this.imgList.splice(this.imgList.findIndex(item => item.carpart === param.carpart), 1)
+										}
+										if(itype == 'P'){//证件图片
+											this.imgListPaper.splice(this.imgListPaper.findIndex(item => item.carpart === param.carpart), 1)
+										}	
 									}
-									if(imgtype == 0){ //证件图片
-										this.imgListPaper.splice(this.imgListPaper.findIndex(item => item.carpart === param.carpart), 1)
+									if(imgtype == 0){ //其他
+										this.imgListOther.splice(this.imgListOther.findIndex(item => item.carpart === param.carpart), 1)
 									}
 									if(imgtype != 0 && imgtype != 101){ //评估图片
 										// this.imgList.splice(this.imgList.findIndex(item => item.carpart === param.carpart), 1)
@@ -389,7 +404,67 @@
 					}
 				})
 			},
+			pgImgInit(){ //评估部位初始化
+				var _this = this
+				_this.pgPartDConfig.forEach((ele, ind) => {
+					// console.log(ele)
+					_this.pgPartDTypeArr.push(ele.imagetype)
+				})
+				_this.pgPartFConfig.forEach((ele, ind) => {
+					// console.log(ele)
+					ele.part.forEach((el, i) => {
+						_this.pgPartFTypeArr.push(el.imagetype)
+					})			
+				})
+				_this.pgPartJConfig.forEach((ele, ind) => {
+					// console.log(ele)
+					ele.part.forEach((el, i) => {
+						_this.pgPartJTypeArr.push(el.imagetype)
+					})			
+				})
+				// console.log('非常规部位',_this.pgPartFTypeArr)
+				// console.log('静态部位',_this.pgPartJTypeArr)
+				// console.log('动态部位',_this.pgPartDTypeArr)
+			},
+			imgPgDell(){ //评估图片处理
+				var _this = this
+				console.log('评估图片', _this.imgPgList)
+				_this.imgPgList.forEach((ele,index) => {
+					if(_this.pgPartDTypeArr.indexOf(ele.imagetype) > -1){
+						_this.imgListPgCurrentD.push(ele)
+						_this.pgPartDConfig.forEach((e,i)=>{
+							if(e.imagetype == ele.imagetype ){
+								e.showBage = true
+							}
+						})
+					}
+					if(_this.pgPartFTypeArr.indexOf(ele.imagetype) > -1){
+						_this.imgListPgCurrentF.push(ele)
+						_this.pgPartFConfig.forEach((el,ind)=>{
+							el.part.forEach((e,i)=>{
+								if(e.imagetype == ele.imagetype ){
+									el.showBage = true
+									e.showBage = true
+								}
+							})		
+						})
+					}
+					if(_this.pgPartJTypeArr.indexOf(ele.imagetype) > -1){
+						_this.imgListPgCurrentJ.push(ele)
+						_this.pgPartJConfig.forEach((el,ind)=>{
+							el.part.forEach((e,i)=>{
+								if(e.imagetype == ele.imagetype ){
+									el.showBage = true
+									e.showBage = true
+								}
+							})		
+						})
+					}
+				})
+			},
 			DelImgPg(e) { //评估图片删除
+				var _this = this
+				_this.imgPgPart = e.currentTarget.dataset.ipart //类型(非常规,静态,动态)
 				uni.showModal({
 					title: '图片删除',
 					content: '确定要删除图片吗？',
@@ -401,17 +476,25 @@
 							const imgId = e.currentTarget.dataset.imgid
 							const imgIndex = e.currentTarget.dataset.index
 							const imgType = e.currentTarget.dataset.imgtype 
-							const imgPart = e.currentTarget.dataset.pgPartDConfig 
+							// const imgPart = e.currentTarget.dataset.pgPartDConfig 
 							imgDeleteById(imgId).then(res => {
 								if(res.data.ResultType === 0){
-									// this.imgList.splice(this.imgList.findIndex(item => item.carpart === param.carpart), 1)
-									/* this.imgListPgCurrent.forEach(ele => {
-										console.log(ele)
-										if(ele.ImageType)
-									}) */
-									this.imgListPgCurrent.splice(imgIndex, 1)
+									if(_this.imgPgPart == 'F'){ //非常规
+										this.imgListPgCurrentF.splice(imgIndex, 1)
+										_this.showBageDell('F')
+										
+									}
+									if(_this.imgPgPart == 'D'){ //动态
+										this.imgListPgCurrentD.splice(imgIndex, 1)
+										_this.showBageDell('D')
+									}
+									if(_this.imgPgPart == 'J'){ //静态
+										this.imgListPgCurrentJ.splice(imgIndex, 1)
+										_this.showBageDell('J')
+									}
 									// console.log(this.imgListPgCurrent)
-									this.hideBageDell(imgType)
+									/* _this.imgPgList = _this.imgListPgCurrentJ.concat(_this.imgListPgCurrentF, _this.imgListPgCurrentD)
+									_this.imgPgDell() */
 								}else{
 									this.$api.msg(`图片删除失败,请刷新重试`);
 								}
@@ -419,57 +502,206 @@
 								console.log('err', err)
 								this.$api.msg(`图片删除失败,请刷新重试`);
 							})
-							console.log('部位',e.currentTarget.dataset.carpart)
-							console.log('carid',this.imgData.Carid)
 						}
 					}
 				})
 			},
-			hideBageDell(imgType){
-				if(this.imgListPgCurrent.length == 0){ //无评估图片
-					this.hideBageDel(imgType)
-				}else{
-					this.imgListPgCurrent.forEach((ele, ind) => {
-						console.log('hide',ele)
-						if(ele.ImageType == imgType){ //该评估项仍有图片
-							console.log('have')
-							return true 
-						}else{ //该评估项已无图片
-							console.log('not have')
-							this.hideBageDel(imgType)
-						}
-					})
-				}	
-			},
-			hideBageDel(imgType){ //showBage 红点处理
-				// console.log(this.imgListPgCurrent)
-				this.pgPartDConfig.forEach(ele => { //动态评估项
-					if(ele.imagetype == imgType){		
-						console.log(ele)
-						return ele.showBage = false
+			showBageDell(part){
+				var _this = this
+				if(part == 'D'){ //动态检查
+					// _this.imgListPgCurrentD //剩余动态图片
+					// _this.pgPartDConfig     //动态评估配置项
+					if(_this.imgListPgCurrentD.length == 0 ){ //无动态评估图片,所有项红点均隐藏
+						_this.pgPartDConfig.forEach(ele=>{
+							ele.showBage = false
+						})
+					}else{
+						let ilist = [] //剩余动态图片包含的imageType
+						_this.imgListPgCurrentD.forEach(ele=>{
+							ilist.push(ele.ImageType)  
+						})
+						console.log('剩余type', ilist)
+						_this.pgPartDConfig.forEach(ele=>{
+							console.log(ele)
+							if(ilist.indexOf(ele.imagetype) > -1){
+								console.log('就你了',ele)
+								ele.showBage = true
+							}else{
+								ele.showBage = false
+							}
+						})
 					}
-				})
-				this.pgPartJConfig.forEach(ele => { //静态评估项
-					ele.part.forEach((el, ind) => {
-						if(el.imagetype == imgType){		
-							// ele.showBage = false
-							el.showBage = false
-							console.log(this.pgPartJConfig)
-							return true
-						}
-					})
-				})
-				this.pgPartFConfig.forEach(ele => { //非常规评估项
-					ele.part.forEach((el, ind) => {
-						if(el.imagetype == imgType){		
-							// ele.showBage = false
-							el.showBage = false
-							console.log(this.pgPartJConfig)
-							return true
-						}
-					})
-				})
+				}
+				if(part == 'J'){ //静态检查
+					if(_this.imgListPgCurrentJ.length == 0 ){ //无动态评估图片,所有项红点均隐藏
+						_this.pgPartJConfig.forEach(ele=>{
+							ele.showBage = false
+							ele.part.forEach(el=>{
+								el.showBage = false
+							})
+						})
+					}else{
+						let ilist = [] //剩余动态图片包含的imageType
+						_this.imgListPgCurrentJ.forEach(ele=>{
+							ilist.push(ele.ImageType)  
+						})
+						console.log('剩余type', ilist)
+						_this.pgPartJConfig.forEach(ele=>{
+							var stillHave = false
+							ele.part.forEach(el=>{
+								if(ilist.indexOf(el.imagetype) > -1){
+									console.log('就你了',el)
+									el.showBage = true
+									stillHave = true
+								}else{
+									el.showBage = false
+								}
+							})	
+							ele.showBage = stillHave
+						})
+					}
+				}
+				if(part == 'F'){ //非常规检查
+					if(_this.imgListPgCurrentF.length == 0 ){ //无动态评估图片,所有项红点均隐藏
+						_this.pgPartFConfig.forEach(ele=>{
+							ele.showBage = false
+							ele.part.forEach(el=>{
+								el.showBage = false
+							})
+						})
+					}else{
+						let ilist = [] //剩余动态图片包含的imageType
+						_this.imgListPgCurrentF.forEach(ele=>{
+							ilist.push(ele.ImageType)  
+						})
+						console.log('剩余type', ilist)
+						_this.pgPartFConfig.forEach(ele=>{
+							var stillHave = false
+							ele.part.forEach(el=>{
+								if(ilist.indexOf(el.imagetype) > -1){
+									console.log('就你了',el)
+									el.showBage = true
+									stillHave = true
+								}else{
+									el.showBage = false
+								}
+							})	
+							ele.showBage = stillHave
+						})
+					}
+				}
 			},
+			/* // hideBageDell(imgType, part){
+			// 	// console.log('del',this.imgListPgCurrent)
+			// 	console.log('del',imgType)
+				
+			// 	// return false
+			// 	if(part == 'D'){
+			// 		if(this.imgListPgCurrentD.length == 0){ //无评估图片
+			// 			this.hideBageDel(imgType, 'D')
+			// 		}else{
+			// 			this.imgListPgCurrentD.forEach((ele, ind) => {
+			// 				console.log('hide',ele)
+			// 				if(ele.ImageType == imgType){ //该评估项仍有图片
+			// 					console.log('have')
+			// 					console.log('动态',this.pgPartDConfig)
+			// 					return true 
+			// 				}else{ //该评估项已无图片
+			// 					console.log('not have')
+			// 					this.hideBageDel(imgType, 'D')
+			// 				}
+			// 			})
+			// 		}
+			// 	}
+			// 	if(part == 'F'){
+			// 		if(this.imgListPgCurrentF.length == 0){ //无评估图片
+			// 			this.hideBageDel(imgType, 'F')
+			// 		}else{
+			// 			this.imgListPgCurrentF.forEach((ele, ind) => {
+			// 				console.log('hide',ele)
+			// 				if(ele.ImageType == imgType){ //该评估项仍有图片
+			// 					console.log('have')
+			// 					console.log('非常规',this.pgPartFConfig)
+			// 					return true 
+			// 				}else{ //该评估项已无图片
+			// 					console.log('not have')
+			// 					this.hideBageDel(imgType, 'F')
+			// 				}
+			// 			})
+			// 		}
+			// 	}
+			// 	if(part == 'J'){
+			// 		if(this.imgListPgCurrentJ.length == 0){ //无评估图片
+			// 			this.hideBageDel(imgType, 'J')
+			// 		}else{
+			// 			this.imgListPgCurrentJ.forEach((ele, ind) => {
+			// 				console.log('hide',ele)
+			// 				if(ele.ImageType == imgType){ //该评估项仍有图片
+			// 					console.log('have')
+			// 					console.log('静态',this.pgPartJConfig)
+			// 					return true 
+			// 				}else{ //该评估项已无图片
+			// 					console.log('not have')
+			// 					this.hideBageDel(imgType, 'J')
+			// 				}
+			// 			})
+			// 		}
+			// 	}
+					
+			// },
+			// hideBageDel(imgType, part){ //showBage 红点处理
+			// 	// console.log(this.imgListPgCurrent)
+			// 	var _this = this
+			// 	if(part == 'D'){	
+			// 		_this.pgPartDConfig.forEach(ele => { //动态评估项
+			// 			let stillHave = false
+			// 			if(ele.imagetype == imgType){		
+			// 				console.log(ele)
+			// 				console.log('删除后',_this.imgListPgCurrentD)		
+			// 				_this.imgListPgCurrentD.forEach(el=>{
+			// 					if(el.ImageType == imgType){							
+			// 						return stillHave = true
+			// 					}
+			// 				})
+			// 			}
+			// 			return ele.showBage = stillHave
+			// 		})	
+			// 	}
+			// 	if(part == 'J'){		
+			// 		console.log('删除后',_this.imgListPgCurrentJ)
+			// 		_this.pgPartJConfig.forEach(ele => { //静态评估项		
+			// 			// var stillHaveTop = false
+			// 			ele.part.forEach((el, ind) => {
+			// 				let stillHavePart = false
+			// 				_this.imgListPgCurrentJ.forEach(e=>{
+			// 					// console.log('2',e)
+			// 					// console.log('3',imgType)
+			// 					if(e.ImageType == imgType){	
+			// 						console.log('这儿有', e)
+			// 						stillHavePart = true			
+			// 						return 
+			// 					}
+			// 				})
+			// 				el.showBage = stillHavePart	
+			// 				console.log('part',stillHavePart)
+			// 			})
+			// 			// ele.showBage = stillHaveTop
+			// 			console.log('top',stillHaveTop)
+			// 		})
+			// 	}
+			// 	if(part == 'F'){
+			// 		_this.pgPartFConfig.forEach(ele => { //非常规评估项
+			// 			ele.part.forEach((el, ind) => {
+			// 				if(el.imagetype == imgType){		
+			// 					// ele.showBage = false
+			// 					el.showBage = false
+			// 					console.log(_this.pgPartJConfig)
+			// 					return true
+			// 				}
+			// 			})
+			// 		})
+			// 	}	
+			// }, */
 			rateChange(e){ //评估图片评级
 				console.log(e)
 				this.imgPgData.ImageLevel = e.value
@@ -480,8 +712,10 @@
 			},
 			ChooseImagePg(e){ //评估图片添加
 				var _this = this
+				
 				console.log(e.currentTarget.dataset.imagetype)
-				_this.imgPgData.ImageType = e.currentTarget.dataset.imagetype
+				_this.imgPgData.ImageType = e.currentTarget.dataset.imagetype  //部位
+				_this.imgPgPart = e.currentTarget.dataset.ipart //类型(非常规,静态,动态)
 				// return false
 				uni.chooseImage({
 					count: 1, //默认9
@@ -519,6 +753,7 @@
 			},
 			addPgImg(){
 				var _this = this
+				console.log('评估类型',_this.imgPgPart)
 				if(!_this.imgPgData.ImageContent){
 					_this.$api.msg(`请填写描述`);
 					return false
@@ -531,13 +766,31 @@
 						id: resImgAdd.data.Data.id,
 						ImageType: resImgAdd.data.Data.imagetype
 					}]
-					console.log('图片类型', _this.imgPgData.ImageType)
-					if (_this.imgListPgCurrent.length != 0) {
-						_this.imgListPgCurrent = _this.imgListPgCurrent.concat(imgReturn)
-					} else {
-						_this.imgListPgCurrent = imgReturn
+					// console.log('图片类型', _this.imgPgData.ImageType)
+					if (_this.imgPgPart == 'D') { //动态检查
+						if(_this.imgListPgCurrentD.length != 0){
+							_this.imgListPgCurrentD = _this.imgListPgCurrentD.concat(imgReturn)
+						}else{
+							_this.imgListPgCurrentD = imgReturn
+						}			
 					}
-					console.log('imlist', _this.imgListPgCurrent)
+					if (_this.imgPgPart == 'J') { //静态检查
+						if(_this.imgListPgCurrentJ.length != 0){
+							_this.imgListPgCurrentJ = _this.imgListPgCurrentJ.concat(imgReturn)
+						}else{
+							_this.imgListPgCurrentJ = imgReturn
+						}			
+					}
+					if (_this.imgPgPart == 'F') { //非常规检查
+						if(_this.imgListPgCurrentF.length != 0){
+							_this.imgListPgCurrentF = _this.imgListPgCurrentF.concat(imgReturn)
+						}else{
+							_this.imgListPgCurrentF = imgReturn
+						}			
+					}
+					/* console.log('动态', _this.imgListPgCurrentD)
+					console.log('静态', _this.imgListPgCurrentJ)
+					console.log('非常态', _this.imgListPgCurrentF) */
 					//根据添加到评估部位确定showBage状态
 					_this.showBageDel(imgReturn[0].ImageType)
 					_this.modalName = null
@@ -667,28 +920,47 @@
 											imgUrl: res.tempFilePaths[0],
 											carpart: resImgAdd.data.Data.carpart
 										}]
-										console.log('图片类型', _this.imgData.ImageType)
-										if(_this.imgData.ImageType == 101){ //基本图片
+										const paperPart = ['登记证书','机动车行使证','身份证/营业执照','购车发票','保险证明']
+										console.log('部位',imgReturn[0].carpart)
+										console.log(paperPart.indexOf(imgReturn[0].carpart))
+										if(paperPart.indexOf(imgReturn[0].carpart) > -1){
+											//证件图片
+											console.log('添加了证件')
+											if (_this.imgListPaper.length != 0) {
+												_this.imgListPaper = _this.imgListPaper.concat(imgReturn)
+											} else {
+												_this.imgListPaper = imgReturn
+											}
+										}else{	
+											console.log('添加了基本图片')
 											if (_this.imgList.length != 0) {
 												_this.imgList = _this.imgList.concat(imgReturn)
 											} else {
 												_this.imgList = imgReturn
 											}
 										}
-										if(_this.imgData.ImageType == 0){ //证件图片
-											if (_this.imgListPaper.length != 0) {
-												_this.imgListPaper = _this.imgListPaper.concat(imgReturn)
+										console.log('图片类型', _this.imgData.ImageType)
+										/* if(_this.imgData.ImageType == 101){ //基本图片
+											if (_this.imgList.length != 0) {
+												_this.imgList = _this.imgList.concat(imgReturn)
 											} else {
-												_this.imgListPaper = imgReturn
+												_this.imgList = imgReturn
 											}
-										}
-										if(_this.imgData.ImageType != 101 && _this.imgData.ImageType != 0){ //评估图片
+										} */
+										/* if(_this.imgData.ImageType == 0){ //基本图片
 											if (_this.imgListOther.length != 0) {
 												_this.imgListOther = _this.imgListOther.concat(imgReturn)
 											} else {
 												_this.imgListOther = imgReturn
 											}
-										}
+										} */
+										/* if(_this.imgData.ImageType != 101 && _this.imgData.ImageType != 0){ //评估图片
+											if (_this.imgListOther.length != 0) {
+												_this.imgListOther = _this.imgListOther.concat(imgReturn)
+											} else {
+												_this.imgListOther = imgReturn
+											}
+										} */
 										console.log('imlist', _this.imgList)
 										_this.imgUpShow[resImgAdd.data.Data.carpart] = false
 									}).catch(err => {

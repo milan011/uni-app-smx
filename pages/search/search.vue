@@ -69,6 +69,9 @@
 			return {
 				defaultKeyword: "",
 				keyword: "",
+				obj:{
+					factory:''
+				},
 				oldKeywordList: [],
 				hotKeywordList: ['大众', '福特', '丰田', '奥迪', '奔驰', '吉利', '宝马', '长城', '荣威'],
 				keywordList: [],
@@ -192,8 +195,19 @@
 			},
 			//执行搜索
 			doSearch(keyword) {
-				this.keyword = keyword ? keyword : this.keyword;
+				this.obj.factory = keyword ? keyword : this.obj.factory;
 				this.saveKeyword(keyword); //保存为历史 
+				console.log(this.keyword)
+				uni.setStorage({
+					key:'selectConditions',
+					data:this.obj,
+					success: () => {
+						uni.reLaunch({
+						    url: '../product/list'
+						})
+					}
+				})
+				return
 				uni.navigateBack({
 					delta: 1,
 					animationType: 'pop-out',

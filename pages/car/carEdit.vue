@@ -10,454 +10,16 @@
 			</view>
 		</view>
 		<!-- 基本信息编辑Begin -->
-		<view v-if="TabCur==0" class="pay-type-list" style="padding: 0px 60upx">
-			<view class="cu-form-group">
-				<view class="title">VIN码</view>
-				<input style="text-align: right;" placeholder="请扫描或输入VIN码" name="input"></input>
-				<text class='cuIcon-scan text-orange' style="font-size: x-large"></text>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">车型</view>
-				<input style="text-align: right;" disabled placeholder="车型由您输入的VIN码确定" name="input"></input>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">车辆类型</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">排量</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">变速箱</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">外观</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">内饰</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">车险</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">上牌日期</view>
-				<picker mode="date" :value="date" start="2015-09" end="2020-09" @change="DateChange">
-					<view class="picker">
-						{{date}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">到捡日期</view>
-				<picker mode="date" :value="date" start="2015-09" end="2020-09" @change="DateChange">
-					<view class="picker">
-						{{date}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">到保日期</view>
-				<picker mode="date" :value="date" start="2015-09" end="2020-09" @change="DateChange">
-					<view class="picker">
-						{{date}}
-					</view>
-				</picker>
-			</view>
-			<!-- #ifndef MP-ALIPAY -->
-			<view class="cu-form-group">
-				<view class="title">所属城市</view>
-				<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray">
-					<view class="picker">
-						{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
-					</view>
-				</picker>
-			</view>
-			<!-- #endif -->
-			<view class="cu-form-group">
-				<view class="title">过户次数</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
-					<view class="picker">
-						{{carTypeIndex>-1?carType[carTypeIndex]:'请选择车辆类型'}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group nu-style">
-				<view class="title">期望价格</view>
-				<input style="text-align: right;" placeholder="请输入期望价格" name="input"></input>
-				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
-			</view>
-			<view class="cu-form-group margin-top">
-				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" placeholder="客户描述"></textarea>
-			</view>
-			<view class="cu-form-group margin-top">
-				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" placeholder="销售描述"></textarea>
-			</view>
-			<!-- <button @click="save" class="evan-form-show__button">保存</button>
-					<button @click="utilsSave" class="evan-form-show__button">直接调用utils验证</button>
-					<button @click="validateSingle" class="evan-form-show__button">只验证邮箱</button>
-					<button @click="validateMultiple" class="evan-form-show__button">只验证邮箱和手机号</button>
-					<button @click="hideReqired" class="evan-form-show__button">{{hideRequiredAsterisk?'显示':'隐藏'}}*号</button> -->
-			<text class="mix-btn" @click="confirmInfo">提交修改</text>
+		<view v-show="TabCur==0" class="pay-type-list" style="padding: 0px 60upx">
+			<car-info v-on:goImgForm="goImg" ref="carInfoSon"></car-info>
 		</view>
 		<!-- 基本信息编辑End -->
 		<!-- 车源图片编辑Begin -->
-		<view v-if="TabCur==1" class="pay-type-list" style="padding: 0px 60upx">
-			<scroll-view scroll-x class="bg-white nav">
-				<view class="flex text-center">
-				<view class="cu-item flex-sub" :class="0==TabCurPicture?'text-green cur':''" @tap="tabSelectP" data-id="0">
-					<!-- <text class="cuIcon-edit"></text> -->
-					<view class="text">车辆</view>
-				</view>
-				<view class="cu-item flex-sub" :class="1==TabCurPicture?'text-green cur':''" @tap="tabSelectP" data-id="1">
-					<!-- <text class="cuIcon-shop"></text> -->
-					<view class="text">证件</view>
-				</view>
-				<view class="cu-item flex-sub" :class="2==TabCurPicture?'text-green cur':''" @tap="tabSelectP" data-id="2">
-					<!-- <text class="cuIcon-cardboard"></text> -->
-					<view class="text">其他</view>
-				</view>
-				<view class="cu-item flex-sub" :class="3==TabCurPicture?'text-green cur':''" @tap="tabSelectP" data-id="3">
-					<!-- <text class="cuIcon-group_fill"></text> -->
-					<view class="text">评估</view>
-				</view>
-				</view>
-			</scroll-view>
-			<view v-if="TabCurPicture==0" class="cu-bar bg-white solid-bottom">
-				<view class="action" style="margin:0px">
-					<text class="cuIcon-title text-orange "></text> 车辆照片
-				</view>
-			</view>
-			<view v-if="TabCurPicture==0" class="cu-form-group">
-				<view class="grid col-4 grid-square flex-sub">
-					<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-						<image :src="imgList[0]" mode="aspectFill"></image>
-						<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							<text class='cuIcon-close'></text>
-						</view>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 1.5em;">正 面</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<view class='tStyle' style="margin-left: 0.5em;"><text>左前45度</text></view>	
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 0.5em;">左后45度</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 0.5em;">发动机舱</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 1.5em;">仪 表</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 1.5em;">内 饰</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 1em;">后备箱</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 0.5em;">右前45度</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 0.5em;">右后45度</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 1.5em;">正 后</text>
-					</view>
-				</view>
-			</view>
-			<view v-if="TabCurPicture==1" class="cu-bar bg-white solid-bottom">
-				<view class="action" style="margin:0px">
-					<text class="cuIcon-title text-orange "></text> 证件照片
-				</view>
-			</view>
-			<view v-if="TabCurPicture==1" class="cu-form-group">
-				<view class="grid col-4 grid-square flex-sub">
-					<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-						<image :src="imgList[0]" mode="aspectFill"></image>
-						<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							<text class='cuIcon-close'></text>
-						</view>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 0.5em;">登记证书</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 1em;">行使证</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 1em;">身份证</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 0.5em;">购车发票</text>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-						<text class='tStyle' style="margin-left: 0.5em;">保险证明</text>
-					</view>
-				</view>
-			</view>
-			<view v-if="TabCurPicture==2" class="cu-bar bg-white solid-bottom">
-				<view class="action" style="margin:0px">
-					<text class="cuIcon-title text-orange "></text> 其他图片
-				</view>
-			</view>
-			<view v-if="TabCurPicture==2" class="cu-form-group">
-				<view class="grid col-4 grid-square flex-sub">
-					<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-						<image :src="imgList[0]" mode="aspectFill"></image>
-						<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							<text class='cuIcon-close'></text>
-						</view>
-					</view>
-					<view class="solids" @tap="ChooseImage">
-						<text class='cuIcon-cameraadd'></text>
-					</view>
-				</view>
-			</view>
-			<view v-if="TabCurPicture==3" class="cu-bar bg-white solid-bottom">
-				<view class="action" style="margin:0px">
-					<text class="cuIcon-title text-orange "></text> 
-					<text>非常规技术检查</text>
-				</view>
-			</view>
-			<uni-collapse v-if="TabCurPicture==3" accordion="true">
-			    <uni-collapse-item :showBage="true" title="疑似过火车">
-						<uni-collapse style="padding:5px" accordion="true">
-							<uni-collapse-item title="车身覆盖件">
-			        <view style="padding: 30rpx;">
-			          <view class="grid col-4 grid-square flex-sub">
-			          	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			          		<image :src="imgList[0]" mode="aspectFill"></image>
-			          		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			          			<text class='cuIcon-close'></text>
-			          		</view>
-			          	</view>
-			          	<view class="solids" @tap="ChooseImage">
-			          		<text class='cuIcon-cameraadd'></text>
-			          	</view>
-			          </view>
-			        </view>
-							</uni-collapse-item>
-							<uni-collapse-item title="发动机舱">
-							<view style="padding: 30rpx;">
-							  <view class="grid col-4 grid-square flex-sub">
-							  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-							  		<image :src="imgList[0]" mode="aspectFill"></image>
-							  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							  			<text class='cuIcon-close'></text>
-							  		</view>
-							  	</view>
-							  	<view class="solids" @tap="ChooseImage">
-							  		<text class='cuIcon-cameraadd'></text>
-							  	</view>
-							  </view>
-							</view>
-							</uni-collapse-item>
-							<uni-collapse-item title="保险盒">
-							<view style="padding: 30rpx;">
-							  <view class="grid col-4 grid-square flex-sub">
-							  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-							  		<image :src="imgList[0]" mode="aspectFill"></image>
-							  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							  			<text class='cuIcon-close'></text>
-							  		</view>
-							  	</view>
-							  	<view class="solids" @tap="ChooseImage">
-							  		<text class='cuIcon-cameraadd'></text>
-							  	</view>
-							  </view>
-							</view>
-							</uni-collapse-item>
-							<uni-collapse-item title="排气管">
-							<view style="padding: 30rpx;">
-							  <view class="grid col-4 grid-square flex-sub">
-							  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-							  		<image :src="imgList[0]" mode="aspectFill"></image>
-							  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							  			<text class='cuIcon-close'></text>
-							  		</view>
-							  	</view>
-							  	<view class="solids" @tap="ChooseImage">
-							  		<text class='cuIcon-cameraadd'></text>
-							  	</view>
-							  </view>
-							</view>
-							</uni-collapse-item>
-							<uni-collapse-item title="车辆门柱">
-							<view style="padding: 30rpx;">
-							  <view class="grid col-4 grid-square flex-sub">
-							  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-							  		<image :src="imgList[0]" mode="aspectFill"></image>
-							  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-							  			<text class='cuIcon-close'></text>
-							  		</view>
-							  	</view>
-							  	<view class="solids" @tap="ChooseImage">
-							  		<text class='cuIcon-cameraadd'></text>
-							  	</view>
-							  </view>
-							</view>
-							</uni-collapse-item>
-						</uni-collapse>
-			    </uni-collapse-item>
-			    <uni-collapse-item title="疑似过水车">
-			      <uni-collapse style="padding:5px" accordion="true">
-			      	<uni-collapse-item title="内饰">
-			        <view style="padding: 30rpx;">
-			          <view class="grid col-4 grid-square flex-sub">
-			          	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			          		<image :src="imgList[0]" mode="aspectFill"></image>
-			          		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			          			<text class='cuIcon-close'></text>
-			          		</view>
-			          	</view>
-			          	<view class="solids" @tap="ChooseImage">
-			          		<text class='cuIcon-cameraadd'></text>
-			          	</view>
-			          </view>
-			        </view>
-			      	</uni-collapse-item>
-			      	<uni-collapse-item title="发动机舱">
-			      	<view style="padding: 30rpx;">
-			      	  <view class="grid col-4 grid-square flex-sub">
-			      	  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			      	  		<image :src="imgList[0]" mode="aspectFill"></image>
-			      	  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			      	  			<text class='cuIcon-close'></text>
-			      	  		</view>
-			      	  	</view>
-			      	  	<view class="solids" @tap="ChooseImage">
-			      	  		<text class='cuIcon-cameraadd'></text>
-			      	  	</view>
-			      	  </view>
-			      	</view>
-			      	</uni-collapse-item>
-			      	<uni-collapse-item title="行李箱">
-			      	<view style="padding: 30rpx;">
-			      	  <view class="grid col-4 grid-square flex-sub">
-			      	  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			      	  		<image :src="imgList[0]" mode="aspectFill"></image>
-			      	  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			      	  			<text class='cuIcon-close'></text>
-			      	  		</view>
-			      	  	</view>
-			      	  	<view class="solids" @tap="ChooseImage">
-			      	  		<text class='cuIcon-cameraadd'></text>
-			      	  	</view>
-			      	  </view>
-			      	</view>
-			      	</uni-collapse-item>
-			      	<uni-collapse-item title="底盘">
-			      	<view style="padding: 30rpx;">
-			      	  <view class="grid col-4 grid-square flex-sub">
-			      	  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			      	  		<image :src="imgList[0]" mode="aspectFill"></image>
-			      	  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			      	  			<text class='cuIcon-close'></text>
-			      	  		</view>
-			      	  	</view>
-			      	  	<view class="solids" @tap="ChooseImage">
-			      	  		<text class='cuIcon-cameraadd'></text>
-			      	  	</view>
-			      	  </view>
-			      	</view>
-			      	</uni-collapse-item>
-			      </uni-collapse>
-			    </uni-collapse-item>
-			    <uni-collapse-item title="疑似重大事故车">
-			      <uni-collapse style="padding:5px" accordion="true">
-			      	<uni-collapse-item title="纵梁">
-			        <view style="padding: 30rpx;">
-			          <view class="grid col-4 grid-square flex-sub">
-			          	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			          		<image :src="imgList[0]" mode="aspectFill"></image>
-			          		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			          			<text class='cuIcon-close'></text>
-			          		</view>
-			          	</view>
-			          	<view class="solids" @tap="ChooseImage">
-			          		<text class='cuIcon-cameraadd'></text>
-			          	</view>
-			          </view>
-			        </view>
-			      	</uni-collapse-item>
-			      	<uni-collapse-item title="横梁">
-			      	<view style="padding: 30rpx;">
-			      	  <view class="grid col-4 grid-square flex-sub">
-			      	  	<view v-if="imgList[0]" class="bg-img" @tap="ViewImage" :data-url="imgList[0]">
-			      	  		<image :src="imgList[0]" mode="aspectFill"></image>
-			      	  		<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="0">
-			      	  			<text class='cuIcon-close'></text>
-			      	  		</view>
-			      	  	</view>
-			      	  	<view class="solids" @tap="ChooseImage">
-			      	  		<text class='cuIcon-cameraadd'></text>
-			      	  	</view>
-			      	  </view>
-			      	</view>
-			      	</uni-collapse-item>
-			      </uni-collapse>
-			    </uni-collapse-item>
-			</uni-collapse>
-			<view v-if="TabCurPicture==3" class="cu-bar bg-white solid-bottom">
-				<view class="action" style="margin:0px">
-					<text class="cuIcon-title text-orange "></text> 静态检查
-				</view>
-			</view>
-			<view v-if="TabCurPicture==3" class="cu-bar bg-white solid-bottom">
-				<view class="action" style="margin:0px">
-					<text class="cuIcon-title text-orange "></text> 动态检查
-				</view>
-			</view>
-			<text class="mix-btn" @click="confirmImg">提交修改</text>
-		</view>
-	</scroll-view>	
+		<view v-show="TabCur==1" class="pay-type-list" style="padding: 0px 60upx">
+			<car-img v-on:goPreviewForm="goPreview" ref="carImgSon"></car-img>
+		</view>	
 		<!-- 车源图片编辑End -->
+	</scroll-view>
 	</view>
 </template>
 
@@ -468,8 +30,21 @@
 	import uniCollapseItem from '@/components/uni-collapse-item/uni-collapse-item.vue'
 	// import utils from '@/components/evan-form/utils.js'
 	import '@/common/utils'
+	import Config from '@/common/config.js'
+	import {
+		getCarDetail, 
+		getCarFollow, 
+		getCarImgsNormal, 
+		getCarImgsExt,
+		getCarImgsCer, 
+		getCarImgsAsse 
+	} from '@/api/carManage.js'
+	import CarInfo from './components/carInfo.vue'
+	import CarImg from './components/carImg.vue'
 	export default {
 		components: {
+			CarInfo,
+			CarImg,
 			EvanForm,
 			EvanFormItem,
 			uniCollapse,
@@ -480,194 +55,180 @@
 				payType: 1,
 				orderInfo: {},
 				hideRequiredAsterisk: false,
-				carTypeIndex: -1,
-				carType: ['轿车', 'SUV', '客车'],
-				date: '2018-12-25',
+				customerEdit: true,
+				carInfoEdit: false,
+				carImgEdit: false,
+				vinReturnModal: true,
 				modalName: null,
 				textareaAValue: '',
-				imgList: [],
 				TabCur: 0,
-				TabCurPicture: 0,
-				multiArray: [
-					['北京', '河北'],
-					['北京'],
-					// ['猪肉绦虫', '吸血虫']
-				],
-				objectMultiArray: [
-					[{
-							id: 0,
-							name: '北京'
-						},
-						{
-							id: 1,
-							name: '河北'
-						}
-					],
-					[{
-							id: 0,
-							name: '北京'
-						},
-						{
-							id: 1,
-							name: '石家庄'
-						},
-						{
-							id: 2,
-							name: '保定'
-						},
-						{
-							id: 3,
-							name: '唐山'
-						},
-						{
-							id: 4,
-							name: '张家口'
-						}
-					]
-				],
-				multiIndex: [0, 0],
-				
+				carId: null,
+				currentUser: null,
+				basicsList: [{
+					cuIcon: 'people',
+					name: '客户信息'
+				}, {
+					cuIcon: 'edit',
+					name: '基本信息'
+				}, {
+					cuIcon: 'picfill',
+					name: '车源图片'
+				}, {
+					cuIcon: 'roundcheckfill',
+					name: '完成'
+				}, ],
+				basics: 0,
 				// 表单的内容必须初始化
 				customer: {
+					id: null,
 					name: 'wcg',
-					phone: '13731080174',
+					telephone: '13731080174',
+					creater_id: null,
+					customer_res: 1,
+					shop_id: null,
 				},
-				carinfo: {
-					carname: '',
-					type: '',
-				}			
-			};
+				vinChanged:false,
+				vinCarList: [],
+				vinCarCheck: '0',	
+			}
 		},
 		mounted() {
 			// 这里必须放在mounted中，不然h5，支付宝小程序等会找不到this.$refs.form
 			// this.$refs.customerform.setRules(this.rules)
-			console.log(Math.pow(1.05, 10))
+			this.$refs.carInfoSon.isEdit = true
+			this.$refs.carImgSon.isEdit = true
+			this.$refs.carImgSon.imgData.Carid = this.carId
+			this.$refs.carImgSon.imgPgData.Carid = this.carId
+			/* console.log(this.$refs.carInfoSon)
+			console.log(this.$refs.carImgSon) */
+			// console.log(this.carId)
+			this.getCarDetailById()
+			this.getCarImgsNormal()
+			this.getCarImgsExt()
+			// this.getCarImgsCer()
+			this.getCarImgsAsse()
+			// console.log((Math.pow(1.03, 10)*10000).toFixed(0))
+			// console.log((Math.pow(1.05, 10)*10000).toFixed(0))
 		},
 		computed: {
 
 		},
 		onLoad(options) {
 			console.log(options)
+			this.carId = options.id
 		},
 
 		methods: {
+			tabSelect(e) { //标签切换
+				this.TabCur = e.currentTarget.dataset.id;
+			},
 			scanVin() {
 				console.log('gan jin sao')
 			},
-			PickerChange(e) {
-				this.carTypeIndex = e.detail.value
-			},
-			MultiChange(e) {
-				this.multiIndex = e.detail.value
-			},
-			textareaAInput(e) {
-				this.textareaAValue = e.detail.value
-			},
-			tabSelect(e) { //标签切换
-				this.TabCur = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-			},			
-			tabSelectP(e){ //图片编辑标签切换
-				this.TabCurPicture = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-			},
-			ChooseImage() {
-				uni.chooseImage({
-					count: 4, //默认9
-					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['camera', 'album'], //从相册选择
-					success: (res) => {
-						/* if (this.imgList.length != 0) {
-							this.imgList = this.imgList.concat(res.tempFilePaths)
-						} else {
-							this.imgList = res.tempFilePaths
-						} */
-						this.imgList = res.tempFilePaths
-						console.log(res)
-						console.log(res.tempFilePaths)
-						uni.getImageInfo({
-							src: res.tempFilePaths[0],
-							success: function(image) {
-								console.log(image.width);
-								console.log(image.height);
-							}
-						});
-					}
-				});
-			},
-			ViewImage(e) {
-				uni.previewImage({
-					urls: this.imgList,
-					current: e.currentTarget.dataset.url
-				});
-			},
-			DelImg(e) {
-				uni.showModal({
-					title: '召唤师',
-					content: '确定要删除这段回忆吗？',
-					cancelText: '再看看',
-					confirmText: '再见',
-					success: res => {
-						if (res.confirm) {
-							this.imgList.splice(e.currentTarget.dataset.index, 1)
-						}
-					}
+			getCarDetailById(){ //获取车源详情
+				getCarDetail(this.carId).then(res => {
+					console.log('carDetail',res.data)
+					let car_data = res.data.Data.cars
+					
+					car_data.BuyDate = car_data.BuyDate.split("T")[0]
+					car_data.InspectionTime = car_data.InspectionTime.split("T")[0]
+					car_data.Safe_end = car_data.Safe_end.split("T")[0]
+							
+					this.$refs.carInfoSon.carData = car_data
+					this.$refs.carInfoSon.carAreaDell(car_data.ProvenceId, car_data.Area); 
+					/* this.detail = res.data.Data
+					this.carImgExt = res.data.Data.carimages */
+					// this.loadingType = 'loading'
+				}).catch(err => {
+					this.$api.msg(`获取数据失败,请刷新重试`);
 				})
 			},
-			MultiColumnChange(e) {
-
-				let data = {
-					multiArray: this.multiArray,
-					multiIndex: this.multiIndex
-				};
-				const column = e.detail.column;
-				const value = e.detail.value;
-				/* console.log('哥,你滚了')
-				console.log('column',column)
-				console.log('value',value) */
-				data.multiIndex[column] = value;
-				switch (column) {
-					case 0:
-						switch (data.multiIndex[0]) {
-							case 0:
-								// console.log('你选了首都')
-								this.multiArray[1] = ['北京'];
-								break;
-							case 1:
-								// console.log('你选了河北省')
-								this.multiArray[1] = ['石家庄', '保定', '唐山', '张家口'];
-								break;
+			getCarImgsNormal(){ //获取车源基本图片
+			  var _this = this
+				getCarImgsNormal(this.carId).then(res => {
+					console.log('carimg_normal',res.data)
+					let dellListNormal = []
+					let dellListPaper = []
+					res.data.Data.forEach((item, index)=>{
+						if(index  < 10){
+							item.imgUrl = Config.img_url + item.filename
+							dellListNormal.push(item)
+							_this.$refs.carImgSon.imgUpShow[item.carpart] = false
+						}else{
+							item.imgUrl = Config.img_url + item.filename
+							dellListPaper.push(item)
+							_this.$refs.carImgSon.imgUpShow[item.carpart] = false
 						}
-						this.multiIndex.splice(1, 0)
-						// console.log('你咋不选')
-						break;
-				}
-				this.multiArray = data.multiArray;
-				this.multiIndex = data.multiIndex;
-			},
-			DateChange(e) {
-				this.date = e.detail.value
-			},
-			confirm() {
-				this.$refs.customerform.validate((res) => {
-					if (res) {
-						uni.showToast({
-							title: '验证通过',
-						})
-						this.customerEdit = false
-						this.carInfoEdit = true
-						this.basics = 1
-					}
+					})
+					_this.$refs.carImgSon.imgList = dellListNormal
+					_this.$refs.carImgSon.imgListPaper = dellListPaper
+					// console.log('nor',dellListNormal)
+					// console.log(dellListPaper)
+					// this.loadingType = 'loading'
+				}).catch(err => {
+					this.$api.msg(`获取数据失败,请刷新重试`);
 				})
 			},
-			confirmInfo() {
-				this.customerEdit = false
-				this.carInfoEdit = false
-				this.carImgEdit = true
-				this.basics = 2
+			// getCarImgsCer(){ //获取车源证件图片
+			// 	getCarImgsCer(this.carId).then(res => {
+			// 		console.log('carimg_normal',res.data)
+			// 		this.carImgCer = res.data.Data
+			// 		// this.loadingType = 'loading'
+			// 	}).catch(err => {
+			// 		this.$api.msg(`获取数据失败,请刷新重试`);
+			// 	})
+			// },
+			getCarImgsExt(){ //获取车源附加图片
+				var _this = this
+				getCarImgsExt(_this.carId).then(res => {
+					let dellListOther = []
+					res.data.Data.forEach((item, index)=>{
+						item.imgUrl = Config.img_url + item.filename
+						dellListOther.push(item)
+					})
+					// _this.$refs.carImgSon.imgUpShow[item.carpart] = false
+					_this.$refs.carImgSon.imgListOther = dellListOther
+					console.log('other', dellListOther)
+				}).catch(err => {
+					_this.$api.msg(`获取数据失败,请刷新重试`);
+				})
 			},
-			confirmImg() {
-
+			getCarImgsAsse(){ //获取车源评估图片
+				var _this = this
+				getCarImgsAsse(this.carId).then(res => {
+					console.log('carimg_pg',res.data)
+					res.data.Data.forEach((item, index)=>{
+						item.imgUrl = Config.img_url + item.filename
+						item.ImageType = item.imagetype
+					})
+					_this.$refs.carImgSon.imgPgList = res.data.Data;
+					_this.$refs.carImgSon.imgPgDell();
+					// console.log(_this.$refs.carImgSon.imgListPgCurrent)
+					// this.carImgAsse = res.data.Data
+					// this.loadingType = 'loading'
+				}).catch(err => {
+					console.log('err', err)
+					_this.$api.msg(`获取数据失败,请刷新重试`);
+				})
+			},
+			goPreview(carId){
+				this.$api.msg(`编辑成功`,1000);
+				setTimeout(()=>{
+					uni.navigateTo({
+						// url: '/pages/car/customer'
+						url: '/pages/car/show?carId=' + carId
+					})
+				}, 1100)
+			},
+			goImg(carId){
+				console.log("触发了编辑父页面内的方法", carId);
+				this.$api.msg(`编辑成功`,1000);
+				setTimeout(()=>{
+					uni.navigateTo({
+						// url: '/pages/car/customer'
+						url: '/pages/car/show?carId=' + carId
+					})
+				}, 1100)		
 			},
 		}
 	}

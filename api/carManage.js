@@ -109,6 +109,42 @@ export function getCarImgsAsse(carId) {
 	)
 }
 
+//废弃/激活车源
+export function abandOrActiv(data) {
+	
+	const requestUrl = Config.url_config + '/car/carstatus'
+	return httpApi.get(
+		requestUrl, { params: { ...data } }
+	)
+}
+
+//评估车源
+export function carAssess(data) {
+	
+	const requestUrl = Config.url_config + '/car/careval'
+	return httpApi.post(
+		requestUrl, { ...data }
+	)
+}
+
+//上架车源
+export function carPutOn(data) {
+	
+	const requestUrl = Config.url_config + '/car/carputon'
+	return httpApi.get(
+		requestUrl, { params: { ...data } }
+	)
+}
+
+//跟进
+export function carFollow(data) {
+	
+	const requestUrl = Config.url_config + '/car/carfollow'
+	return httpApi.get(
+		requestUrl, { params: { ...data } }
+	)
+}
+
 //vin码是否重复
 export function vinRepeatCheck(vinCode) {
 	

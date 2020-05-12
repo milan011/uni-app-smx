@@ -132,6 +132,8 @@
 			this.$refs.carImgSon.imgUser.shop_id = this.currentUser.shop_id
 			this.$refs.carImgSon.imgUser.pshop_id = this.currentUser.pshop_id
 			console.log("mounted",this.$refs.carInfoSon.carData)
+			console.log(this.$refs.carInfoSon)
+			console.log(this.$refs.carImgSon)
 			// this.$refs.carInfoSon.carTypeConfig = carTypeConfig
 			// this.resetCustomer()
 			// console.log(Math.pow(1.06, 10))

@@ -9,7 +9,7 @@
 	import citys from './citys.js'
 	import citySelect from '@/components/city-select/city-select.vue'
 	// import amap from '../../common/._amap-wx.js';
-	
+
 	export default {
 		data() {
 			return {
@@ -42,32 +42,60 @@
 		},
 		onLoad() {
 			this.activeCity.cityName = "正在定位中"
+			// 城市初始化
 			let that = this
-			// this.amapPlugin = new amap.AMapWX({
-			// 	key: this.key
-			// });
-			// this.amapPlugin.getRegeo({
-			// 	success: function(data) {
-			// 		//成功回调
-			// 		console.log(data)
-			// 		that.activeCity.cityName = data[0].regeocodeData.addressComponent.city
-			// 	},
-			// 	fail: function(info) {
-			// 		//失败回调
-			// 		console.log(info)
-			// 	}
-			// })
+			//#ifndef H5
+			uni.getStorage({
+				key: 'city',
+				success: function(res) {
+					// that.city = res.data
+					let arr = res.data.split("")
+					let index = arr.length - 1
+					if (arr[index] == "市") {
+						let arr1 = arr.pop()
+						that.activeCity.cityName = arr.join("")
+					} else {
+						that.activeCity.cityName = res.data
+					}
+				}
+			});
+			//#endif
+			//#ifdef H5
+			uni.getStorage({
+				key: 'citys',
+				success: function(res) {
+					that.city = res.data
+					let arr = res.data.split("")
+					let index = arr.length - 1
+					if (arr[index] == "市") {
+						let arr1 = arr.pop()
+						that.activeCity.cityName = arr.join("")
+					} else {
+						that.activeCity.cityName = res.data
+					}
+				}
+			});
+			//#endif
 		},
 		methods: {
 			cityClick(item) {
-				uni.showToast({
-					icon: 'none',
-					title: 'item: ' + JSON.stringify(item),
-					// #ifdef MP-WEIXIN
-					duration: 3000,
-					// #endif
-					mask: true
+				console.log(item)
+				let city = item.cityName
+				//#ifndef H5
+				uni.setStorage({
+					key: 'city',
+					data: city.split("市")[0]
 				})
+				//#endif
+				//#ifdef H5
+				uni.setStorage({
+					key: 'citys',
+					data: city.split("市")[0]
+				})
+				//#endif
+				uni.reLaunch({
+				    url: '../index/index'
+				});
 			}
 		}
 	}

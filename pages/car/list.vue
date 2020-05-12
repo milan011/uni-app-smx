@@ -141,7 +141,7 @@
 					Factory: "",
 					Out_color: "",
 					Capacity: "",
-					Sale_number: "",
+					Sale_number: "-1",
 					StarTime: "",
 					EndTime: "",
 					MileageMin: "",
@@ -150,7 +150,7 @@
 					SaleAMTMax: "",
 					RoleName: "",
 					updatetime: "",
-					Car_Status: '',
+					Car_Status: '1',
 					IsPutOn: -1,
 					Shop_Id: ""
 				},
@@ -164,6 +164,7 @@
 					this.car.RoleName = res.data.rolename.split(',')[0]
 					this.car.Shop_Id = res.data.shop_id
 					this.car.CreateID = res.data.id
+					this.loadData();
 				},
 				fail: () => {
 					uni.showToast({
@@ -173,7 +174,6 @@
 					})
 				}
 			})
-			this.loadData();
 		},
 		//下拉刷新
 		onPullDownRefresh() {
@@ -187,7 +187,7 @@
 			this.car.EndTime = ''
 			this.car.CarType = 0
 			this.car.Transmission = 0
-			this.car.Car_Status = ''
+			this.car.Car_Status = '1'
 			this.car.IsPutOn = -1
 			this.car.PageIndex = 1
 			// this.loadData()
@@ -287,6 +287,16 @@
 				this.car.IsPutOn = e.detail.value - 1
 				this.putOnIndex = e.detail.value
 				console.log(this.car.IsPutOn)
+			},
+			changebxs(e){
+				this.car.Transmission = e.detail.value
+			},
+			doSeach(){
+				console.log(this.car)
+				this.car.pageIndex = 1
+				this.cartList = []
+				this.loadData();
+				this.hideModal();
 			},
 			//创建订单
 			createCar() {

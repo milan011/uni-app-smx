@@ -467,12 +467,24 @@
 		},
 		methods:{
 			doDel(){
+				let that = this
 				uni.showModal({
 				    title: '是否删除?',
 				    content: '确定删除此条合同吗?注：删除后将无法恢复!',
 				    success: function (res) {
 				        if (res.confirm) {
-				            deleteContract({id:this.formdata.id})
+				            deleteContract({id:that.formdata.id}).then(res=>{
+								uni.showToast({
+									title:'删除成功',
+									icon:'success',
+									duration:1500
+								})
+								setTimeout(()=>{
+									uni.navigateBack({
+										delta:1
+									})
+								},1500)
+							})
 				        } else if (res.cancel) {
 				            console.log('用户点击取消');
 				        }

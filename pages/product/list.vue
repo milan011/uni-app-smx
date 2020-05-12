@@ -1,6 +1,7 @@
 <template>
 	<view class="content">
-		<HMfilterDropdown :filterData="menuData" ref="filterDropdown" :defaultSelected="filterDropdownValue" :updateMenuName="true" @confirm="confirm"></HMfilterDropdown>
+		<HMfilterDropdown :filterData="menuData" ref="filterDropdown" :defaultSelected="filterDropdownValue" :updateMenuName="true"
+		 @confirm="confirm"></HMfilterDropdown>
 		<view class="goods-list">
 			<view style="width: 100%;" class="cu-card article no-card" v-for="(item, index) in goodsList" :key="index" @click="navToDetailPage(item)">
 				<view class="cu-item shadow">
@@ -164,7 +165,11 @@
 						that.car.SaleAMTMax = arr[1]
 						that.loadData();
 					} else {
-						that.car.Factory = res.data.factory
+						if (res.data.factory === true) {
+							that.car.Factory = ''
+						} else {
+							that.car.Factory = res.data.factory
+						}
 						that.loadData();
 					}
 				},
@@ -174,9 +179,14 @@
 			})
 		},
 		onPullDownRefresh() {
+			this.filterDropdownValue = []
 			var that = this
 			this.$refs.filterDropdown.resetFilterData(2);
+			this.$refs.filterDropdown.setFilterData(2);
 			this.$refs.filterDropdown.resetFilterData(3);
+			this.$refs.filterDropdown.setFilterData(3);
+			this.$refs.filterDropdown.selectHierarchyMenu(0, 0);
+			this.$refs.filterDropdown.selectHierarchyMenu(1, 0, 0);
 			this.car.OrderPriceMin = ""
 			this.car.OrderYearMin = ""
 			this.car.OrderNew = ""
@@ -215,7 +225,6 @@
 		onReachBottom() {
 			let num = Math.ceil(this.total / this.car.PageSize)
 			if (this.car.PageIndex == num || this.car.PageIndex > num) {
-				this.car.PageIndex = 1
 				return
 			} else {
 				this.car.PageIndex++
@@ -344,16 +353,16 @@
 				let value = val.value
 				if (value[0] == '价格最低') {
 					this.car.OrderPriceMin = true
-						this.car.OrderYearMin = ""
-						this.car.OrderNew = ""
-					} else if (value[0] == '车龄最短') {
-						this.car.OrderYearMin = true
-						this.car.OrderPriceMin = ""
-						this.car.OrderNew = ""
-					} else if (value[0] == '里程最低') {
-						this.car.OrderNew = true
-						this.car.OrderPriceMin = ""
-						this.car.OrderYearMin = ""
+					this.car.OrderYearMin = ""
+					this.car.OrderNew = ""
+				} else if (value[0] == '车龄最短') {
+					this.car.OrderYearMin = true
+					this.car.OrderPriceMin = ""
+					this.car.OrderNew = ""
+				} else if (value[0] == '里程最低') {
+					this.car.OrderNew = true
+					this.car.OrderPriceMin = ""
+					this.car.OrderYearMin = ""
 				} else {
 					this.car.OrderPriceMin = ""
 					this.car.OrderYearMin = ""
@@ -472,6 +481,7 @@
 			font-size: 30upx;
 			color: $font-color-dark;
 			position: relative;
+
 			&.current {
 				color: $base-color;
 

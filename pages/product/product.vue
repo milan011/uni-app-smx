@@ -8,6 +8,7 @@
 					</view>
 				</swiper-item>
 			</swiper>
+			<image src="../../static/collect.png" mode="" @click="doCollect" class="collect"></image>
 		</view>
 
 		<view class="introduce-section">
@@ -19,10 +20,10 @@
 			<view class="c-list">
 				<view class="c-row b-b">
 					<view class="con-list">
-						<text>销售顾问: {{ carDetail.EvalName}}({{ carDetail.shop.name }})</text>
-						<text>门店地址: {{ carDetail.shop.address}}</text>
-						<text>发布时间: {{ carDetail.CreateDate}}</text>
-						<text>联系电话: {{ carDetail.Telephone}}</text>
+						<text>销售顾问: {{ carDetail.EvalName?carDetail.EvalName:"暂无数据"}}({{ carDetail.shop.name }})</text>
+						<text>门店地址: {{ carDetail.shop.address? carDetail.shop.address:'暂无数据'}}</text>
+						<text>发布时间: {{ carDetail.CreateDate? carDetail.CreateDate:"暂无数据"}}</text>
+						<text>联系电话: {{ carDetail.Telephone?carDetail.Telephone:"暂无数据"}}</text>
 					</view>
 				</view>
 			</view>
@@ -73,7 +74,7 @@
 						</view>
 						<view class="tj-item">
 							<text if="carDetail.cars.BuyDate" class="num">
-								{{ carDetail.cars.BuyDate.substring(0,carDetail.cars.BuyDate.indexOf('T')) }}
+								{{ carDetail.cars.BuyDate?carDetail.cars.BuyDate.split("T")[0]:"暂无数据" }}
 							</text>
 							<text>上牌时间</text>
 						</view>
@@ -167,7 +168,7 @@
 				specSelected: [],
 				carDetail: {
 					"cars": {
-						BuyDate: "",
+						BuyDate: 'T'
 					},
 					"shop": {},
 					"user": {},
@@ -214,6 +215,10 @@
 				id
 			})
 			this.carDetail = carDetail.data.Data;
+			console.log(this.carDetail)
+			if (this.carDetail.cars.BuyDate == null) {
+				this.carDetail.cars.BuyDate = ''
+			}
 			// 浏览历史
 			let browseList = [];
 			uni.getStorage({
@@ -370,16 +375,74 @@
 					url: `/pages/product/product?id=${id}`
 				})
 			},
-			goPutOn(){
+			// 收藏
+			doCollect() {
+				let collectList = [];
+				uni.getStorage({
+					key: 'collectList',
+					success: (res) => {
+						collectList = res.data
+						let index = res.data.findIndex(ele => {
+							return this.carDetail.cars.ID == ele.cars.ID
+						})
+						console.log('index1==>', res.data.findIndex(ele => {
+							return ele.cars.ID == this.carDetail.cars.ID
+						}))
+						if (index == -1) {
+							collectList.unshift(this.carDetail)
+							uni.setStorage({
+								key: 'collectList',
+								data: collectList,
+								success: () => {
+									uni.showToast({
+										title: '已收藏',
+										icon: "success",
+										duration: 1500
+									})
+								}
+							})
+						} else {
+							collectList.splice(index, 1)
+							collectList.unshift(this.carDetail)
+							uni.setStorage({
+								key: 'collectList',
+								data: collectList,
+								success: () => {
+									uni.showToast({
+										title: '已收藏',
+										icon: "success",
+										duration: 1500
+									})
+								}
+							})
+						}
+					},
+					fail: () => {
+						collectList.unshift(this.carDetail)
+						uni.setStorage({
+							key: 'collectList',
+							data: collectList,
+							success: () => {
+								console.log('set')
+							}
+						})
+					}
+				})
+			},
+			goPutOn() {
 				uni.navigateTo({
 					url: `/pages/car/list`
 				})
 			},
-			reEdit(){
+			reEdit() {
 				console.log(this.car.Carid)
 				uni.navigateTo({
 					url: `/pages/car/list`
 				})
+
+			},
+			stopPrevent() {
+
 			}
 		},
 
@@ -479,6 +542,14 @@
 		height: 722upx;
 		position: relative;
 
+		.collect {
+			position: absolute;
+			right: 40upx;
+			bottom: -30upx;
+			width: 60upx;
+			height: 60upx;
+		}
+
 		swiper {
 			height: 100%;
 		}
@@ -486,7 +557,8 @@
 		.image-wrapper {
 			width: 100%;
 			height: 100%;
-		}		
+		}
+
 		.swiper-item {
 			display: flex;
 			justify-content: center;
@@ -500,6 +572,7 @@
 			}
 		}
 	}
+
 	.mix-btn {
 		display: flex;
 		align-items: center;
@@ -513,6 +586,7 @@
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
 	}
+
 	/* 标题简介 */
 	.introduce-section {
 		background: #fff;

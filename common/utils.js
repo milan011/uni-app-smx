@@ -114,7 +114,7 @@ const utils = {
 					validateResault['validateInfo'].unshift(info)
 					validateResault['validateType'] = false
 				}
-				if(data['BasePrice'] > data['SaleAMT']){ //期望低价高于期望高价
+				if(Number(data['BasePrice']) > Number(data['SaleAMT'])){ //期望低价高于期望高价
 					const info = {key: '期望价格', message: '期望低价应小于高价'}
 					validateResault['validateInfo'].unshift(info)
 					validateResault['validateType'] = false

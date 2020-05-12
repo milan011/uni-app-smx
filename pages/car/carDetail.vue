@@ -273,7 +273,7 @@
 					</view>
 				</view>
 				<view class="grid col-4 grid-square flex-sub">
-					<view v-if="index >= 10" v-for="(img,index) in carImgNormal" :key="index" class="bg-img" @tap="ViewImage" :data-url="imgUrl + img.filename">
+					<view v-if="index >= 10" v-for="(img,index) in carImgExt" :key="index" class="bg-img" @tap="ViewImage" :data-url="imgUrl + img.filename">
 						<image :src="imgUrl + img.filename" mode="aspectFit"></image>
 					</view>
 				</view>
@@ -535,6 +535,7 @@
 				getCarDetail(this.carId).then(res => {
 					console.log('carDetail',res.data)
 					this.detail = res.data.Data
+					this.carImgExt = res.data.Data.carimages
 					// this.loadingType = 'loading'
 				}).catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
@@ -553,6 +554,7 @@
 				getCarImgsNormal(this.carId).then(res => {
 					console.log('carimg_normal',res.data)
 					this.carImgNormal = res.data.Data
+					console.log(this.carImgNormal)
 					// this.loadingType = 'loading'
 				}).catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);

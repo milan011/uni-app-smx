@@ -22,15 +22,12 @@
 
 			<view class="tj-sction">
 				<view class="tj-item">
-					<text class="num">17</text>
 					<text @click="navTo('/pages/car/list')">车源</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">0</text>
 					<text @click="navTo('/pages/wantBuy/wantBuy')">求购</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">20</text>
 					<text>交易</text>
 				</view>
 			</view>
@@ -58,17 +55,20 @@
 			<view class="history-section icon">
 				<view class="sec-header">
 					<text class="yticon icon-lishijilu"></text>
-					<text>浏览历史</text>
+					<text class="cell-tit clamp">浏览历史</text>
+					<text class="cuIcon-delete icons" @click="removeCache"></text>
 				</view>
 				<scroll-view scroll-x class="h-list">
 					<image v-for="(item,index) in imgList" :key='index' @click="navTo('/pages/product/product?id='+item.id)" :src="img_url+item.url"
 					 mode="aspectFill"></image>
 				</scroll-view>
-				<list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="公告" tips="您的会员还有3天过期"></list-cell>
-				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')"></list-cell>
+				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" @eventClick="navTo('/pages/collect/collect')" title="我的收藏"></list-cell>
+				<!-- <list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="公告" tips="您的会员还有3天过期"></list-cell> -->
+				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')
+				
+				"></list-cell>
 				<!-- <list-cell icon="icon-share" iconColor="#9789f7" title="分享" tips="邀请好友赢10万大礼"></list-cell> -->
 				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="协议管理" @eventClick="navTo('/pages/protocol/protocol')"></list-cell>
-				<!-- <list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏"></list-cell> -->
 				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>
@@ -119,8 +119,10 @@
 							}
 						}
 					}
-					console.log(this.imgList)
-				})
+				}),
+				fail:()=> {
+					console.log('未获取')
+				}
 			})
 
 		},
@@ -199,6 +201,24 @@
 				this.moving = false;
 				this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
 				this.coverTransform = 'translateY(0px)';
+			},
+			// 清空浏览历史
+			removeCache(){
+				let that = this
+				uni.showModal({
+				    title: '是否清空',
+				    content: '确定要清空浏览历史吗？',
+				    success: function (res) {
+				        if (res.confirm) {
+							 that.imgList = []
+				             uni.removeStorage({
+								 key:'browseList'
+							 })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
 			}
 		}
 	}
@@ -210,7 +230,7 @@
 		justify-content: center;
 		align-items: center;
 	}
-
+	
 	%section {
 		display: flex;
 		justify-content: space-around;
@@ -218,7 +238,9 @@
 		background: #fff;
 		border-radius: 10upx;
 	}
-
+	.icons{
+		margin-left: 420upx;
+	}
 	.user-section {
 		height: 520upx;
 		padding: 100upx 30upx 0;

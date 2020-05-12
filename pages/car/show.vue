@@ -21,14 +21,15 @@
 				<text class="yticon icon-shouye"></text>
 				<text>查看</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/car/carEdit??id=' + carId)" hover-class="common-hover"
+			<view class="order-item" @click="navTo('/pages/car/carEdit?id=' + carId)" hover-class="common-hover"
 			 :hover-stay-time="50">
 				<text class="yticon icon-daifukuan"></text>
 				<text>编辑</text>
 			</view>
 			<view class="order-item" @tap="showModal" data-target="ModalScrap" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-daifukuan"></text>
-				<text>废弃/激活</text>
+				<text v-if="detail.cars.Car_Status == 1">废弃</text>
+				<text v-if="detail.cars.Car_Status == 0">激活</text>
 			</view>
 		</view>
 		<view class="order-section">
@@ -40,7 +41,7 @@
 				<text class="yticon icon-shouhoutuikuan"></text>
 				<text>跟进</text>
 			</view>
-			<view class="order-item" @tap="showModal" data-target="ModalFollow" hover-class="common-hover" :hover-stay-time="50">
+			<view v-if="!detail.cars.IsPutOn" class="order-item" @tap="showModal" data-target="carPutOn" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-shouhoutuikuan"></text>
 				<text>上架</text>
 			</view>
@@ -74,25 +75,50 @@
 		<view class="cu-modal" :class="modalName=='ModalScrap'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
-					<view class="content">废弃车源</view>
+					<view class="content" v-if="detail.cars.Car_Status == 1">废弃车源</view>
+					<view class="content" v-if="detail.cars.Car_Status == 0">激活车源</view>
 					<view class="action" @tap="hideModal">
 						<text class="cuIcon-close text-red"></text>
 					</view>
 				</view>
-				<view class="padding-xl">
+				<view v-if="detail.cars.Car_Status == 1" class="padding-xl">
 					您确定要废弃该车源吗
+				</view>
+				<view v-if="detail.cars.Car_Status == 0" class="padding-xl">
+					您确定要激活该车源吗
 				</view>
 				<view class="cu-bar bg-white justify-end">
 					<view class="action">
 						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-						<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+						<button class="cu-btn bg-green margin-left" @tap="abandActiv">确定</button>
 					</view>
 				</view>
 			</view>
 		</view>
 		<!-- 废弃modal End -->
+		<!-- 上架modal Begin -->
+		<view class="cu-modal" :class="modalName=='carPutOn'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content" v-if="detail.cars.Car_Status == 1">上架车源</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					您确定要上架该车源吗
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="carPutOnDel">确定</button>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 上架modal End -->
 		<!-- 评估modal Begin -->
-		<view class="cu-modal" :class="modalName=='ModalAssess'?'show':''">
+		<view class="cu-modal" style="z-index: 10;" :class="modalName=='ModalAssess'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
 					<view class="content">评估车源</view>
@@ -102,25 +128,25 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group nu-style">
-						<view class="title">期望价格</view>
-						<input style="text-align: right;" placeholder="请输入期望价格" name="input"></input>
+						<view class="title">评估指导价</view>
+						<input style="text-align: right;" type="number" v-model="assessInfo.EvalAMT" placeholder="请输入评估指导价" name="input"></input>
 						<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 					</view>
 					<view class="cu-form-group margin-top">
-						<textarea maxlength="-1" @input="textareaAInput" placeholder="评估描述"></textarea>
+						<textarea maxlength="-1" v-model="assessInfo.Pg_description" @input="textareaBInput" placeholder="评估师描述"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">
 					<view class="action">
 						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-						<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+						<button class="cu-btn bg-green margin-left" @tap="accessCarSend">确定</button>
 					</view>
 				</view>
 			</view>
 		</view>
 		<!-- 评估modal End -->
 		<!-- 跟进modal Begin -->
-		<view class="cu-modal" :class="modalName=='ModalFollow'?'show':''">
+		<view class="cu-modal" style="z-index: 10;" :class="modalName=='ModalFollow'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
 					<view class="content">车源跟进</view>
@@ -130,13 +156,13 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group margin-top">
-						<textarea maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
+						<textarea v-model="quickFollow.content" maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">
 					<view class="action">
 						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-						<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+						<button class="cu-btn bg-green margin-left" @tap="followSend">确定</button>
 					</view>
 				</view>
 			</view>
@@ -149,7 +175,13 @@
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import { carStatusConfig, putOnStatusConfig } from '@/common/appConfig.js';
 	import listCell from '@/components/mix-list-cell';
-	import { getCarDetail,getCarFollow } from '@/api/carManage.js'
+	import { 
+		getCarDetail, 
+		getCarFollow, 
+		abandOrActiv, 
+		carFollow, 
+		carPutOn, 
+		carAssess } from '@/api/carManage.js'
 	import {
 		mapState
 	} from 'vuex';
@@ -185,6 +217,18 @@
 					customer: {},
 					carimages: []
 				},
+				assessInfo:{
+					ID: null,
+					InitPrice: 0,
+					EvalAMT: null,
+					Pg_description: '',
+				},
+				quickFollow:{
+					id: null,
+					content: '',
+					type: 1,
+					username: '',
+				},
 				carStatusConfig:[],
 				putOnStatusConfig: {},
 				followInfo: {}
@@ -192,9 +236,14 @@
 		},
 		onLoad(options) {
 			console.log(options)
+			console.log('user', uni.getStorageSync('userInfo'))
+			let user = uni.getStorageSync('userInfo')
 			/* this.carStatusConfig = this.$api.config('carStatusConfig');
 			this.inputStatusConfig = this.$api.config('inputStatusConfig'); */
 			this.carId = options.carId
+			this.quickFollow.id = options.carId
+			this.assessInfo.ID = options.carId
+			this.quickFollow.username = user.nick_name
 			// this.carId = '9228'
 			this.carStatusConfig = carStatusConfig
 			this.putOnStatusConfig = putOnStatusConfig
@@ -230,6 +279,7 @@
 				getCarDetail(this.carId).then(res => {
 					console.log('carDetail',res.data)
 					this.detail = res.data.Data
+					this.assessInfo.InitPrice = res.data.Data.cars.InitPrice
 					// this.loadingType = 'loading'
 				}).catch(err => {
 					this.$api.msg(`获取车源数据失败,请刷新重试`);
@@ -241,8 +291,83 @@
 					this.followInfo = res.data.Data[0]
 					// this.loadingType = 'loading'
 				}).catch(err => {
+					// console.log(err)
 					this.$api.msg(`获取跟踪数据失败,请刷新重试`);
 				})
+			},
+			carPutOnDel(){
+				var _this = this
+				console.log(_this.detail.carimages)
+				if(_this.detail.carimages.length < 9){
+					_this.$api.msg(`请完善车源基础图片后再上架`);
+				}else{
+					carPutOn({carid: _this.detail.cars.ID , putton: 1}).then(res=>{
+						console.log(res.data)
+						if(res.data.ResultType == 0){
+							_this.$api.msg(`车源已上架`);
+							_this.modalName = null
+							_this.detail.cars.IsPutOn = true
+						}
+					})
+				}
+			},
+			accessCarSend(){ //车源评估
+				if(!this.assessInfo.Pg_description || !this.assessInfo.EvalAMT){
+					this.$api.msg(`请输入描述信息或评估价格`);
+				}else{
+					console.log('sldsjldfj')
+					carAssess(this.assessInfo).then(res=>{
+						// console.log(res.data)
+						if(res.data.ResultType == 0){
+							this.$api.msg(`车源评估成功`);
+							this.modalName = null
+						}
+					})
+				}
+			},
+			followSend(){ //跟进
+				if(!this.quickFollow.content){
+					this.$api.msg(`请输入跟进内容`);
+				}else{
+					carFollow(this.quickFollow).then(res=>{
+						// console.log(res.data)
+						if(res.data.ResultType == 0){
+							this.$api.msg(`跟进成功`);
+							this.modalName = null
+						}
+					})
+				}
+			},
+			abandActiv(){ //废弃激活		
+				if(this.detail.cars.Car_Status == 1){ //废弃
+					console.log('废弃', this.detail.cars.ID)
+					const param = {id: this.detail.cars.ID, status: 0}
+					abandOrActiv(param).then(res=>{
+						if(res.data.ResultType == 0){
+							this.modalName = null
+							this.$api.msg(`车源已废弃`);
+							this.getCarDetailById()
+							this.getCarFollowById()
+							uni.navigateTo({
+								url: `/pages/car/list`
+							})
+						}			
+					})
+				}
+				if(this.detail.cars.Car_Status == 0){ //激活
+					const param = {id: this.detail.cars.ID, status: 1}
+					abandOrActiv(param).then(res=>{
+						if(res.data.ResultType == 0){
+							this.modalName = null
+							this.$api.msg(`车源已激活`);
+							this.getCarDetailById()
+							this.getCarFollowById()
+							uni.navigateTo({
+								url: `/pages/car/list`
+							})
+						}
+					})
+				}
 			},
 			/**
 			 * 统一跳转接口,拦截未登录路由
@@ -262,7 +387,10 @@
 				})
 			},
 			textareaAInput(e) {
-				this.textareaAValue = e.detail.value
+				this.quickFollow.content = e.detail.value
+			},
+			textareaBInput(e){
+				this.assessInfo.Pg_description = e.detail.value
 			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target

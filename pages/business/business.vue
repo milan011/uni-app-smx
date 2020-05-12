@@ -104,7 +104,7 @@
 				loadingType: 'more',
 				business: {
 					pageindex: 1,
-					pagesize: 14,
+					pagesize: 16,
 					mobile: "",
 					categoryname: "",
 					enrooltype: "",
@@ -133,18 +133,32 @@
 				success: (res) => {
 					this.business.shopid = res.data.shop_id
 					this.business.rolename = res.data.rolename.split(",")[0]
+					this.init()
+					this.getshop()
 				}
 			})
-			this.init()
-			this.getshop()
+		},
+		onShow() {
+			this.businessList = []
+			uni.getStorage({
+				key: 'userInfo',
+				success: (res) => {
+					this.business.shopid = res.data.shop_id
+					this.business.rolename = res.data.rolename.split(",")[0]
+					this.init()
+					this.getshop()
+				}
+			})
 		},
 		onPullDownRefresh() {
+			this.businessList = []
+			this.business.pageindex = 1
 			this.business.mobile = ""
 			this.business.categoryname = ''
 			this.business.enrooltype = ''
 			this.business.starttime = ''
 			this.business.endtime = ''
-			this.business.status = ''
+			this.business.status = 1
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
@@ -179,6 +193,11 @@
 					} else {
 						this.loadingType = "nomore"
 					}
+				}).catch(()=>{
+					uni.showToast({
+						title:'登录超时',
+						icon:'none'
+					})
 				})
 			},
 			showModal(e) {
@@ -213,17 +232,17 @@
 				uni.getStorage({
 					key: "userInfo",
 					success: (res) => {
-						id = res.data.shop_id
+						getShopList({
+							id:res.data.shop_id
+						}).then(res => {
+							this.shopList = res.data.Data
+							this.shopList.unshift({
+								name: "全部"
+							})
+						})
 					}
 				})
-				getShopList({
-					id
-				}).then(res => {
-					this.shopList = res.data.Data
-					this.shopList.unshift({
-						name: "全部"
-					})
-				})
+				
 			},
 			changeShop(e) {
 				this.shopIndex = e.detail.value

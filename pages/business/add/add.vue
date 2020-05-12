@@ -44,9 +44,19 @@
 					category_name:"",
 					city_name:"",
 					provence_id:"",
-					area:""
+					area:"",
+					ff_shop:'',
+					id:0
 				},
 			}
+		},
+		onLoad(options) {
+			uni.getStorage({
+				key:'userInfo',
+				success:(res)=>{
+					this.business.ff_shop = res.data.shop_id
+				}
+			})
 		},
 		methods:{
 			verificationName(e) {
@@ -95,8 +105,8 @@
 							duration:1500
 						})
 						setTimeout(()=>{
-							uni.navigateTo({
-								url:'../business'
+							uni.navigateBack({
+								delta:1
 							})
 						},1500)
 					})

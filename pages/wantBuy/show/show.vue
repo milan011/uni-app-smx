@@ -222,7 +222,7 @@
 			doSave() {
 				statusWant({
 					Id: this.Id,
-					status: this.status
+					status: 0
 				}).then(res => {
 
 					this.hideModal()

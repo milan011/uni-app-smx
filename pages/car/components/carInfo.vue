@@ -3,9 +3,9 @@
 		<!-- 基本信息编辑Begin -->
 		<view class="cu-form-group">
 			<view class="title">VIN码</view>
-			<input @blur="handlerVin" @input="vinChange" v-model="carData.VIN" style="text-align: right;margin-right: 1em;"
+			<input @blur="handlerVin" @input="vinChange" :disabled="isEdit"  v-model="carData.VIN" style="text-align: right;margin-right: 1em;"
 			 placeholder="请扫描或输入VIN码" name="input"></input>
-			<text @tap="scanVin" class='cuIcon-scan text-orange' style="font-size: x-large"></text>
+			<text v-if="!isEdit" @tap="scanVin" class='cuIcon-scan text-orange' style="font-size: x-large"></text>
 		</view>
 		<view class="cu-form-group">
 			<view class="title">车型</view>
@@ -17,7 +17,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">车辆类型</view>
-			<picker @change="PickerChange" :value="carData.CarType" :range="carTypeConfig" range-key="name">
+			<picker @change="PickerChange" :value="Number(carData.CarType)" :range="carTypeConfig" range-key="name">
 				<view class="picker">
 					{{carTypeConfig[carData.CarType].name}}
 				</view>
@@ -25,7 +25,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">变速箱</view>
-			<picker @change="PickerTransChange" :value="carData.Transmission" :range="transmissionConfig" range-key="name">
+			<picker @change="PickerTransChange" :value="Number(carData.Transmission)" :range="transmissionConfig" range-key="name">
 				<view class="picker">
 					{{transmissionConfig[carData.Transmission].name}}
 				</view>
@@ -33,7 +33,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">外观</view>
-			<picker @change="PickerOutChange" :value="carData.Out_color" :range="outcolorConfig" range-key="name">
+			<picker @change="PickerOutChange" :value="Number(carData.Out_color)" :range="outcolorConfig" range-key="name">
 				<view class="picker">
 					{{outcolorConfig[carData.Out_color].name}}
 				</view>
@@ -41,7 +41,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">内饰</view>
-			<picker @change="PickerInChange" :value="carData.Inside_color" :range="insidecolorConfig" range-key="name">
+			<picker @change="PickerInChange" :value="Number(carData.Inside_color)" :range="insidecolorConfig" range-key="name">
 				<view class="picker">
 					{{insidecolorConfig[carData.Inside_color].name}}
 				</view>
@@ -49,7 +49,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">车险</view>
-			<picker @change="PickerSafeChange" :value="carData.Safe_type" :range="safetypeConfig" range-key="name">
+			<picker @change="PickerSafeChange" :value="Number(carData.Safe_type)" :range="safetypeConfig" range-key="name">
 				<view class="picker">
 					{{safetypeConfig[carData.Safe_type].name}}
 				</view>
@@ -57,7 +57,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">过户次数</view>
-			<picker @change="PickerSaleNumChange" :value="carData.Sale_number" :range="saleNumConfig" range-key="name">
+			<picker @change="PickerSaleNumChange" :value="Number(carData.Sale_number)" :range="saleNumConfig" range-key="name">
 				<view class="picker">
 					{{saleNumConfig[carData.Sale_number].name}}
 				</view>
@@ -65,7 +65,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">车辆用途</view>
-			<picker @change="PickerCarUseChange" :value="carData.CarUse" :range="carUseConfig" range-key="name">
+			<picker @change="PickerCarUseChange" :value="Number(carData.CarUse)" :range="carUseConfig" range-key="name">
 				<view class="picker">
 					{{carUseConfig[carData.CarUse].name}}
 				</view>
@@ -73,7 +73,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">使用条件</view>
-			<picker @change="PickerUseconditionsChange" :value="carData.Useconditions" :range="useconditionsConfig" range-key="name">
+			<picker @change="PickerUseconditionsChange" :value="Number(carData.Useconditions)" :range="useconditionsConfig" range-key="name">
 				<view class="picker">
 					{{useconditionsConfig[carData.Useconditions].name}}
 				</view>
@@ -81,7 +81,7 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">维护保养</view>
-			<picker @change="PickerMaintainingChange" :value="carData.Maintaining" :range="maintainingConfig" range-key="name">
+			<picker @change="PickerMaintainingChange" :value="Number(carData.Maintaining)" :range="maintainingConfig" range-key="name">
 				<view class="picker">
 					{{maintainingConfig[carData.Maintaining].name}}
 				</view>
@@ -115,7 +115,10 @@
 		<view class="cu-form-group">
 			<view class="title">所属城市</view>
 			<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray" range-key="name">
-				<view class="picker">
+				<view v-if="isEdit" class="picker">
+					{{multiArray[0][multiIndex[0]].name}}，{{carData.CityName}}
+				</view>
+				<view v-else class="picker">
 					{{multiArray[0][multiIndex[0]].name}}，{{multiArray[1][multiIndex[1]].name}}
 				</view>
 			</picker>
@@ -142,7 +145,8 @@
 		<view class="cu-form-group margin-top">
 			<textarea v-model="carData.XS_description" maxlength="-1" :disabled="modalName!=null" @input="xsInput" placeholder="销售描述"></textarea>
 		</view> 
-		<text class="mix-btn" @click="confirmInfo">添加图片</text>
+		<text class="mix-btn"  v-if="isEdit" @click="confirmInfo">提交修改</text>
+		<text class="mix-btn" v-else @click="confirmInfo">添加图片</text>
 		<!-- 基本信息编辑End -->
 		<!-- vin码返回信息选择Begin -->
 		<view class="cu-modal" :class="modalName=='vinChose'?'show':''" @tap="hideModal">
@@ -262,6 +266,7 @@
 		data() {
 			return {
 				vinChanged: false,
+				isEdit: false,
 				vinCarList: [],
 				vinCarCheck: '0',
 				modalName: null,
@@ -327,7 +332,6 @@
 				multiArray: [
 					[{id: 2, name:'北京'}],
 					[{id: 52, name:'北京'}],
-					// ['猪肉绦虫', '吸血虫']
 				],
 				multiIndex: [0, 0],
 			}
@@ -469,7 +473,7 @@
 						this.$api.msg(`您输入的里程或价格过高,请确认`, 3000);
 					}
 					editCarInfo(this.carData).then(res => {
-						console.log(res)
+						// console.log(res)
 						if(res.data.ResultType == 0){
 							this.$api.msg(res.data.Message);
 							// this.imgData.Carid = res.data.Data.ID
@@ -495,12 +499,36 @@
 			getCitys(pid){
 				this.multiArray[1] = []
 				getCityByProvince(pid).then(res => {
-					console.log('市',res.data)
+					// console.log('市',res.data)
 					this.multiArray[1] = res.data.Data
 					this.multiIndex.splice(1, 0)
 					// return res.data.Data
 				}).catch(err => {
 					this.$api.msg(`获取城市,请刷新重试`);
+				})
+			},
+			carAreaDell(proveceId, cityId){ //编辑车源所属城市处理
+			  var _this = this
+				// console.log('嗯,我处理',proveceId,cityId)
+				_this.multiArray[0].forEach((item,index)=>{ //遍历省份
+					if(item.id == proveceId){
+						_this.multiIndex[0] = index
+						getCityByProvince(proveceId).then(res => {
+							_this.multiArray[1] = res.data.Data
+							// console.log(_this.multiArray)
+							res.data.Data.forEach((ite,ind)=>{
+								if(ite.id == cityId){
+									_this.multiIndex[1] = ind
+									// console.log(_this.multiIndex)
+								}
+							})
+							/* this.multiArray[1] = res.data.Data
+							this.multiIndex.splice(1, 0) */
+							// return res.data.Data
+						}).catch(err => {
+							this.$api.msg(`获取城市,请刷新重试`);
+						})
+					}
 				})
 			},
 			MultiChange(e) {
