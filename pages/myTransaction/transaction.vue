@@ -17,8 +17,8 @@
 					</view>
 					<view class="action">
 						<!-- <view class="cu-tag round bg-orange light">正常</view> -->
-						<view class="cu-tag round  bg-blue light">{{item.shopname}}</view>
-						<view class="cu-tag round bg-olive light">{{item.SaledPrice}}万元</view>
+						<!-- <view class="cu-tag round  bg-blue light">{{item.shopname}}</view> -->
+						<view class="cu-tag round   bg-blue light">{{item.SaledPrice}}万元</view>
 						<view class="cu-tag round bg-orange light">{{item.Status==1?'已确认':'未确认'}}</view>
 					</view>
 				</view>
@@ -121,6 +121,12 @@
 				}
 			})
 		},
+		onBackPress(event){
+			uni.switchTab({
+				url: '/pages/user/user'
+			});
+			return true
+		},
 		onShow() {
 			this.list = []
 			uni.getStorage({
@@ -146,6 +152,7 @@
 			this.transaction.EndTime = ''
 			this.startdate = '请选择开始时间'
 			this.endData = '请选择结束时间'
+			this.shopIndex = 0
 			this.list = []
 			uni.getStorage({
 				key: 'userInfo',
@@ -262,7 +269,7 @@
 		z-index: 1 !important;
 	}
 	.bg-blue.light{
-		width: 160upx;
+		width: auto;
 		text-align: left;
 		overflow: hidden;
 		text-overflow:ellipsis;

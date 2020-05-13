@@ -10,7 +10,7 @@
 				<view class="list" v-for="item in collectList" @click="toInfo(item.id)" @longpress='del(item.id)' :key='item.id'>
 					<image :src="imgUrl+item.url" mode=""></image>
 					<view class="title">
-					{{item.title}}
+						{{item.title}}
 					</view>
 					<view class="kilometer">
 						{{item.date}} / {{item.mileage}}万公里
@@ -30,7 +30,7 @@
 		data() {
 			return {
 				collectList: [],
-				imgUrl:Config.img_url
+				imgUrl: Config.img_url
 			};
 		},
 		onLoad() {
@@ -41,10 +41,10 @@
 						let params = {
 							url: ele.carimages[1].filename,
 							id: ele.cars.ID,
-							title:ele.cars.FullName,
-							date:ele.cars.CreateDate.split("T")[0],
-							mileage:ele.cars.Mileage,
-							price:ele.cars.SaleAMT
+							title: ele.cars.FullName,
+							date: ele.cars.CreateDate.split("T")[0],
+							mileage: ele.cars.Mileage,
+							price: ele.cars.SaleAMT
 						}
 						this.collectList.push(params)
 					})
@@ -62,47 +62,48 @@
 				}
 			})
 		},
-		methods:{
-			toInfo(id){
+		methods: {
+			toInfo(id) {
 				uni.navigateTo({
-					url:'../product/product?id='+id
+					url: '../product/product?id=' + id
 				})
 			},
-			del(id){
+			del(id) {
 				uni.showModal({
-				    title: '是否删除',
-				    content: '确定要删除此条收藏吗？',
-				    success: (res)=> {
-				        if (res.confirm) {
+					title: '是否删除',
+					content: '确定要删除此条收藏吗？',
+					success: (res) => {
+						if (res.confirm) {
 							uni.getStorage({
-								key:'collectList',
-								success:(res)=>{
+								key: 'collectList',
+								success: (res) => {
 									let list = res.data
-									let index = list.findIndex(ele=>id==ele.cars.ID)
-									list.splice(index,1)
+									let index = list.findIndex(ele => id == ele.cars.ID)
+									list.splice(index, 1)
 									// console.log('index===>',index)
 									this.collectList = []
 									list.forEach(ele => {
 										let params = {
 											url: ele.carimages[1].filename,
 											id: ele.cars.ID,
-											title:ele.cars.FullName,
-											date:ele.cars.CreateDate.split("T")[0],
-											mileage:ele.cars.Mileage,
-											price:ele.cars.SaleAMT
+											title: ele.cars.FullName,
+											date: ele.cars.CreateDate.split("T")[0],
+											mileage: ele.cars.Mileage,
+											price: ele.cars.SaleAMT
 										}
 										this.collectList.push(params)
 									})
 									uni.setStorage({
-										key:'collectList',
-										data:list
+										key: 'collectList',
+										data: list
 									})
 								}
 							})
-				        } else if (res.cancel) {
-				            console.log('用户点击取消');
-				        }
-				    }
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+							
+						}
+					}
 				});
 			}
 		}
@@ -112,23 +113,33 @@
 
 <style lang="scss">
 	.content {
-		.list{
+		.list {
 			position: relative;
 			width: 90%;
-			margin:10px auto 0;
+			margin: 10px auto 0;
+
 			image {
 				width: 220upx;
 				height: 165upx;
 			}
-			.title{
+
+			.title {
 				position: absolute;
 				left: 245upx;
 				top: 0;
 				font-size: 28upx;
 				font-weight: 700;
 				line-height: 1.2;
+				width: 360upx;
+				word-break: break-all;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 2;
+				overflow: hidden;
 			}
-			.kilometer{
+
+			.kilometer {
 				position: absolute;
 				left: 245upx;
 				top: 70upx;
@@ -136,12 +147,13 @@
 				color: #ccc;
 				// font-weight: 700;
 			}
-			.price{
+
+			.price {
 				position: absolute;
 				left: 245upx;
 				bottom: 10upx;
 				font-size: 30upx;
-				color: rgb(245,27,131);
+				color: rgb(245, 27, 131);
 			}
 		}
 	}

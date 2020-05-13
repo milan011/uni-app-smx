@@ -133,10 +133,10 @@
 			<uni-collapse v-if="TabCur==3" accordion="true">
 				<uni-collapse-item v-for="(pgpro, index) in pgPartFConfig" :key="index"  :showBage="pgpro.showBage" :title="pgpro.title">
 					<uni-collapse style="padding:5px" accordion="true">
-						<uni-collapse-item v-for="(part,index) in pgpro.part" :showBage="part.showBage"  :key="index" :title="part.name">
+						<uni-collapse-item v-for="(part,inde) in pgpro.part" :showBage="part.showBage"  :key="inde" :title="part.name">
 							<view style="padding: 30rpx;">
 								<view class="grid col-4 grid-square flex-sub">
-									<view v-if="part.imagetype == img.ImageType" v-for="(img, index) in imgListPgCurrentF" :key="index" class="bg-img" @tap="ViewImage">
+									<view v-if="part.imagetype == img.ImageType" v-for="(img, ind) in imgListPgCurrentF" :key="ind" class="bg-img" @tap="ViewImage">
 										<image :src="img.imgUrl" mode="aspectFill"></image>
 										<view class="cu-tag bg-red" data-ipart="F" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
 											<text class='cuIcon-close'></text>
@@ -159,10 +159,10 @@
 			<uni-collapse v-if="TabCur==3" accordion="true">
 				<uni-collapse-item v-for="(pgpro, index) in pgPartJConfig" :key="index" :showBage="pgpro.showBage" :title="pgpro.title">
 					<uni-collapse style="padding:5px" accordion="true">
-						<uni-collapse-item v-for="(part,index) in pgpro.part" :showBage="part.showBage" :key="index" :title="part.name">
+						<uni-collapse-item v-for="(part,inde) in pgpro.part" :showBage="part.showBage" :key="inde" :title="part.name">
 							<view style="padding: 30rpx;">
 								<view class="grid col-4 grid-square flex-sub">
-									<view v-if="part.imagetype == img.ImageType" v-for="(img, index) in imgListPgCurrentJ" :key="index" class="bg-img" @tap="ViewImage">
+									<view v-if="part.imagetype == img.ImageType" v-for="(img, ind) in imgListPgCurrentJ" :key="ind" class="bg-img" @tap="ViewImage">
 										<image :src="img.imgUrl" mode="aspectFill"></image>
 										<view class="cu-tag bg-red" data-ipart="J" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
 											<text class='cuIcon-close'></text>
@@ -183,7 +183,7 @@
 				</view>
 			</view>
 			<uni-collapse v-if="TabCur==3" accordion="true">
-				<uni-collapse-item v-for="(part,index) in pgPartDConfig" :showBage="part.showBage" :key="index" :title="part.name">
+				<uni-collapse-item v-for="(part,inde) in pgPartDConfig" :showBage="part.showBage" :key="inde" :title="part.name">
 					<view style="padding: 30rpx;">
 						<view class="grid col-4 grid-square flex-sub">
 							<view v-if="part.imagetype == img.ImageType" v-for="(img, ind) in imgListPgCurrentD" :key="ind" class="bg-img" @tap="ViewImage">
@@ -211,12 +211,6 @@
 							</view>
 						</view>
 					</view>
-					<!-- <view class="cu-bar bg-white justify-end">
-						<view class="content">点评</view>
-						<view class="action" @tap="hideModal">
-							<text class="cuIcon-close text-red"></text>
-						</view>
-					</view> -->
 					<view class="padding-xl">
 						<view class="cu-form-group margin-top">
 							<uni-rate size="18" :value="imgPgData.ImageLevel" active-color="#565656" @change="rateChange"></uni-rate>

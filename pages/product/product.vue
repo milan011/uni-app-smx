@@ -153,6 +153,7 @@
 		getCarTypeByVin,
 		getCarList
 	} from '@/api/car.js'
+	import { carPutOn } from '@/api/carManage.js'
 	import Config from '@/common/config.js'
 	export default {
 		components: {
@@ -385,9 +386,6 @@
 						let index = res.data.findIndex(ele => {
 							return this.carDetail.cars.ID == ele.cars.ID
 						})
-						console.log('index1==>', res.data.findIndex(ele => {
-							return ele.cars.ID == this.carDetail.cars.ID
-						}))
 						if (index == -1) {
 							collectList.unshift(this.carDetail)
 							uni.setStorage({
@@ -430,16 +428,26 @@
 				})
 			},
 			goPutOn() {
-				uni.navigateTo({
-					url: `/pages/car/list`
+				const param = {carid: this.car.Carid, putton:1}
+				console.log(param)
+				carPutOn(param).then(res=>{
+					// console.log(res.data)
+					if(res.data.ResultType == 0){
+						this.$api.msg(`车源已上架`,1000);
+						setTimeout(()=>{
+							uni.reLaunch({
+								url: '/pages/car/list'
+							})
+						}, 1100)
+					}
 				})
 			},
 			reEdit() {
 				console.log(this.car.Carid)
-				uni.navigateTo({
-					url: `/pages/car/list`
+				const carid = this.car.Carid
+				uni.reLaunch({
+					url: `/pages/car/carEdit?id=` + carid
 				})
-
 			},
 			stopPrevent() {
 

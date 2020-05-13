@@ -159,6 +159,11 @@
 			this.business.starttime = ''
 			this.business.endtime = ''
 			this.business.status = 1
+			this.startdate = '请选择开始时间'
+			this.endData = '请选择结束时间'
+			this.typeIndex = 0
+			this.shopIndex = 0
+			this.radio = ''
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {

@@ -134,7 +134,7 @@
 		<view class="guess-section">
 			<view v-for="(item, index) in goodsList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 				<view class="image-wrapper">
-					<image :src="imgUrl+item.filename" mode="aspectFit"></image>
+					<image :src="imgUrl+item.filename" mode="scaleToFill"></image>
 				</view>
 				<!-- <text class="title clamp">{{item.FullName}}</text> -->
 				<view style="min-height:21%;">{{item.FullName}}</view>
@@ -223,17 +223,6 @@
 				}
 			});
 			// #endif
-			/* getExampleList().then(res => {
-				console.log('返回了',res)
-			}).catch(err => {
-				
-			}) */
-			getCarList().then(res => {
-				console.log('返回了',res)
-			}).catch(err => {
-				
-			})
-			// return false
 			this.loadData();
 			// 城市初始化
 			let that = this
@@ -922,7 +911,7 @@
 
 		.image-wrapper {
 			width: 100%;
-			height: 330upx;
+			height: 240upx;
 			border-radius: 3px;
 			overflow: hidden;
 

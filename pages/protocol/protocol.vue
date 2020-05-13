@@ -128,6 +128,8 @@
 			this.contract.username = ''
 			this.contract.telephone = ''
 			this.contract.carmodel = 0
+			this.startdate = '请选择开始时间'
+			this.endData = '请选择结束时间'
 			this.init()
 			uni.stopPullDownRefresh();
 		},
@@ -241,12 +243,10 @@
 	.uni-input-input {
 		text-align: right !important;
 	}
-
 	.protocol-main {
 		.cu-modal {
 			z-index: 1 !important;
 		}
-
 		.card {
 			border-bottom: 4upx solid #CCCCCC;
 

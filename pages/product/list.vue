@@ -202,6 +202,8 @@
 				success: (res) => {
 					that.car.SaleAMTMin = ""
 					that.car.SaleAMTMax = ""
+					that.loadingType = 'loading'
+					that.goodsList = []
 					getCarList({ ...that.car
 					}).then(res => {
 						that.goodsList = res.data.Data.DataList;

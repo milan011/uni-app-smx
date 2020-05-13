@@ -30,7 +30,7 @@
 				<text class="yticon icon-daifukuan"></text>
 				<text v-if="detail.cars.Car_Status == 1">废弃</text>
 				<text v-if="detail.cars.Car_Status == 0">激活</text>
-			</view>
+			</view> 
 		</view>
 		<view class="order-section">
 			<view class="order-item" @tap="showModal" data-target="ModalAssess" hover-class="common-hover" :hover-stay-time="50">
@@ -45,7 +45,7 @@
 				<text class="yticon icon-shouhoutuikuan"></text>
 				<text>上架</text>
 			</view>
-			<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover" :hover-stay-time="50">
+			<view class="order-item" @click="navTo('/pages/myTransaction/create?carId=' + carId)" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-shouhoutuikuan"></text>
 				<text>交易</text>
 			</view>
@@ -211,7 +211,9 @@
 				carId: null,
 				loadingType: 'loading', //加载更多状态
 				detail: {
-					cars: {},
+					cars: {
+						CreateDate:''
+					},
 					shop: {},
 					user: null,
 					customer: {},
@@ -231,7 +233,9 @@
 				},
 				carStatusConfig:[],
 				putOnStatusConfig: {},
-				followInfo: {}
+				followInfo: {
+					created_at:""
+				}
 			}
 		},
 		onLoad(options) {
@@ -250,6 +254,12 @@
 			console.log('status_config',carStatusConfig)
 			this.getCarDetailById()
 			this.getCarFollowById()
+		},
+		onBackPress(event){
+			uni.navigateTo({
+				url: '/pages/car/list'
+			});
+			return true
 		},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {
@@ -270,6 +280,7 @@
 				})
 			}
 		},
+		
 		// #endif
 		computed: {
 			...mapState(['hasLogin', 'userInfo'])
@@ -365,6 +376,9 @@
 							uni.navigateTo({
 								url: `/pages/car/list`
 							})
+						}else{
+							this.$api.msg(res.data.Message);
+							this.modalName = null
 						}
 					})
 				}

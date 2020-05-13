@@ -262,6 +262,13 @@
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "我的交易"
 			}
+		}, 
+		{
+			"path": "pages/myTransaction/create",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "发起交易"
+			}
 		}, {
 			"path": "pages/myTransaction/deltail/deltail",
 			"style": {
@@ -367,10 +374,10 @@
 				"text": "买车"
 			},
 			{
-				"pagePath": "pages/cart/cart",
+				"pagePath": "pages/sell/sellCar",
 				"iconPath": "static/tab-cart.png",
 				"selectedIconPath": "static/tab-cart-current.png",
-				"text": "购物车"
+				"text": "卖车"
 			},
 			{
 				"pagePath": "pages/user/user",

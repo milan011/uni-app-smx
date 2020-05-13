@@ -7,6 +7,11 @@ export function getTransactionList(data) {
 	const requestUrl = Config.url_config + '/transaction/page'
 	return httpApi.post(requestUrl, {...data})
 }
+// 交易创建
+export function transactionCreate(data) {
+	const requestUrl = Config.url_config + '/transaction/edit'
+	return httpApi.post(requestUrl, {...data})
+}
 // 获取详情
 export function getDetail(data) {
 	const requestUrl = Config.url_config + '/transaction/detail'

@@ -20,7 +20,7 @@
 					<text class="text-grey">客户姓名：</text>
 				</view>
 				<view class="action">
-					<text class="text-grey text-sm">{{detail.customer.name}}</text>
+					<text class="text-grey text-sm">{{detail.customer.name?detail.customer.name:'暂无数据'}}</text>
 				</view>
 			</view>
 			<view class="cu-item">
@@ -372,7 +372,10 @@
 				detail: {
 					cars: [],
 					want: [],
-					transaction: []
+					transaction: [],
+					customer:{
+						name:""
+					}
 				},
 				customer_res: ["来电", "进店", "朋友介绍", "车商", "广告", "其他"],
 				customer_res_index: "",

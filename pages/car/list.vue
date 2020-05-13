@@ -158,6 +158,7 @@
 			};
 		},
 		onLoad(options) {
+			console.log('onload')
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
@@ -175,6 +176,12 @@
 				}
 			})
 		},
+		onBackPress(event){
+			uni.switchTab({
+				url: '/pages/user/user'
+			});
+			return true
+		},
 		//下拉刷新
 		onPullDownRefresh() {
 			// var that = this
@@ -190,10 +197,23 @@
 			this.car.Car_Status = '1'
 			this.car.IsPutOn = -1
 			this.car.PageIndex = 1
+			this.CarStautIndex = 0
+			this.putOnIndex = 0
+			this.startdate = '请选择开始时间'
+			this.endData = '请选择结束时间'
 			// this.loadData()
 			this.cartList = []
 			getCarList({...this.car}).then(res=>{
 				this.cartList = res.data.Data.DataList
+				this.cartList.forEach(ele => {
+					if (ele.Car_Status === '0') {
+						this.carSt = '废弃'
+					} else if (ele.Car_Status === '1') {
+						this.carSt = '正常'
+					} else {
+						this.carSt = '已交易'
+					}
+				})
 				uni.stopPullDownRefresh()
 				this.total = res.data.Data.Total;
 				if (this.car.PageIndex < this.total / this.car.PageSize) {
@@ -313,7 +333,7 @@
 <style lang='scss'>
 	.text-grey {
 		display: inline-block;
-		width: 320upx;
+		width: 300upx;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
