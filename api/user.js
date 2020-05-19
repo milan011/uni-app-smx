@@ -23,3 +23,8 @@ export function editCustomer(data) {
 	const requestUrl = Config.url_config + '/customer/edit'
 	return httpApi.post(requestUrl, {...data})
 }
+// 获取用户平台车源,求购数量等
+export function getUserGeneral() {
+	const requestUrl = Config.url_config + '/user/index'
+	return httpApi.get(requestUrl)
+}

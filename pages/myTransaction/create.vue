@@ -65,6 +65,7 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group nu-style">
+						<text class="cuIcon-require text-red"></text>
 						<view class="title">成交价(万)</view>
 						<input style="text-align: right;" type="number" v-model="transFormData.SaledPrice" placeholder="请输入成交价" name="input"></input>
 						<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
@@ -84,6 +85,7 @@
 						<switch class='orange radius' @change="SwitchD" :class="transFormData.IsLoan=='1'?'checked':''" :checked="transFormData.IsLoan=='1'?true:false"></switch>
 					</view>
 					<view v-show="transFormData.IsLoan==1" class="cu-form-group nu-style">
+						
 						<view class="title">贷款金额(万)</view>
 						<input style="text-align: right;" type="number" v-model="transFormData.LoanMoney" placeholder="请输入贷款金额" name="input"></input>
 						<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>

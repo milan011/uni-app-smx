@@ -68,6 +68,14 @@
                     "key" : "RGSBZ-SNN3G-TALQO-ITSTZ-HOQRS-IGBAE"
                 }
             }
+        },
+        "router" : {
+            "mode" : "hash"
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
         }
     }
 }

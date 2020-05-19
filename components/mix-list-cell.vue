@@ -13,7 +13,7 @@
 			<text class="cell-tit clamp">{{title}}</text>
 			<slot />
 			<text v-if="tips" class="cell-tip">{{tips}}</text>		
-			<text class="cell-more yticon"
+			<text v-if="showYt" class="cell-more yticon"
 				:class="typeList[navigateType]"
 				:style="[{
 					color: iconRightColor,
@@ -54,6 +54,10 @@
 			tips: {
 				type: String,
 				default: ''
+			},
+			showYt:{
+				type: Boolean,
+				default: false
 			},
 			navigateType: {
 				type: String,

@@ -22,13 +22,25 @@
 
 			<view class="tj-sction">
 				<view class="tj-item">
-					<text @click="navTo('/pages/car/list')">车源</text>
+					<!-- <text>车源 | {{ userGeneralInfo.MyCar }}</text> -->
+					<view  @click="navTo('/pages/car/listRemind')" class='cu-tag radius line-green'>
+						车源 | {{ userGeneralInfo.MyCar }}
+						<view v-if="userGeneralInfo.CarRemind > 0" class="cu-tag badge"></view>
+					</view>
 				</view>
 				<view class="tj-item">
-					<text @click="navTo('/pages/wantBuy/wantBuy')">求购</text>
+					<!-- <text>求购 | {{ userGeneralInfo.MyWant }}</text> -->
+					<view  @click="navTo('/pages/wantBuy/listRemind')" class='cu-tag radius line-olive'>
+						求购 | {{ userGeneralInfo.MyWant }}
+						<view v-if="userGeneralInfo.WantRemind > 0" class="cu-tag badge"></view>
+					</view>
 				</view>
 				<view class="tj-item">
-					<text>交易</text>
+					<!-- <text>交易 | {{ userGeneralInfo.MyTrancation }}</text> -->
+					<view class='cu-tag radius line-cyan'>
+						交易 | {{ userGeneralInfo.MyTrancation }}
+						<view v-if="userGeneralInfo.TranRemind > 0" class="cu-tag badge"></view>
+					</view>
 				</view>
 			</view>
 			<!-- 订单 -->
@@ -60,16 +72,16 @@
 				</view>
 				<scroll-view scroll-x class="h-list">
 					<image v-for="(item,index) in imgList" :key='index' @click="navTo('/pages/product/product?id='+item.id)" :src="img_url+item.url"
-					 mode="aspectFill"></image>
+					 mode="scaleToFill"></image>
 				</scroll-view>
-				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" @eventClick="navTo('/pages/collect/collect')" title="我的收藏"></list-cell>
+				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" showYt iconColor="#54b4ef" @eventClick="navTo('/pages/collect/collect')" title="我的收藏"></list-cell>
 				<!-- <list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="公告" tips="您的会员还有3天过期"></list-cell> -->
-				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')
+				<list-cell icon="icon-dizhi" showYt iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')
 				
 				"></list-cell>
 				<!-- <list-cell icon="icon-share" iconColor="#9789f7" title="分享" tips="邀请好友赢10万大礼"></list-cell> -->
-				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="协议管理" @eventClick="navTo('/pages/protocol/protocol')"></list-cell>
-				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
+				<list-cell icon="icon-pinglun-copy" showYt iconColor="#ee883b" title="协议管理" @eventClick="navTo('/pages/protocol/protocol')"></list-cell>
+				<list-cell icon="icon-shezhi1" showYt iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>
 	</view>
@@ -80,6 +92,7 @@
 		mapState
 	} from 'vuex';
 	import Config from '@/common/config.js'
+	import { getUserGeneral } from '@/api/user.js'
 	let startY = 0,
 		moveY = 0,
 		pageAtTop = true;
@@ -93,11 +106,12 @@
 				coverTransition: '0s',
 				moving: false,
 				imgList: [],
+				userGeneralInfo: {},
 				img_url: Config.img_url
 			}
 		},
 		onLoad() {
-
+			this.userGeneral()
 		},
 		onShow() {
 			let imgList = []
@@ -105,11 +119,13 @@
 				key: 'browseList',
 				success: (res => {
 					res.data.forEach(ele => {
-						let params = {
-							url: ele.carimages[1].filename,
-							id: ele.cars.ID
+						if(ele.carimages[1]){
+							let params = {
+								url: ele.carimages[1].filename,
+								id: ele.cars.ID
+							}
+							this.imgList.push(params)
 						}
-						this.imgList.push(params)
 					})
 					for (var i = 0; i < this.imgList.length; i++) {
 						for (var j = i + 1; j < this.imgList.length; j++) {
@@ -150,7 +166,12 @@
 			...mapState(['hasLogin', 'userInfo'])
 		},
 		methods: {
-
+			userGeneral(){
+				getUserGeneral().then(res=>{
+					console.log('uGen',res.data)
+					this.userGeneralInfo = res.data.Data
+				})
+			},
 			/**
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view

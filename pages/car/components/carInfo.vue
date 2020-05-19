@@ -2,6 +2,7 @@
 	<view>
 		<!-- 基本信息编辑Begin -->
 		<view class="cu-form-group">
+			<text class="cuIcon-require text-red"></text>
 			<view class="title">VIN码</view>
 			<input @blur="handlerVin" @input="vinChange" :disabled="isEdit"  v-model="carData.VIN" style="text-align: right;margin-right: 1em;"
 			 placeholder="请扫描或输入VIN码" name="input"></input>
@@ -24,6 +25,7 @@
 			</picker>
 		</view>
 		<view class="cu-form-group">
+			<text class="cuIcon-require text-red"></text>
 			<view class="title">变速箱</view>
 			<picker @change="PickerTransChange" :value="Number(carData.Transmission)" :range="transmissionConfig" range-key="name">
 				<view class="picker">
@@ -88,6 +90,7 @@
 			</picker>
 		</view>
 		<view class="cu-form-group">
+			<text class="cuIcon-require text-red"></text>
 			<view class="title">上牌日期</view>
 			<picker mode="date" :value="carData.BuyDate" :start="pickerStart" :end="pickerEnd" @change="DateChangePlate">
 				<view class="picker">
@@ -96,6 +99,7 @@
 			</picker>
 		</view>
 		<view class="cu-form-group">
+			<text class="cuIcon-require text-red"></text>
 			<view class="title">到捡日期</view>
 			<picker mode="date" :value="carData.InspectionTime" :start="pickerStart" :end="pickerEnd" @change="DateChangeCheck">
 				<view class="picker">
@@ -104,6 +108,7 @@
 			</picker>
 		</view>
 		<view class="cu-form-group">
+			<text class="cuIcon-require text-red"></text>
 			<view class="title">到保日期</view>
 			<picker mode="date" :value="carData.Safe_end" :start="pickerStart" :end="pickerEnd" @change="DateChangeSafe">
 				<view class="picker">
@@ -125,16 +130,19 @@
 		</view>
 		<!-- #endif -->
 		<view class="cu-form-group nu-style">
+			<text class="cuIcon-require text-red"></text>
 			<view class="title">行驶里程(万)</view>
 			<input v-model="carData.Mileage" style="text-align: right;" type="number" placeholder="请输入行驶里程" name="input"></input>
 			<text class='cuIcon-taxi text-orange' style="font-size: x-large"></text>
 		</view>
 		<view class="cu-form-group nu-style">
+			<text class="cuIcon-require text-red"></text>
 			<view class="title">期望底价(万)</view>
 			<input v-model="carData.BasePrice" style="text-align: right;" type="number" placeholder="请输入期望价格" name="input"></input>
 			<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 		</view>
 		<view class="cu-form-group nu-style">
+			<text class="cuIcon-require text-red"></text>
 			<view class="title">期望高价(万)</view>
 			<input v-model="carData.SaleAMT" style="text-align: right;" type="number" placeholder="请输入期望价格" name="input"></input>
 			<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
@@ -583,7 +591,7 @@
 				if(!this.manualData.category || !this.manualData.year || !this.manualData.Transmission || !this.manualData.name){
 					this.$api.msg(`请填写完整信息`, 2000);
 				}else{
-					this.carData.FullName = this.manualData.category + ' ' + this.manualData.year  + this.manualData.Transmission + ' ' + this.manualData.name
+					this.carData.FullName = this.manualData.category + ' ' + this.manualData.year + '款 ' + this.manualData.Transmission + ' ' + this.manualData.name
 					this.carData.Capacity = this.manualData.Transmission
 					this.carData.CarModel = this.manualData.category
 					this.carData.Factory = this.manualData.brand

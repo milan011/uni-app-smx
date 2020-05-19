@@ -21,7 +21,7 @@ http.interceptor.request((config, cancel) => { /* 请求之前拦截器 */
     ...config.header,
     // a: 3
   }
-	console.log('http', 'go go go')
+	// console.log('http', '前端接口拦截')
   // if (config.custom.auth) {
   //   config.header.token = 'token'
   // }
@@ -99,7 +99,7 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
   // return false
   return response
 }, (response) => { // 请求错误做点什么
-	console.log('请求错误',response.data)
+	console.log('请求错误',response)
 	if(response.data.ResultType == 4){
 		//token过期
 		store.dispatch('logout')
@@ -108,7 +108,11 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
 		});
 	}
   return response
-})
+}),(error => {
+    console.log('err' + error) // for debug
+    return Promise.reject(error)
+  })
+
 
 export {
   httpApi,

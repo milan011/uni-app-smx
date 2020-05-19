@@ -53,6 +53,10 @@
 	content: "\e646";
 }
 
+.cuIcon-require:before {
+	content: "\2731";
+}
+
 .cuIcon-edit:before {
 	content: "\e649";
 }

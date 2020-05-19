@@ -4,113 +4,48 @@
 			<scroll-view scroll-y="true" class="page">
 				<view class="cu-bar bg-white solid-bottom">
 					<view class="action">
-						<text class="cuIcon-title text-orange"></text> 我的车源
-					</view>
-					<view class="action">
-						<button class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-					</view>
-					<view class="action">
-						<button class="cu-btn bg-green shadow" @tap="createCar" data-target="menuModal">添加车源</button>
+						<text class="cuIcon-title text-orange"></text> 待跟进车源
 					</view>
 				</view>
-				<!-- 车源列表 Begain -->
 				<view class="cu-list menu">
-					<view v-for="(item, index) in cartList" :key="index" class="cu-item" :class="menuArrow?'arrow':''">
-						<navigator class="content" hover-class="none" :url="'./show?carId='+item.ID" open-type="navigate">
-							<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
-							<text class="text-grey">{{ item.FullName }}</text>
-						</navigator>
-						<view class="action">
-							<view class="cu-tag round bg-orange light" v-if="!item.IsPutOn">{{item.IsPutOn?'':'未上架'}}</view>
-							<view class="cu-tag round bg-olive light">{{carSt}}</view>
-							<view class="cu-tag round bg-blue light">{{item.CreateDate.substring(0,item.CreateDate.indexOf("T"))}}</view>
-						</view>
+					<view @tap="carFollow(item)" v-for="(item, index) in cartList" :key="index" class="cu-item" :class="menuArrow?'arrow':''">
+					<text class="text-grey">{{ item.FullName }}</text>
+					<view class="action">
+						<view class="cu-tag round bg-blue light">最近跟进:{{item.UpdateDate.substring(0,item.CreateDate.indexOf("T"))}}</view>
+					</view>
 					</view>
 				</view>
-				<!-- 车源列表 End -->
 				<uni-load-more :status="loadingType"></uni-load-more>
 			</scroll-view>
-			<!-- 筛选Mode Begain -->
-			<view class="cu-modal" :class="modalName=='RadioModal'?'show':''" @tap="hideModal">
-				<view class="cu-dialog" @tap.stop="">
-					<radio-group class="block" @change="RadioChange">
-						<view class="cu-form-group">
-							<view class="title">车源编号</view>
-							<input placeholder="请输入车源编号" v-model="car.Code" style="text-align: right; padding-right: 40upx;" name="input"></input>
-						</view>
-						<view class="cu-form-group">
-							<view class="title">最低价格</view>
-							<input placeholder="请输入最低价格" v-model="car.SaleAMTMin" style="text-align: right; padding-right: 40upx;" name="input"></input>
-						</view>
-						<view class="cu-form-group">
-							<view class="title">最高价格</view>
-							<input placeholder="请输入最高价格" v-model="car.SaleAMTMax" style="text-align: right; padding-right: 40upx;" name="input"></input>
-						</view>
-						<view class="cu-form-group">
-							<view class="title">开始时间</view>
-							<picker mode="date" :value="startdate" @change="startDateChange">
-								<view class="picker">
-									{{startdate}}
-								</view>
-							</picker>
-						</view>
-						<view class="cu-form-group">
-							<view class="title">结束时间</view>
-							<picker mode="date" :value="endData" @change="endDateChange">
-								<view class="picker">
-									{{endData}}
-								</view>
-							</picker>
-						</view>
-						<view class="cu-form-group">
-							<view class="title">车辆类型</view>
-							<picker @change="PickerChange" :value="index" :range="carType">
-								<view class="picker">
-									{{carType[car.CarType]}}
-								</view>
-							</picker>
-						</view>
-						<view class="cu-form-group">
-							<view class="title">车辆状态</view>
-							<picker @change="changeCarStaut" :value="index" :range="CarStaut">
-								<view class="picker">
-									{{CarStaut[CarStautIndex]}}
-								</view>
-							</picker>
-						</view>
-						<view class="cu-form-group">
-							<view class="title">上架状态</view>
-							<picker @change="changePutOn" :value="index" :range="putOn">
-								<view class="picker">
-									{{putOn[putOnIndex]}}
-								</view>
-							</picker>
-						</view>
-						<view class="cu-form-group">
-							<view class="title">变速箱</view>
-							<picker @change="changebxs" :value="index" :range="Gearbox">
-								<view class="picker">
-									{{Gearbox[car.Transmission]}}
-								</view>
-							</picker>
-						</view>
-						<view class="padding flex flex-direction">
-							<view class="cu-btn bg-blue lg" @tap="doSeach">确定</view>
-							<view class="cu-btn bg-grey margin-tb-sm lg" @tap="hideModal">取消</view>
-						</view>
-					</radio-group>
+		</view>
+		<!-- 跟进modal Begin -->
+		<view class="cu-modal" style="z-index: 10;" :class="modalName=='ModalFollow'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">车源跟进</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<view class="cu-form-group margin-top">
+						<textarea v-model="quickFollow.content" maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
+					</view>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="followSend">确定</button>
+					</view>
 				</view>
 			</view>
-			<!-- 筛选Mode End -->
 		</view>
-	</view>
+		<!-- 跟进modal End -->
 	</view>
 </template>
 
 <script>
-	import {
-		getCarList
-	} from '@/api/carManage.js'
+	import { getCarList, carFollow } from '@/api/carManage.js'
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
 		components: {
@@ -121,7 +56,7 @@
 				index: 0,
 				loadingType: 'more', //参数loading加载,nomore
 				cartList: [],
-				menuArrow: true,
+				menuArrow: false,
 				carSt: "",
 				modalName: null,
 				startdate: '请选择开始时间',
@@ -133,6 +68,12 @@
 				putOn: ['不限', '未上架', '已上架'],
 				putOnIndex:0,
 				Gearbox: ['不限', '手动', '自动'],
+				quickFollow:{
+					id: null,
+					content: '',
+					type: 1,
+					username: '',
+				},
 				car: {
 					PageIndex: 1,
 					PageSize: 14,
@@ -153,7 +94,7 @@
 					SaleAMTMin: "",
 					SaleAMTMax: "",
 					RoleName: "",
-					updatetime: "",
+					updatetime: "车源",
 					Car_Status: '1',
 					IsPutOn: -1,
 					Shop_Id: ""
@@ -268,15 +209,44 @@
 						console.log('nomore')
 					}
 				})
-
+			},
+			textareaAInput(e) {
+				this.quickFollow.content = e.detail.value
+			},
+			carFollow(car){
+				// console.log(want)
+				this.quickFollow.id = car.ID
+				this.quickFollow.username = car.CreateName
+				this.quickFollow.content = ''
+				// console.log(this.wantFollowData)
+				this.modalName = 'ModalFollow'
+			},
+			followSend(){
+				// console.log(this.wantFollowData)
+				// return false
+				if(!this.quickFollow.content){
+					this.$api.msg(`请填写跟进信息`, 2000)
+				}else{
+					carFollow(this.quickFollow).then(res => {
+						// this.getFollow();
+						this.hideModal()
+						uni.showToast({
+							title: "跟进成功成功",
+							icon: "none",
+							duration: 1500
+						})
+						this.cartList = []
+						this.loadData()
+					})
+				}
 			},
 			//添加车源
-			createCar() {
+			/* createCar() {
 				uni.navigateTo({
 					url: '/pages/car/customer'
 				})
 				this.$api.msg('跳转下一页 sendData');
-			},
+			}, */
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 			},
@@ -296,8 +266,8 @@
 				console.log(e.detail)
 			},
 			changeCarStaut(e) {
-				if (e.detail.value == 1 || e.detail.value == 2) {
-					this.car.Car_Status = Number(e.detail.value) - 1
+				if (e.detail.value === 1 || e.detail.value == 2) {
+					this.car.Car_Status = e.detail.value - 1
 				} else if(e.detail.value == 3){
 					this.car.Car_Status = 4
 				}
@@ -322,14 +292,20 @@
 				this.loadData();
 				this.hideModal();
 			},
+			onBackPress(event){
+				uni.reLaunch({
+					url: '/pages/user/user'
+				});
+				return true
+			},
 			//创建订单
-			createCar() {
+			/* createCar() {
 				uni.navigateTo({
 					// url: '/pages/car/customer'
 					url: '/pages/car/carCreate'
 				})
 				this.$api.msg('跳转下一页 sendData');
-			}
+			} */
 		}
 	}
 </script>
@@ -342,12 +318,7 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	.cu-list.menu>.cu-item.arrow {
-	    padding-right: 30px;
-	}
-	.cu-list.menu>.cu-item.arrow:before {
-	  right: 0.5em;
-	}
+
 	.cu-modal {
 		z-index: 1 !important;
 	}

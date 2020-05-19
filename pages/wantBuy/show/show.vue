@@ -104,7 +104,7 @@
 		<view class="cu-modal" :class="modalName=='ModalFollow'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
-					<view class="content">车源跟进</view>
+					<view class="content">求购跟进</view>
 					<view class="action" @tap="hideModal">
 						<text class="cuIcon-close text-red"></text>
 					</view>

@@ -24,8 +24,7 @@
 						</block>
 					</scroll-view>
 					<block v-for="(sub,index) in page.submenu" :key="index">
-						<scroll-view class="sub-menu-list not-first" :scroll-y="true" v-if="activeMenuArr[page_index][0]==index&&sub.submenu.length>0"
-						 :scroll-into-view="'second_id'+secondScrollInto">
+						<scroll-view class="sub-menu-list not-first" :scroll-y="true" v-if="activeMenuArr[page_index][0]==index&&sub.submenu.length>0" :scroll-into-view="'second_id'+secondScrollInto">
 							<block v-for="(sub_second,second_index) in sub.submenu" :key="second_index">
 								<view class="sub-menu" :id="'second_id'+second_index" :class="{'on':activeMenuArr[page_index][1]==second_index}">
 									<view class="menu-name" @tap="selectHierarchyMenu(page_index,activeMenuArr[page_index][0],second_index,null)">
@@ -34,8 +33,7 @@
 									</view>
 									<view class="more-sub-menu" v-if="sub_second.submenu&&sub.submenu.length>0&&sub_second.submenu.length>0">
 										<block v-for="(sub2,sub2_index) in sub_second.submenu" :key="sub2_index">
-											<text v-if="sub_second.showAllSub || (sub2_index<8)" :class="{'on':activeMenuArr[page_index][1]==second_index&&activeMenuArr[page_index][2]==sub2_index}"
-											 @tap="selectHierarchyMenu(page_index,activeMenuArr[page_index][0],second_index,sub2_index)">{{sub2.name}}</text>
+											<text v-if="sub_second.showAllSub || (sub2_index<8)" :class="{'on':activeMenuArr[page_index][1]==second_index&&activeMenuArr[page_index][2]==sub2_index}" @tap="selectHierarchyMenu(page_index,activeMenuArr[page_index][0],second_index,sub2_index)">{{sub2.name}}</text>
 											<text v-if="sub_second.showAllSub!=true && sub2_index==8 && sub_second.submenu.length>9" @tap="showMoreSub(second_index)">更多<text
 												 class="iconfont triangle"></text></text>
 										</block>
@@ -126,16 +124,24 @@
 			filterData: {
 				handler() {
 					this.initMenu(); //filterData重新赋值初始化菜单
-				},
+					console.log('初始活动菜单',this.activeMenuArr)
+				},	
 				immediate: true
 			},
 			defaultSelected(newVal) {
 				if (newVal.length == 0) {
 					return;
 				}
+				console.log('newVal',newVal)
 				this.defaultActive = JSON.parse(JSON.stringify(newVal));
 				this.activeMenuArr = JSON.parse(JSON.stringify(newVal));
 				this.shadowActiveMenuArr = JSON.parse(JSON.stringify(newVal));
+				
+				console.log('默认筛选条件数组', newVal)
+				console.log('defaultActive', this.defaultActive)
+				console.log('activeMenuArr', this.activeMenuArr)
+				console.log('shadowActiveMenuArr', this.shadowActiveMenuArr)
+				// return false
 				if (this.updateMenuName) {
 					this.setMenuName();
 				}
@@ -143,6 +149,7 @@
 		},
 		methods: {
 			initMenu() {
+				console.log('init')
 				let tmpMenuActiveArr = [];
 				let tmpMenu = [];
 				for (let i = 0; i < this.filterData.length; i++) {
@@ -164,8 +171,7 @@
 				}
 				this.menu = tmpMenu;
 				//初始化选中项数组
-				tmpMenuActiveArr = this.defaultActive.length > 0 ? this.defaultActive : this.activeMenuArr.length > 0 ? this.activeMenuArr :
-					tmpMenuActiveArr;
+				tmpMenuActiveArr = this.defaultActive.length > 0 ? this.defaultActive : this.activeMenuArr.length > 0 ? this.activeMenuArr : tmpMenuActiveArr;
 				this.defaultActive = [];
 				this.activeMenuArr = JSON.parse(JSON.stringify(tmpMenuActiveArr));
 				this.shadowActiveMenuArr = JSON.parse(JSON.stringify(tmpMenuActiveArr));
@@ -177,6 +183,7 @@
 				}
 			},
 			setMenuName() {
+				console.log('重置顶层菜单name')
 				for (var i = 0; i < this.activeMenuArr.length; i++) {
 					let row = this.activeMenuArr[i];
 					if (typeof(row[0]) != 'object') {
@@ -205,30 +212,30 @@
 			},
 			//选中
 			selectHierarchyMenu(page_index, level1_index, level2_index, level3_index) {
-				console.log('page_index==>',page_index)
-				console.log('level1_index==>',level1_index)
-				console.log('level2_index==>',level2_index)
-				console.log('level3_index==>',level3_index)
+				console.log('page_index==>', page_index)
+				console.log('level1_index==>', level1_index)
+				console.log('level2_index==>', level2_index)
+				console.log('level3_index==>', level3_index)
+				console.log(this.activeMenuArr)
 				//读取记录
 				if (level1_index != null && level2_index == null && level3_index == null && this.shadowActiveMenuArr[page_index][0] ==
 					level1_index) {
 					this.activeMenuArr.splice(page_index, 1, JSON.parse(JSON.stringify(this.shadowActiveMenuArr[page_index])));
 				} else {
 					this.activeMenuArr[page_index].splice(0, 1, level1_index);
-					(level2_index != null || this.activeMenuArr[page_index].length >= 2) && this.activeMenuArr[page_index].splice(1, 1,
-						level2_index) || this.activeMenuArr[page_index].splice(1, 1);
-					(level3_index != null || this.activeMenuArr[page_index].length >= 3) && this.activeMenuArr[page_index].splice(2, 1,
-						level3_index) || this.activeMenuArr[page_index].splice(2, 1);
+					(level2_index != null || this.activeMenuArr[page_index].length >= 2) && this.activeMenuArr[page_index].splice(1, 1,level2_index) || this.activeMenuArr[page_index].splice(1, 1);
+					(level3_index != null || this.activeMenuArr[page_index].length >= 3) && this.activeMenuArr[page_index].splice(2, 1,level3_index) || this.activeMenuArr[page_index].splice(2, 1);
 				}
 				//写入结果
-				if (level3_index != null || level2_index != null || (level1_index != null && this.subData[page_index].submenu[
-						level1_index].submenu.length == 0)) {
+				if (level3_index != null || level2_index != null || (level1_index != null && this.subData[page_index].submenu[level1_index].submenu.length == 0)) {
+					console.log('subData',this.subData)
+					console.log('menu',this.menu)
 					let sub = this.subData[page_index].submenu[level1_index].submenu[level2_index];
 					if (this.updateMenuName) {
-						this.menu[page_index].name = (level3_index != null && sub.submenu[level3_index].name) || (level2_index != null &&
-							sub.name) || this.subData[page_index].submenu[level1_index].name;
+						this.menu[page_index].name = (level3_index != null && sub.submenu[level3_index].name) || (level2_index != null &&sub.name) || this.subData[page_index].submenu[level1_index].name;
 					}
 					this.shadowActiveMenuArr[page_index] = JSON.parse(JSON.stringify(this.activeMenuArr[page_index]));
+					console.log(this.shadowActiveMenuArr[page_index])
 					this.togglePage(this.showPage);
 				}
 			},
@@ -253,10 +260,10 @@
 				this.activeMenuArr[page_index] = JSON.parse(JSON.stringify(tmpArr));
 				this.$forceUpdate();
 				uni.removeStorage({
-				    key: 'selectConditions',
-				    success: function (res) {
-				        console.log('success');
-				    }
+					key: 'selectConditions',
+					success: function(res) {
+						console.log('success');
+					}
 				});
 			},
 			//选中筛选类label-UI状态
@@ -282,7 +289,6 @@
 					if (activeIndex != null) {
 						this.subData[page_index].submenu[box_index].submenu[activeIndex].selected = false;
 					}
-
 					this.subData[page_index].submenu[box_index].submenu[label_index].selected = true;
 					this.activeMenuArr[page_index][box_index][0] = label_index;
 				}
@@ -764,8 +770,9 @@
 						align-items: center;
 						text-align: left;
 						overflow: hidden;
-						text-overflow:ellipsis;
+						text-overflow: ellipsis;
 						white-space: nowrap;
+
 						&:nth-child(4n) {
 							margin-right: 0;
 						}

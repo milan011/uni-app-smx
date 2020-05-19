@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<scroll-view style="height:45vh;" v-show="currentCard === 0"  scroll-y="true">
-			<view class="scroll-view-item">
+			<view class="scroll-view-item mystyle">
 				<list-cell
 					title="长宽高" 
 					:tips="vinData.car_length + 'cm*' + vinData.car_width + 'cm*' +vinData.car_height + 'cm'">
@@ -260,6 +260,8 @@
     }
   }
 </script>
-<style>
-  
+<style lang='scss' >
+  .mystyle /deep/ .mix-list-cell .cell-tip {
+     width:auto;
+  }
 </style>

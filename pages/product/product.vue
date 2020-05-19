@@ -8,11 +8,12 @@
 					</view>
 				</swiper-item>
 			</swiper>
-			<image src="../../static/collect.png" mode="" @click="doCollect" class="collect"></image>
+			<!-- <image src="../../static/collect.png" mode="" @click="doCollect" class="collect"></image> -->
 		</view>
 
 		<view class="introduce-section">
 			<text class="title">{{ carDetail.cars.FullName }}</text>
+			<text class="cuIcon-favor" :class="'text-' + favorColor" style="margin-left:0.5em" @tap="doCollect"></text>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
 				<text class="price">{{ carDetail.cars.SaleAMT }}万</text>
@@ -134,7 +135,7 @@
 						<vin-car ref="sonVinInfo"></vin-car>
 					</view>
 				</view>
-				<button class="btn" @click="toggleSpec">完成</button>
+				<button class="btn" @click="toggleSpec">知道了</button>
 			</view>
 		</view>
 	</view>
@@ -167,6 +168,7 @@
 			return {
 				specClass: 'none',
 				specSelected: [],
+				favorColor: 'gray',
 				carDetail: {
 					"cars": {
 						BuyDate: 'T'
@@ -202,6 +204,7 @@
 			};
 		},
 		async onLoad(options) {
+			var _this = this
 			console.log(options)
 			//接收传值,id里面放的是标题，因为测试数据并没写id 
 			// 车辆详情
@@ -220,6 +223,24 @@
 			if (this.carDetail.cars.BuyDate == null) {
 				this.carDetail.cars.BuyDate = ''
 			}
+			//是否收藏
+			uni.getStorage({
+				key: 'collectList',
+				success: (res) => {
+					console.log('收藏列表',res.data)
+					let index = res.data.findIndex(ele => {
+						return _this.carDetail.cars.ID == ele.cars.ID
+					})
+					console.log('是否收藏', index)
+					if (index == -1) {					
+						_this.favorColor = 'gray'					
+					} else {
+						_this.favorColor = 'green'
+					}
+				},
+				fail: () => {
+				}
+			})
 			// 浏览历史
 			let browseList = [];
 			uni.getStorage({
@@ -273,11 +294,11 @@
 				}).then(res => {
 					let msg = JSON.parse(res.data.LogMessage).message
 					if (msg) {
-						uni.showToast({
+						/* uni.showToast({
 							title: msg,
 							icon: "none",
 							duration: 2000
-						})
+						}) */
 					} else {
 						let list = JSON.parse(res.data.LogMessage).data;
 						let obj = list.find(ele => this.carDetail.cars.FullName == ele.psalename)
@@ -288,12 +309,15 @@
 			let carVin = await getCarModelConfigByTid({
 				tid: plevelid
 			})
-			if (JSON.parse(carVin.data.LogMessage).result[0]) {
-				this.carVin = JSON.parse(carVin.data.LogMessage).result[0]
-			}
-			if (Object.keys(this.carVin).length != 0) {
-				this.allParamShow = true
-				this.$refs.sonVinInfo.sonAssginVin(this.carVin);
+			console.log('vin码返回',carVin.data)
+			if(carVin.data.ResultType == 0){ //有vin码返回值
+				if (JSON.parse(carVin.data.LogMessage).result[0]) {
+					this.carVin = JSON.parse(carVin.data.LogMessage).result[0]
+				}
+				if (Object.keys(this.carVin).length != 0) {
+					this.allParamShow = true
+					this.$refs.sonVinInfo.sonAssginVin(this.carVin);
+				}
 			}
 			// 车况检测
 			let carCheckStatus = await getCarCheckStatus({
@@ -388,6 +412,7 @@
 						})
 						if (index == -1) {
 							collectList.unshift(this.carDetail)
+							this.favorColor = 'green'
 							uni.setStorage({
 								key: 'collectList',
 								data: collectList,
@@ -401,13 +426,14 @@
 							})
 						} else {
 							collectList.splice(index, 1)
-							collectList.unshift(this.carDetail)
+							this.favorColor = 'gray'
+							// collectList.unshift(this.carDetail)
 							uni.setStorage({
 								key: 'collectList',
 								data: collectList,
 								success: () => {
 									uni.showToast({
-										title: '已收藏',
+										title: '取消收藏',
 										icon: "success",
 										duration: 1500
 									})
@@ -485,7 +511,7 @@
 	uni-page-body {
 		padding-bottom: 20px;
 	}
-
+	
 	.icon-you {
 		font-size: $font-base + 2upx;
 		color: #888;
@@ -606,7 +632,10 @@
 			height: 50upx;
 			line-height: 50upx;
 		}
-
+		
+		.cuIcon-favor {
+			font-size: 32upx;
+		}
 		.price-box {
 			display: flex;
 			align-items: baseline;

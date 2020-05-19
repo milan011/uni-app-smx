@@ -10,8 +10,8 @@
 			</view>
 		</view>
 		<scroll-view scroll-y class="indexes" :scroll-with-animation="true" :enable-back-to-top="true">
-			<view class="cu-list menu-avatar no-padding" v-for="item in userList" :key="item.customer.id" @click="toInfo(item.customer.id)">
-				<view class="cu-item">
+			<view class="cu-list menu menu-avatar no-padding" v-for="item in userList" :key="item.customer.id" @click="toInfo(item.customer.id)">
+				<view class="cu-item arrow">
 					<view class="cu-avatar round lg">{{item.customer.name.substring(0,1)}}</view>
 					<view class="content">
 						<view class="text-grey"><text class="text-abc"></text>{{item.customer.name}}</view>

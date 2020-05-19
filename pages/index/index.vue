@@ -71,16 +71,16 @@
 		</view> -->
 		<!-- 快捷筛选 -->
 		<view class="order-section">
-			<view class="order-item" @tap="navToCarList" data-price="0-5" hover-class="common-hover" :hover-stay-time="50">
-				<text>5万以下</text>
+			<view class="order-item" @tap="navToCarList" data-price="0-3" data-cont="3万以下" hover-class="common-hover" :hover-stay-time="50">
+				<text>3万以下</text>
 			</view>
-			<view class="order-item" @tap="navToCarList" data-price="5-10" hover-class="common-hover" :hover-stay-time="50">
-				<text>5-10万</text>
+			<view class="order-item" @tap="navToCarList" data-price="3-5" data-cont="3-5万" hover-class="common-hover" :hover-stay-time="50">
+				<text>3-5万</text>
 			</view>
-			<view class="order-item" @tap="navToCarList" data-price="10-15" hover-class="common-hover" :hover-stay-time="50">
-				<text>10-15万</text>
+			<view class="order-item" @tap="navToCarList" data-price="5-15" data-cont="5-15万" hover-class="common-hover" :hover-stay-time="50">
+				<text>5-15万</text>
 			</view>
-			<view class="order-item" @tap="navToCarList" data-price="20-10000" hover-class="common-hover" :hover-stay-time="50">
+			<view class="order-item" @tap="navToCarList" data-price="15-10000" data-cont="15万以上" hover-class="common-hover" :hover-stay-time="50">
 				<text>15万以上</text>
 			</view>
 		</view>
@@ -189,7 +189,7 @@
 					OrderYearMin: "",
 					Car_Status: 1,
 					IsPutOn: 1,
-					Shop_Id: "",
+					Shop_Id: "71",
 					Sale_number: -1
 				},
 				city: "",
@@ -260,6 +260,7 @@
 			//#endif
 		},
 		onReachBottom() {
+			// console.log('哥,你上拉了')
 			let num = Math.ceil(this.total / this.car.PageSize)
 			if (this.car.PageIndex < num) {
 				this.car.PageIndex++
@@ -274,14 +275,23 @@
 			 * 分次请求未作整合
 			 */
 			toSell() {
-				uni.navigateTo({
+				uni.switchTab({
 					url: '../sell/sellCar'
 				});
 			},
 			toBuy() {
-				uni.switchTab({
+				uni.setStorage({
+					key: 'selectConditions',
+					data: [],
+					success: function() {
+						uni.reLaunch({
+							url: `/pages/product/list`
+						})
+					}
+				})
+				/* uni.switchTab({
 					url: '/pages/product/list'
-				});
+				}); */
 			},
 			toCitySelect() {
 				uni.navigateTo({
@@ -299,6 +309,14 @@
 						})
 					}
 				});
+			},
+			//下拉刷新
+			onPullDownRefresh() {
+				// console.log('哥,你下拉了')
+				this.goodsList = []
+				this.car.PageIndex = 1
+				this.loadData()
+				uni.stopPullDownRefresh()
 			},
 			async loadData() {
 				this.loadingType = "loading"

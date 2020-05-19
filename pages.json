@@ -5,8 +5,9 @@
 				// "navigationBarTitleText": "驷马先二手车电商平台",
 				// #ifndef MP 
 				"navigationBarTitleText": "驷马先二手车电商平台",
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
 				// #endif
+				"enablePullDownRefresh": true
 				// "navigationStyle": "custom"
 				/* "app-plus": {
 					"titleNView": {
@@ -104,6 +105,13 @@
 				// "navigationStyle":"custom",
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "车源列表"
+			}
+		},  {
+			"path": "pages/car/listRemind",
+			"style": {
+				// "navigationStyle":"custom",
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "车源跟进"
 			}
 		}, {
 			"path": "pages/car/show",
@@ -305,6 +313,12 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "求购管理"
+			}
+		},  {
+			"path": "pages/wantBuy/listRemind",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "求购跟进列表"
 			}
 		}, {
 			"path": "pages/wantBuy/show/show",

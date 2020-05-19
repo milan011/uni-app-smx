@@ -10,7 +10,7 @@
 				</view>
 			</view>
 			<view class="cu-list menu">
-				<view v-for="(item, index) in list" :key="index" class="cu-item">
+				<view v-for="(item, index) in list" :key="index" class="cu-item arrow">
 					<view class="content" @click="toDetail(item)">
 						<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
 						<text class="text-grey">{{ item.FullName }}</text>
@@ -258,6 +258,12 @@
 </script>
 
 <style lang="scss">
+	.cu-list.menu>.cu-item.arrow {
+	    padding-right: 30px;
+	}
+	.cu-list.menu>.cu-item.arrow:before {
+	  right: 0.5em;
+	}
 	.text-grey {
 		display: inline-block;
 		width: 260upx;

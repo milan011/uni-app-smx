@@ -12,7 +12,7 @@
 							<view>
 								<view class="cu-tag bg-red light sm round">¥ {{item.SaleAMT}}万元</view>
 								<view class="cu-tag bg-green light sm round">{{item.Mileage}}万公里</view>
-								<view class="cu-tag bg-green light sm round">{{item.shopcityname}}</view>
+								<view class="cu-tag bg-green light sm round">{{item.CityName}}</view>
 							</view>
 						</view>
 					</view>
@@ -65,12 +65,14 @@
 				cateList: [],
 				menuData: [],
 				filterDropdownValue: [],
+				filterDropdownValueM: [[0],[0,0],[[]], [[],[],[]]],
 				selectConditions: {},
 				goodsList: [],
+				xiala: 'wo mei xiala',
 				imgUrl: Config.img_url,
 				car: {
 					PageIndex: 1,
-					PageSize: 8,
+					PageSize: 6,
 					CityName: "",
 					CarAges: "",
 					Factory: "",
@@ -94,8 +96,10 @@
 			};
 		},
 
-		onLoad(options) {
-			let that = this
+		async onLoad(options) {
+			let _this = this
+			console.log('xiala==>?',_this.xiala)
+			// return false
 			// #ifdef H5
 			// this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
 			// #endif
@@ -112,14 +116,14 @@
 			uni.getStorage({
 				key: 'city',
 				success: function(res) {
-					that.city = res.data
+					_this.city = res.data
 					let arr = res.data.split("")
 					let index = arr.length - 1
 					if (arr[index] == "市") {
 						let arr1 = arr.pop()
-						that.car.CityName = arr.join("")
+						_this.car.CityName = arr.join("")
 					} else {
-						that.car.CityName = res.data
+						_this.car.CityName = res.data
 					}
 				},
 				fail: function() {
@@ -133,14 +137,14 @@
 			uni.getStorage({
 				key: 'citys',
 				success: function(res) {
-					that.city = res.data
+					_this.city = res.data
 					let arr = res.data.split("")
 					let index = arr.length - 1
 					if (arr[index] == "市") {
 						let arr1 = arr.pop()
-						that.car.CityName = arr.join("")
+						_this.car.CityName = arr.join("")
 					} else {
-						that.car.CityName = res.data
+						_this.car.CityName = res.data
 					}
 				},
 				fail: function() {
@@ -151,36 +155,70 @@
 			});
 			//#endif
 			this.cateId = options.tid;
-			this.loadCateList(options.fid, options.sid);
+			// this.loadCateList(options.fid, options.sid);
+			// this.getCarTypelist()
+			// this.getshoplist()
+			console.log('kaishi')
+			console.log('menuData1', menuExam)
+			await this.getshoplist()
+			await this.getCarTypelist()
+			this.menuData = await this.$api.json('menuExam');
+			console.log('menuData2', this.menuData)
+			console.log('开始初始化')
+			await this.selectCondInit()
 
-			this.getCarTypelist()
-			this.getshoplist()
-			uni.getStorage({
-				key: 'selectConditions',
-				success: function(res) {
-					console.log(res.data)
-					if (res.data.price) {
-						let arr = res.data.price.split("-")
-						that.car.SaleAMTMin = arr[0]
-						that.car.SaleAMTMax = arr[1]
-						that.loadData();
-					} else {
-						if (res.data.factory === true) {
-							that.car.Factory = ''
-						} else {
-							that.car.Factory = res.data.factory
-						}
-						that.loadData();
-					}
-				},
-				fail: function() {
-					that.loadData();
-				}
-			})
+			console.log('4', _this.filterDropdownValueM)
+			// return false
+			// _this.filterDropdownValue = [[0],[5,9],[[]], [[],[],[]]]
+			_this.filterDropdownValue = _this.filterDropdownValueM
+			_this.$refs.filterDropdown.selectHierarchyMenu(1,_this.filterDropdownValue[1][0],_this.filterDropdownValue[1][1],null)
+			console.log('搜索初始化完成',this.car)
+			// return false
+			// this.menuData = await this.$api.json('menuExam');
+			// _this.loadData();
+			console.log('end')
+			// uni.getStorage({
+			// 	key: 'selectConditions',
+			// 	success: function(res) {
+			// 		console.log(res.data)
+			// 		// console.log('顶部横条数据',_this.$refs.filterDropdown)
+			// 		if (res.data.price) {
+			// 			let arr = res.data.price.split("-")
+			// 			_this.car.SaleAMTMin = arr[0]
+			// 			_this.car.SaleAMTMax = arr[1]
+			// 			_this.loadData();
+			// 		} else {
+			// 			if (res.data.factory === true) {
+			// 				_this.car.Factory = ''
+			// 			} else {
+			// 				_this.car.Factory = res.data.factory
+			// 			}
+			// 			_this.loadData();
+			// 		}
+			// 	},
+			// 	fail: function() {
+			// 		_this.loadData();
+			// 	}
+			// })
 		},
-		onPullDownRefresh() {
-			this.filterDropdownValue = []
-			var that = this
+		onShow() {
+			// this.$refs.filterDropdown.selectHierarchyMenu(1,1,2)
+		},
+		mounted() {
+			// this.$refs.filterDropdown.initMenu()
+			// this.$refs.filterDropdown.menu = [{name: 'hehe'}, {name: '奥迪'}]
+			console.log('顶部横条数据',this.$refs.filterDropdown.menu)
+			console.log('json文件', this.menuData)
+			console.log('菜单',this.$refs.filterDropdown.subData)
+			// this.$refs.filterDropdown.selectFilterLabel(1,2,3)
+			// this.filterDropdownValue = [[1],[4,2],[[]], [[],[],[]]]
+			// this.$refs.filterDropdown.defaultSelected = [[1],[4,2],[[]], [[],[],[]]]
+			// this.$refs.HMfilterDropdown.defaultSelected = [1,[1,2],[0,1], [0,0,1]]
+			// this.$refs.filterDropdown.initMenu()
+			// this.$refs.filterDropdown.activeMenuArr = [[0],[4,2],[[0]],[[],[],[]]]
+			// this.$refs.filterDropdown.selectHierarchyMenu(1,4,2,null)
+		},
+		onHide(){
 			this.$refs.filterDropdown.resetFilterData(2);
 			this.$refs.filterDropdown.setFilterData(2);
 			this.$refs.filterDropdown.resetFilterData(3);
@@ -200,20 +238,51 @@
 			uni.removeStorage({
 				key: 'selectConditions',
 				success: (res) => {
-					that.car.SaleAMTMin = ""
-					that.car.SaleAMTMax = ""
-					that.loadingType = 'loading'
-					that.goodsList = []
-					getCarList({ ...that.car
-					}).then(res => {
-						that.goodsList = res.data.Data.DataList;
-						that.total = res.data.Data.Total
-						that.loadingType = that.goodsList.length >= that.total ? 'nomore' : 'more';
-						uni.stopPullDownRefresh()
-					})
-
+					
 				}
 			})
+		},
+		onPullDownRefresh() {	
+			var _this = this
+			_this.goodsList = []
+			_this.xiala = 'wo xia la le '
+			// return false
+			console.log('xial?',_this.xiala)
+			_this.filterDropdownValue = []
+			_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
+			uni.stopPullDownRefresh()
+			// _this.$refs.filterDropdown.resetFilterData(2);
+			// _this.$refs.filterDropdown.setFilterData(2);
+			// _this.$refs.filterDropdown.resetFilterData(3);
+			// _this.$refs.filterDropdown.setFilterData(3);
+			// _this.$refs.filterDropdown.selectHierarchyMenu(0, 0);
+			// _this.$refs.filterDropdown.selectHierarchyMenu(1, 0, 0);
+			// _this.car.OrderPriceMin = ""
+			// _this.car.OrderYearMin = ""
+			// _this.car.OrderNew = ""
+			// _this.car.Factory = ""
+			// _this.car.SaleAMTMin = ""
+			// _this.car.SaleAMTMax = ""
+			// _this.car.CarType = ""
+			// _this.car.Transmission = ""
+			// _this.car.Shop_Id = ""
+			// _this.car.PageIndex = 1
+			// uni.removeStorage({
+			// 	key: 'selectConditions',
+			// 	success: (res) => {
+			// 		_this.car.SaleAMTMin = ""
+			// 		_this.car.SaleAMTMax = ""
+			// 		_this.loadingType = 'loading'
+			// 		console.log('here1')
+			// 		getCarList({ ..._this.car
+			// 		}).then(res => {
+			// 			_this.goodsList = res.data.Data.DataList;
+			// 			_this.total = res.data.Data.Total
+			// 			_this.loadingType = _this.goodsList.length >= _this.total ? 'nomore' : 'more';
+			// 			uni.stopPullDownRefresh()
+			// 		})
+			// 	}
+			// })
 		},
 		onPageScroll(e) {
 			//兼容iOS端下拉时顶部漂移
@@ -231,12 +300,14 @@
 			} else {
 				this.car.PageIndex++
 				console.log(this.car.PageIndex)
+				console.log('here1')
+				console.log('load',this.loadingType)
 				this.loadData();
 			}
 		},
 		methods: {
 			//加载分类
-			async loadCateList(fid, sid) {
+			/* async loadCateList(fid, sid) {
 				let list = await this.$api.json('cateList');
 				let cateList = list.filter(item => item.pid == fid);
 
@@ -245,20 +316,57 @@
 					item.child = tempList;
 				})
 				this.cateList = cateList;
-			},
+			}, */
 			async selectCondInit() {
+				var _this = this
+				let condArr = [[0],[0,0],[[]], [[],[],[]]]
+				let topIndex = 1
+				let firIndex = 0
+				let senIndex = 0
 				return new Promise(resolve => {
-					setTimeout(() => {
-						// this.selectConditions = uni.getStorageSync('selectConditions');
-						uni.getStorage({
-							key: 'selectConditions',
-							success: function(res) {}
-						});
-
-						resolve()
-					}, 500)
+					uni.getStorage({
+						key: 'selectConditions',
+						success: function(res) {
+							console.log('首页参数', res.data)
+							console.log('筛选菜单',_this.menuData)
+							if (res.data.price) {
+								let arr = res.data.price.split("-")
+								let condName = res.data.cont
+								_this.car.SaleAMTMin = arr[0]
+								_this.car.SaleAMTMax = arr[1]
+								console.log(_this.menuData[2].submenu[0].submenu)
+								_this.menuData[2].submenu[0].submenu.forEach((ele, index)=>{
+									if(ele.name == condName){
+										console.log('你选了我', index, '==>', ele)
+										condArr[2][0] = [index]
+									}
+								})
+								console.log(condArr)
+							} else {		
+								if (res.data.factory === true) {
+									_this.car.Factory = ''
+								} else {
+									_this.car.Factory = res.data.factory								
+									_this.menuData[1].submenu.forEach((ele,index)=>{
+										ele.submenu.forEach((el, ind)=>{						
+											if(el.brand == _this.car.Factory){
+												console.log(el, ind)
+												console.log(ele, index)
+												condArr[1] = [index, ind]
+											}
+										})
+									})
+								}
+							}				
+							_this.filterDropdownValueM = condArr
+							_this.filterDropdownValue = _this.filterDropdownValueM
+							resolve()
+						},
+						fail: function() {
+							resolve()
+						}
+					});				
 				})
-
 			},
 			//加载商品 ，带下拉刷新和上滑加载
 			async loadData(type = 'add', loading) {
@@ -271,14 +379,15 @@
 				} else {
 					this.loadingType = 'more'
 				}
-				this.menuData = await this.$api.json('menuExam');
-				// console.log('begin')
-				let cond = await this.selectCondInit();
+				// this.menuData = await this.$api.json('menuExam');
+				// console.log('menuData', this.menuData)
+				// let cond = await this.selectCondInit();
 				let list = await getCarList({ ...this.car
 				})
 				let goodsList = list.data.Data.DataList
 				this.total = list.data.Data.Total
-				console.log("219行===>", this.total)
+				// this.filterDropdownValue = [[0],[4,2],[[]], [[],[],[]]]
+				// this.$refs.filterDropdown.selectHierarchyMenu(1,4,2,null)
 				if (type === 'refresh') {
 					this.goodsList = [];
 				}
@@ -324,6 +433,7 @@
 					duration: 300,
 					scrollTop: 0
 				})
+				console.log('here2')
 				this.loadData('refresh', 1);
 				uni.showLoading({
 					title: '正在加载'
@@ -346,12 +456,14 @@
 					duration: 300,
 					scrollTop: 0
 				})
+				console.log('here3')
 				this.loadData('refresh', 1);
 				uni.showLoading({
 					title: '正在加载'
 				})
 			},
 			confirm(val) {
+				console.log('条件数组', val)
 				let value = val.value
 				if (value[0] == '价格最低') {
 					this.car.OrderPriceMin = true
@@ -399,14 +511,17 @@
 					this.car.Shop_Id = ""
 				}
 				this.car.PageIndex = 1
-				getCarList({ ...this.car
+				this.goodsList = []
+				this.loadingType = 'loading'
+				// console.log('loda',this.loadingType)
+				this.loadData()
+				/* getCarList({ ...this.car
 					})
 					.then(res => {
 						this.goodsList = res.data.Data.DataList;
 						this.total = res.data.Data.Total
 						this.loadingType = this.goodsList.length >= this.total ? 'nomore' : 'more';
-					})
-
+					}) */
 			},
 			//详情
 			navToDetailPage(item) {
@@ -418,31 +533,54 @@
 			},
 			stopPrevent() {},
 			// 获取车型列表
-			getCarTypelist() {
-				getCarTypeList().then(res => {
-					let list = res.data.Data
-					list.forEach(ele => {
-						ele.name = ele.CarTypeMark
-						ele.value = ele.CarTypeMark
-						ele.submenu = ele.BrandLst
-						ele.submenu.forEach(i => {
-							i.name = i.brand
-							i.value = i.brand
+			async getCarTypelist() {
+				return new Promise(resolve => {
+					if(menuExam.menuExam[1].submenu.length > 1){
+						resolve()	
+					}else{
+						getCarTypeList().then(res => {
+							let list = res.data.Data
+							list.forEach(ele => {
+								ele.name = ele.CarTypeMark
+								ele.value = ele.CarTypeMark
+								ele.submenu = ele.BrandLst
+								ele.submenu.forEach(i => {
+									i.name = i.brand
+									i.value = i.brand
+								})
+							})
+							console.log('有品牌吗',menuExam.menuExam[1].submenu.length)
+							menuExam.menuExam[1].submenu.push(...list)	
+							console.log('cartyep')
+							resolve()
 						})
-					})
-					menuExam.menuExam[1].submenu.push(...list)
+					}
+					/* setTimeout(() => {
+						
+					}, 1500) */
 				})
 			},
-			getshoplist() {
-				getCarShopList({
-					id: 1
-				}).then(res => {
-					let list = res.data.Data
-					list.forEach(ele => {
-						ele.value = ele.id
-						ele.submenu = []
-					})
-					menuExam.menuExam[3].submenu[2].submenu.push(...list)
+			async getshoplist() {
+				return new Promise(resolve => {
+					if(menuExam.menuExam[3].submenu[2].submenu.length != 0){
+						resolve()
+					}else{
+						getCarShopList({
+							id: 1
+						}).then(res => {
+							let list = res.data.Data
+							list.forEach(ele => {
+								ele.value = ele.id
+								ele.submenu = []
+							})
+							menuExam.menuExam[3].submenu[2].submenu.push(...list)
+							console.log('shop')
+							resolve()
+						})
+					}
+					/* setTimeout(() => {
+						
+					}, 2500) */
 				})
 			}
 		},

@@ -4,106 +4,50 @@
 			<scroll-view scroll-y="true" class="page">
 				<view class="cu-bar bg-white solid-bottom">
 					<view class="action">
-						<text class="cuIcon-title text-orange"></text> 我的求购
-					</view>
-					<view class="action">
-						<button class="cu-btn bg-green shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-					</view>
-					<view class="action">
-						<button class="cu-btn bg-blue shadow" @tap="createCar" data-target="menuModal">添加求购</button>
+						<text class="cuIcon-title text-orange"></text> 待跟进求购
 					</view>
 				</view>
 				<view class="cu-list menu">
-					<view v-for="(item, index) in cartList" :key="index" class="cu-item" :class="menuArrow?'arrow':''">
-						<navigator class="content" hover-class="none" :url="'./show/show?carId='+item.want.id" open-type="navigate">
+					<view @tap="wantFollow(item.want)" v-for="(item, index) in wantList" :key="index" class="cu-item" :class="menuArrow?'arrow':''">
+						<!-- <navigator class="content" hover-class="none" :url="'./show/show?carId='+item.want.id" open-type="navigate"> -->
 							<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
 							<text class="text-grey">{{ item.want.carcate }}</text>
-						</navigator>
-						<navigator hover-class="none" :url="'./show/show?carId='+item.want.id" open-type="navigate">
+						<!-- </navigator> -->
+						<!-- <navigator hover-class="none" :url="'./show/show?carId='+item.want.id" open-type="navigate"> -->
 							<view class="action">
 								<!-- <view class="cu-tag round bg-orange light">正常</view> -->
-								<view class="cu-tag round bg-olive light">{{item.want.want_status1}}</view>
-								<view class="cu-tag round bg-blue light">{{item.want.created_at}}</view>
+								<!-- <view class="cu-tag round bg-olive light">{{item.want.want_status1}}</view> -->
+								<view class="cu-tag round bg-blue light">最近跟进:{{item.want.updated_at.split('T')[0]}}</view>
 							</view>
-						</navigator>
+						<!-- </navigator> -->
 					</view>
 				</view>
 				<uni-load-more :status="loadingType"></uni-load-more>
 			</scroll-view>
-			<view class="cu-modal" :class="modalName=='RadioModal'?'show':''" @tap="hideModal">
-				<view class="cu-dialog" @tap.stop="">
-					<radio-group class="block" @change="RadioChange">
-						<view class="cu-list menu text-left">
-							<view class="cu-bar bg-white">
-								<view class='action'>
-									<text class='cuIcon-title text-blue'></text>车辆状态
-								</view>
-							</view>
-							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
-								<view class='cu-tag radius' :class="want.wantstatus===1?'bg-orange':''" @click="changeType(1)">正常</view>
-								<view class='cu-tag radius' :class="want.wantstatus===0?'bg-orange':''" @click="changeType(0)">废弃</view>
-								<view class='cu-tag radius' :class="want.wantstatus===4?'bg-orange':''" @click="changeType(4)">已交易</view>
-							</view>
-							<view class="cu-bar bg-white">
-								<view class='action'>
-									<text class='cuIcon-title text-blue'></text>变速箱
-								</view>
-							</view>
-							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
-								<view class='cu-tag radius' :class="want.bsx===0?'bg-orange':''" @click="changeBsx(0)">不限</view>
-								<view class='cu-tag radius' :class="want.bsx==1?'bg-orange':''" @click="changeBsx(1)">手动</view>
-								<view class='cu-tag radius' :class="want.bsx==2?'bg-orange':''" @click="changeBsx(2)">自动</view>
-							</view>
-							<view class="cu-bar bg-white">
-								<view class='action'>
-									<text class='cuIcon-title text-blue'></text>价格区间
-								</view>
-							</view>
-							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
-								<view class='cu-tag radius' :class="want.pricemin===0 && want.pricemax==3?'bg-orange':''" @click="changePrice(0,3)">三万以下</view>
-								<view class='cu-tag radius' :class="want.pricemin===3 && want.pricemax==5?'bg-orange':''" @click="changePrice(3,5)">3-5万</view>
-								<view class='cu-tag radius' :class="want.pricemin===5 && want.pricemax==15?'bg-orange':''" @click="changePrice(5,15)">5-15万</view>
-								<view class='cu-tag radius' :class="want.pricemin===15 && want.pricemax==500?'bg-orange':''" @click="changePrice(15,500)">15万以上</view>
-							</view>
-							<view class="cu-bar bg-white">
-								<view class='action'>
-									<text class='cuIcon-title text-blue'></text>日期
-								</view>
-							</view>
-							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
-								<view class="uni-list">
-									<view class="uni-list-cell">
-										<view class="uni-list-cell-left">
-											开始日期
-										</view>
-										<view class="uni-list-cell-db">
-											<picker mode="date" :value="startDate" @change="bindDateChange">
-												<view class="uni-input">{{startDate}}</view>
-											</picker>
-										</view>
-									</view>
-									<view class="uni-list-cell" style="margin-top: 30upx;">
-										<view class="uni-list-cell-left">
-											结束日期
-										</view>
-										<view class="uni-list-cell-db">
-											<picker mode="date" :value="endDate" @change="bindEndDateChange">
-												<view class="uni-input">{{endDate}}</view>
-											</picker>
-										</view>
-									</view>
-								</view>
-							</view>
-						</view>
-						<view class="padding flex flex-direction">
-							<view class="cu-btn bg-blue lg" @tap="doSeach">确定</view>
-							<view class="cu-btn bg-grey margin-tb-sm lg" @tap="hideModal">取消</view>
-						</view>
-					</radio-group>
+		</view>
+		<!-- 跟进modal Begin -->
+		<view class="cu-modal" style="z-index: 10;" :class="modalName=='ModalFollow'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">求购跟进</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<view class="cu-form-group margin-top">
+						<textarea maxlength="-1" v-model="wantFollowData.description" @input="textareaAInput" placeholder="跟进内容"></textarea>
+					</view>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="doFollow">确定</button>
+					</view>
 				</view>
 			</view>
 		</view>
-	</view>
+		<!-- 跟进modal End -->
 	</view>
 </template>
 
@@ -117,9 +61,7 @@
 	import uniList from '@/components/uni-list/uni-list';
 	import uniListItem from "@/components/uni-list-item/uni-list-item.vue"
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
-	import {
-		getWantList
-	} from "@/api/want.js"
+	import { getWantList,wantFollow } from "@/api/want.js"
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
 		components: {
@@ -133,9 +75,9 @@
 		},
 		data() {
 			return {
-				menuArrow: true,
+				menuArrow: false,
 				empty: false, //空白页现实  true|false
-				cartList: [],
+				wantList: [],
 				modalName: null,
 				startDate: "请选择开始日期",
 				endDate: "请选择结束日期",
@@ -152,10 +94,17 @@
 					userid: "",
 					shopid: "",
 					wantstatus: 1,
-					updatetime: "",
+					updatetime: "求购",
 					rolename: "",
 					startTime: "",
 					endTime: ""
+				},
+				wantFollowData: {
+					want_id: null,
+					follow_type: 1,
+					user_name: '',
+					user_id: '',
+					description: ''
 				},
 				total: "",
 				loadingType: 'more', //参数loading加载,nomore
@@ -177,15 +126,15 @@
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
-					this.cartList = []
+					this.wantList = []
 					this.want.shopid = res.data.shop_id;
 					this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
 					this.want.userid = res.data.id;
 					this.loadingType = 'loading'
 					getWantList({ ...this.want
 					}).then(res => {
-						this.cartList = res.data.Data.DataList
-						this.cartList.forEach(ele => {
+						this.wantList = res.data.Data.DataList
+						this.wantList.forEach(ele => {
 							if (ele.want.want_status === '0') {
 								ele.want.want_status1 = "废弃"
 							} else if (ele.want.want_status === '1') {
@@ -209,7 +158,7 @@
 		},
 		//下拉刷新
 		onPullDownRefresh() {
-			this.cartList = []
+			this.wantList = []
 			this.want.pageIndex = 1
 			this.want.wantstatus = 1;
 			this.want.bsx = 0;
@@ -238,7 +187,7 @@
 		},
 		watch: {
 			//显示空白页
-			cartList(e) {
+			wantList(e) {
 				let empty = e.length === 0 ? true : false;
 				if (this.empty !== empty) {
 					this.empty = empty;
@@ -252,16 +201,16 @@
 			//请求数据
 			async loadData() {
 				this.loadingType = "loading"
-				let cartList = await getWantList({ ...this.want
+				let wantList = await getWantList({ ...this.want
 				})
-				// this.cartList = cartList.data.Data.DataList;
-				if (this.cartList.length == 0) {
-					this.cartList = cartList.data.Data.DataList;
+				// this.wantList = wantList.data.Data.DataList;
+				if (this.wantList.length == 0) {
+					this.wantList = wantList.data.Data.DataList;
 				} else {
-					this.cartList = this.cartList.concat(cartList.data.Data.DataList);
+					this.wantList = this.wantList.concat(wantList.data.Data.DataList);
 				}
-				this.total = cartList.data.Data.Total;
-				this.cartList.forEach(ele => {
+				this.total = wantList.data.Data.Total;
+				this.wantList.forEach(ele => {
 					if (ele.want.want_status === '0') {
 						ele.want.want_status1 = "废弃"
 					} else if (ele.want.want_status === '1') {
@@ -284,9 +233,40 @@
 					url: '/pages/public/login'
 				})
 			},
+			textareaAInput(e) {
+				this.wantFollowData.description = e.detail.value
+			},
+			wantFollow(want){
+				// console.log(want)
+				this.wantFollowData.want_id = want.id
+				this.wantFollowData.user_name = want.creater_name
+				this.wantFollowData.user_id = want.creater_id
+				this.wantFollowData.description = ''
+				// console.log(this.wantFollowData)
+				this.modalName = 'ModalFollow'
+			},
+			doFollow(){
+				// console.log(this.wantFollowData)
+				// return false
+				if(!this.wantFollowData.description){
+					this.$api.msg(`请填写跟进信息`, 2000)
+				}else{
+					wantFollow(this.wantFollowData).then(res => {
+						// this.getFollow();
+						this.hideModal()
+						uni.showToast({
+							title: "跟进成功成功",
+							icon: "none",
+							duration: 1500
+						})
+						this.wantList = []
+						this.loadData()
+					})
+				}
+			},
 			doSeach() {
 				this.want.pageIndex = 1
-				this.cartList = []
+				this.wantList = []
 				this.loadData();
 				this.hideModal();
 			},
@@ -375,11 +355,5 @@
 				height: 0;
 			}
 		}
-	}
-	.cu-list.menu>.cu-item.arrow {
-	    padding-right: 30px;
-	}
-	.cu-list.menu>.cu-item.arrow:before {
-	  right: 0.5em;
 	}
 </style>

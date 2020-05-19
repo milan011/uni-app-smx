@@ -3,7 +3,8 @@
 		<scroll-view scroll-x class="bg-white nav" style="width: 90%;margin: 0 auto;">
 			<!-- 基本信息编辑Begin -->
 			<view class="cu-form-group">
-				<text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
+				<!-- <text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text> -->
+				<text class="cuIcon-require text-red"></text>
 				<view class="title">期望车型</view>
 				<input style="text-align: right;" placeholder="请输入期望车型" v-model="form.carcate" @blur="verification" name="input"></input>
 			</view>
@@ -24,18 +25,20 @@
 				</picker>
 			</view>
 			<view class="cu-form-group nu-style">
-				<text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
+				<text class="cuIcon-require text-red"></text>
 				<view class="title">最低期望价格(万元)</view>
 				<input style="text-align: right;" placeholder="请输入最低期望价格" v-model="form.bottom_price" @blur="verification" @ name="input"></input>
 				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group nu-style">
-				<text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
+				<text class="cuIcon-require text-red"></text>
 				<view class="title">最高期望价格(万元)</view>
 				<input style="text-align: right;" placeholder="请输入最高期望价格" v-model="form.top_price" @blur="verification" @ name="input"></input>
 				<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 			</view>
 			<view class="cu-form-group margin-top">
+				<!-- <text class="cuIcon-require text-red"></text> -->
+				<!-- <view class="title">客户描述</view> -->
 				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" :value="textareaAValue" placeholder="客户描述"></textarea>
 			</view>
 			<text class="mix-btn" @click="confirmInfo">提交修改</text>

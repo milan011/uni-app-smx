@@ -6,8 +6,8 @@ if (process.env.NODE_ENV === 'development') {
 	img_url = 'http://testapi.simaxian.com'
 } else {
 	// 生产环境
-	url_config = 'https://*****.com/'
-	img_url = ''
+	url_config = 'http://testapi.simaxian.com/api'
+	img_url = 'http://testapi.simaxian.com'
 }
 //变速箱
 const transmissionConfig = ['不限', '手动', '自动'];

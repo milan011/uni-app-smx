@@ -19,7 +19,7 @@
 		},
 		onLaunch: function() {
 			let userInfo = uni.getStorageSync('userInfo') || '';
-			console.log(userInfo)
+			// console.log(userInfo)
 			if (userInfo.id) {
 				//更新登陆状态
 				uni.getStorage({
@@ -109,6 +109,15 @@
 		-moz-osx-font-smoothing: grayscale;
 	}
 
+	.cu-form-group>uni-text[class*="cuIcon-require"] {
+	    font-size: 10px;
+	}
+	.uni-textarea-placeholder{
+		color: #c0bfbf;
+	}
+	.uni-input-placeholder{
+		color: #c0bfbf;
+	}
 	.icon-yiguoqi1:before {
 		content: "\e700";
 	}

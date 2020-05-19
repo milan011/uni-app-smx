@@ -97,7 +97,7 @@
 					if(res.data.ResultType === 0){ //登录成功
 						this.login(res.data.Data);
 						// uni.navigateBack();
-						uni.switchTab({
+						uni.reLaunch({
 							url: '/pages/user/user'
 						});
 					}else{ //登录失败

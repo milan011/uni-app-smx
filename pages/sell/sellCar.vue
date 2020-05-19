@@ -98,7 +98,7 @@
 					<view class="question" v-if="TabCur==0">
 						<view v-for="(item,index) in reservation" :key="index" @click="reservationIsShow(index)">
 							<text class="Q" :class="{ 'active': item.isShow }">Q</text>
-							<text>{{item.questions}}?</text>
+							<text>{{item.questions}}</text>
 							<text class="cuIcon-unfold icons" v-if="!item.isShow"></text>
 							<text class="cuIcon-fold icons" v-else></text>
 							<view class="answer" v-if="item.isShow">
@@ -112,7 +112,7 @@
 					<view class="question" v-if="TabCur==1">
 						<view v-for="(item,index) in assess" :key="index" @click="assessIsShow(index)">
 							<text class="Q" :class="{ 'active': item.isShow }">Q</text>
-							<text>{{item.questions}}?</text>
+							<text>{{item.questions}}</text>
 							<text class="cuIcon-unfold icons" v-if="!item.isShow"></text>
 							<text class="cuIcon-fold icons" v-else></text>
 							<view class="answer" v-if="item.isShow">
@@ -126,7 +126,7 @@
 					<view class="question" v-if="TabCur==2">
 						<view v-for="(item,index) in putOn" :key="index" @click="putOnIsShow(index)">
 							<text class="Q" :class="{ 'active': item.isShow }">Q</text>
-							<text>{{item.questions}}?</text>
+							<text>{{item.questions}}</text>
 							<text class="cuIcon-unfold icons" v-if="!item.isShow"></text>
 							<text class="cuIcon-fold icons" v-else></text>
 							<view class="answer" v-if="item.isShow">
@@ -354,7 +354,11 @@
 		background: #fff;
 		border-radius: 10upx;
 	}
-
+	
+	uni-view {
+	    // font-size: 20px;
+	    line-height: 2.4;
+	}
 	.sellcar-main {
 		margin-top: 40upx;
 
@@ -502,7 +506,7 @@
 		.superiority {
 			width: 90%;
 			margin: 0 auto;
-
+			margin-bottom: 0.5em;
 			.box {
 				width: 100%;
 				height: 600upx;

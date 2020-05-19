@@ -17,7 +17,7 @@
 			</view>	
 			<!-- 信息显示Begin -->
 			<view class="cu-list menu" v-if="TabCur==0">
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">名称</text>
@@ -26,7 +26,7 @@
 						<text class="text-grey text-sm">{{detail.cars.FullName}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">状态</text>
@@ -35,7 +35,7 @@
 						<text v-if="detail.cars.Car_Status" class="text-grey text-sm">{{carStatusConfig[detail.cars.Car_Status].name}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">车架号</text>
@@ -44,7 +44,7 @@
 						<text class="text-grey text-sm">{{detail.cars.VIN}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">车型类别</text>
@@ -53,7 +53,7 @@
 						<text v-if="detail.cars.CarType" class="text-grey text-sm">{{carTypeConfig[detail.cars.CarType].name}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">期望价格(万)</text>
@@ -62,7 +62,7 @@
 						<text class="text-grey text-sm">{{detail.cars.BasePrice}}-{{detail.cars.SaleAMT}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">指导价(万)</text>
@@ -71,7 +71,7 @@
 						<text class="text-grey text-sm">{{detail.cars.InitPrice/10000}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">评估价(万)</text>
@@ -80,7 +80,7 @@
 						<text class="text-grey text-sm">{{detail.cars.EvalAMT?detail.cars.EvalAMT:'暂无评估价'}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">车龄(年)</text>
@@ -89,7 +89,7 @@
 						<text v-if="detail.cars.BuyDate" class="text-grey text-sm">{{detail.cars.BuyDate?(nowYear-detail.cars.BuyDate.split("-")[0]):""}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">过户次数</text>
@@ -98,7 +98,7 @@
 						<text class="text-grey text-sm">{{detail.cars.Sale_number}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">行驶里程(万公里)</text>
@@ -107,7 +107,7 @@
 						<text class="text-grey text-sm">{{detail.cars.Mileage}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">变速箱</text>
@@ -116,7 +116,7 @@
 						<text v-if="detail.cars.Transmission" class="text-grey text-sm">{{transmissionConfig[detail.cars.Transmission].name}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">排量</text>
@@ -125,7 +125,7 @@
 						<text class="text-grey text-sm">{{detail.cars.Capacity}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">上牌日期</text>
@@ -134,7 +134,7 @@
 						<text v-if="detail.cars.BuyDate" class="text-grey text-sm">{{detail.cars.BuyDate.split("T")[0]}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">上牌城市</text>
@@ -143,7 +143,7 @@
 						<text class="text-grey text-sm">{{detail.cars.CityName}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">到检日期</text>
@@ -152,7 +152,7 @@
 						<text v-if="detail.cars.InspectionTime" class="text-grey text-sm">{{detail.cars.InspectionTime.split("T")[0]}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">保险类别</text>
@@ -161,7 +161,7 @@
 						<text v-if="detail.cars.Safe_type" class="text-grey text-sm">{{safetypeConfig[detail.cars.Safe_type].name}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">保险到期</text>
@@ -170,7 +170,7 @@
 						<text v-if="detail.cars.Safe_end" class="text-grey text-sm">{{detail.cars.Safe_end.split("T")[0]}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">外观颜色</text>
@@ -179,7 +179,7 @@
 						<text v-if="detail.cars.Out_color" class="text-grey text-sm">{{outcolorConfig[detail.cars.Out_color].name}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">内饰颜色</text>
@@ -188,7 +188,7 @@
 						<text v-if="detail.cars.Inside_color" class="text-grey text-sm">{{insidecolorConfig[detail.cars.Inside_color].name}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">所属门店</text>
@@ -197,7 +197,7 @@
 						<text class="text-grey text-sm">{{detail.shop.name}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">负责人</text>
@@ -206,7 +206,7 @@
 						<text class="text-grey text-sm">{{detail.cars.CreateName}} | {{detail.Telephone}}</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">客户信息</text>
@@ -216,7 +216,7 @@
 						<text v-if="detail.cars.CreateId === currentUserId" class="text-grey text-sm">({{detail.customer.telephone}})</text>
 					</view>
 				</view>
-				<view class="cu-item arrow">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">评估师描述</text>

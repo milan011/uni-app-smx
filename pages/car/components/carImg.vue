@@ -138,7 +138,7 @@
 								<view class="grid col-4 grid-square flex-sub">
 									<view v-if="part.imagetype == img.ImageType" v-for="(img, ind) in imgListPgCurrentF" :key="ind" class="bg-img" @tap="ViewImage">
 										<image :src="img.imgUrl" mode="aspectFill"></image>
-										<view class="cu-tag bg-red" data-ipart="F" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
+										<view class="cu-tag bg-red" data-ipart="F" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="ind" :data-imgtype="img.ImageType">
 											<text class='cuIcon-close'></text>
 										</view>
 									</view>
@@ -164,11 +164,11 @@
 								<view class="grid col-4 grid-square flex-sub">
 									<view v-if="part.imagetype == img.ImageType" v-for="(img, ind) in imgListPgCurrentJ" :key="ind" class="bg-img" @tap="ViewImage">
 										<image :src="img.imgUrl" mode="aspectFill"></image>
-										<view class="cu-tag bg-red" data-ipart="J" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="index" :data-imgtype="img.ImageType">
+										<view class="cu-tag bg-red" data-ipart="J" @tap.stop="DelImgPg" :data-imgid="img.id" :data-index="ind" :data-imgtype="img.ImageType">
 											<text class='cuIcon-close'></text>
 										</view>
 									</view>
-									<view class="solids" @tap="ChooseImagePg" data-ipart="J" :data-imagetype="part.imagetype" >
+                  <view class="solids" @tap="ChooseImagePg" data-ipart="J" :data-imagetype="part.imagetype" >
 										<text class='cuIcon-cameraadd'></text>
 									</view>
 								</view>
@@ -470,6 +470,7 @@
 							const imgId = e.currentTarget.dataset.imgid
 							const imgIndex = e.currentTarget.dataset.index
 							const imgType = e.currentTarget.dataset.imgtype 
+							console.log(imgIndex)
 							// const imgPart = e.currentTarget.dataset.pgPartDConfig 
 							imgDeleteById(imgId).then(res => {
 								if(res.data.ResultType === 0){
