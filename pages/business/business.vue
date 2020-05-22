@@ -8,9 +8,7 @@
 					</view>
 					<view class="action">
 						<button class="cu-btn bg-green shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-					</view>
-					<view class="action">
-						<button class="cu-btn bg-blue shadow" @tap="addBusiness" data-target="menuModal">添加商机</button>
+						<button v-show="isAdmin" class="cu-btn bg-blue shadow" @tap="addBusiness" data-target="menuModal">添加商机</button>
 					</view>
 				</view>
 				<view class="cu-list menu">
@@ -23,7 +21,7 @@
 							<!-- <view class="cu-tag round bg-orange light">正常</view> -->
 							<view class="cu-tag round bg-olive light">{{item.name}}</view>
 							<view class="cu-tag round bg-blue light">{{item.mobile}}</view>
-							<view class="cu-tag round bg-green light">{{item.status==1?'未分发':'已分发'}}</view>
+							<view v-show="isAdmin" class="cu-tag round bg-green light">{{item.status==1?'未分发':'已分发'}}</view>
 						</view>
 					</view>
 				</view>
@@ -87,12 +85,35 @@
 				</view>
 			</view>
 		</view>
+		<!-- 反馈modal Begin -->
+		<view class="cu-modal" style="z-index: 10;" :class="modalName=='ModalFollow'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">商机反馈</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<view class="cu-form-group margin-top">
+						<textarea v-model="oppData.remark" maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
+					</view>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="editOpp">确定</button>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 反馈modal End -->
 	</view>
 </template>
 
 <script>
 	import {
-		getBusinessList
+		getBusinessList, oppFeed
 	} from '@/api/business.js'
 	import {
 		getShopList
@@ -114,6 +135,11 @@
 					rolename: "",
 					status: 1
 				},
+				oppData: {
+					id: null,
+					remark: '',
+				},
+				isAdmin: false,
 				total: "",
 				startdate: "请选择开始时间",
 				endData: "请选择结束时间",
@@ -123,11 +149,16 @@
 				shopList: [{
 					name: ""
 				}],
+				ifOnShow:false,
 				shopIndex: 0,
 				radio: '',
 			}
 		},
 		onLoad(option) {
+			console.log('roleArr', this.$store.getters.roleArr)		
+			if(this.$store.getters.roleArr.indexOf('admin') > -1){
+				this.isAdmin = true
+			}
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
@@ -138,17 +169,23 @@
 				}
 			})
 		},
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
 		onShow() {
-			this.businessList = []
-			uni.getStorage({
-				key: 'userInfo',
-				success: (res) => {
-					this.business.shopid = res.data.shop_id
-					this.business.rolename = res.data.rolename.split(",")[0]
-					this.init()
-					this.getshop()
-				}
-			})
+			if(this.ifOnShow){
+				this.businessList = []
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.business.shopid = res.data.shop_id
+						this.business.rolename = res.data.rolename.split(",")[0]
+						this.init()
+						this.getshop()
+					}
+				})
+			}	
 		},
 		onPullDownRefresh() {
 			this.businessList = []
@@ -205,6 +242,24 @@
 					})
 				})
 			},
+			textareaAInput(e) {
+				this.oppData.remark = e.detail.value
+			},
+			editOpp(){
+				if(!this.oppData.remark){
+					this.$api.msg(`请输入反馈信息`);
+				}else{
+					console.log('oppData', this.oppData)
+					oppFeed(this.oppData).then(res=>{
+						console.log(res.data)
+						if(res.data.ResultType == 0){
+							this.$api.msg(`反馈成功`);
+							this.modalName = null
+							this.init()
+						}
+					})
+				}		
+			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 			},
@@ -240,10 +295,15 @@
 						getShopList({
 							id:res.data.shop_id
 						}).then(res => {
-							this.shopList = res.data.Data
-							this.shopList.unshift({
-								name: "全部"
-							})
+							console.log('shop',res.data)
+							if(res.data.ResultType == 0){
+								if(res.data.Data){
+									this.shopList = res.data.Data
+									this.shopList.unshift({
+										name: "全部"
+									})
+								}
+							}	
 						})
 					}
 				})
@@ -268,15 +328,21 @@
 				// console.log(this.business)
 			},
 			toInfo(item) {
-				uni.setStorage({
-					key: 'businessInfo',
-					data: item,
-					success: () => {
-						uni.navigateTo({
-							url: './edit/edit?id=' + item.id
-						})
-					}
-				})
+				if(this.isAdmin){ //管理员处理商机
+					uni.setStorage({
+						key: 'businessInfo',
+						data: item,
+						success: () => {
+							uni.navigateTo({
+								url: './edit/edit?id=' + item.id
+							})
+						}
+					})
+				}else{ //店长反馈商机
+					this.oppData.id = item.id
+					this.oppData.remark = ''
+					this.modalName = 'ModalFollow'
+				}		
 			}
 		}
 	}

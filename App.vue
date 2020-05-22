@@ -29,11 +29,11 @@
 					}
 				});
 			}
-			let amapPlugin = new amap.AMapWX({
+			/* let amapPlugin = new amap.AMapWX({
 				key: '23ebf335166547d686e8383326c7b375'
-			});
+			}); */
 			//#ifndef H5
-			amapPlugin.getRegeo({
+			/* amapPlugin.getRegeo({
 				success: function(data) {
 					//成功回调
 					uni.setStorage({
@@ -49,10 +49,10 @@
 						duration:1500
 					})
 				}
-			})
+			}) */
 			//#endif
 			//#ifdef H5
-			uni.request({
+			/* uni.request({
 				url: 'https://restapi.amap.com/v3/ip?parameters',
 				data: {
 					key: 'b4480e225615b0754c5b8c6d1988cb3c'
@@ -72,7 +72,7 @@
 						duration:1500
 					})
 				}
-			})
+			}) */
 			//#endif
 		},
 		onShow: function() {

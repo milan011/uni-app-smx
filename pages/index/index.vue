@@ -69,7 +69,7 @@
 		<!-- <view class="ad-1">
 			<image src="/static/temp/ad1.jpg" mode="scaleToFill"></image>
 		</view> -->
-		<!-- 快捷筛选 -->
+		<!-- 快捷筛选 Begain-->
 		<view class="order-section">
 			<view class="order-item" @tap="navToCarList" data-price="0-3" data-cont="3万以下" hover-class="common-hover" :hover-stay-time="50">
 				<text>3万以下</text>
@@ -87,33 +87,34 @@
 		<view class="order-section">
 			<view class="order-item" @tap="navToCarList" data-factory="本田" hover-class="common-hover" :hover-stay-time="50">
 				<!-- <icon type="success" size="16"/> -->
-				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/honda.png" mode="aspectFit"></image>
+				<image src="/static/brand/bentian.jpg" mode="aspectFit"></image>
 				<text>本田</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="大众" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/dazhong.png" mode="aspectFit"></image>
+				<!-- <image src="https://sta.guazistatic.com/static/c2c/web/che-logo/dazhong.png" mode="aspectFit"></image> -->
+				<image src="/static/brand/dazhong.jpg" mode="aspectFit"></image>
 				<text>大众</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="奔驰" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/benz.png" mode="aspectFit"></image>
+				<image src="/static/brand/benz.png" mode="aspectFit"></image>
 				<text>奔驰</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="丰田" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/toyota.png" mode="aspectFit"></image>
+				<image src="/static/brand/fengtian.jpg" mode="aspectFit"></image>
 				<text>丰田</text>
 			</view>
 		</view>
 		<view class="order-section">
 			<view class="order-item" @tap="navToCarList" data-factory="奥迪" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/audi.png" mode="aspectFit"></image>
+				<image src="/static/brand/aodi.jpg" mode="aspectFit"></image>
 				<text>奥迪</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="宝马" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/bmw.png" mode="aspectFit"></image>
+				<image src="/static/brand/bmw.png" mode="aspectFit"></image>
 				<text>宝马</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="福特" hover-class="common-hover" :hover-stay-time="50">
-				<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/ford.png" mode="aspectFit"></image>
+				<image src="/static/brand/fute.jpg" mode="aspectFit"></image>
 				<text>福特</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="" hover-class="common-hover" :hover-stay-time="50">
@@ -121,6 +122,7 @@
 				<text>更多</text>
 			</view>
 		</view>
+		<!-- 快捷筛选 End-->
 		<!-- 车型推荐 -->
 		<view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
@@ -197,8 +199,51 @@
 				loadingType: 'more', //参数loading加载,nomore
 			};
 		},
-
+		mounted(){
+			var _this = this
+			
+			// #ifdef  MP-WEIXIN
+			// uni.getSetting({
+			//    success(res) {
+			//       console.log("授权：",res);
+			//      if (!res.authSetting['scope.userInfo']) {
+			//           //这里调用授权
+			//           console.log("当前未授权");
+			//      } else {
+			//           //用户已经授权过了
+		 //          console.log("当前已授权");
+			//      }
+			//    }
+			//  })
+			// uni.login({
+			// 	provider: 'weixin',
+			// 	success: function(loginRes) {
+			// 		console.log(JSON.stringify(loginRes));
+			// 		console.log(JSON.stringify(loginRes.code));
+			// 		// console.log(loginRes.authResult);
+			// 		// 获取用户信息
+			// 		uni.getUserInfo({
+			// 			provider: 'weixin',
+			// 			success: function(infoRes) {
+			// 				console.log('wuser',infoRes)
+			// 				console.log('用户昵称为：' + infoRes.userInfo.nickName);
+			// 				console.log('用户Code为：' + JSON.stringify(infoRes.code));
+			// 			},
+			// 			fail:(res=>{
+			// 					// 获取失败的去引导用户授权
+			// 					console.log('亲,赶紧去授权')
+			// 					console.log(_this.$refs)
+			// 					// _this.$refs.author.getuserinfo()
+			// 					// _this.$refs.author.$emit('getuserinfo')
+			// 					// _this.wxGetUserInfo()
+			// 			})
+			// 		});
+			// 	}
+			// });
+			// #endif
+		},
 		onLoad() {
+			var _this = this
 			/* wx.login({
 			      success: loginres => {
 			      var code= loginres.code;
@@ -207,22 +252,8 @@
 			}); */
 			console.log(Config)
 			// #ifdef  MP-WEIXIN
-			uni.login({
-				provider: 'weixin',
-				success: function(loginRes) {
-					console.log(JSON.stringify(loginRes.code));
-					console.log(loginRes.authResult);
-					// 获取用户信息
-					uni.getUserInfo({
-						provider: 'weixin',
-						success: function(infoRes) {
-							console.log('用户昵称为：' + infoRes.userInfo.nickName);
-							console.log('用户Code为：' + JSON.stringify(infoRes.code));
-						}
-					});
-				}
-			});
 			// #endif
+			// console.log('load')
 			this.loadData();
 			// 城市初始化
 			let that = this

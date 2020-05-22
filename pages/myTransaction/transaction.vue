@@ -97,6 +97,7 @@
 					RoleName: '',
 					Status: ''
 				},
+				ifOnShow: false,
 				loadingType: 'more',
 				total: '',
 				modalName:'',
@@ -127,21 +128,27 @@
 			});
 			return true
 		},
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
 		onShow() {
-			this.list = []
-			uni.getStorage({
-				key: 'userInfo',
-				success: (res) => {
-					this.transaction.CreateID = res.data.id
-					this.transaction.RoleName = res.data.rolename.split(',')[0]
-					this.transaction.Shop_Id = res.data.shop_id
-					getTransactionList({ ...this.transaction
-					}).then(res=>{
-						this.list = res.data.Data.DataList;
-					})
-					this.getshop()
-				}
-			})
+			if(this.ifOnShow){
+				this.list = []
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.transaction.CreateID = res.data.id
+						this.transaction.RoleName = res.data.rolename.split(',')[0]
+						this.transaction.Shop_Id = res.data.shop_id
+						getTransactionList({ ...this.transaction
+						}).then(res=>{
+							this.list = res.data.Data.DataList;
+						})
+						this.getshop()
+					}
+				})
+			}	
 		},
 		onPullDownRefresh() {
 			this.transaction.PageIndex = 1

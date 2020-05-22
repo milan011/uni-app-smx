@@ -15,8 +15,9 @@
 			<text class="title">{{ carDetail.cars.FullName }}</text>
 			<text class="cuIcon-favor" :class="'text-' + favorColor" style="margin-left:0.5em" @tap="doCollect"></text>
 			<view class="price-box">
-				<text class="price-tip">¥</text>
-				<text class="price">{{ carDetail.cars.SaleAMT }}万</text>
+				<text class="price-tip">¥<text class="price">{{ carDetail.cars.SaleAMT }}万</text></text>
+				<!-- <text class="price">{{ carDetail.cars.SaleAMT }}万</text> -->
+				<view class='cu-tag radius line-green'>{{carDetail.pshopname}}</view>
 			</view>
 			<view class="c-list">
 				<view class="c-row b-b">
@@ -643,6 +644,7 @@
 			padding: 10upx 0;
 			font-size: 26upx;
 			color: $uni-color-primary;
+			justify-content:space-between;
 		}
 
 		.price {

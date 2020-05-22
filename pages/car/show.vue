@@ -87,17 +87,23 @@
 				<view v-if="detail.cars.Car_Status == 0" class="padding-xl">
 					您确定要激活该车源吗
 				</view>
-				<view class="cu-bar bg-white justify-end">
+				<view v-if="detail.cars.Car_Status == 1" class="cu-bar bg-white justify-end">
 					<view class="action">
 						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-						<button class="cu-btn bg-green margin-left" @tap="abandActiv">确定</button>
+						<button class="cu-btn bg-green margin-left" @tap="abandActivF">废弃</button>
+					</view>
+				</view>
+				<view v-if="detail.cars.Car_Status == 0" class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="abandActivJ">激活</button>
 					</view>
 				</view>
 			</view>
 		</view>
 		<!-- 废弃modal End -->
 		<!-- 上架modal Begin -->
-		<view class="cu-modal" :class="modalName=='carPutOn'?'show':''">
+		<view class="cu-modal" style="z-index: 10;" :class="modalName=='carPutOn'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
 					<view class="content" v-if="detail.cars.Car_Status == 1">上架车源</view>
@@ -255,7 +261,8 @@
 			this.getCarDetailById()
 			this.getCarFollowById()
 		},
-		onBackPress(event){
+		onBackPress(){
+			console.log('fanhui')
 			uni.navigateTo({
 				url: '/pages/car/list'
 			});
@@ -349,39 +356,38 @@
 					})
 				}
 			},
-			abandActiv(){ //废弃激活		
-				if(this.detail.cars.Car_Status == 1){ //废弃
-					console.log('废弃', this.detail.cars.ID)
-					const param = {id: this.detail.cars.ID, status: 0}
-					abandOrActiv(param).then(res=>{
-						if(res.data.ResultType == 0){
+			abandActivF(){ //废弃激活		
+				console.log('废弃', this.detail.cars.ID)
+				const param = {id: this.detail.cars.ID, status: 0}
+				abandOrActiv(param).then(res=>{
+					if(res.data.ResultType == 0){
+						// 
+						this.modalName = null
+						this.$api.msg(`车源已废弃`);
+						/* this.getCarDetailById()
+						this.getCarFollowById() */
+						uni.navigateBack()
+					}else{
+							this.$api.msg(res.data.Message);
 							this.modalName = null
-							this.$api.msg(`车源已废弃`);
-							this.getCarDetailById()
-							this.getCarFollowById()
-							uni.navigateTo({
-								url: `/pages/car/list`
-							})
-						}			
-					})
-				}
-				if(this.detail.cars.Car_Status == 0){ //激活
+					}		
+				})
+			},
+			abandActivJ(){//激活
 					const param = {id: this.detail.cars.ID, status: 1}
 					abandOrActiv(param).then(res=>{
 						if(res.data.ResultType == 0){
+							// 
 							this.modalName = null
 							this.$api.msg(`车源已激活`);
-							this.getCarDetailById()
-							this.getCarFollowById()
-							uni.navigateTo({
-								url: `/pages/car/list`
-							})
+							uni.navigateBack()
+							/* this.getCarDetailById()
+							this.getCarFollowById() */
 						}else{
 							this.$api.msg(res.data.Message);
 							this.modalName = null
 						}
 					})
-				}
 			},
 			/**
 			 * 统一跳转接口,拦截未登录路由

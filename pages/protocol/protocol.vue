@@ -10,8 +10,8 @@
 				</view>
 			</view>
 			<view class="cu-list menu">
-				<view v-for="(item, index) in list" :key="index" class="cu-item">
-					<view class="content" @click="toDetail(item)">
+				<view v-for="(item, index) in list" :key="index" class="cu-item" @tap="toDetail(item)">
+					<view class="content">
 						<text class="text-grey">{{ item.carmodel }}</text>
 					</view>
 					<view class="action">
@@ -92,6 +92,7 @@
 		data() {
 			return {
 				carType: ['不限', '轿车', 'SUV', '面包车', '客车', '货车', 'MPV'],
+				ifOnShow: false,
 				contract: {
 					pageindex: 1,
 					pagesize: 14,
@@ -146,22 +147,28 @@
 			})
 
 		},
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
 		onShow() {
-			this.list = []
-			uni.getStorage({
-				key: 'userInfo',
-				success: (res) => {
-					this.contract.rolename = res.data.rolename
-					this.contract.shopid = res.data.shop_id
-					this.contract.userid = res.data.id
-					getContractList({
-						...this.contract
-					}).then(res => {
-						this.list = res.data.Data.DataList
-					})
-				}
-			})
-
+			if(this.ifOnShow){
+				this.list = []
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.contract.rolename = res.data.rolename
+						this.contract.shopid = res.data.shop_id
+						this.contract.userid = res.data.id
+						getContractList({
+							...this.contract
+						}).then(res => {
+							console.log('获取列表show')
+							this.list = res.data.Data.DataList
+						})
+					}
+				})
+			}
 		},
 		onReachBottom() {
 			let num = Math.ceil(this.total / this.contract.pagesize)
@@ -175,6 +182,7 @@
 		},
 		methods: {
 			init() {
+				console.log('获取列表')
 				this.loadingType = 'loading'
 				getContractList({
 					...this.contract
@@ -193,7 +201,6 @@
 						this.loadingType = "nomore"
 					}
 				})
-
 			},
 			toDetail(item) {
 				uni.setStorage({

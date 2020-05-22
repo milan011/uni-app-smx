@@ -8,8 +8,6 @@
 					</view>
 					<view class="action">
 						<button class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-					</view>
-					<view class="action">
 						<button class="cu-btn bg-green shadow" @tap="createCar" data-target="menuModal">添加车源</button>
 					</view>
 				</view>
@@ -133,6 +131,7 @@
 				putOn: ['不限', '未上架', '已上架'],
 				putOnIndex:0,
 				Gearbox: ['不限', '手动', '自动'],
+				ifOnShow: false,
 				car: {
 					PageIndex: 1,
 					PageSize: 14,
@@ -160,6 +159,17 @@
 				},
 				total: ""
 			};
+		},
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
+		onShow() {
+			if(this.ifOnShow){
+				console.log('onshow')
+				this.cartList = []
+				this.loadData()
+			}
 		},
 		onLoad(options) {
 			console.log('onload')

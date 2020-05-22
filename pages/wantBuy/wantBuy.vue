@@ -8,8 +8,6 @@
 					</view>
 					<view class="action">
 						<button class="cu-btn bg-green shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-					</view>
-					<view class="action">
 						<button class="cu-btn bg-blue shadow" @tap="createCar" data-target="menuModal">添加求购</button>
 					</view>
 				</view>
@@ -157,6 +155,7 @@
 					startTime: "",
 					endTime: ""
 				},
+				ifOnShow: false,
 				total: "",
 				loadingType: 'more', //参数loading加载,nomore
 			};
@@ -172,40 +171,45 @@
 				}
 			})
 		},
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
 		onShow() {
-			// this.want.pageIndex = 1
-			uni.getStorage({
-				key: 'userInfo',
-				success: (res) => {
-					this.cartList = []
-					this.want.shopid = res.data.shop_id;
-					this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
-					this.want.userid = res.data.id;
-					this.loadingType = 'loading'
-					getWantList({ ...this.want
-					}).then(res => {
-						this.cartList = res.data.Data.DataList
-						this.cartList.forEach(ele => {
-							if (ele.want.want_status === '0') {
-								ele.want.want_status1 = "废弃"
-							} else if (ele.want.want_status === '1') {
-								ele.want.want_status1 = "正常"
+			if(this.ifOnShow){
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.cartList = []
+						this.want.shopid = res.data.shop_id;
+						this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
+						this.want.userid = res.data.id;
+						this.loadingType = 'loading'
+						getWantList({ ...this.want
+						}).then(res => {
+							this.cartList = res.data.Data.DataList
+							this.cartList.forEach(ele => {
+								if (ele.want.want_status === '0') {
+									ele.want.want_status1 = "废弃"
+								} else if (ele.want.want_status === '1') {
+									ele.want.want_status1 = "正常"
+								} else {
+									ele.want.want_status1 = "已交易"
+								}
+								if (ele.want.created_at) {
+									ele.want.created_at = ele.want.created_at.split('T')[0]
+								}
+							})
+							this.total = res.data.Data.Total;
+							if (this.want.pageIndex < this.total / this.want.PageSize) {
+								this.loadingType = "more"
 							} else {
-								ele.want.want_status1 = "已交易"
-							}
-							if (ele.want.created_at) {
-								ele.want.created_at = ele.want.created_at.split('T')[0]
+								this.loadingType = "nomore"
 							}
 						})
-						this.total = res.data.Data.Total;
-						if (this.want.pageIndex < this.total / this.want.PageSize) {
-							this.loadingType = "more"
-						} else {
-							this.loadingType = "nomore"
-						}
-					})
-				}
-			})
+					}
+				})
+			}
 		},
 		//下拉刷新
 		onPullDownRefresh() {

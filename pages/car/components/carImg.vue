@@ -975,12 +975,13 @@
 				});
 			},
 			confirmImg() { //预览上架
-				console.log(this.imgData)
-				console.log(this.imgList)
-				if(this.imgList.length != 10){
-					this.$api.msg(`请将车辆基本照片补充完整`, 3000);
+				var _this = this
+				console.log(_this.imgData)
+				console.log(_this.imgList)
+				if(_this.imgList.length != 10){
+					_this.$api.msg(`请将车辆基本照片补充完整`, 3000);
 				}else{
-					this.$emit("goPreviewForm", this.imgData.Carid);
+					_this.$emit("goPreviewForm", _this.imgData.Carid);
 				}
 				// 
 			},

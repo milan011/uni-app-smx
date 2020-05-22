@@ -4,7 +4,7 @@
 		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack"></view>
 		<view class="right-top-sign"></view>
 		<!-- 设置白色背景防止软键盘把下部绝对定位元素顶上来盖住输入框等 -->
-		<view class="wrapper">
+		<view v-if="isAuthor" class="wrapper">
 			<view class="left-top-sign">LOGIN</view>
 			<view class="welcome">
 				欢迎回来！
@@ -39,6 +39,17 @@
 				忘记密码?
 			</view>
 		</view>
+		<view v-if="!isAuthor">
+			<!-- #ifdef MP-WEIXIN -->
+			<button
+				style="margin-top:10em;" 
+				open-type="getUserInfo" 
+				@getuserinfo="wxGetUserInfo" 
+				withCredentials="true">
+					微信授权获取用户信息
+			</button>
+			<!-- #endif -->
+		</view>
 		<view class="register-section">
 			还没有账号?
 			<text @click="toRegist">马上注册</text>
@@ -50,17 +61,70 @@
 	import {  
         mapMutations  
     } from 'vuex';
-	import { loginByUser } from '@/api/login.js'
+	import { loginByUser, loginByWxCode, loginByUserWithCode } from '@/api/login.js'
 	export default{
 		data(){
 			return {
 				mobile: 'yz',
 				password: '123456',
+				ifOnShow: false,
+				isMpWeiXin: false,
+				isAuthor: false,
+				showWxLog: false,
 				logining: false
 			}
 		},
-		onLoad(){
-			
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
+		onShow() {
+			var _this = this
+			if(_this.ifOnShow){
+				// #ifdef MP-WEIXIN
+				  uni.getSetting({
+				   success(res) {
+				      console.log("授权：",res);
+				     if (!res.authSetting['scope.userInfo']) {
+				          //这里调用授权
+				          console.log("当前未授权");
+									_this.isAuthor = false
+				     } else {
+				          //用户已经授权过了
+				          console.log("当前已授权");
+									_this.isAuthor = true
+				     }
+				   }
+				 })
+				//#endif
+			}
+		},
+		async onLoad(){
+			var _this = this
+			  // #ifdef MP-WEIXIN
+			  uni.getSetting({
+			   success(res) {
+			     console.log("授权：",res);
+			     if (!res.authSetting['scope.userInfo']) {
+			          //这里调用授权
+			          console.log("当前未授权");
+								_this.isAuthor = false
+			     } else {
+			          //用户已经授权过了
+			          console.log("当前已授权");
+								_this.getUserWxCode().then(res=>{
+									console.log('code',res)
+									_this.loginWithWx(res)
+								})
+								// console.log('code', userCode)
+								// _this.isAuthor = true
+			     }
+			   }
+			 })
+			//#endif
+			// #ifndef MP-WEIXIN
+			 _this.isAuthor = true
+			//#endif
 		},
 		methods: {
 			...mapMutations(['login']),
@@ -71,12 +135,88 @@
 			navBack(){
 				uni.navigateBack();
 			},
+			wxGetUserInfo(res){
+				var _this = this
+				console.log(res)
+				if (!res.detail.iv) {
+					uni.showToast({
+						title: "您取消了授权,登录失败",
+						icon: "none"
+					});
+					return false;
+				}else{
+					_this.getUserWxCode().then(res=>{
+						console.log('code',res)
+						_this.loginWithWx(res)
+					})
+				}
+				console.log('-------用户授权，并获取用户基本信息和加密数据------')
+				console.log(res.detail);
+			},
 			toRegist(){
 				this.$api.msg('去注册');
 			},
+			loginWithWx(code){
+				var _this = this
+				console.log('微信授权登录',code)
+				const sendData = { WxCode: code }
+				/* const sendData = {
+					UserPhone: this.mobile,
+					NewPassword: this.password,
+				}; */
+				console.log(sendData)
+				loginByWxCode(sendData).then(res=>{
+					console.log('微信登录返回',res.data)
+					if(res.data.ResultType == 0){ //登录成功
+						console.log('微信Code登录成功?')
+						_this.login(res.data.Data);
+						uni.reLaunch({
+							url: '/pages/user/user'
+						});
+					}else{ //登录失败,转用户名密码登录
+						console.log('微信Code登录失败?')
+						_this.isMpWeiXin = true
+						_this.isAuthor = true
+					}
+				})
+			},
+			async getUserWxCode(){ //获取微信授权用户code
+			  var _this = this
+				return new Promise(resolve=>{
+					uni.login({
+						provider: 'weixin',
+						success: function(loginRes) {
+							console.log(loginRes);
+							console.log(JSON.stringify(loginRes));
+							console.log(JSON.stringify(loginRes.code));
+							// let code = JSON.stringify(loginRes.code)
+							// _this.loginWithWx(code)
+							// _this.userWxCode = JSON.stringify(loginRes.code)
+							// resolve(JSON.stringify(loginRes.code))
+							resolve(loginRes.code)
+							// console.log(loginRes.authResult);
+							// 获取用户信息
+							// uni.getUserInfo({
+							// 	provider: 'weixin',
+							// 	success: function(infoRes) {
+							// 		console.log('wuser',infoRes)
+							// 		console.log('用户昵称为：' + infoRes.userInfo.nickName);
+							// 		console.log('用户Code为：' + JSON.stringify(infoRes.code));
+							// 	},
+							// 	fail:(res=>{
+							// 			// 获取失败的去引导用户授权
+							// 			console.log('亲,赶紧去授权')		
+							// 			_this.isAuthor = false
+							// 	})
+							// });
+						}
+					})
+				})
+			},
 			async toLogin(){
-				this.logining = true;
-				const {mobile, password} = this;
+				var _this = this
+				_this.logining = true;
+				const {mobile, password} = _this;
 				/* 数据验证模块
 				if(!this.$api.match({
 					mobile,
@@ -86,26 +226,56 @@
 					return;
 				}
 				*/
-				const sendData = {
-					UserPhone: this.mobile,
-					NewPassword: this.password,
+			 
+				var sendData = {
+					name: _this.mobile,
+					NewPassword: _this.password,
 				};
-				const result = await this.$api.json('userInfo');
-
-				loginByUser(sendData).then(res => {
-					console.log('登录了',res)
-					if(res.data.ResultType === 0){ //登录成功
-						this.login(res.data.Data);
-						// uni.navigateBack();
-						uni.reLaunch({
-							url: '/pages/user/user'
-						});
-					}else{ //登录失败
-						this.$api.msg(res.data.Message);
-					}
-				}).catch(err => {
-					this.$api.msg('登录失败,请刷新后重试');
-				})
+				if(_this.isMpWeiXin){ //用户名密码登录附带微信Code
+					console.log('weix')
+					/* _this.getUserWxCode().then(res=>{
+						console.log('code',res)
+						sendData.WxCode = res
+					}) */
+					sendData.WxCode = await _this.getUserWxCode()
+					loginByUserWithCode(sendData).then(res => {
+						console.log('微信登录了',res)
+						if(res.data.ResultType === 0){ //登录成功
+							_this.login(res.data.Data);
+							// uni.navigateBack();
+							uni.reLaunch({
+								url: '/pages/user/user'
+							});
+						}else{ //登录失败
+							_this.$api.msg(res.data.Message);
+						}
+					}).catch(err => {
+						_this.$api.msg('登录失败,请刷新后重试');
+					})
+				}else{
+					const sendData = {
+						UserPhone: _this.mobile,
+						NewPassword: _this.password,
+					};
+					loginByUser(sendData).then(res => {
+						console.log('登录了',res)
+						if(res.data.ResultType === 0){ //登录成功
+							_this.login(res.data.Data);
+							// uni.navigateBack();
+							uni.reLaunch({
+								url: '/pages/user/user'
+							});
+						}else{ //登录失败
+							_this.$api.msg(res.data.Message);
+						}
+					}).catch(err => {
+						_this.$api.msg('登录失败,请刷新后重试');
+					})
+				}
+				console.log('登录信息',sendData)
+				// const result = await _this.$api.json('userInfo');
+				// return false
+				
 				/* if(result.status === 1){
 					this.login(result.data);
           uni.navigateBack();  

@@ -219,7 +219,7 @@
 			// this.$refs.filterDropdown.selectHierarchyMenu(1,4,2,null)
 		},
 		onHide(){
-			this.$refs.filterDropdown.resetFilterData(2);
+			/* this.$refs.filterDropdown.resetFilterData(2);
 			this.$refs.filterDropdown.setFilterData(2);
 			this.$refs.filterDropdown.resetFilterData(3);
 			this.$refs.filterDropdown.setFilterData(3);
@@ -234,7 +234,7 @@
 			this.car.CarType = ""
 			this.car.Transmission = ""
 			this.car.Shop_Id = ""
-			this.car.PageIndex = 1
+			this.car.PageIndex = 1 */
 			uni.removeStorage({
 				key: 'selectConditions',
 				success: (res) => {

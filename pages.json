@@ -86,8 +86,12 @@
 			"style": {
 				"navigationBarTitleText": "设置"
 			}
+		},{
+			"path": "pages/set/wxAuthor",
+			"style": {
+				"navigationBarTitleText": "微信授权登录"
+			}
 		},
-
 		{
 			"path": "pages/userinfo/userinfo",
 			"style": {

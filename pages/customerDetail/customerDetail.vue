@@ -369,6 +369,7 @@
 			return {
 				id: '',
 				TabCur: 0,
+				ifOnShow: false,
 				detail: {
 					cars: [],
 					want: [],
@@ -387,8 +388,14 @@
 			this.id = option.id;
 			this.getDetail();
 		},
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
 		onShow() {
-			this.getDetail();
+			if(this.ifOnShow){
+				this.getDetail();
+			}	
 		},
 		methods: {
 			tabSelect(e) {

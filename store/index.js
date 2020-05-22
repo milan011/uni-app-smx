@@ -11,8 +11,9 @@ const store = new Vuex.Store({
 	mutations: {
 		login(state, provider) {
 			// console.log(state)
-			// console.log(provider)
+			console.log(provider)
 			// return false
+			provider.rolenameArr = provider.rolename.split(",")
 			state.hasLogin = true;
 			state.userInfo = provider;
 			uni.setStorage({//缓存用户登陆状态
@@ -28,6 +29,9 @@ const store = new Vuex.Store({
         key: 'userInfo'  
       })
 		}
+	},
+	getters: {
+	  roleArr: state => state.userInfo.rolenameArr,
 	},
 	actions: {
 		logout(state) {

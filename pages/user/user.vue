@@ -105,11 +105,13 @@
 				coverTransform: 'translateY(0px)',
 				coverTransition: '0s',
 				moving: false,
+				ifOnShow: false,
 				imgList: [],
 				userGeneralInfo: {},
 				img_url: Config.img_url
 			}
 		},
+		
 		onLoad() {
 			this.userGeneral()
 		},

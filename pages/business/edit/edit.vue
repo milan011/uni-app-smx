@@ -36,7 +36,7 @@
 			<view class="cu-dialog" @tap.stop="">
 				<radio-group class="block" @change="RadioChange">
 					<view class="cu-list menu text-left">
-						<view class="cu-item" v-for="(item,index) in shopList" :key="index">
+						<view v-if="shopList.length > 0" class="cu-item" v-for="(item,index) in shopList" :key="index">
 							<label class="flex justify-between align-center flex-sub">
 								<view class="flex-sub">{{item.name}}</view>
 								<radio class="round" :class="radio==item.name?'checked':''" :checked="radio==item.name?true:false"
@@ -72,7 +72,9 @@
 				},
 				modalName: null,
 				radio: '',
-				shopList:[],
+				shopList: [{
+					name: ""
+				}],
 				index:''
 			};
 		},
@@ -199,12 +201,16 @@
 						getShopList({
 							id:res.data.shop_id
 						}).then(res => {
-							this.shopList = res.data.Data
-							this.shopList.forEach(ele=>{
-								if(ele.address == '元氏县'){
-									ele.name = '元氏2店'
+							if(res.data.ResultType == 0){
+								if(res.data.Data){
+									this.shopList = res.data.Data
+									this.shopList.forEach(ele=>{
+										if(ele.address == '元氏县'){
+											ele.name = '元氏2店'
+										}
+									})
 								}
-							})
+							}		
 						})
 					}
 				})

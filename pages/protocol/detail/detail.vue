@@ -43,7 +43,7 @@
 				<view class="row" style="margin-top: 20upx;">9、若车辆有其他共有人的，甲方对车辆进行处分时，必须经其他共有人同意，因此造成的损失由甲方承担。</view>
 				<view class="row" style="margin-top: 20upx;font-weight: 600;">第二条 交易保证</view>
 				<view class="row" style="margin-top: 20upx;">乙方自愿向丙方支付交易保证金人民币<text class="red">{{formdata.s_margin}}</text>
-					元(不低于成交价4%)，大写<text class="red">{{formdata.s_margin}}</text>元。甲方选择以下方式保证合同履行（在选择的方式中打√）：
+					元(不低于成交价4%)，大写<text class="red">{{formdata.s_margin_dx}}</text>元。甲方选择以下方式保证合同履行（在选择的方式中打√）：
 				</view>
 				<view class="row" style="margin-top: 20upx;">
 					<text v-if="formdata.b_marginType" style="padding-right:10upx">☐</text>
@@ -52,7 +52,7 @@
 					<text class="red">
 						{{!formdata.b_marginType?formdata.b_margin:"————"}}
 					</text>元(不低于成交价4%)，大写
-					<text class="red">{{!formdata.b_marginType?formdata.b_margin:"————"}}</text>元
+					<text class="red">{{!formdata.b_marginType?formdata.b_margin_dx:"————"}}</text>元
 				</view>
 				<view class="row" style="margin-top: 20upx;">
 					<text v-if="!formdata.b_marginType" style="padding-right:10upx">☐</text>
@@ -127,22 +127,22 @@
 						{{formdata.days}}
 					</text> -->
 					<text class="red">
-						{{formdata.starttime.split("-")[0]}}
+						{{formdata.starttime.year}}
 					</text>年
 					<text class="red">
-						{{formdata.starttime.split("-")[1]}}
+						{{formdata.starttime.month}}
 					</text>月
 					<text class="red">
-						{{formdata.starttime.split("-")[2].split("T")[0]}}
+						{{formdata.starttime.day}}
 					</text>日至
 					<text class="red">
-						{{formdata.endtime.split("-")[0]}}
+						{{formdata.endtime.year}}
 					</text>年
 					<text class="red">
-						{{formdata.endtime.split("-")[1]}}
+						{{formdata.endtime.month}}
 					</text>月
 					<text class="red">
-						{{formdata.endtime.split("-")[2].split("T")[0]}}
+						{{formdata.endtime.day}}
 					</text>日）办理过户转籍等相关手续。）过户手续由
 					<text class="red">
 						{{formdata.assigned}}
@@ -184,13 +184,13 @@
 						{{formdata.serveruser}}
 					</text>承担；以上两项费用应于
 					<text class="red">
-						{{formdata.serverovertime.split("-")[0]}}
+						{{formdata.serverovertime.year}}
 					</text>年
 					<text class="red">
-						{{formdata.serverovertime.split("-")[1]}}
+						{{formdata.serverovertime.month}}
 					</text>月
 					<text class="red">
-						{{formdata.serverovertime.split("-")[2].split("T")[0]}}
+						{{formdata.serverovertime.day}}
 					</text>日付清。
 				</view>
 				<view class="row" style="margin-top: 20upx;">
@@ -214,13 +214,13 @@
 						{{formdata.othercost?formdata.assignuser:"————"}}
 					</text>方承担；以上费用应于
 					<text class="red">
-						{{formdata.assigndatetime?formdata.assigndatetime.split("-")[0]:"————"}}
+						{{formdata.assigndatetime?formdata.assigndatetime.year:"————"}}
 					</text>年
 					<text class="red">
-						{{formdata.assigndatetime?formdata.assigndatetime.split("-")[1]:"————"}}
+						{{formdata.assigndatetime?formdata.assigndatetime.month:"————"}}
 					</text>月
 					<text class="red">
-						{{formdata.assigndatetime?formdata.assigndatetime.split("-")[2]:"————"}}
+						{{formdata.assigndatetime?formdata.assigndatetime.day:"————"}}
 					</text>日付清。
 				</view>
 				<view class="row" style="margin-top: 20upx;">
@@ -232,19 +232,19 @@
 				<view class="row" style="margin-top: 20upx;">
 					1、支付时间约定为在
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split("-")[0]:""}}
+						{{formdata.getcartime?formdata.getcartime.year:""}}
 					</text>年
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split("-")[1]:""}}
+						{{formdata.getcartime?formdata.getcartime.month:""}}
 					</text>月
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split("-")[2].split("T")[1].split(':')[0]:""}}
+						{{formdata.getcartime?formdata.getcartime.day:""}}
 					</text>日
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split("-")[2].split("T")[1].split(':')[1]:""}}
+						{{formdata.getcartime?formdata.getcartime.hour:""}}
 					</text>时
 					<text class="red">
-						{{formdata.getcartime?formdata.getcartime.split("-")[2].split("T")[1].split(':')[2]:""}}
+						{{formdata.getcartime?formdata.getcartime.minute:""}}
 					</text>分
 				</view>
 				<view class="row" style="margin-top: 20upx;">
@@ -372,6 +372,7 @@
 
 <script>
 	import {deleteContract} from "@/api/contract.js"
+	import '@/common/utils'
 	export default {
 		data() {
 			return {
@@ -458,10 +459,34 @@
 			};
 		},
 		onLoad() {
+			var _this = this
 			uni.getStorage({
 				key:'contractDetail',
 				success:(res)=>{
-					this.formdata = res.data
+					console.log('协议详情', res.data)
+					_this.formdata = res.data
+					const daxie = _this.$utils.DX(2410)
+					console.log('大写金额2410',daxie)		
+					
+					_this.formdata.s_margin_dx = _this.$utils.DX(_this.formdata.s_margin)
+					_this.formdata.b_margin_dx = _this.$utils.DX(_this.formdata.b_margin)
+					_this.formdata.p_way_1_money = _this.$utils.DX(_this.formdata.p_way_1_money)
+					_this.formdata.p_way_1_money_b = _this.$utils.DX(_this.formdata.p_way_1_money_b)
+					_this.formdata.p_way_1_lastmoney = _this.$utils.DX(_this.formdata.p_way_1_lastmoney)
+					_this.formdata.p_way_2_money = _this.$utils.DX(_this.formdata.p_way_2_money)
+					_this.formdata.p_way_2_margin = _this.$utils.DX(_this.formdata.p_way_2_margin)
+					_this.formdata.p_way_2_money_b = _this.$utils.DX(_this.formdata.p_way_2_money_b)
+					_this.formdata.p_way_2_lastmoney = _this.$utils.DX(_this.formdata.p_way_2_lastmoney)
+	
+					console.log(_this.formdata.s_margin_dx)
+					_this.formdata.starttime = _this.$utils.dateFormat(_this.formdata.starttime)
+					_this.formdata.endtime = _this.$utils.dateFormat(_this.formdata.endtime)
+					_this.formdata.serverovertime = _this.$utils.dateFormat(_this.formdata.serverovertime)
+					_this.formdata.getcartime = _this.$utils.dateFormat(_this.formdata.getcartime)
+					// _this.formdata.getcarcontent = _this.$utils.dateFormat(_this.formdata.getcarcontent)
+					// console.log('格式化时间',_this.$utils)
+					
+					
 				}
 			})
 		},

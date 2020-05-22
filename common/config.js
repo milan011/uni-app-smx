@@ -2,12 +2,12 @@ let url_config = ""
 let img_url = null
 if (process.env.NODE_ENV === 'development') {
 	// 开发环境
-	url_config = 'http://testapi.simaxian.com/api'
-	img_url = 'http://testapi.simaxian.com'
+	url_config = 'https://testapi.simaxian.com/api'
+	img_url = 'https://testapi.simaxian.com'
 } else {
 	// 生产环境
-	url_config = 'http://testapi.simaxian.com/api'
-	img_url = 'http://testapi.simaxian.com'
+	url_config = 'https://testapi.simaxian.com/api'
+	img_url = 'https://testapi.simaxian.com'
 }
 //变速箱
 const transmissionConfig = ['不限', '手动', '自动'];
