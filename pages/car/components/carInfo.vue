@@ -153,8 +153,12 @@
 		<view class="cu-form-group margin-top">
 			<textarea v-model="carData.XS_description" maxlength="-1" :disabled="modalName!=null" @input="xsInput" placeholder="销售描述"></textarea>
 		</view> 
-		<text class="mix-btn"  v-if="isEdit" @click="confirmInfo">提交修改</text>
-		<text class="mix-btn" v-else @click="confirmInfo">添加图片</text>
+		<view class="padding flex flex-direction">
+			<button v-if="isEdit" class="cu-btn bg-olive lg" @click="confirmInfo">提交修改</button>
+			<button v-else class="cu-btn bg-olive lg" @click="confirmInfo">添加图片</button>	
+		</view>
+		<!-- <text class="mix-btn"  v-if="isEdit" @click="confirmInfo">提交修改</text>
+		<text class="mix-btn" v-else @click="confirmInfo">添加图片</text> -->
 		<!-- 基本信息编辑End -->
 		<!-- vin码返回信息选择Begin -->
 		<view class="cu-modal" :class="modalName=='vinChose'?'show':''" @tap="hideModal">
@@ -239,6 +243,21 @@
 			</view>
 		</view>
 		<!-- 校验信息显示 End -->
+		<!-- vin码拍摄 Begin -->
+		<view style="z-index: 110;" class="cu-modal" :class="modalName=='vinPhoto'?'show':''">
+			<view class="cu-dialog">
+				<scan-frame v-if="vinScanShow" v-on:vinPhotoDel="vinPhotoDel"></scan-frame>
+			</view>
+			<!-- <view class="cu-dialog">
+				<camera device-position="back" flash="auto" @error="error" style="width: 100%; height: 500upx;">
+					<cover-image src="../../static/scan-img.png" class="scan-img"></cover-image>
+				</camera>
+				<view class="scan-text">请将XXX放置白色框内</view>
+				<button type="primary" @click="takePhoto">拍照</button>
+			</view> -->
+		</view>
+		<!-- vin码拍摄 End -->
+		
 	</view>
 </template>
 <script>
@@ -260,8 +279,11 @@
 		maintainingConfig,
 		safetypeConfig, 
 	} from '@/common/appConfig.js'
+	import ScanFrame from '@/components/scan-frame.vue'
+	import { imgUpload } from '@/api/carManage.js'
 	import { getAllProvince, getCityByProvince } from '@/api/city.js'
 	import '@/common/utils'
+	// import native from '@/common/native'
 	import moment from 'moment' 
 	export default {
 		name: 'CarInfo',
@@ -271,10 +293,14 @@
 				default: ''
 			}, // 标题
 		},
+		components: {
+			ScanFrame
+		},
 		data() {
 			return {
 				vinChanged: false,
 				isEdit: false,
+				vinScanShow:false,
 				vinCarList: [],
 				vinCarCheck: '0',
 				modalName: null,
@@ -409,8 +435,28 @@
 			xsInput(e) { //销售描述
 				this.carData.XS_description = e.detail.value
 			},
-			scanVin() {
-				console.log('gan jin sao  dddd')
+			scanVin() { //扫vin码确定车型
+				console.log('gan jin sao')
+				this.modalName = "vinPhoto" 
+				this.vinScanShow = true
+			},
+			vinPhotoDel(img){
+				console.log('父组件', img)
+				const imgParam = {
+					path:img,
+					shopid: 72,
+					pshopid: 71,
+				}
+				imgUpload(imgParam).then(resImg => {
+					// _this.imgPgData.ImageUrl = resImg.data.LogMessage
+					// _this.imgPgData.ImageContent = ''
+					console.log('图片上传',resImg.data)
+					// console.log(_this.imgPgData)
+					// _this.modalName = 'Comment'
+					// return false								
+				}).catch(err => {
+					_this.$api.msg(`图片上传失败,请刷新重试`);
+				})
 			},
 			vinChange() { //vin码有变动
 				// console.log('狗子,你变了')

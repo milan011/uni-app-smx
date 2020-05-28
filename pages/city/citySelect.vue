@@ -81,17 +81,21 @@
 			cityClick(item) {
 				console.log(item)
 				let city = item.cityName
-				//#ifndef H5
 				uni.setStorage({
+					key: 'selectCity',
+					data: city.split("市")[0]
+				})
+				//#ifndef H5
+				/* uni.setStorage({
 					key: 'city',
 					data: city.split("市")[0]
-				})
+				}) */
 				//#endif
 				//#ifdef H5
-				uni.setStorage({
+				/* uni.setStorage({
 					key: 'citys',
 					data: city.split("市")[0]
-				})
+				}) */
 				//#endif
 				uni.reLaunch({
 				    url: '../index/index'

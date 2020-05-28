@@ -5,13 +5,17 @@
 	import {
 		mapMutations
 	} from 'vuex';
+	import config from '@/common/config.js'
 	import amap from '@/common/amap-wx.js'
+	import txmap from '@/common/qqmap-wx-jssdk.js'
 	// import getIp from "@/api/postion.js"
 	export default {
 		data() {
 			return {
-				amapPlugin: null,
-				key: '23ebf335166547d686e8383326c7b375'
+				// amapPlugin: null,
+				// key: '23ebf335166547d686e8383326c7b375' //高德定位key(王格浩)
+				txapPlugin: null,
+				key: 'ZBXBZ-OI63R-3DFWF-WXVTM-F4JU6-WTBYD' //腾讯定位key(贺星国)
 			}
 		},
 		methods: {
@@ -32,10 +36,60 @@
 			/* let amapPlugin = new amap.AMapWX({
 				key: '23ebf335166547d686e8383326c7b375'
 			}); */
-			//#ifndef H5
-			/* amapPlugin.getRegeo({
+			console.log('keyConfig', config.mapKey)
+			/* console.log('定位obj',new txmap({
+				key: config.mapKey
+			})) */
+			//#ifdef MP-WEIXIN
+			let txapPlugin = new txmap({
+				key: config.mapKey.tx
+			})
+			console.log(txapPlugin)
+			console.log(txapPlugin.reverseGeocoder())
+			txapPlugin.reverseGeocoder({
+				//位置坐标，默认获取当前位置，非必须参数
+				/**
+				 * 
+				 //Object格式
+				  location: {
+				    latitude: 39.984060,
+				    longitude: 116.307520
+				  },
+				*/
+				/**
+				 *
+				 //String格式
+				  location: '39.984060,116.307520',
+				*/
+				location: '', //位置坐标,不填默认当前位置,示例为string格式
+				//get_poi: 1, //是否返回周边POI列表：1.返回；0不返回(默认),非必须参数
+				success: function(res) { //成功后的回调
+					// console.log('定位返回',res)
+					console.log('小程序定位城市',res.result.address_component.city)
+					uni.setStorage({
+						key: 'city',
+						data: res.result.address_component.city.split("市")[0]
+					})
+				},
+				fail: function(error) {
+					uni.showToast({
+						title: "定位失败,请点击右上角手动选择",
+						icon: "none",
+						duration: 1500
+					})
+					uni.setStorage({
+						key: 'city',
+						data: '石家庄'
+					})
+				}
+			})
+			/*  */
+			//#endif
+			//#ifdef APP-PLUS
+			amapPlugin.getRegeo({
 				success: function(data) {
 					//成功回调
+					console.log('App定位到了城市', data)
 					uni.setStorage({
 						key: 'city',
 						data: data[0].regeocodeData.addressComponent.city.split("市")[0]
@@ -48,31 +102,39 @@
 						icon:"none",
 						duration:1500
 					})
+					uni.setStorage({
+						key: 'city',
+						data: '石家庄'
+					})
 				}
-			}) */
+			})
 			//#endif
 			//#ifdef H5
-			/* uni.request({
+			uni.request({
 				url: 'https://restapi.amap.com/v3/ip?parameters',
 				data: {
-					key: 'b4480e225615b0754c5b8c6d1988cb3c'
+					key: config.mapKey.gd
 				},
 				method: "GET",
 				success: (res) => {
-					console.log(res.data);
+					console.log('H5定位',res.data);
 					uni.setStorage({
 						key: 'citys',
 						data: res.data.city.split("市")[0]
 					})
 				},
-				fail:()=>{
+				fail: () => {
 					uni.showToast({
-						title:"定位失败,请点击右上角手动选择",
-						icon:"none",
-						duration:1500
+						title: "定位失败,请点击右上角手动选择",
+						icon: "none",
+						duration: 1500
+					})
+					uni.setStorage({
+						key: 'citys',
+						data: '石家庄'
 					})
 				}
-			}) */
+			})
 			//#endif
 		},
 		onShow: function() {
@@ -110,14 +172,17 @@
 	}
 
 	.cu-form-group>uni-text[class*="cuIcon-require"] {
-	    font-size: 10px;
+		font-size: 10px;
 	}
-	.uni-textarea-placeholder{
+
+	.uni-textarea-placeholder {
 		color: #c0bfbf;
 	}
-	.uni-input-placeholder{
+
+	.uni-input-placeholder {
 		color: #c0bfbf;
 	}
+
 	.icon-yiguoqi1:before {
 		content: "\e700";
 	}

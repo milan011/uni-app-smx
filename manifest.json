@@ -1,5 +1,5 @@
 {
-    "name" : "mix-mall",
+    "name" : "驷马先买车宝",
     "appid" : "__UNI__B1D7D68",
     "description" : "",
     "versionName" : "1.0.0",
@@ -56,14 +56,16 @@
     "mp-weixin" : {
         /* 小程序特有相关 */
         "usingComponents" : true,
-        "appid" : "",
-				"permission": {
-					"scope.userLocation": {
-						"desc": "请求获取您的地理位置"
-					}	
-				},
+        "appid" : "wx20489d96ce494bb7",
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "请求获取您的地理位置"
+            }
+        },
         "setting" : {
-            "urlCheck" : true
+            "urlCheck" : true,
+            "es6" : true,
+            "minified" : true
         }
     },
     "h5" : {

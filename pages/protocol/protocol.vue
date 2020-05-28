@@ -6,7 +6,7 @@
 					<text class="cuIcon-title text-orange"></text> 我的合同
 				</view>
 				<view class="action">
-					<button class="cu-btn bg-green shadow" @tap="showModal" data-target="RadioModal">搜索</button>
+					<button class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
 				</view>
 			</view>
 			<view class="cu-list menu">

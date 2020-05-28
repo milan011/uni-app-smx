@@ -61,7 +61,7 @@
 							<text>上牌地</text>
 						</view>
 						<view class="tj-item">
-							<text class="num">{{ transmissionConfig[carDetail.cars.Transmission] }}</text>
+							<text v-if="transmissionConfig[carDetail.cars.Transmission]" class="num">{{ transmissionConfig[carDetail.cars.Transmission].name }}</text>
 							<text>变速箱</text>
 						</view>
 					</view>
@@ -157,6 +157,19 @@
 	} from '@/api/car.js'
 	import { carPutOn } from '@/api/carManage.js'
 	import Config from '@/common/config.js'
+	import {
+		transmissionConfig,
+		carStatusConfig, 
+		putOnStatusConfig, 
+		carTypeConfig,
+		insidecolorConfig,
+		outcolorConfig,
+		saleNumConfig,
+		carUseConfig,
+		useconditionsConfig,
+		maintainingConfig,
+		safetypeConfig, 
+	} from '@/common/appConfig.js'
 	export default {
 		components: {
 			share,
@@ -366,7 +379,7 @@
 			let recomList = await getCarList({ ...this.car
 			});
 			this.recomList = recomList.data.Data.DataList
-			this.transmissionConfig = await this.$api.config('transmissionConfig');
+			this.transmissionConfig = transmissionConfig;
 			await uni.hideLoading()
 		},
 		methods: {

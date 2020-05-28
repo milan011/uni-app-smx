@@ -35,12 +35,12 @@
 				</view>
 			</view>
 			<button class="confirm-btn" @click="toLogin" :disabled="logining">登录</button>
-			<view class="forget-section">
+			<!-- <view class="forget-section">
 				忘记密码?
-			</view>
+			</view> -->
 		</view>
-		<view v-if="!isAuthor">
-			<!-- #ifdef MP-WEIXIN -->
+		<!-- #ifdef MP-WEIXIN -->
+		<view v-if="showWxLog">	
 			<button
 				style="margin-top:10em;" 
 				open-type="getUserInfo" 
@@ -48,12 +48,17 @@
 				withCredentials="true">
 					微信授权获取用户信息
 			</button>
-			<!-- #endif -->
 		</view>
-		<view class="register-section">
+		<!-- #endif -->
+		<view class="cu-load load-modal" v-if="loadModal">
+			<!-- <view class="cuIcon-emojifill text-orange"></view> -->
+			<image src="/static/load.png" mode="aspectFit"></image>
+			<view class="gray-text">授权登陆中...</view>
+		</view>
+		<!-- <view class="register-section">
 			还没有账号?
 			<text @click="toRegist">马上注册</text>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -71,6 +76,7 @@
 				isMpWeiXin: false,
 				isAuthor: false,
 				showWxLog: false,
+				loadModal: false,
 				logining: false
 			}
 		},
@@ -89,6 +95,7 @@
 				          //这里调用授权
 				          console.log("当前未授权");
 									_this.isAuthor = false
+									_this.showWxLog = true
 				     } else {
 				          //用户已经授权过了
 				          console.log("当前已授权");
@@ -109,6 +116,7 @@
 			          //这里调用授权
 			          console.log("当前未授权");
 								_this.isAuthor = false
+								_this.showWxLog = true
 			     } else {
 			          //用户已经授权过了
 			          console.log("当前已授权");
@@ -158,6 +166,7 @@
 			},
 			loginWithWx(code){
 				var _this = this
+				_this.loadModal = true
 				console.log('微信授权登录',code)
 				const sendData = { WxCode: code }
 				/* const sendData = {
@@ -177,6 +186,7 @@
 						console.log('微信Code登录失败?')
 						_this.isMpWeiXin = true
 						_this.isAuthor = true
+						_this.loadModal = false
 					}
 				})
 			},

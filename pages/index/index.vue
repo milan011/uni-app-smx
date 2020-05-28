@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="container">
 		<!-- <view class="container"> -->
 		<!-- 小程序头部兼容 -->
 		<!-- #ifdef MP -->
@@ -25,9 +25,6 @@
 		</view>
 		<!-- 头部轮播 -->
 		<view class="carousel-section">
-			<!-- 标题栏和状态栏占位符 -->
-			<!-- <view class="titleNview-placing">
-			</view> -->
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular autoplay="true" @change="swiperChange">
@@ -60,16 +57,7 @@
 				<image src="/static/temp/c7.png"></image>
 				<text>关于我们</text>
 			</view>
-			<!-- <view class="cate-item">
-				<image src="/static/temp/c8.png"></image>
-				<text>速食生鲜</text>
-			</view> -->
 		</view>
-
-		<!-- <view class="ad-1">
-			<image src="/static/temp/ad1.jpg" mode="scaleToFill"></image>
-		</view> -->
-		<!-- 快捷筛选 Begain-->
 		<view class="order-section">
 			<view class="order-item" @tap="navToCarList" data-price="0-3" data-cont="3万以下" hover-class="common-hover" :hover-stay-time="50">
 				<text>3万以下</text>
@@ -84,14 +72,48 @@
 				<text>15万以上</text>
 			</view>
 		</view>
-		<view class="order-section">
+		<view class="cate-section">
+			<view class="cate-item" @tap="navToCarList" data-factory="本田">
+				<image src="/static/brand/bentian.jpg"></image>
+				<text>本田</text>
+			</view>
+			<view class="cate-item" @tap="navToCarList" data-factory="大众">
+				<image src="/static/brand/dazhong.jpg"></image>
+				<text>大众</text>
+			</view>
+			<view class="cate-item" @tap="navToCarList" data-factory="奔驰">
+				<image src="/static/brand/benz.png"></image>
+				<text>奔驰</text>
+			</view>
+			<view class="cate-item" @tap="navToCarList" data-factory="丰田">
+				<image src="/static/brand/fengtian.jpg"></image>
+				<text>丰田</text>
+			</view>
+		</view>
+		<view class="cate-section">
+			<view class="cate-item" @tap="navToCarList" data-factory="奥迪">
+				<image src="/static/brand/aodi.jpg"></image>
+				<text>奥迪</text>
+			</view>
+			<view class="cate-item" @tap="navToCarList" data-factory="宝马">
+				<image src="/static/brand/bmw.png"></image>
+				<text>宝马</text>
+			</view>
+			<view class="cate-item" @tap="navToCarList" data-factory="福特">
+				<image src="/static/brand/fute.jpg"></image>
+				<text>福特</text>
+			</view>
+			<view class="cate-item" @tap="navToCarList" data-factory="">
+				<image src="../../static/index/more.png"></image>
+				<text>更多</text>
+			</view>
+		</view>
+		<!-- <view class="order-section">
 			<view class="order-item" @tap="navToCarList" data-factory="本田" hover-class="common-hover" :hover-stay-time="50">
-				<!-- <icon type="success" size="16"/> -->
 				<image src="/static/brand/bentian.jpg" mode="aspectFit"></image>
 				<text>本田</text>
 			</view>
 			<view class="order-item" @tap="navToCarList" data-factory="大众" hover-class="common-hover" :hover-stay-time="50">
-				<!-- <image src="https://sta.guazistatic.com/static/c2c/web/che-logo/dazhong.png" mode="aspectFit"></image> -->
 				<image src="/static/brand/dazhong.jpg" mode="aspectFit"></image>
 				<text>大众</text>
 			</view>
@@ -103,8 +125,8 @@
 				<image src="/static/brand/fengtian.jpg" mode="aspectFit"></image>
 				<text>丰田</text>
 			</view>
-		</view>
-		<view class="order-section">
+		</view> -->
+		<!-- <view class="order-section">
 			<view class="order-item" @tap="navToCarList" data-factory="奥迪" hover-class="common-hover" :hover-stay-time="50">
 				<image src="/static/brand/aodi.jpg" mode="aspectFit"></image>
 				<text>奥迪</text>
@@ -121,7 +143,7 @@
 				<image src="../../static/index/more.png" mode="aspectFit"></image>
 				<text>更多</text>
 			</view>
-		</view>
+		</view> -->
 		<!-- 快捷筛选 End-->
 		<!-- 车型推荐 -->
 		<view class="f-header m-t">
@@ -130,7 +152,6 @@
 				<text class="tit">好车推荐</text>
 				<text class="tit2">为您精选好车</text>
 			</view>
-			<!-- <text class="yticon icon-you"></text> -->
 		</view>
 
 		<view class="guess-section">
@@ -196,70 +217,15 @@
 				},
 				city: "",
 				total: "",
-				loadingType: 'more', //参数loading加载,nomore
+				loadingType: 'loading', //参数loading加载,nomore
 			};
-		},
-		mounted(){
-			var _this = this
-			
-			// #ifdef  MP-WEIXIN
-			// uni.getSetting({
-			//    success(res) {
-			//       console.log("授权：",res);
-			//      if (!res.authSetting['scope.userInfo']) {
-			//           //这里调用授权
-			//           console.log("当前未授权");
-			//      } else {
-			//           //用户已经授权过了
-		 //          console.log("当前已授权");
-			//      }
-			//    }
-			//  })
-			// uni.login({
-			// 	provider: 'weixin',
-			// 	success: function(loginRes) {
-			// 		console.log(JSON.stringify(loginRes));
-			// 		console.log(JSON.stringify(loginRes.code));
-			// 		// console.log(loginRes.authResult);
-			// 		// 获取用户信息
-			// 		uni.getUserInfo({
-			// 			provider: 'weixin',
-			// 			success: function(infoRes) {
-			// 				console.log('wuser',infoRes)
-			// 				console.log('用户昵称为：' + infoRes.userInfo.nickName);
-			// 				console.log('用户Code为：' + JSON.stringify(infoRes.code));
-			// 			},
-			// 			fail:(res=>{
-			// 					// 获取失败的去引导用户授权
-			// 					console.log('亲,赶紧去授权')
-			// 					console.log(_this.$refs)
-			// 					// _this.$refs.author.getuserinfo()
-			// 					// _this.$refs.author.$emit('getuserinfo')
-			// 					// _this.wxGetUserInfo()
-			// 			})
-			// 		});
-			// 	}
-			// });
-			// #endif
 		},
 		onLoad() {
 			var _this = this
-			/* wx.login({
-			      success: loginres => {
-			      var code= loginres.code;
-						console.log(code)
-			}
-			}); */
-			console.log(Config)
-			// #ifdef  MP-WEIXIN
-			// #endif
-			// console.log('load')
-			this.loadData();
 			// 城市初始化
 			let that = this
-			//#ifndef H5
 			uni.getStorage({
-				key: 'city',
+				key: 'selectCity',
 				success: function(res) {
 					that.city = res.data
 					let arr = res.data.split("")
@@ -270,35 +236,44 @@
 					} else {
 						that.car.CityName = res.data
 					}
+				},
+				fail:function(){
+					//#ifndef H5
+					uni.getStorage({
+						key: 'city',
+						success: function(res) {
+							that.city = res.data
+							let arr = res.data.split("")
+							let index = arr.length - 1
+							if (arr[index] == "市") {
+								let arr1 = arr.pop()
+								that.car.CityName = arr.join("")
+							} else {
+								that.car.CityName = res.data
+							}
+						}
+					});
+					//#endif
+					//#ifdef H5
+					uni.getStorage({
+						key: 'citys',
+						success: function(res) {
+							that.city = res.data
+							let arr = res.data.split("")
+							let index = arr.length - 1
+							if (arr[index] == "市") {
+								let arr1 = arr.pop()
+								that.car.CityName = arr.join("")
+							} else {
+								that.car.CityName = res.data
+							}
+						}
+					});
+					//#endif
 				}
-			});
-			//#endif
-			//#ifdef H5
-			uni.getStorage({
-				key: 'citys',
-				success: function(res) {
-					that.city = res.data
-					let arr = res.data.split("")
-					let index = arr.length - 1
-					if (arr[index] == "市") {
-						let arr1 = arr.pop()
-						that.car.CityName = arr.join("")
-					} else {
-						that.car.CityName = res.data
-					}
-				}
-			});
-			//#endif
-		},
-		onReachBottom() {
-			// console.log('哥,你上拉了')
-			let num = Math.ceil(this.total / this.car.PageSize)
-			if (this.car.PageIndex < num) {
-				this.car.PageIndex++
-				this.loadData();
-			} else {
-				return
-			}
+			})
+			this.car.PageIndex = 1
+			this.loadData()
 		},
 		methods: {
 			/**
@@ -344,10 +319,32 @@
 			//下拉刷新
 			onPullDownRefresh() {
 				// console.log('哥,你下拉了')
+				this.loadingType = "loading"
 				this.goodsList = []
 				this.car.PageIndex = 1
 				this.loadData()
 				uni.stopPullDownRefresh()
+			},
+			//上拉加载更多
+			onReachBottom() {
+				/* console.log('哥,你上拉了')
+				console.log('当前页',this.car.PageIndex)
+				console.log('总数',this.total)
+				console.log('还有吗',this.total/this.car.PageSize)
+				console.log('每页显示条数',this.car.PageSize) */
+				if (this.car.PageIndex < this.total/this.car.PageSize) {
+					this.loadingType = "loading"
+					// return false
+					let num = Math.ceil(this.total / this.car.PageSize)
+					if (this.car.PageIndex < num) {
+						this.car.PageIndex++
+						this.loadData()
+					} else {
+						return
+					}
+				} else {
+					this.loadingType = "nomore"
+				}
 			},
 			async loadData() {
 				this.loadingType = "loading"
@@ -364,11 +361,11 @@
 				})
 				this.goodsList = this.goodsList.concat(goodsList.data.Data.DataList);
 				this.total = goodsList.data.Data.Total
-				if (this.car.pageindex < this.total/this.car.pagesize) {
+				/* if (this.car.PageIndex < this.total/this.car.pagesize) {
 					this.loadingType = "more"
 				} else {
 					this.loadingType = "nomore"
-				}
+				} */
 			},
 			// 去搜索页面
 			toSearch() {
@@ -563,8 +560,8 @@
 		// margin-top: 20upx;
 		.order-item {
 			@extend %flex-center;
-			width: 200upx;
-			height: 100upx;
+			width: 160upx;
+			height: 120upx;
 			border-radius: 10upx;
 			font-size: $font-sm;
 			color: $font-color-dark;
@@ -654,7 +651,7 @@
 			margin-bottom: 14upx;
 			border-radius: 50%;
 			opacity: .7;
-			box-shadow: 4upx 4upx 20upx rgba(250, 67, 106, 0.3);
+			// box-shadow: 4upx 4upx 20upx rgba(250, 67, 106, 0.3);
 		}
 	}
 

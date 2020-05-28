@@ -6,7 +6,7 @@
 					<text class="cuIcon-title text-orange"></text> 我的交易
 				</view>
 				<view class="action">
-					<button class="cu-btn bg-green shadow" @tap="showModal" data-target="RadioModal">搜索</button>
+					<button class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
 				</view>
 			</view>
 			<view class="cu-list menu">
@@ -233,10 +233,12 @@
 						getShopList({
 							id:res.data.shop_id
 						}).then(res => {
-							this.shopList = res.data.Data
-							this.shopList.unshift({
-								name: "全部"
-							})
+							if(res.data.Data){
+								this.shopList = res.data.Data
+								this.shopList.unshift({
+									name: "全部"
+								})
+							}
 						})
 					}
 				})

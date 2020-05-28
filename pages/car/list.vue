@@ -7,8 +7,8 @@
 						<text class="cuIcon-title text-orange"></text> 我的车源
 					</view>
 					<view class="action">
-						<button class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-						<button class="cu-btn bg-green shadow" @tap="createCar" data-target="menuModal">添加车源</button>
+						<button style="margin-right:5rpx" class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
+						<button class="cu-btn bg-green shadow" @tap="createCar" data-target="menuModal">添加</button>
 					</view>
 				</view>
 				<!-- 车源列表 Begain -->
@@ -19,8 +19,11 @@
 							<text class="text-grey">{{ item.FullName }}</text>
 						</navigator>
 						<view class="action">
-							<view class="cu-tag round bg-orange light" v-if="!item.IsPutOn">{{item.IsPutOn?'':'未上架'}}</view>
-							<view class="cu-tag round bg-olive light">{{carSt}}</view>
+							<!-- <view class="cu-tag round bg-orange light" v-if="!item.IsPutOn">{{item.IsPutOn?'':'未上架'}}</view> -->
+							<view  class="cu-tag round bg-olive light">
+								{{carSt}}
+								<text style="color:#ff7637" v-if="!item.IsPutOn">[{{item.IsPutOn?'':'未上架'}}]</text>
+							</view>
 							<view class="cu-tag round bg-blue light">{{item.CreateDate.substring(0,item.CreateDate.indexOf("T"))}}</view>
 						</view>
 					</view>
@@ -283,9 +286,9 @@
 			//添加车源
 			createCar() {
 				uni.navigateTo({
-					url: '/pages/car/customer'
+					url: '/pages/car/carCreate'
 				})
-				this.$api.msg('跳转下一页 sendData');
+				// this.$api.msg('跳转下一页 sendData');
 			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
@@ -332,14 +335,6 @@
 				this.loadData();
 				this.hideModal();
 			},
-			//创建订单
-			createCar() {
-				uni.navigateTo({
-					// url: '/pages/car/customer'
-					url: '/pages/car/carCreate'
-				})
-				this.$api.msg('跳转下一页 sendData');
-			}
 		}
 	}
 </script>

@@ -11,8 +11,8 @@
 							<view class="text-content" style="padding-top: 0.8em;">{{item.FullName}}</view>
 							<view>
 								<view class="cu-tag bg-red light sm round">¥ {{item.SaleAMT}}万元</view>
-								<view class="cu-tag bg-green light sm round">{{item.Mileage}}万公里</view>
-								<view class="cu-tag bg-green light sm round">{{item.CityName}}</view>
+								<view class="cu-tag bg-olive light sm round">{{item.Mileage}}万公里</view>
+								<view class="cu-tag bg-blue light sm round">{{item.CityName}}</view>
 							</view>
 						</view>
 					</view>
@@ -58,7 +58,7 @@
 				cateMaskState: 0, //分类面板展开状态
 				headerPosition: "fixed",
 				headerTop: "0px",
-				loadingType: 'more', //加载更多状态
+				loadingType: 'loading', //加载更多状态
 				filterIndex: 0,
 				cateId: 0, //已选三级分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
@@ -104,12 +104,32 @@
 			// this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
 			// #endif
 			// #ifdef MP-WEIXIN
-			uni.authorize({
-				scope: 'scope.userLocation',
-				success() {
-					uni.getLocation()
-				}
-			})
+			// uni.authorize({
+			// 	scope: 'scope.userLocation',
+			// 	success() {
+			// 		uni.getLocation({
+			// 			type: 'wgs84',
+			// 			success: function (res) {
+			// 				console.log('当前位置的经度：' + res.longitude);
+			// 				console.log('当前位置的纬度：' + res.latitude);
+			// 			},
+			// 			fail: function() {
+			// 				// console.log('没获取到您的位置,您在火星?')
+			// 				uni.showToast({
+			// 					title: '没获取到您的位置,您在火星?',
+			// 					duration: 1500
+			// 				})
+			// 			}
+			// 		})
+			// 	},
+			// 	fail: function() {
+			// 		console.log('您拒绝了')
+			// 		uni.showToast({
+			// 			title: '您拒绝了',
+			// 			duration: 1500
+			// 		})
+			// 	}
+			// })
 			// #endif
 
 			//#ifndef H5
@@ -127,8 +147,9 @@
 					}
 				},
 				fail: function() {
-					uni.showLoading({
-						title: '请先选择城市'
+					uni.showToast({
+						title: '定位城市失败,请手动选择',
+						duration: 1500
 					})
 				}
 			});
@@ -148,8 +169,9 @@
 					}
 				},
 				fail: function() {
-					uni.showLoading({
-						title: '请先选择城市'
+					uni.showToast({
+						title: '定位城市失败,请手动选择',
+						duration: 1500
 					})
 				}
 			});
@@ -589,6 +611,11 @@
 <style>
 	.cu-card.article>.cu-item .content {
 		padding: 0px;
+	}
+	.cu-tag.sm {
+	  font-size: 20rpx;
+	  padding: 0px 5rpx;
+	  height: 30rpx;
 	}
 </style>
 <style lang="scss">

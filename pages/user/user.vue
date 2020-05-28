@@ -1,6 +1,5 @@
 <template>
 	<view class="container">
-
 		<view class="user-section">
 			<image class="bg" src="/static/user-bg.jpg"></image>
 			<view class="user-info-box">
@@ -13,24 +12,25 @@
 			</view>
 		</view>
 
-		<view class="cover-container" :style="[{
-				transform: coverTransform,
-				transition: coverTransition
-			}]"
-		 @touchstart="coverTouchstart" @touchmove="coverTouchmove" @touchend="coverTouchend">
+		<view 
+		class="cover-container" 
+		:style="[{transform: coverTransform,transition: coverTransition}]"
+		 @touchstart="coverTouchstart" 
+		 @touchmove="coverTouchmove" 
+		 @touchend="coverTouchend">
 			<image class="arc" src="/static/arc.png"></image>
-
-			<view class="tj-sction">
+			<!-- 信息展示 Begain -->
+			<view class="tj-sction" v-if="hasLogin">
 				<view class="tj-item">
 					<!-- <text>车源 | {{ userGeneralInfo.MyCar }}</text> -->
-					<view  @click="navTo('/pages/car/listRemind')" class='cu-tag radius line-green'>
+					<view @tap="toRemindCar" class='cu-tag radius line-green'>
 						车源 | {{ userGeneralInfo.MyCar }}
 						<view v-if="userGeneralInfo.CarRemind > 0" class="cu-tag badge"></view>
 					</view>
 				</view>
 				<view class="tj-item">
 					<!-- <text>求购 | {{ userGeneralInfo.MyWant }}</text> -->
-					<view  @click="navTo('/pages/wantBuy/listRemind')" class='cu-tag radius line-olive'>
+					<view @tap="toRemindWant"  class='cu-tag radius line-olive'>
 						求购 | {{ userGeneralInfo.MyWant }}
 						<view v-if="userGeneralInfo.WantRemind > 0" class="cu-tag badge"></view>
 					</view>
@@ -43,8 +43,9 @@
 					</view>
 				</view>
 			</view>
-			<!-- 订单 -->
-			<view class="order-section">
+			<!-- 信息展示 End -->
+			<!-- 操作菜单 Begain -->
+			<view v-if="hasLogin" class="order-section">
 				<view class="order-item" @click="navTo('/pages/car/list')" hover-class="common-hover" :hover-stay-time="50">
 					<text class="yticon icon-shouye"></text>
 					<text>车源管理</text>
@@ -63,6 +64,7 @@
 					<text>客户管理</text>
 				</view>
 			</view>
+			<!-- 操作菜单 End -->
 			<!-- 浏览历史 -->
 			<view class="history-section icon">
 				<view class="sec-header">
@@ -75,12 +77,10 @@
 					 mode="scaleToFill"></image>
 				</scroll-view>
 				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" showYt iconColor="#54b4ef" @eventClick="navTo('/pages/collect/collect')" title="我的收藏"></list-cell>
-				<!-- <list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="公告" tips="您的会员还有3天过期"></list-cell> -->
-				<list-cell icon="icon-dizhi" showYt iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')
+				<list-cell v-if="hasLogin" icon="icon-dizhi" showYt iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')
 				
 				"></list-cell>
-				<!-- <list-cell icon="icon-share" iconColor="#9789f7" title="分享" tips="邀请好友赢10万大礼"></list-cell> -->
-				<list-cell icon="icon-pinglun-copy" showYt iconColor="#ee883b" title="协议管理" @eventClick="navTo('/pages/protocol/protocol')"></list-cell>
+				<list-cell v-if="hasLogin" icon="icon-pinglun-copy" showYt iconColor="#ee883b" title="协议管理" @eventClick="navTo('/pages/protocol/protocol')"></list-cell>
 				<list-cell icon="icon-shezhi1" showYt iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>
@@ -107,13 +107,20 @@
 				moving: false,
 				ifOnShow: false,
 				imgList: [],
-				userGeneralInfo: {},
+				userGeneralInfo: {
+					MyCar: '',
+					MyWant: '',
+					MyTrancation: '',
+				},
 				img_url: Config.img_url
 			}
 		},
 		
 		onLoad() {
-			this.userGeneral()
+			console.log('是否登录',this.hasLogin)
+			if(this.hasLogin){ //登录用户
+				this.userGeneral()
+			}
 		},
 		onShow() {
 			let imgList = []
@@ -178,13 +185,24 @@
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view
 			 */
-			navTo(url) {
+			navTo(url) {		
 				if (!this.hasLogin) {
 					url = '/pages/public/login';
 				}
 				uni.navigateTo({
 					url
 				})
+			},
+			
+			toRemindCar(){ //待跟进车源列表
+				if(this.userGeneralInfo.CarRemind > 0){
+					this.navTo('/pages/car/listRemind')
+				}
+			},
+			toRemindWant(){ //待跟进求购列表
+				if(this.userGeneralInfo.WantRemind > 0){
+					this.navTo('/pages/wantBuy/listRemind')
+				}
 			},
 
 			/**

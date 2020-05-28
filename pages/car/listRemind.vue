@@ -29,7 +29,7 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group margin-top">
-						<textarea v-model="quickFollow.content" maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
+						<textarea v-if="modalName=='ModalFollow'" v-model="quickFollow.content" maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">

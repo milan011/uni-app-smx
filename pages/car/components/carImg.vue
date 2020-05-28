@@ -198,10 +198,8 @@
 						</view>
 					</view>
 				</uni-collapse-item>
-			</uni-collapse>
-			<text class="mix-btn"  v-if="isEdit" @click="confirmImg">提交修改</text>
-			<text class="mix-btn" v-else @click="confirmImg">预览上架</text>
-			<!-- 手动输入车型 Begin -->
+			</uni-collapse>			
+			<!-- 评估图片描述 Begin -->
 			<view style="z-index: 110;" class="cu-modal" :class="modalName=='Comment'?'show':''">
 				<view class="cu-dialog">
 					<view class="bg-img" :style="{backgroundImage: 'url(' + pgBackImg + ')' }" style="height:200px">
@@ -216,7 +214,7 @@
 							<uni-rate size="18" :value="imgPgData.ImageLevel" active-color="#565656" @change="rateChange"></uni-rate>
 						</view>
 						<view class="cu-form-group margin-top">
-							<textarea style="text-align: left;" v-model="imgPgData.ImageContent" maxlength="-1" @input="dpInput" placeholder="点评描述">
+							<textarea v-if="modalName=='Comment'" style="text-align: left;" v-model="imgPgData.ImageContent" maxlength="-1" @input="dpInput" placeholder="点评描述">
 							</textarea>
 						</view>
 					</view>
@@ -228,7 +226,24 @@
 					</view>
 				</view>
 			</view>
-			<!-- 手动输入车型 End -->
+			<!-- 评估图片描述 End -->
+			<view class="cu-load load-modal" v-if="loadModal">
+				<!-- <view class="cuIcon-emojifill text-orange"></view> -->
+				<image src="/static/load.png" mode="aspectFit"></image>
+				<view class="gray-text">图片上传中...</view>
+			</view>
+			<view class="padding flex flex-direction">
+				<button v-if="isEdit" class="cu-btn bg-olive lg" @click="confirmImg">提交修改</button>
+				<button v-else class="cu-btn bg-olive lg" @click="confirmImg">预览上架</button>	
+			</view>
+			<!-- <view class="padding flex flex-direction">
+				<button class="cu-btn bg-grey">玄灰</button>
+				<button class="cu-btn bg-red margin-tb-sm lg">嫣红</button>
+			</view> -->
+			<!-- <view>
+				<text class="mix-btn" v-if="isEdit"  @click="confirmImg">提交修改</text>
+				<text class="mix-btn" v-else @click="confirmImg">预览上架</text>
+			</view> -->
 	</view>
 </template>
 
@@ -258,6 +273,7 @@
 					'购车发票': true,
 					'保险证明': true,
 				},
+				loadModal: false,
 				isEdit: false,
 				imgPgPart: '',
 				modalName: null,
@@ -268,6 +284,7 @@
 				pgPartJTypeArr: [],
 				pgPartDTypeArr: [],
 				TabCur: 0,
+				isNotPg:true,
 				imgData: {
 					ID: 0,
 					Carid: null,
@@ -313,6 +330,11 @@
 		},
 		methods: {
 			tabSelect(e) { //标签切换
+				/* if(e.currentTarget.dataset.id == 3){
+					this.isNotPg = false
+				}else{
+					this.isNotPg = true
+				} */
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
@@ -706,8 +728,7 @@
 				this.imgPgData.ImageContent = e.detail.value
 			},
 			ChooseImagePg(e){ //评估图片添加
-				var _this = this
-				
+				var _this = this		
 				console.log(e.currentTarget.dataset.imagetype)
 				_this.imgPgData.ImageType = e.currentTarget.dataset.imagetype  //部位
 				_this.imgPgPart = e.currentTarget.dataset.ipart //类型(非常规,静态,动态)
@@ -721,7 +742,8 @@
 							src: res.tempFilePaths[0],
 							success: function(image) {
 								if(image.width/image.height < 1){
-									_this.$api.msg(`请上传横拍图片`, 2000);
+									_this.loadModal = false
+									_this.$api.msg(`请上传横拍图片`, 2000);			
 									return false
 								}	
 								const imgParam = {
@@ -753,6 +775,7 @@
 					_this.$api.msg(`请填写描述`);
 					return false
 				}
+				_this.loadModal = true
 				imgAdd(_this.imgPgData).then(resImgAdd => {
 					console.log('图片添加',resImgAdd.data)
 					const imgReturn = [{
@@ -788,10 +811,12 @@
 					console.log('非常态', _this.imgListPgCurrentF) */
 					//根据添加到评估部位确定showBage状态
 					_this.showBageDel(imgReturn[0].ImageType)
+					_this.loadModal = false
 					_this.modalName = null
 				}).catch(err => {
 					console.log('err=>',err)
 					_this.modalName = null
+					_this.loadModal = false
 					_this.$api.msg(`图片添加失败,请刷新重试`);
 				})
 			},
@@ -836,10 +861,12 @@
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera', 'album'], //从相册选择
 					success: (res) => {
+						_this.loadModal = true
 						uni.getImageInfo({
 							src: res.tempFilePaths[0],
 							success: function(image) {
 								if(image.width/image.height < 1){
+									_this.loadModal = false
 									_this.$api.msg(`请上传横拍图片`, 2000);
 									return false
 								}	
@@ -865,12 +892,15 @@
 											_this.imgListOther = imgReturn
 										}
 										console.log('imlist', _this.imgListOther)
+										_this.loadModal = false
 									}).catch(err => {
 										console.log('1',err)
+										_this.loadModal = false
 										_this.$api.msg(`图片添加失败,请刷新重试`);
 									})
 								}).catch(err => {
 									// console.log('2',err)
+									_this.loadModal = false
 									_this.$api.msg(`图片上传失败,请刷新重试`);
 								})
 							}
@@ -891,6 +921,7 @@
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera', 'album'], //从相册选择
 					success: (res) => {
+						_this.loadModal = true
 						uni.getImageInfo({
 							src: res.tempFilePaths[0],
 							success: function(image) {
@@ -898,7 +929,8 @@
 								console.log(image.height);
 								console.log(image.width/image.height)
 								if(image.width/image.height < 1){
-									_this.$api.msg(`请上传横拍图片`, 2000);
+									_this.loadModal = false
+									_this.$api.msg(`请上传横拍图片`, 2000);		
 									return false
 								}			
 								const imgParam = {
@@ -958,11 +990,14 @@
 										} */
 										console.log('imlist', _this.imgList)
 										_this.imgUpShow[resImgAdd.data.Data.carpart] = false
+										_this.loadModal = false
 									}).catch(err => {
 										_this.$api.msg(`图片添加失败,请刷新重试`);
+										_this.loadModal = false
 									})
 								}).catch(err => {
 									_this.$api.msg(`图片上传失败,请刷新重试`);
+									_this.loadModal = false
 								})
 							}
 						});
@@ -1009,12 +1044,21 @@
 		justify-content: center;
 		width: 630upx;
 		height: 80upx;
-		margin: 80upx auto 30upx;
+		margin: 10upx auto 30upx;
 		font-size: $font-lg;
 		color: #fff;
 		background-color: $base-color;
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+		position: relative;
+		z-index: 9999;
+	}
+	.btn{
+		position: fixed;
+		left: 0;
+		bottom: 40upx;
+		z-index: 999;
+		width: 100%;
 	}
 	.padding-xl {
 	  padding: 10px;

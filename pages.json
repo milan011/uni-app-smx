@@ -98,12 +98,6 @@
 				"navigationBarTitleText": "修改资料"
 			}
 		}, {
-			"path": "pages/cart/cart",
-			"style": {
-				// "navigationStyle":"custom",
-				"navigationBarTitleText": "购物车"
-			}
-		}, {
 			"path": "pages/car/list",
 			"style": {
 				// "navigationStyle":"custom",
@@ -137,21 +131,6 @@
 			"style": {
 				"navigationBarTitleText": "新增车源"
 			}
-		},/* {
-			"path": "pages/car/customer",
-			"style": {
-				"navigationBarTitleText": "车源客户"
-			}
-		}, */ {
-			"path": "pages/public/hongbao",
-			"style": {
-				"navigationBarTitleText": "",
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false,
-					"animationType": "slide-in-bottom"
-				}
-			}
 		},{
 			"path": "pages/public/login",
 			"style": {
@@ -172,8 +151,8 @@
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
-						"type": "transparent",
-						"buttons": [{
+						"type": "transparent"
+						/* "buttons": [{
 								"fontSrc": "/static/yticon.ttf",
 								"text": "\ue60f",
 								// "text": "\ue588",
@@ -190,7 +169,7 @@
 								"background": "rgba(0,0,0,0)",
 								"redDot": true
 							}
-						]
+						] */
 					}
 				}
 			}
@@ -205,22 +184,6 @@
 				}
 			}
 		}, {
-			"path": "pages/order/order",
-			"style": {
-				"navigationBarTitleText": "我的订单",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		}, {
-			"path": "pages/money/money",
-			"style": {}
-		}, {
-			"path": "pages/order/createOrder",
-			"style": {
-				"navigationBarTitleText": "创建订单"
-			}
-		}, {
 			"path": "pages/business/business",
 			"style": {
 				"enablePullDownRefresh": true,
@@ -233,29 +196,10 @@
 				"navigationBarTitleText": "新建商机"
 			}
 		}, {
-			"path": "pages/money/pay",
-			"style": {
-				"navigationBarTitleText": "支付"
-			}
-		},
-		{
-			"path": "pages/money/paySuccess",
-			"style": {
-				"navigationBarTitleText": "支付成功"
-			}
-		}, {
 			"path": "pages/notice/notice",
 			"style": {
 				"navigationStyle": "custom",
 				"navigationBarTitleText": "通知"
-			}
-		}, {
-			"path": "pages/category/category",
-			"style": {
-				"navigationBarTitleText": "分类",
-				"app-plus": {
-					"bounce": "none"
-				}
 			}
 		}, {
 			"path": "pages/product/list",

@@ -7,7 +7,7 @@
 						<text class="cuIcon-title text-orange"></text> 商机管理
 					</view>
 					<view class="action">
-						<button class="cu-btn bg-green shadow" @tap="showModal" data-target="RadioModal">搜索</button>
+						<button style="margin-right:5rpx" class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
 						<button v-show="isAdmin" class="cu-btn bg-blue shadow" @tap="addBusiness" data-target="menuModal">添加商机</button>
 					</view>
 				</view>
@@ -86,7 +86,7 @@
 			</view>
 		</view>
 		<!-- 反馈modal Begin -->
-		<view class="cu-modal" style="z-index: 10;" :class="modalName=='ModalFollow'?'show':''">
+		<view class="cu-modal" style="z-index: 100;" :class="modalName=='ModalFollow'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
 					<view class="content">商机反馈</view>
@@ -96,7 +96,7 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group margin-top">
-						<textarea v-model="oppData.remark" maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
+						<textarea v-if="modalName=='ModalFollow'" v-model="oppData.remark" maxlength="-1" @input="textareaAInput" placeholder="反馈内容"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">
@@ -249,13 +249,14 @@
 				if(!this.oppData.remark){
 					this.$api.msg(`请输入反馈信息`);
 				}else{
+					var _this = this
 					console.log('oppData', this.oppData)
 					oppFeed(this.oppData).then(res=>{
 						console.log(res.data)
 						if(res.data.ResultType == 0){
-							this.$api.msg(`反馈成功`);
-							this.modalName = null
-							this.init()
+							_this.$api.msg(`反馈成功`);
+							_this.modalName = null
+							// _this.init()
 						}
 					})
 				}		

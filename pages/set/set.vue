@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class="list-cell b-b m-t" @click="navTo('个人资料')" hover-class="cell-hover" :hover-stay-time="50">
+		<!-- <view class="list-cell b-b m-t" @click="navTo('个人资料')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">个人资料</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
@@ -29,7 +29,7 @@
 			<text class="cell-tit">检查更新</text>
 			<text class="cell-tip">当前版本 1.0.3</text>
 			<text class="cell-more yticon icon-you"></text>
-		</view>
+		</view> -->
 		<view class="list-cell log-out-btn" @click="toLogout">
 			<text class="cell-tit">退出登录</text>
 		</view>

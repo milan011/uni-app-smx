@@ -26,7 +26,7 @@
 			</scroll-view>
 		</view>
 		<!-- 跟进modal Begin -->
-		<view class="cu-modal" style="z-index: 10;" :class="modalName=='ModalFollow'?'show':''">
+		<view class="cu-modal" style="z-index: 100;" :class="modalName=='ModalFollow'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
 					<view class="content">求购跟进</view>
@@ -36,7 +36,7 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group margin-top">
-						<textarea maxlength="-1" v-model="wantFollowData.description" @input="textareaAInput" placeholder="跟进内容"></textarea>
+						<textarea maxlength="-1" v-if="modalName=='ModalFollow'" v-model="wantFollowData.description" @input="textareaAInput" placeholder="跟进内容"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">

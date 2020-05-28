@@ -9,26 +9,16 @@ if (process.env.NODE_ENV === 'development') {
 	url_config = 'https://testapi.simaxian.com/api'
 	img_url = 'https://testapi.simaxian.com'
 }
-//变速箱
-const transmissionConfig = ['不限', '手动', '自动'];
 
-//车源状态
-const carStatusConfig = {
-	 '1':'正常',
-	 '0':'废弃',
-	 '5':'已交易',
-};
+//地图定位Key
+const mapKey = {
+	tx: 'ZBXBZ-OI63R-3DFWF-WXVTM-F4JU6-WTBYD', //腾讯(贺星国)
+	gd: 'b4480e225615b0754c5b8c6d1988cb3c' //高德(王格浩)
+}
 
-//上下架状态
-const putOnStatusConfig = {
-	 '1':'已上架',
-	 '0':'未上架',
-};
 
 export default {
 	url_config,
-	transmissionConfig,
-	carStatusConfig,
-	putOnStatusConfig,
+	mapKey,
 	img_url	
 }

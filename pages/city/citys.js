@@ -499,10 +499,10 @@ export default [{
         }, {
             'cityCode': '411700',
             'cityName': '驻马店市'
-        }, {
+        },/* {
             'cityCode': '419000',
             'cityName': '省直辖县级行政区划'
-        }, {
+        }, */{
             'cityCode': '420100',
             'cityName': '武汉市'
         }, {
@@ -541,10 +541,10 @@ export default [{
         }, {
             'cityCode': '422800',
             'cityName': '恩施土家族苗族自治州'
-        }, {
+        }, /* {
             'cityCode': '429000',
             'cityName': '省直辖县级行政区划'
-        }, {
+        }, */{
             'cityCode': '430100',
             'cityName': '长沙市'
         }, {
@@ -700,10 +700,10 @@ export default [{
         }, {
             'cityCode': '460300',
             'cityName': '三沙市'
-        }, {
+        }, /* {
             'cityCode': '469000',
             'cityName': '省直辖县级行政区划'
-        }, {
+        }, */{
             'cityCode': '500100',
             'cityName': '重庆'
         }, {

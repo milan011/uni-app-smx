@@ -42,9 +42,9 @@
 					pagesize: 20,
 					pageindex: 1,
 					key: "",
-					shopid: 1,
-					userid: 0,
-					rolename: "admin"
+					shopid: null,
+					userid: null,
+					rolename: ""
 				},
 				loadingType:'more', //参数loading加载,nomore
 				total:"",
@@ -52,7 +52,22 @@
 			};
 		},
 		onLoad() {
-			this.getUserList()
+			uni.getStorage({
+				key: 'userInfo',
+				success: (res) => {
+					this.user.rolename = res.data.rolename.split(',')[0]
+					this.user.shopid = res.data.shop_id
+					this.user.userid = res.data.id
+					this.getUserList()
+				},
+				fail: () => {
+					uni.showToast({
+						title: "请先登录",
+						icon: "none",
+						duration: 1500
+					})
+				}
+			})
 		},
 		onReachBottom() {
 			if (this.user.pageindex == this.index || this.user.pageindex > this.index) {

@@ -3,7 +3,8 @@ import store from './store'
 import App from './App'
 // import uniRequest from './common/request' //request封装
 import Json from './Json' //测试用数据
-import Config from './common/config' //配置数据
+import Config from './common/config' //基础配置数据
+import AppConfig from './common/appConfig' //应用配置数据
 /**
  *  因工具函数属于公司资产, 所以直接在Vue实例挂载几个常用的函数
  *  所有测试用数据均存放于根目录json.js
@@ -41,6 +42,17 @@ const config = type=>{
 	})
 }
 
+const appConfig = type=>{
+	//模拟异步请求数据
+	return new Promise(resolve=>{
+		console.log(Config)
+		console.log(AppConfig)
+		setTimeout(()=>{
+			resolve(AppConfig[type]);
+		}, 500)
+	})
+}
+
 const prePage = ()=>{
 	let pages = getCurrentPages();
 	let prePage = pages[pages.length - 2];
@@ -55,7 +67,7 @@ Vue.config.productionTip = false
 Vue.prototype.$fire = new Vue();
 Vue.prototype.$store = store;
 // Vue.prototype.$request = uniRequest;
-Vue.prototype.$api = {msg, json, prePage, config};
+Vue.prototype.$api = {msg, json, prePage, config, appConfig};
 
 import cuCustom from '@/common/colorui/components/cu-custom.vue'
 Vue.component('cu-custom',cuCustom)

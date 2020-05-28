@@ -90,6 +90,13 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
 		// console.log('!200',response.data)
 		// return Promise.reject(response)
   }
+	if(response.data.ResultType == 4){
+		//token过期
+		store.dispatch('logout')
+		uni.navigateTo({
+			url: '/pages/public/login'
+		});
+	}
   // if (response.config.custom.verification) { // 演示自定义参数的作用
   //   return response.data
   // }

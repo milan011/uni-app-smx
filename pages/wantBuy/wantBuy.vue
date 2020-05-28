@@ -7,8 +7,8 @@
 						<text class="cuIcon-title text-orange"></text> 我的求购
 					</view>
 					<view class="action">
-						<button class="cu-btn bg-green shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-						<button class="cu-btn bg-blue shadow" @tap="createCar" data-target="menuModal">添加求购</button>
+						<button style="margin-right:5rpx" class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
+						<button class="cu-btn bg-green shadow" @tap="createCar" data-target="menuModal">添加</button>
 					</view>
 				</view>
 				<view class="cu-list menu">

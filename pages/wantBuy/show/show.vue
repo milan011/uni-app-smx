@@ -88,7 +88,7 @@
 						<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 					</view>
 					<view class="cu-form-group margin-top">
-						<textarea maxlength="-1" @input="textareaAInput" placeholder="评估描述"></textarea>
+						<textarea v-if="modalName=='ModalAssess'" maxlength="-1" @input="textareaAInput" placeholder="评估描述"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">
@@ -111,7 +111,7 @@
 				</view>
 				<view class="padding-xl">
 					<view class="cu-form-group margin-top">
-						<textarea maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
+						<textarea v-if="modalName=='ModalFollow'" maxlength="-1" @input="textareaAInput" placeholder="跟进内容"></textarea>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">
