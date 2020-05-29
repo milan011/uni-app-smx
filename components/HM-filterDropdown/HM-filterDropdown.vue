@@ -124,7 +124,7 @@
 			filterData: {
 				handler() {
 					this.initMenu(); //filterData重新赋值初始化菜单
-					console.log('初始活动菜单',this.activeMenuArr)
+					// console.log('初始活动菜单',this.activeMenuArr)
 				},	
 				immediate: true
 			},
@@ -132,15 +132,15 @@
 				if (newVal.length == 0) {
 					return;
 				}
-				console.log('newVal',newVal)
+				// console.log('newVal',newVal)
 				this.defaultActive = JSON.parse(JSON.stringify(newVal));
 				this.activeMenuArr = JSON.parse(JSON.stringify(newVal));
 				this.shadowActiveMenuArr = JSON.parse(JSON.stringify(newVal));
 				
-				console.log('默认筛选条件数组', newVal)
-				console.log('defaultActive', this.defaultActive)
-				console.log('activeMenuArr', this.activeMenuArr)
-				console.log('shadowActiveMenuArr', this.shadowActiveMenuArr)
+				// console.log('默认筛选条件数组', newVal)
+				// console.log('defaultActive', this.defaultActive)
+				// console.log('activeMenuArr', this.activeMenuArr)
+				// console.log('shadowActiveMenuArr', this.shadowActiveMenuArr)
 				// return false
 				if (this.updateMenuName) {
 					this.setMenuName();
@@ -149,7 +149,7 @@
 		},
 		methods: {
 			initMenu() {
-				console.log('init')
+				// console.log('init')
 				let tmpMenuActiveArr = [];
 				let tmpMenu = [];
 				for (let i = 0; i < this.filterData.length; i++) {
@@ -183,7 +183,7 @@
 				}
 			},
 			setMenuName() {
-				console.log('重置顶层菜单name')
+				// console.log('重置顶层菜单name')
 				for (var i = 0; i < this.activeMenuArr.length; i++) {
 					let row = this.activeMenuArr[i];
 					if (typeof(row[0]) != 'object') {
@@ -212,11 +212,11 @@
 			},
 			//选中
 			selectHierarchyMenu(page_index, level1_index, level2_index, level3_index) {
-				console.log('page_index==>', page_index)
-				console.log('level1_index==>', level1_index)
-				console.log('level2_index==>', level2_index)
-				console.log('level3_index==>', level3_index)
-				console.log(this.activeMenuArr)
+				// console.log('page_index==>', page_index)
+				// console.log('level1_index==>', level1_index)
+				// console.log('level2_index==>', level2_index)
+				// console.log('level3_index==>', level3_index)
+				// console.log(this.activeMenuArr)
 				//读取记录
 				if (level1_index != null && level2_index == null && level3_index == null && this.shadowActiveMenuArr[page_index][0] ==
 					level1_index) {
@@ -228,14 +228,14 @@
 				}
 				//写入结果
 				if (level3_index != null || level2_index != null || (level1_index != null && this.subData[page_index].submenu[level1_index].submenu.length == 0)) {
-					console.log('subData',this.subData)
-					console.log('menu',this.menu)
+					// console.log('subData',this.subData)
+					// console.log('menu',this.menu)
 					let sub = this.subData[page_index].submenu[level1_index].submenu[level2_index];
 					if (this.updateMenuName) {
 						this.menu[page_index].name = (level3_index != null && sub.submenu[level3_index].name) || (level2_index != null &&sub.name) || this.subData[page_index].submenu[level1_index].name;
 					}
 					this.shadowActiveMenuArr[page_index] = JSON.parse(JSON.stringify(this.activeMenuArr[page_index]));
-					console.log(this.shadowActiveMenuArr[page_index])
+					// console.log(this.shadowActiveMenuArr[page_index])
 					this.togglePage(this.showPage);
 				}
 			},
@@ -246,7 +246,7 @@
 			},
 			//重置结果和ui，筛选
 			resetFilterData(page_index) {
-				console.log(page_index)
+				// console.log(page_index)
 				let tmpArr = [];
 				let level = this.shadowActiveMenuArr[page_index].length;
 				while (level > 0) {
@@ -363,7 +363,7 @@
 					} else {
 						let submenu = this.subData[i].submenu[item[0]];
 						value[i][0] = submenu.value;
-						console.log("value[i][0]: " + value[i][0]);
+						// console.log("value[i][0]: " + value[i][0]);
 						if (value[i].length >= 2 && item[1] != null) {
 							if (submenu.submenu.length > 0) {
 								submenu = submenu.submenu[item[1]];

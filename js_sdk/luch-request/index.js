@@ -90,7 +90,7 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
 		// console.log('!200',response.data)
 		// return Promise.reject(response)
   }
-	if(response.data.ResultType == 4){
+	if(response.data.ResultType == 4 || response.data.ResultType == 8){
 		//token过期
 		store.dispatch('logout')
 		uni.navigateTo({
@@ -107,7 +107,7 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
   return response
 }, (response) => { // 请求错误做点什么
 	console.log('请求错误',response)
-	if(response.data.ResultType == 4){
+	if(response.data.ResultType == 4 || response.data.ResultType == 8){
 		//token过期
 		store.dispatch('logout')
 		uni.navigateTo({

@@ -67,7 +67,6 @@
 					</view>
 				</view>
 			</view>
-
 		</view>
 		<view class="circuit">
 			<view class="title">

@@ -44,8 +44,8 @@
 			let txapPlugin = new txmap({
 				key: config.mapKey.tx
 			})
-			console.log(txapPlugin)
-			console.log(txapPlugin.reverseGeocoder())
+			// console.log(txapPlugin)
+			// console.log(txapPlugin.reverseGeocoder())
 			txapPlugin.reverseGeocoder({
 				//位置坐标，默认获取当前位置，非必须参数
 				/**

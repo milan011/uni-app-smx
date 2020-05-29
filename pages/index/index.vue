@@ -108,43 +108,35 @@
 				<text>更多</text>
 			</view>
 		</view>
-		<!-- <view class="order-section">
-			<view class="order-item" @tap="navToCarList" data-factory="本田" hover-class="common-hover" :hover-stay-time="50">
-				<image src="/static/brand/bentian.jpg" mode="aspectFit"></image>
-				<text>本田</text>
-			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="大众" hover-class="common-hover" :hover-stay-time="50">
-				<image src="/static/brand/dazhong.jpg" mode="aspectFit"></image>
-				<text>大众</text>
-			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="奔驰" hover-class="common-hover" :hover-stay-time="50">
-				<image src="/static/brand/benz.png" mode="aspectFit"></image>
-				<text>奔驰</text>
-			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="丰田" hover-class="common-hover" :hover-stay-time="50">
-				<image src="/static/brand/fengtian.jpg" mode="aspectFit"></image>
-				<text>丰田</text>
-			</view>
-		</view> -->
-		<!-- <view class="order-section">
-			<view class="order-item" @tap="navToCarList" data-factory="奥迪" hover-class="common-hover" :hover-stay-time="50">
-				<image src="/static/brand/aodi.jpg" mode="aspectFit"></image>
-				<text>奥迪</text>
-			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="宝马" hover-class="common-hover" :hover-stay-time="50">
-				<image src="/static/brand/bmw.png" mode="aspectFit"></image>
-				<text>宝马</text>
-			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="福特" hover-class="common-hover" :hover-stay-time="50">
-				<image src="/static/brand/fute.jpg" mode="aspectFit"></image>
-				<text>福特</text>
-			</view>
-			<view class="order-item" @tap="navToCarList" data-factory="" hover-class="common-hover" :hover-stay-time="50">
-				<image src="../../static/index/more.png" mode="aspectFit"></image>
-				<text>更多</text>
-			</view>
-		</view> -->
 		<!-- 快捷筛选 End-->
+		<!-- 一级平台展示 Begain -->
+		<view class="f-header m-t">
+					<image src="/static/temp/h1.png"></image>
+					<view class="tit-box">
+						<text class="tit">一级平台</text>
+						<text class="tit2">优秀平台展示</text>
+					</view>
+					<!-- <text class="yticon icon-you"></text> -->
+				</view>
+				<view class="hot-floor">
+					<scroll-view class="floor-list" scroll-x>
+						<view class="scoll-wrapper">
+							<view 
+								v-for="(item, index) in marketList" :key="index"
+								class="floor-item"
+								@click="navToMarketPage(item.id)"
+							>
+								<image style="height: 100upx;" :src="imgUrl+item.shoplogo" mode="aspectFit"></image>
+								<text class="title clamp">{{item.name}}</text>
+							</view>
+							<view class="more">
+								<text>查看全部</text>
+								<text>More+</text>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+		<!-- 一级平台展示 End -->
 		<!-- 车型推荐 -->
 		<view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
@@ -153,9 +145,8 @@
 				<text class="tit2">为您精选好车</text>
 			</view>
 		</view>
-
 		<view class="guess-section">
-			<view v-for="(item, index) in goodsList" :key="index" class="guess-item" @click="navToDetailPage(item)">
+			<view v-for="(item, index) in carList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 				<view class="image-wrapper">
 					<image :src="imgUrl+item.filename" mode="scaleToFill"></image>
 				</view>
@@ -177,6 +168,7 @@
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	import { getMarketShopList } from '@/api/shop.js'
 	const Qs = require('qs');
 	export default {
 		components: {
@@ -191,7 +183,8 @@
 				swiperCurrent: 0,
 				swiperLength: 0,
 				carouselList: [],
-				goodsList: [],
+				carList: [],
+				marketList: [],
 				imgUrl: Config.img_url,
 				car: {
 					PageIndex: 1,
@@ -212,7 +205,8 @@
 					OrderYearMin: "",
 					Car_Status: 1,
 					IsPutOn: 1,
-					Shop_Id: "71",
+					Shop_Id: "",
+					P_Shop_Id: '',
 					Sale_number: -1
 				},
 				city: "",
@@ -223,18 +217,17 @@
 		onLoad() {
 			var _this = this
 			// 城市初始化
-			let that = this
 			uni.getStorage({
 				key: 'selectCity',
 				success: function(res) {
-					that.city = res.data
+					_this.city = res.data
 					let arr = res.data.split("")
 					let index = arr.length - 1
 					if (arr[index] == "市") {
 						let arr1 = arr.pop()
-						that.car.CityName = arr.join("")
+						_this.car.CityName = arr.join("")
 					} else {
-						that.car.CityName = res.data
+						_this.car.CityName = res.data
 					}
 				},
 				fail:function(){
@@ -242,14 +235,14 @@
 					uni.getStorage({
 						key: 'city',
 						success: function(res) {
-							that.city = res.data
+							_this.city = res.data
 							let arr = res.data.split("")
 							let index = arr.length - 1
 							if (arr[index] == "市") {
 								let arr1 = arr.pop()
-								that.car.CityName = arr.join("")
+								_this.car.CityName = arr.join("")
 							} else {
-								that.car.CityName = res.data
+								_this.car.CityName = res.data
 							}
 						}
 					});
@@ -258,22 +251,23 @@
 					uni.getStorage({
 						key: 'citys',
 						success: function(res) {
-							that.city = res.data
+							_this.city = res.data
 							let arr = res.data.split("")
 							let index = arr.length - 1
 							if (arr[index] == "市") {
 								let arr1 = arr.pop()
-								that.car.CityName = arr.join("")
+								_this.car.CityName = arr.join("")
 							} else {
-								that.car.CityName = res.data
+								_this.car.CityName = res.data
 							}
 						}
 					});
 					//#endif
 				}
 			})
-			this.car.PageIndex = 1
-			this.loadData()
+			_this.car.PageIndex = 1
+			_this.loadData()
+			_this.getMarketList()
 		},
 		methods: {
 			/**
@@ -316,11 +310,17 @@
 					}
 				});
 			},
+			getMarketList(){
+				getMarketShopList().then(res=>{
+					console.log('一级市场', res)
+					this.marketList = res.data.Data
+				})
+			},
 			//下拉刷新
 			onPullDownRefresh() {
 				// console.log('哥,你下拉了')
 				this.loadingType = "loading"
-				this.goodsList = []
+				this.carList = []
 				this.car.PageIndex = 1
 				this.loadData()
 				uni.stopPullDownRefresh()
@@ -357,10 +357,10 @@
 				}
 				// let obj = Qs.stringify(params)
 				// console.log(obj)
-				let goodsList = await getCarList({ ...params
+				let carList = await getCarList({ ...params
 				})
-				this.goodsList = this.goodsList.concat(goodsList.data.Data.DataList);
-				this.total = goodsList.data.Data.Total
+				this.carList = this.carList.concat(carList.data.Data.DataList);
+				this.total = carList.data.Data.Total
 				/* if (this.car.PageIndex < this.total/this.car.pagesize) {
 					this.loadingType = "more"
 				} else {
@@ -390,6 +390,18 @@
 				const index = e.detail.current;
 				this.swiperCurrent = index;
 				this.titleNViewBackground = this.carouselList[index].background;
+			},
+			//一级市场
+			navToMarketPage(pshop){
+				uni.setStorage({
+					key: 'pshop',
+					data: pshop,
+					success: function() {
+						uni.reLaunch({
+							url: `/pages/product/list`
+						})
+					}
+				})
 			},
 			//详情页
 			navToDetailPage(item) {
@@ -887,8 +899,8 @@
 			padding: 20upx;
 			padding-right: 50upx;
 			border-radius: 6upx;
-			margin-top: -140upx;
-			margin-left: 30upx;
+			// margin-top: -140upx;
+			// margin-left: 30upx;
 			background: #fff;
 			box-shadow: 1px 1px 5px rgba(0, 0, 0, .2);
 			position: relative;

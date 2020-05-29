@@ -73,10 +73,10 @@
 					<text class="cuIcon-delete icons" @click="removeCache"></text>
 				</view>
 				<scroll-view scroll-x class="h-list">
-					<image v-for="(item,index) in imgList" :key='index' @click="navTo('/pages/product/product?id='+item.id)" :src="img_url+item.url"
+					<image v-for="(item,index) in imgList" :key='index' @click="navToProduct('/pages/product/product?id='+item.id)" :src="img_url+item.url"
 					 mode="scaleToFill"></image>
 				</scroll-view>
-				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" showYt iconColor="#54b4ef" @eventClick="navTo('/pages/collect/collect')" title="我的收藏"></list-cell>
+				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" showYt iconColor="#54b4ef" @eventClick="navToCollect" title="我的收藏"></list-cell>
 				<list-cell v-if="hasLogin" icon="icon-dizhi" showYt iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')
 				
 				"></list-cell>
@@ -146,7 +146,7 @@
 					}
 				}),
 				fail:()=> {
-					console.log('未获取')
+					console.log('尚无浏览历史')
 				}
 			})
 
@@ -193,7 +193,14 @@
 					url
 				})
 			},
-			
+			navToCollect(){
+				uni.navigateTo({ url:'/pages/collect/collect'})
+			},
+			navToProduct(url){
+				uni.navigateTo({
+					url
+				})
+			},
 			toRemindCar(){ //待跟进车源列表
 				if(this.userGeneralInfo.CarRemind > 0){
 					this.navTo('/pages/car/listRemind')

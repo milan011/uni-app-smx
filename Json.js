@@ -75,7 +75,7 @@ const menuExam = [{
 			"name": '品牌',
 			"value": "品牌",
 			"submenu": [{
-				"name": "品牌不限",
+				"name": "品牌",
 				"value": "品牌"
 				},]
 		}]
