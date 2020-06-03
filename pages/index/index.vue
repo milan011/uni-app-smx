@@ -11,6 +11,9 @@
 		<!-- #endif -->
 		<view class="header-search">
 			<view class="cu-bar search bg-white">
+				<view v-if="marketCurrent" class="action">
+					<text class="cuIcon-back text-gray" @tap="returnToSmx"></text> {{marketCurrent}}
+				</view>
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
 					<input @click="toSearch" :adjust-position="false" type="text" placeholder="搜索关键词" confirm-type="search"></input>
@@ -110,32 +113,32 @@
 		</view>
 		<!-- 快捷筛选 End-->
 		<!-- 一级平台展示 Begain -->
-		<view class="f-header m-t">
-					<image src="/static/temp/h1.png"></image>
-					<view class="tit-box">
-						<text class="tit">一级平台</text>
-						<text class="tit2">优秀平台展示</text>
+		<view v-if="!marketCurrent" class="f-header m-t">
+			<image src="/static/temp/h1.png"></image>
+			<view class="tit-box">
+				<text class="tit">一级平台</text>
+				<text class="tit2">优秀平台展示</text>
+			</view>
+			<!-- <text class="yticon icon-you"></text> -->
+		</view>
+		<view v-if="!marketCurrent" class="hot-floor">
+			<scroll-view class="floor-list" scroll-x>
+				<view class="scoll-wrapper">
+					<view 
+						v-for="(item, index) in marketList" :key="index"
+						class="floor-item"
+						@click="navToMarketPage(item)"
+					>
+						<image style="height: 100upx;" :src="imgUrl+item.shoplogo" mode="aspectFit"></image>
+						<text class="title clamp">{{item.name}}</text>
 					</view>
-					<!-- <text class="yticon icon-you"></text> -->
+					<view class="more">
+						<text>查看全部</text>
+						<text>More+</text>
+					</view>
 				</view>
-				<view class="hot-floor">
-					<scroll-view class="floor-list" scroll-x>
-						<view class="scoll-wrapper">
-							<view 
-								v-for="(item, index) in marketList" :key="index"
-								class="floor-item"
-								@click="navToMarketPage(item.id)"
-							>
-								<image style="height: 100upx;" :src="imgUrl+item.shoplogo" mode="aspectFit"></image>
-								<text class="title clamp">{{item.name}}</text>
-							</view>
-							<view class="more">
-								<text>查看全部</text>
-								<text>More+</text>
-							</view>
-						</view>
-					</scroll-view>
-				</view>
+			</scroll-view>
+		</view>
 		<!-- 一级平台展示 End -->
 		<!-- 车型推荐 -->
 		<view class="f-header m-t">
@@ -185,6 +188,7 @@
 				carouselList: [],
 				carList: [],
 				marketList: [],
+				marketCurrent: null,
 				imgUrl: Config.img_url,
 				car: {
 					PageIndex: 1,
@@ -214,6 +218,9 @@
 				loadingType: 'loading', //参数loading加载,nomore
 			};
 		},
+		/* onShow(){
+			console.log('当前市场',this.marketCurrent)
+		}, */
 		onLoad() {
 			var _this = this
 			// 城市初始化
@@ -265,6 +272,16 @@
 					//#endif
 				}
 			})
+			if(!_this.marketCurrent){
+				uni.setStorage({
+					key: 'pshop',
+					data: '',
+					success: function() {
+						_this.car.P_Shop_Id = ''
+						_this.carList = []
+					}
+				})
+			}
 			_this.car.PageIndex = 1
 			_this.loadData()
 			_this.getMarketList()
@@ -322,29 +339,40 @@
 				this.loadingType = "loading"
 				this.carList = []
 				this.car.PageIndex = 1
+				console.log('here2')
 				this.loadData()
 				uni.stopPullDownRefresh()
 			},
 			//上拉加载更多
 			onReachBottom() {
+				console.log(this.loadingType)
+				if(this.loadingType == "nomore"){
+					return false
+				}
 				/* console.log('哥,你上拉了')
 				console.log('当前页',this.car.PageIndex)
 				console.log('总数',this.total)
 				console.log('还有吗',this.total/this.car.PageSize)
 				console.log('每页显示条数',this.car.PageSize) */
-				if (this.car.PageIndex < this.total/this.car.PageSize) {
-					this.loadingType = "loading"
-					// return false
-					let num = Math.ceil(this.total / this.car.PageSize)
-					if (this.car.PageIndex < num) {
-						this.car.PageIndex++
-						this.loadData()
+				if(this.total){
+					if (this.car.PageIndex < this.total/this.car.PageSize) {
+						this.loadingType = "loading"
+						// return false
+						let num = Math.ceil(this.total / this.car.PageSize)
+						if (this.car.PageIndex == num || this.car.PageIndex > num) {			
+							return false
+						} else {
+							this.car.PageIndex++
+							console.log('here3')
+							this.loadData()
+						}
 					} else {
-						return
+						this.loadingType = "nomore"
 					}
-				} else {
-					this.loadingType = "nomore"
+				}else{
+					return false
 				}
+				
 			},
 			async loadData() {
 				this.loadingType = "loading"
@@ -359,7 +387,12 @@
 				// console.log(obj)
 				let carList = await getCarList({ ...params
 				})
-				this.carList = this.carList.concat(carList.data.Data.DataList);
+				if (this.carList.length == 0) {
+					this.carList = carList.data.Data.DataList
+				} else {
+					this.carList = this.carList.concat(carList.data.Data.DataList);
+				}
+				// this.carList = this.carList.concat(carList.data.Data.DataList);
 				this.total = carList.data.Data.Total
 				/* if (this.car.PageIndex < this.total/this.car.pagesize) {
 					this.loadingType = "more"
@@ -391,17 +424,45 @@
 				this.swiperCurrent = index;
 				this.titleNViewBackground = this.carouselList[index].background;
 			},
-			//一级市场
-			navToMarketPage(pshop){
+			returnToSmx(){
+				console.log('去总平台')
+				var _this = this
 				uni.setStorage({
 					key: 'pshop',
-					data: pshop,
+					data: '',
 					success: function() {
-						uni.reLaunch({
-							url: `/pages/product/list`
-						})
+						_this.marketCurrent = null
+						_this.car.P_Shop_Id = ''
+						_this.car.PageIndex = 1
+						_this.carList = []
+						console.log('here1')
+						_this.loadData()
 					}
 				})
+			},
+			//一级市场
+			navToMarketPage(pshop){
+				var _this = this
+				uni.setStorage({
+					key: 'pshop',
+					data: pshop.id,
+					success: function() {
+						_this.marketCurrent = pshop.name
+						_this.car.P_Shop_Id = pshop.id
+						_this.car.PageIndex = 1
+						_this.carList = []
+						getCarList(_this.car).then(res=>{
+							_this.carList = res.data.Data.DataList
+							_this.total = res.data.Data.Total
+						})
+						console.log(_this.car.PageIndex)
+						// _this.loadData()
+						/* uni.reLaunch({
+							url: `/pages/product/list`
+						}) */
+					}
+				})
+				
 			},
 			//详情页
 			navToDetailPage(item) {

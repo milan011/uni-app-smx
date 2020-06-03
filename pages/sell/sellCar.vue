@@ -1,47 +1,35 @@
 <template>
 	<view class="sellcar-main">
 		<view class="car-type">
-			<view class="title">
+			<!-- <view class="title">
 				选择车型
+			</view> -->
+			<view class="cu-form-group">
+				<view class="title">车型信息</view>
+				<input v-model="oppData.category_name" placeholder="请输入您的车型" name="input"></input>
+				<text class='cuIcon-deliver_fill text-orange'></text>
 			</view>
-			<view class="order-section">
-				<view class="order-item" hover-class="common-hover" :hover-stay-time="50">
-					<!-- <icon type="success" size="16"/> -->
-					<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/honda.png" mode="aspectFit"></image>
-					<text>本田</text>
-				</view>
-				<view class="order-item" hover-class="common-hover" :hover-stay-time="50">
-					<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/dazhong.png" mode="aspectFit"></image>
-					<text>大众</text>
-				</view>
-				<view class="order-item" hover-class="common-hover" :hover-stay-time="50">
-					<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/benz.png" mode="aspectFit"></image>
-					<text>奔驰</text>
-				</view>
-				<view class="order-item" hover-class="common-hover" :hover-stay-time="50">
-					<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/toyota.png" mode="aspectFit"></image>
-					<text>丰田</text>
-				</view>
+			<view class="cu-form-group">
+				<view class="title">联系电话</view>
+				<input v-model="oppData.mobile" placeholder="请输入您的手机号码" name="input"></input>
+				<text class='cuIcon-dianhua text-orange'></text>
 			</view>
-			<view class="order-section">
-				<view class="order-item" hover-class="common-hover" :hover-stay-time="50">
-					<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/audi.png" mode="aspectFit"></image>
-					<text>奥迪</text>
-				</view>
-				<view class="order-item" hover-class="common-hover" :hover-stay-time="50">
-					<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/bmw.png" mode="aspectFit"></image>
-					<text>宝马</text>
-				</view>
-				<view class="order-item" hover-class="common-hover" :hover-stay-time="50">
-					<image src="https://sta.guazistatic.com/static/c2c/web/che-logo/ford.png" mode="aspectFit"></image>
-					<text>福特</text>
-				</view>
-				<view class="order-item" hover-class="common-hover" :hover-stay-time="50">
-					<image src="../../static/index/more.png" mode="aspectFit"></image>
-					<text>更多</text>
-				</view>
+			<!-- <view class="cu-form-group">
+				<view class="title">上牌日期</view>
+				<picker mode="date" fields="month" :value="date" :end="endDate" @change="changDate">
+					<view class="picker">{{date}}</view>
+				</picker>
 			</view>
-			<view class="bottom">
+			<view class="cu-form-group">
+				<view class="title">选择里程</view>
+				<picker @change="changMileage" :value="index" :range="mileage">
+					<view class="picker">{{mileage[index]}}</view>
+				</picker>
+			</view> -->
+			<view class="padding flex flex-direction">
+				<button class="cu-btn bg-olive lg" @click="oppSend">快速估价</button>
+			</view>
+			<!-- <view class="bottom">
 				<view class="box">
 					<view class="uni-title uni-common-pl">上牌时间</view>
 					<view class="uni-list">
@@ -66,7 +54,7 @@
 						</view>
 					</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 		<view class="circuit">
 			<view class="title">
@@ -199,6 +187,8 @@
 </template>
 
 <script>
+	import { editOpp } from '@/api/business.js'
+	import '@/common/utils'
 	export default {
 		data() {
 			const currentDate = this.getDate({
@@ -210,6 +200,15 @@
 				index: 0,
 				TabCur: 0,
 				scrollLeft: 0,
+				preOppData:{},
+				oppData:{
+					name: '卖车游客',
+					mobile: '13645120124',
+					contents: '',
+					shopid: '71',
+					city_name: '',
+					category_name: ''
+				},
 				// 一键预约
 				reservation: [{
 						questions: "卖车有什么条件?",
@@ -280,6 +279,25 @@
 				]
 			};
 		},
+		onLoad() {
+			var _this = this
+			//#ifndef H5
+			uni.getStorage({
+				key: 'city',
+				success: function(res) {
+					_this.oppData.city_name = res.data
+				}
+			})
+			//#endif
+			//#ifdef H5
+			uni.getStorage({
+				key: 'citys',
+				success: function(res) {
+					_this.oppData.city_name = res.data
+				}
+			})
+			//#endif
+		},
 		computed: {
 			endDate() {
 				return this.getDate('end');
@@ -300,6 +318,29 @@
 				month = month > 9 ? month : '0' + month;;
 				day = day > 9 ? day : '0' + day;
 				return `${year}-${month}-${day}`;
+			},
+			oppSend(){
+				console.log(this.oppData.mobile)
+				console.log(this.preOppData.mobile)
+				console.log(this.oppData.mobile == this.preOppData.mobile)
+				if (this.$utils.isMobilePhone(this.oppData.mobile)) {
+					if(this.oppData.mobile == this.preOppData.mobile && this.oppData.category_name == this.preOppData.category_name){ //防止用户重复提交
+						this.oppData.mobile = ''
+						this.oppData.category_name = ''
+						this.$api.msg(`平台已记录您的需求,销售顾问会尽快和您联系`, 2000);
+					}else{
+						editOpp(this.oppData).then(res=>{
+							console.log(res.data)
+							if(res.data.ResultType == 0){
+								this.oppData.mobile = ''
+								this.preOppData = res.data.Data
+								this.$api.msg(`平台已记录您的需求,销售顾问会尽快和您联系`, 2000);
+							}
+						})
+					}	
+				}else{
+					this.$api.msg(`请输入正确格式手机号码`);
+				}		
 			},
 			// 时间切换
 			changDate(e) {
@@ -362,10 +403,10 @@
 		margin-top: 40upx;
 
 		.title {
-			padding-left: 20upx;
+			// padding-left: 20upx;
 			font-size: 34upx;
-			line-height: 3;
-			font-weight: 800;
+			// line-height: 3;
+			// font-weight: 800;
 		}
 
 		// 选择车型
@@ -572,8 +613,8 @@
 							margin-top: 30upx;
 							padding-left: 30upx;
 							font-size: 28upx;
-							line-height: 3;
-							font-weight: 700;
+							// line-height: 3;
+							// font-weight: 700;
 						}
 						.text {
 							padding-left: 30upx;

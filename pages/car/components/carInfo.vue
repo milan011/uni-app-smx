@@ -6,7 +6,7 @@
 			<view class="title">VIN码</view>
 			<input @blur="handlerVin" @input="vinChange" :disabled="isEdit"  v-model="carData.VIN" style="text-align: right;margin-right: 1em;"
 			 placeholder="请扫描或输入VIN码" name="input"></input>
-			<text v-if="!isEdit" @tap="scanVin" class='cuIcon-scan text-orange' style="font-size: x-large"></text>
+			<!-- <text v-if="!isEdit" @tap="scanVin" class='cuIcon-scan text-orange' style="font-size: x-large"></text> -->
 		</view>
 		<view class="cu-form-group">
 			<view class="title">车型</view>

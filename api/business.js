@@ -1,6 +1,7 @@
 import Config from '@/common/config.js'
 import {
-	httpApi
+	httpApi,
+	http
 } from '@/js_sdk/luch-request/index.js';
 export function getBusinessList(data) {
 	const requestUrl = Config.url_config + '/opportunity/page'
@@ -17,6 +18,10 @@ export function oppFeed(data) {
 export function edit(data) {
 	const requestUrl = Config.url_config + '/opportunity/edit'
 	return httpApi.post(requestUrl, {...data})
+}
+export function editOpp(data) {
+	const requestUrl = Config.url_config + '/opportunity/edit'
+	return http.post(requestUrl, {...data})
 }
 export function del(data) {
 	const requestUrl = Config.url_config + '/opportunity/delete'

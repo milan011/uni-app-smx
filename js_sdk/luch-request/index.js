@@ -97,6 +97,13 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
 			url: '/pages/public/login'
 		});
 	}
+	if(response.data.ResultType != 0){
+		/* uni.showToast({
+			title:'登录超时',
+			icon:'none'
+		}) */
+		return Promise.reject(response)
+	}
   // if (response.config.custom.verification) { // 演示自定义参数的作用
   //   return response.data
   // }

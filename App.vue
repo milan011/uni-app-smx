@@ -83,6 +83,7 @@
 					})
 				}
 			})
+			console.log(uni.getAccountInfoSync().miniProgram.appId) //小程序appId
 			/*  */
 			//#endif
 			//#ifdef APP-PLUS

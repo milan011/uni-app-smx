@@ -76,6 +76,7 @@
 				goodsList: [],
 				xiala: 'wo mei xiala',
 				imgUrl: Config.img_url,
+				ifOnShow: false,
 				car: {
 					PageIndex: 1,
 					PageSize: 6,
@@ -103,7 +104,32 @@
 				total: ""
 			};
 		},
-
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
+		async onShow(){
+			var _this = this
+			if(_this.ifOnShow){
+				console.log('show')
+				uni.getStorage({
+					key: 'pshop',
+					success: function(res) {
+						console.log('市场3', res)
+						_this.car.P_Shop_Id = res.data
+						// this.getshoplist(_this.car.P_Shop_Id)
+						_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
+						_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
+					}
+				})
+				
+				/* this.menuData = await this.$api.json('menuExam');
+				await this.selectCondInit()		
+				_this.filterDropdownValue = _this.filterDropdownValueM
+				_this.$refs.filterDropdown.selectHierarchyMenu(1,_this.filterDropdownValue[1][0],_this.filterDropdownValue[1][1],null) */
+				
+			}
+		},
 		async onLoad(options) {
 			let _this = this
 			this.cateId = options.tid;
@@ -112,7 +138,7 @@
 			uni.getStorage({
 				key: 'pshop',
 				success: function(res) {
-					console.log('市场', res)
+					console.log('市场2', res)
 					_this.car.P_Shop_Id = res.data
 					// console.log(_this.car)
 				}
@@ -180,30 +206,30 @@
 			/* console.log('搜索初始化完成',this.car)
 			console.log('end') */
 		},
-		onShow() {
-			// this.$refs.filterDropdown.selectHierarchyMenu(1,1,2)
-		},
+		// onShow() {
+		// 	this.$refs.filterDropdown.selectHierarchyMenu(1,1,2)
+		// },
 		mounted() {
 			
 		},
-		onHide(){
+		/* onHide(){
 			uni.removeStorage({
 				key: 'selectConditions',
 				success: (res) => {
 					
 				}
 			})
-		},
+		}, */
 		onPullDownRefresh() {	
 			var _this = this
 			_this.goodsList = []
 			_this.xiala = 'wo xia la le '
 			// return false
 			console.log('xial?',_this.xiala)
-			// _this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
-			// _this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
-			const arr = [[0],[0,0],[[]], [[],[],[]]]
-			_this.confirm({index: arr, value: arr})
+			_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
+			_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
+			/* const arr = [[0],[0,0],[[]], [[],[],[]]]
+			_this.confirm({index: arr, value: arr}) */
 			uni.stopPullDownRefresh()
 		},
 		onPageScroll(e) {
@@ -401,7 +427,7 @@
 				}
 				if(val['index'][3][2].length > 0){
 					// console.log('门店index', val['index'][3][2])
-					condTags[3]['content'] = this.menuData[3]['submenu'][2]['submenu'][val['index'][3][2][0]]['name']
+					condTags[4]['content'] = this.menuData[3]['submenu'][2]['submenu'][val['index'][3][2][0]]['name']
 				}
 				_this.condTagList = condTags
 				/* {
@@ -512,6 +538,10 @@
 								ele.submenu = []
 							})
 							menuExam.menuExam[3].submenu[2].submenu.push(...list)
+							console.log('shop')
+							resolve()
+						}).catch(err=>{
+							menuExam.menuExam[3].submenu[2].submenu.push([])
 							console.log('shop')
 							resolve()
 						})

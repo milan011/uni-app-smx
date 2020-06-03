@@ -7,6 +7,7 @@
 				"navigationBarTitleText": "驷马先二手车电商平台",
 				"navigationStyle": "custom",
 				// #endif
+				"onReachBottomDistance": 50,
 				"enablePullDownRefresh": true
 				// "navigationStyle": "custom"
 				/* "app-plus": {

@@ -125,6 +125,21 @@
 			<button class="cu-btn bg-olive" @tap="goPutOn">确认上架</button>
 			<button class="cu-btn bg-orange" @tap="reEdit">返回修改</button>
 		</view>
+		<!-- 底部操作菜单 -->
+		<!-- <view class="page-bottom">
+			<navigator url="/pages/index/index" open-type="switchTab" class="p-b-btn">
+				<text class="yticon icon-xiatubiao--copy"></text>
+				<text>首页</text>
+			</navigator>
+			<view class="p-b-btn" :class="{active: favorite}" @click="doCollect">
+				<text class="yticon icon-shoucang"></text>
+				<text>收藏</text>
+			</view>	
+			<view style="width: 60%;" class="action-btn-group">
+				<button type="primary" class=" action-btn no-border buy-now-btn" @click="">立即购买</button>
+				<button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button>
+			</view>
+		</view> -->
 		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="stopPrevent" @click="toggleSpec">
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
@@ -203,7 +218,7 @@
 				imgUrl: Config.img_url,
 				tabCurrentIndex: 0,
 				recomList: [],
-				favorite: true,
+				favorite: false,
 				car: {
 					PageIndex: 1,
 					PageSize: 4,
@@ -217,6 +232,19 @@
 				}
 			};
 		},
+		//#ifdef MP-WEIXIN
+		onShareAppMessage(res) {
+		  if (res.from === 'button') {// 来自页面内分享按钮
+		    console.log(res.target)
+		  }
+			console.log('微信分析', res)
+			console.log(this.carDetail.cars.FullName)
+		  return {
+		    title: this.carDetail.cars.FullName,
+		    path: '/pages/product/product?id=' + this.carDetail.cars.ID
+		  }
+		},
+		//#endif
 		async onLoad(options) {
 			var _this = this
 			console.log(options)
@@ -247,9 +275,11 @@
 					})
 					console.log('是否收藏', index)
 					if (index == -1) {					
-						_this.favorColor = 'gray'					
+						_this.favorColor = 'gray'	
+						_this.favorite = false
 					} else {
 						_this.favorColor = 'green'
+						_this.favorite = true
 					}
 				},
 				fail: () => {
@@ -314,9 +344,13 @@
 							duration: 2000
 						}) */
 					} else {
+						// console.log(JSON.parse(res.data.LogMessage).data)
 						let list = JSON.parse(res.data.LogMessage).data;
 						let obj = list.find(ele => this.carDetail.cars.FullName == ele.psalename)
-						plevelid = obj.plevelid
+						// console.log(obj)
+						if(obj){
+							plevelid = obj.plevelid
+						}	
 					}
 				})
 			}
@@ -416,17 +450,19 @@
 			},
 			// 收藏
 			doCollect() {
+				var _this = this
 				let collectList = [];
 				uni.getStorage({
 					key: 'collectList',
 					success: (res) => {
 						collectList = res.data
 						let index = res.data.findIndex(ele => {
-							return this.carDetail.cars.ID == ele.cars.ID
+							return _this.carDetail.cars.ID == ele.cars.ID
 						})
 						if (index == -1) {
-							collectList.unshift(this.carDetail)
-							this.favorColor = 'green'
+							collectList.unshift(_this.carDetail)
+							_this.favorColor = 'green'
+							_this.favorite = true
 							uni.setStorage({
 								key: 'collectList',
 								data: collectList,
@@ -440,7 +476,8 @@
 							})
 						} else {
 							collectList.splice(index, 1)
-							this.favorColor = 'gray'
+							_this.favorColor = 'gray'
+							_this.favorite = false
 							// collectList.unshift(this.carDetail)
 							uni.setStorage({
 								key: 'collectList',
@@ -456,7 +493,7 @@
 						}
 					},
 					fail: () => {
-						collectList.unshift(this.carDetail)
+						collectList.unshift(_this.carDetail)
 						uni.setStorage({
 							key: 'collectList',
 							data: collectList,
@@ -1093,7 +1130,7 @@
 	.page-bottom {
 		position: fixed;
 		left: 30upx;
-		bottom: 30upx;
+		bottom: 10upx;
 		z-index: 95;
 		display: flex;
 		justify-content: center;

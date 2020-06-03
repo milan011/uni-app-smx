@@ -10,7 +10,9 @@ function isEmpty(v) {
 const utils = {
 	// 手机号格式是否正确
 	isMobilePhone(value) {
+		console.log(value)
 		const reg = /^1\d{10}$/
+		console.log(reg.test(value))
 		if (reg.test(value)) {
 			return true
 		}
