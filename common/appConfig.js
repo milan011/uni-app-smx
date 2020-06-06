@@ -35,6 +35,7 @@ const carTypeConfig = [
 ]
 //内饰颜色
 const insidecolorConfig = [
+	{key: 0, name: '不限'},
 	{key: 1, name: '深色'},
 	{key: 2, name: '浅色'},
 	{key: 3, name: '其他'},
@@ -58,6 +59,7 @@ const outcolorConfig = [
 ]
 //保险类型
 const safetypeConfig = [
+	{key: 0, name: '未知'},
 	{key: 1, name: '交强险+商业险'},
 	{key: 2, name: '交强险'},
 	{key: 3, name: '商业险'},
@@ -74,18 +76,21 @@ const saleNumConfig = [
 ]
 //车辆用途
 const carUseConfig = [
+	{key: 0, name: '其他'},
 	{key: 1, name: '私用'},
 	{key: 2, name: '公用/商务'},
 	{key: 3, name: '运营'},
 ]
 //使用条件
 const useconditionsConfig = [
+	{key: 0, name: '未知'},
 	{key: 1, name: '好'},
 	{key: 2, name: '一般'},
 	{key: 3, name: '差'},
 ]
 //维护保养
 const maintainingConfig = [
+	{key: 0, name: '未知'},
 	{key: 1, name: '好'},
 	{key: 2, name: '较好'},
 	{key: 3, name: '一般'},

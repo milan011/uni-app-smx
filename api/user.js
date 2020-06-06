@@ -25,6 +25,6 @@ export function editCustomer(data) {
 }
 // 获取用户平台车源,求购数量等
 export function getUserGeneral() {
-	const requestUrl = Config.url_config + '/user/index'
+	const requestUrl = Config.url_config + '/user/sysinfo'
 	return httpApi.get(requestUrl)
 }

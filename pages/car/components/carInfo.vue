@@ -338,16 +338,16 @@
 					Transmission: 0,
 					CarType: 1,
 					Out_color: 0,
-					Inside_color: 0,
+					Inside_color: 1,
 					MakeDate: '',
 					BuyDate: '点击选择',
 					Safe_end: '点击选择',
 					InspectionTime: '点击选择',
-					CarUse: 0,
-					Useconditions: 0,
-					Maintaining: 0,
+					CarUse: 1,
+					Useconditions: 1,
+					Maintaining: 1,
 					Area: '北京',
-					Safe_type: 0,
+					Safe_type: 1,
 					Mileage: '',
 					Sale_number: 0,
 					Description: '客户说',
@@ -407,7 +407,11 @@
 			},
 			PickerInChange(e){//内饰颜色选择
 				// this.inColorIndex = e.detail.value
+				console.log(e.detail.value)
+				console.log(insidecolorConfig[e.detail.value])
+				console.log(insidecolorConfig[e.detail.value].key)
 				this.carData.Inside_color = e.detail.value
+				// this.carData.Inside_color = insidecolorConfig[e.detail.value].key
 			},
 			PickerSafeChange(e){//保险类型选择
 				// this.safeColorIndex = e.detail.value
