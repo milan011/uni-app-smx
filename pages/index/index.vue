@@ -113,7 +113,7 @@
 		</view>
 		<!-- 快捷筛选 End-->
 		<!-- 一级平台展示 Begain -->
-		<view v-if="!marketCurrent" class="f-header m-t">
+		<view v-if="allMarket" class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
 				<text class="tit">一级平台</text>
@@ -121,7 +121,7 @@
 			</view>
 			<!-- <text class="yticon icon-you"></text> -->
 		</view>
-		<view v-if="!marketCurrent" class="hot-floor">
+		<view v-if="allMarket" class="hot-floor">
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
 					<view 
@@ -171,7 +171,8 @@
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
-	import { getMarketShopList } from '@/api/shop.js'
+	import { getMarketShopList, getMarketByAppid } from '@/api/shop.js'
+	import { getStorageByKey } from '@/common/storage.js'
 	const Qs = require('qs');
 	export default {
 		components: {
@@ -189,6 +190,7 @@
 				carList: [],
 				marketList: [],
 				marketCurrent: null,
+				allMarket: true,
 				imgUrl: Config.img_url,
 				car: {
 					PageIndex: 1,
@@ -221,57 +223,71 @@
 		/* onShow(){
 			console.log('当前市场',this.marketCurrent)
 		}, */
-		onLoad() {
+		async onLoad() {
 			var _this = this
 			// 城市初始化
-			uni.getStorage({
-				key: 'selectCity',
-				success: function(res) {
-					_this.city = res.data
-					let arr = res.data.split("")
-					let index = arr.length - 1
-					if (arr[index] == "市") {
-						let arr1 = arr.pop()
-						_this.car.CityName = arr.join("")
-					} else {
-						_this.car.CityName = res.data
-					}
-				},
-				fail:function(){
-					//#ifndef H5
-					uni.getStorage({
-						key: 'city',
-						success: function(res) {
-							_this.city = res.data
-							let arr = res.data.split("")
-							let index = arr.length - 1
-							if (arr[index] == "市") {
-								let arr1 = arr.pop()
-								_this.car.CityName = arr.join("")
-							} else {
-								_this.car.CityName = res.data
-							}
-						}
-					});
-					//#endif
-					//#ifdef H5
-					uni.getStorage({
-						key: 'citys',
-						success: function(res) {
-							_this.city = res.data
-							let arr = res.data.split("")
-							let index = arr.length - 1
-							if (arr[index] == "市") {
-								let arr1 = arr.pop()
-								_this.car.CityName = arr.join("")
-							} else {
-								_this.car.CityName = res.data
-							}
-						}
-					});
-					//#endif
-				}
+			await getStorageByKey('selectCity').then(res => { //用户选择城市
+				console.log('用户选择城市', res)
+				_this.car.CityName = res
+				_this.city = res
 			})
+			console.log(_this.car.CityName)
+			if(!_this.car.CityName){ //用户没有选择城市
+				await getStorageByKey('locationCity').then(res => {
+					console.log('当前定位城市', res)
+					_this.car.CityName = res
+					_this.city = res
+				})
+			}
+			// uni.getStorage({
+			// 	key: 'selectCity',
+			// 	success: function(res) {
+			// 		_this.city = res.data
+			// 		let arr = res.data.split("")
+			// 		let index = arr.length - 1
+			// 		if (arr[index] == "市") {
+			// 			let arr1 = arr.pop()
+			// 			_this.car.CityName = arr.join("")
+			// 		} else {
+			// 			_this.car.CityName = res.data
+			// 		}
+			// 	},
+			// 	fail:function(){
+			// 		//#ifndef H5
+			// 		uni.getStorage({
+			// 			key: 'city',
+			// 			success: function(res) {
+			// 				_this.city = res.data
+			// 				let arr = res.data.split("")
+			// 				let index = arr.length - 1
+			// 				if (arr[index] == "市") {
+			// 					let arr1 = arr.pop()
+			// 					_this.car.CityName = arr.join("")
+			// 				} else {
+			// 					_this.car.CityName = res.data
+			// 				}
+			// 			}
+			// 		});
+			// 		//#endif
+			// 		//#ifdef H5
+			// 		uni.getStorage({
+			// 			key: 'citys',
+			// 			success: function(res) {
+			// 				_this.city = res.data
+			// 				let arr = res.data.split("")
+			// 				let index = arr.length - 1
+			// 				if (arr[index] == "市") {
+			// 					let arr1 = arr.pop()
+			// 					_this.car.CityName = arr.join("")
+			// 				} else {
+			// 					_this.car.CityName = res.data
+			// 				}
+			// 			}
+			// 		});
+			// 		//#endif
+			// 	}
+			// })
+			
 			if(!_this.marketCurrent){
 				uni.setStorage({
 					key: 'pshop',
@@ -283,8 +299,9 @@
 				})
 			}
 			_this.car.PageIndex = 1
-			_this.loadData()
 			_this.getMarketList()
+			// _this.loadData()
+			
 		},
 		methods: {
 			/**
@@ -328,9 +345,28 @@
 				});
 			},
 			getMarketList(){
-				getMarketShopList().then(res=>{
-					console.log('一级市场', res)
-					this.marketList = res.data.Data
+				var _this = this
+				getMarketShopList({ pid: '0' }).then(res=>{
+					console.log('一级市场2', res)	
+					_this.marketList = res.data.Data
+					//#ifdef MP-WEIXIN
+					const currentAppId = uni.getAccountInfoSync().miniProgram.appId
+					// const currentAppId = "wx20ge3d96cesedbb2"
+					_this.marketList.forEach(ele=>{
+						if(ele.appid == currentAppId){
+							console.log(ele)
+							uni.setStorage({
+								key: 'pshop',
+								data: ele.id,
+								success: function() {
+									_this.allMarket = false
+									_this.car.P_Shop_Id = ele.id
+								}
+							})
+						}	
+					})
+					//#endif
+					_this.loadData()
 				})
 			},
 			//下拉刷新
@@ -371,8 +407,7 @@
 					}
 				}else{
 					return false
-				}
-				
+				}	
 			},
 			async loadData() {
 				this.loadingType = "loading"
@@ -432,6 +467,7 @@
 					data: '',
 					success: function() {
 						_this.marketCurrent = null
+						_this.allMarket = true
 						_this.car.P_Shop_Id = ''
 						_this.car.PageIndex = 1
 						_this.carList = []
@@ -448,6 +484,7 @@
 					data: pshop.id,
 					success: function() {
 						_this.marketCurrent = pshop.name
+						_this.allMarket = false
 						_this.car.P_Shop_Id = pshop.id
 						_this.car.PageIndex = 1
 						_this.carList = []

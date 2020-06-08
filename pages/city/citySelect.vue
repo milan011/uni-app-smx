@@ -8,6 +8,7 @@
 <script>
 	import citys from './citys.js'
 	import citySelect from '@/components/city-select/city-select.vue'
+	import { getStorageByKey } from '@/common/storage.js'
 	// import amap from '../../common/._amap-wx.js';
 
 	export default {
@@ -40,42 +41,18 @@
 		components: {
 			citySelect
 		},
-		onLoad() {
-			this.activeCity.cityName = "正在定位中"
+		async onLoad() {
+			let _this = this
+			
+			_this.activeCity.cityName = "正在定位中"
 			// 城市初始化
-			let that = this
-			//#ifndef H5
-			uni.getStorage({
-				key: 'city',
-				success: function(res) {
-					// that.city = res.data
-					let arr = res.data.split("")
-					let index = arr.length - 1
-					if (arr[index] == "市") {
-						let arr1 = arr.pop()
-						that.activeCity.cityName = arr.join("")
-					} else {
-						that.activeCity.cityName = res.data
-					}
-				}
-			});
-			//#endif
-			//#ifdef H5
-			uni.getStorage({
-				key: 'citys',
-				success: function(res) {
-					that.city = res.data
-					let arr = res.data.split("")
-					let index = arr.length - 1
-					if (arr[index] == "市") {
-						let arr1 = arr.pop()
-						that.activeCity.cityName = arr.join("")
-					} else {
-						that.activeCity.cityName = res.data
-					}
-				}
-			});
-			//#endif
+			await getStorageByKey('locationCity').then(res=>{
+				console.log('定位城市', res)
+				_this.activeCity.cityName = res
+			}).catch( err => { 
+				console.log('catch',err)
+				_this.activeCity.cityName = '石家庄'
+			}) 
 		},
 		methods: {
 			cityClick(item) {

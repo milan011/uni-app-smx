@@ -19,6 +19,14 @@
 				</evan-form-item>
 				<evan-form-item label="手机号：" prop="telephone">
 					<input class="form-input" placeholder-class="form-input-placeholder" v-model="customer.telephone" placeholder="请输入手机号" />
+					<view class="cu-capsule radius">
+						<view class='cu-tag bg-blue '>
+							+86
+						</view>
+						<view class="cu-tag line-blue">
+							中国大陆
+						</view>
+					</view>
 				</evan-form-item>
 				<evan-form-item label="客户来源：">
 					<picker @change="PickerChanges" :value="index" :range="picker">

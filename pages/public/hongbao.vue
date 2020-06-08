@@ -37,26 +37,31 @@
 					<data android:scheme="h56131bcf" />      
 				</intent-filter>  
 			</activity> -->
-
+			<helang-checkbox style="height:auto" ref="checkbox" @change="valueChange"></helang-checkbox>
 			<view class="input-content">
-				<view class="input-item">
+				<!-- <view class="input-item">
 					<text class="tit">所用字符</text>
-					<helang-checkbox ref="checkbox" @change="valueChange"></helang-checkbox>
-				</view>
+					<input :value="totalAmount" placeholder="" type="number" maxlength="11" @input="inputChange" data-key="totalAmount" />			 
+				</view> -->
 				<view class="input-item">
 					<text class="tit">密码长度</text>
-					<input :value="totalNum" placeholder="" type="number" maxlength="11" data-key="totalNum" @input="inputChange" />
+					<picker style="width:100%" @change="passLengthChange" :value="passIndex" :range="passLength">
+						<view class="uni-input">{{passLength[passIndex]}}</view>
+					</picker>
 				</view>
 				<view class="input-item">
 					<text class="tit">生成数量</text>
-					<input :value="maxAmount" placeholder="" type="number" maxlength="11" data-key="maxAmount" @input="inputChange" />
+					<input :value="passNumber" placeholder="" type="number" maxlength="11" data-key="passNumber" @input="inputChange" />
 				</view>
-				<view class="input-item">
+				<view class="cu-form-group margin-top">
+					<textarea v-model="passResult" disabled="true" maxlength="-1" placeholder="生成结果"></textarea>
+				</view> 
+				<!-- <view class="input-item">
 					<text class="tit">生成结果</text>
-					<input :value="minAmount" data-key="minAmount" placeholder="" type="number" maxlength="11" @input="inputChange" />
-				</view>
+					<textarea v-model="passResult" maxlength="-1"  placeholder="生成结果"></textarea>
+				</view> -->
 			</view>
-			<button class="confirm-btn" @click="makeMoney">生成</button>
+			<button class="confirm-btn" @click="makePass">生成</button>
 		</view>
 	</view>
 </template>
@@ -73,17 +78,98 @@
 		components: {"helang-checkbox":helangCheckbox},
 		data() {
 			return {
-				totalAmount: 10.3,
+				/* totalAmount: 10.3,
 				totalNum: 3,
-				maxAmount: 4,
-				minAmount: 0.5,
+				maxAmount: 4, */
+				passNumber: 4,
+				passType: [],
+				passLength: [6, 8, 12, 16],
+				passIndex: 0,
+				passResult: '',
+				capital: ['A', 'B', 'C', 'D', 'E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+				letter: ['a', 'b', 'c', 'd', 'e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],
+				number: [0,1,2,3,4,5,6,7,8,9],
+				symbolArr: ['~','!','@','#','$','%','^','&','*','(',')'],
 			}
 		},
 		onLoad() {
-
+			
+		},
+		mounted(){
+			/* 设置 复选框 */
+			this.$refs.checkbox.set({
+			    type:'checkbox',// 类型：单选框
+			    column:2,       // 分列
+			    list:[          // 列表数据
+			        {text:'大写字母'},
+			        {text:'小写字母'},
+			        {text:'数字'},
+			        {text:'符号'}
+			    ]   
+			});
+			
+			/* 获取 已选项的值 */
+			let data = this.$refs.checkbox.get();   // 组件返回的数据
+			console.log(data);
 		},
 		methods: {
 			...mapMutations(['login']),
+			valueChange(e){
+				console.log(e)
+				this.passType = e
+			},
+			passLengthChange(e){
+				console.log(e)
+				this.passIndex = e.detail.value
+			},
+			makePass(){
+				/****
+				*1.根据所有字符复选框选项,将选择的项对应数组合并
+				*2.根据输入需要生成的条数循环
+				*3.将数组随机打乱顺序,再随机位置截取密码长度
+				****/
+				var _this = this
+				let connectArr = []
+				let passWord = []
+				const passlength = _this.passLength[_this.passIndex]
+				console.log('密码组成', _this.passType)
+				console.log('密码长度', _this.passLength[_this.passIndex])
+				console.log('密码数量', _this.passNumber)
+				_this.passType.forEach(function(e){  
+				   console.log(e.text)
+					 if(e.text == '大写字母'){
+						// console.log(_this.capital)
+						connectArr = connectArr.concat(_this.capital)
+					 }
+					 if(e.text == '小写字母'){ 
+					 	// console.log(_this.letter)	
+						connectArr = connectArr.concat(_this.letter)
+					 }
+					 if(e.text == '数字'){
+					 	// console.log(_this.number)	
+						connectArr = connectArr.concat(_this.number)
+					 }
+					 if(e.text == '符号'){
+					 	// console.log(_this.symbolArr)	
+						connectArr = connectArr.concat(_this.symbolArr)
+					 }
+				});
+				
+				console.log(connectArr)
+				
+				for (let i=0; i<_this.passNumber; i++) { //需生成密码数量
+					// let randomArr = connectArr.sort(function(){return Math.random()>0.5?-1:1;})
+					// console.log(randomArr)
+					let pass = ''
+					for (let j=0; j<passlength; j++){ //密码长度
+						// passWord[i][j] = connectArr[Math.floor(Math.random()*connectArr.length)]
+						pass += connectArr[Math.floor(Math.random()*connectArr.length)]
+					}
+					passWord[i] = pass
+				}
+				
+				console.log(passWord)
+			},
 			inputChange(e) {
 				const key = e.currentTarget.dataset.key;
 				this[key] = e.detail.value;

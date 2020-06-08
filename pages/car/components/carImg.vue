@@ -236,14 +236,6 @@
 				<button v-if="isEdit" class="cu-btn bg-olive lg" @click="confirmImg">提交修改</button>
 				<button v-else class="cu-btn bg-olive lg" @click="confirmImg">预览上架</button>	
 			</view>
-			<!-- <view class="padding flex flex-direction">
-				<button class="cu-btn bg-grey">玄灰</button>
-				<button class="cu-btn bg-red margin-tb-sm lg">嫣红</button>
-			</view> -->
-			<!-- <view>
-				<text class="mix-btn" v-if="isEdit"  @click="confirmImg">提交修改</text>
-				<text class="mix-btn" v-else @click="confirmImg">预览上架</text>
-			</view> -->
 	</view>
 </template>
 
@@ -608,117 +600,6 @@
 					}
 				}
 			},
-			/* // hideBageDell(imgType, part){
-			// 	// console.log('del',this.imgListPgCurrent)
-			// 	console.log('del',imgType)
-				
-			// 	// return false
-			// 	if(part == 'D'){
-			// 		if(this.imgListPgCurrentD.length == 0){ //无评估图片
-			// 			this.hideBageDel(imgType, 'D')
-			// 		}else{
-			// 			this.imgListPgCurrentD.forEach((ele, ind) => {
-			// 				console.log('hide',ele)
-			// 				if(ele.ImageType == imgType){ //该评估项仍有图片
-			// 					console.log('have')
-			// 					console.log('动态',this.pgPartDConfig)
-			// 					return true 
-			// 				}else{ //该评估项已无图片
-			// 					console.log('not have')
-			// 					this.hideBageDel(imgType, 'D')
-			// 				}
-			// 			})
-			// 		}
-			// 	}
-			// 	if(part == 'F'){
-			// 		if(this.imgListPgCurrentF.length == 0){ //无评估图片
-			// 			this.hideBageDel(imgType, 'F')
-			// 		}else{
-			// 			this.imgListPgCurrentF.forEach((ele, ind) => {
-			// 				console.log('hide',ele)
-			// 				if(ele.ImageType == imgType){ //该评估项仍有图片
-			// 					console.log('have')
-			// 					console.log('非常规',this.pgPartFConfig)
-			// 					return true 
-			// 				}else{ //该评估项已无图片
-			// 					console.log('not have')
-			// 					this.hideBageDel(imgType, 'F')
-			// 				}
-			// 			})
-			// 		}
-			// 	}
-			// 	if(part == 'J'){
-			// 		if(this.imgListPgCurrentJ.length == 0){ //无评估图片
-			// 			this.hideBageDel(imgType, 'J')
-			// 		}else{
-			// 			this.imgListPgCurrentJ.forEach((ele, ind) => {
-			// 				console.log('hide',ele)
-			// 				if(ele.ImageType == imgType){ //该评估项仍有图片
-			// 					console.log('have')
-			// 					console.log('静态',this.pgPartJConfig)
-			// 					return true 
-			// 				}else{ //该评估项已无图片
-			// 					console.log('not have')
-			// 					this.hideBageDel(imgType, 'J')
-			// 				}
-			// 			})
-			// 		}
-			// 	}
-					
-			// },
-			// hideBageDel(imgType, part){ //showBage 红点处理
-			// 	// console.log(this.imgListPgCurrent)
-			// 	var _this = this
-			// 	if(part == 'D'){	
-			// 		_this.pgPartDConfig.forEach(ele => { //动态评估项
-			// 			let stillHave = false
-			// 			if(ele.imagetype == imgType){		
-			// 				console.log(ele)
-			// 				console.log('删除后',_this.imgListPgCurrentD)		
-			// 				_this.imgListPgCurrentD.forEach(el=>{
-			// 					if(el.ImageType == imgType){							
-			// 						return stillHave = true
-			// 					}
-			// 				})
-			// 			}
-			// 			return ele.showBage = stillHave
-			// 		})	
-			// 	}
-			// 	if(part == 'J'){		
-			// 		console.log('删除后',_this.imgListPgCurrentJ)
-			// 		_this.pgPartJConfig.forEach(ele => { //静态评估项		
-			// 			// var stillHaveTop = false
-			// 			ele.part.forEach((el, ind) => {
-			// 				let stillHavePart = false
-			// 				_this.imgListPgCurrentJ.forEach(e=>{
-			// 					// console.log('2',e)
-			// 					// console.log('3',imgType)
-			// 					if(e.ImageType == imgType){	
-			// 						console.log('这儿有', e)
-			// 						stillHavePart = true			
-			// 						return 
-			// 					}
-			// 				})
-			// 				el.showBage = stillHavePart	
-			// 				console.log('part',stillHavePart)
-			// 			})
-			// 			// ele.showBage = stillHaveTop
-			// 			console.log('top',stillHaveTop)
-			// 		})
-			// 	}
-			// 	if(part == 'F'){
-			// 		_this.pgPartFConfig.forEach(ele => { //非常规评估项
-			// 			ele.part.forEach((el, ind) => {
-			// 				if(el.imagetype == imgType){		
-			// 					// ele.showBage = false
-			// 					el.showBage = false
-			// 					console.log(_this.pgPartJConfig)
-			// 					return true
-			// 				}
-			// 			})
-			// 		})
-			// 	}	
-			// }, */
 			rateChange(e){ //评估图片评级
 				console.log(e)
 				this.imgPgData.ImageLevel = e.value
@@ -967,27 +848,6 @@
 											}
 										}
 										console.log('图片类型', _this.imgData.ImageType)
-										/* if(_this.imgData.ImageType == 101){ //基本图片
-											if (_this.imgList.length != 0) {
-												_this.imgList = _this.imgList.concat(imgReturn)
-											} else {
-												_this.imgList = imgReturn
-											}
-										} */
-										/* if(_this.imgData.ImageType == 0){ //基本图片
-											if (_this.imgListOther.length != 0) {
-												_this.imgListOther = _this.imgListOther.concat(imgReturn)
-											} else {
-												_this.imgListOther = imgReturn
-											}
-										} */
-										/* if(_this.imgData.ImageType != 101 && _this.imgData.ImageType != 0){ //评估图片
-											if (_this.imgListOther.length != 0) {
-												_this.imgListOther = _this.imgListOther.concat(imgReturn)
-											} else {
-												_this.imgListOther = imgReturn
-											}
-										} */
 										console.log('imlist', _this.imgList)
 										_this.imgUpShow[resImgAdd.data.Data.carpart] = false
 										_this.loadModal = false

@@ -50,6 +50,7 @@
 		getCarTypeList,
 		getCarShopList
 	} from '@/api/car.js'
+	import { getStorageByKey } from '@/common/storage.js'
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import HMfilterDropdown from '@/components/HM-filterDropdown/HM-filterDropdown.vue';
 	import menuExam from '@/Json.js'
@@ -112,92 +113,124 @@
 			var _this = this
 			if(_this.ifOnShow){
 				console.log('show')
-				uni.getStorage({
+				_this.car.P_Shop_Id = await getStorageByKey('pshop') //获取storage:pshop
+				await _this.getshoplist(_this.car.P_Shop_Id)
+				_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
+				_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
+				/* uni.getStorage({
 					key: 'pshop',
 					success: function(res) {
 						console.log('市场3', res)
 						_this.car.P_Shop_Id = res.data
-						// this.getshoplist(_this.car.P_Shop_Id)
+						_this.getshoplist(_this.car.P_Shop_Id)
+						// await this.getshoplist(_this.car.P_Shop_Id)
 						_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
 						_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
 					}
-				})
+				}) */
 				
 				/* this.menuData = await this.$api.json('menuExam');
 				await this.selectCondInit()		
 				_this.filterDropdownValue = _this.filterDropdownValueM
-				_this.$refs.filterDropdown.selectHierarchyMenu(1,_this.filterDropdownValue[1][0],_this.filterDropdownValue[1][1],null) */
-				
+				_this.$refs.filterDropdown.selectHierarchyMenu(1,_this.filterDropdownValue[1][0],_this.filterDropdownValue[1][1],null) */				
 			}
 		},
 		async onLoad(options) {
 			let _this = this
-			this.cateId = options.tid;
+			_this.cateId = options.tid
+			
+			//一级市场初始化
+			_this.car.P_Shop_Id = await getStorageByKey('pshop') //获取storage:pshop
+			/* await getStorageByKey('pshop2').then(res=>{
+				console.log('then',res)
+			}).catch( err => { 
+				console.log('catch',err)
+			})
+			console.log('一级市场id',pShopId)
+			return false */
+			
 			// console.log('xiala==>?',_this.xiala)
 			//是否选择了一级市场
-			uni.getStorage({
+			/* uni.getStorage({
 				key: 'pshop',
 				success: function(res) {
 					console.log('市场2', res)
 					_this.car.P_Shop_Id = res.data
 					// console.log(_this.car)
 				}
-			})
+			}) */
 			// 城市初始化
-			uni.getStorage({
-				key: 'selectCity',
-				success: function(res) {
-					_this.city = res.data
-					let arr = res.data.split("")
-					let index = arr.length - 1
-					if (arr[index] == "市") {
-						let arr1 = arr.pop()
-						_this.car.CityName = arr.join("")
-					} else {
-						_this.car.CityName = res.data
-					}
-				},
-				fail:function(){
-					//#ifndef H5
-					uni.getStorage({
-						key: 'city',
-						success: function(res) {
-							_this.city = res.data
-							let arr = res.data.split("")
-							let index = arr.length - 1
-							if (arr[index] == "市") {
-								let arr1 = arr.pop()
-								_this.car.CityName = arr.join("")
-							} else {
-								_this.car.CityName = res.data
-							}
-						}
-					});
-					//#endif
-					//#ifdef H5
-					uni.getStorage({
-						key: 'citys',
-						success: function(res) {
-							_this.city = res.data
-							let arr = res.data.split("")
-							let index = arr.length - 1
-							if (arr[index] == "市") {
-								let arr1 = arr.pop()
-								_this.car.CityName = arr.join("")
-							} else {
-								_this.car.CityName = res.data
-							}
-						}
-					});
-					//#endif
-				}
-			})
-			await this.getshoplist(_this.car.P_Shop_Id)
-			await this.getCarTypelist()
-			this.menuData = await this.$api.json('menuExam');
+			await getStorageByKey('selectCity').then(res => { //用户选择城市
+				console.log('用户选择城市', res)
+				_this.car.CityName = res
+			})	
+			if(!_this.car.CityName){ //用户没有选择城市
+				await getStorageByKey('locationCity').then(res => {
+					console.log('当前定位城市', res)
+					_this.car.CityName = res
+				})
+			}
+			console.log('筛选车源城市',_this.car.CityName)
+			/* const selectCity = await getStorageByKey('selectCity')
+			const locationCity = await getStorageByKey('locationCity')
+			
+			console.log('选择城市', selectCity)
+			console.log('定位城市', locationCity) */
+			// return false
+			// uni.getStorage({
+			// 	key: 'selectCity',
+			// 	success: function(res) {
+			// 		_this.city = res.data
+			// 		let arr = res.data.split("")
+			// 		let index = arr.length - 1
+			// 		if (arr[index] == "市") {
+			// 			let arr1 = arr.pop()
+			// 			_this.car.CityName = arr.join("")
+			// 		} else {
+			// 			_this.car.CityName = res.data
+			// 		}
+			// 	},
+			// 	fail:function(){
+			// 		//#ifndef H5
+			// 		uni.getStorage({
+			// 			key: 'city',
+			// 			success: function(res) {
+			// 				_this.city = res.data
+			// 				let arr = res.data.split("")
+			// 				let index = arr.length - 1
+			// 				if (arr[index] == "市") {
+			// 					let arr1 = arr.pop()
+			// 					_this.car.CityName = arr.join("")
+			// 				} else {
+			// 					_this.car.CityName = res.data
+			// 				}
+			// 			}
+			// 		});
+			// 		//#endif
+			// 		//#ifdef H5
+			// 		uni.getStorage({
+			// 			key: 'citys',
+			// 			success: function(res) {
+			// 				_this.city = res.data
+			// 				let arr = res.data.split("")
+			// 				let index = arr.length - 1
+			// 				if (arr[index] == "市") {
+			// 					let arr1 = arr.pop()
+			// 					_this.car.CityName = arr.join("")
+			// 				} else {
+			// 					_this.car.CityName = res.data
+			// 				}
+			// 			}
+			// 		});
+			// 		//#endif
+			// 	}
+			// })
+			await _this.getshoplist(_this.car.P_Shop_Id)
+			await _this.getCarTypelist()
+			_this.menuData = await _this.$api.json('menuExam');
 			/* console.log('menuData2', this.menuData)
 			console.log('开始初始化') */
-			await this.selectCondInit()
+			await _this.selectCondInit()
 
 			// console.log('4', _this.filterDropdownValueM)
 
@@ -220,12 +253,13 @@
 				}
 			})
 		}, */
-		onPullDownRefresh() {	
+		async onPullDownRefresh() {	
 			var _this = this
 			_this.goodsList = []
 			_this.xiala = 'wo xia la le '
 			// return false
 			console.log('xial?',_this.xiala)
+			_this.car.P_Shop_Id = await getStorageByKey('pshop') //获取storage:pshop
 			_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
 			_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
 			/* const arr = [[0],[0,0],[[]], [[],[],[]]]
@@ -525,7 +559,16 @@
 				})
 			},
 			async getshoplist(pshop) {
+				console.log('一级市场', pshop)
 				return new Promise(resolve => {
+					if(!pshop){	
+						// console.log('总平台')
+						// console.log(menuExam.menuExam[3].submenu)
+						// console.log(menuExam.menuExam[3].submenu[2])
+						menuExam.menuExam[3].submenu[2] = []
+						// menuExam.menuExam[3].submenu[2].delete()
+						resolve()
+					}
 					if(menuExam.menuExam[3].submenu[2].submenu.length != 0){
 						resolve()
 					}else{
@@ -538,11 +581,10 @@
 								ele.submenu = []
 							})
 							menuExam.menuExam[3].submenu[2].submenu.push(...list)
-							console.log('shop')
 							resolve()
 						}).catch(err=>{
+							console.log('pshoperr',err)
 							menuExam.menuExam[3].submenu[2].submenu.push([])
-							console.log('shop')
 							resolve()
 						})
 					}

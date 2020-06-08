@@ -67,7 +67,7 @@
 					// console.log('定位返回',res)
 					console.log('小程序定位城市',res.result.address_component.city)
 					uni.setStorage({
-						key: 'city',
+						key: 'locationCity',
 						data: res.result.address_component.city.split("市")[0]
 					})
 				},
@@ -78,7 +78,7 @@
 						duration: 1500
 					})
 					uni.setStorage({
-						key: 'city',
+						key: 'locationCity',
 						data: '石家庄'
 					})
 				}
@@ -92,7 +92,7 @@
 					//成功回调
 					console.log('App定位到了城市', data)
 					uni.setStorage({
-						key: 'city',
+						key: 'locationCity',
 						data: data[0].regeocodeData.addressComponent.city.split("市")[0]
 					})
 				},
@@ -104,7 +104,7 @@
 						duration:1500
 					})
 					uni.setStorage({
-						key: 'city',
+						key: 'locationCity',
 						data: '石家庄'
 					})
 				}
@@ -120,7 +120,7 @@
 				success: (res) => {
 					console.log('H5定位',res.data);
 					uni.setStorage({
-						key: 'citys',
+						key: 'locationCity',
 						data: res.data.city.split("市")[0]
 					})
 				},
@@ -131,7 +131,7 @@
 						duration: 1500
 					})
 					uni.setStorage({
-						key: 'citys',
+						key: 'locationCity',
 						data: '石家庄'
 					})
 				}

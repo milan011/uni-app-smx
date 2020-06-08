@@ -8,7 +8,7 @@
 					</view>
 					<view class="action">
 						<button style="margin-right:5rpx" class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-						<button v-show="isAdmin" class="cu-btn bg-blue shadow" @tap="addBusiness" data-target="menuModal">添加商机</button>
+						<button v-show="isAdmin" class="cu-btn bg-green shadow" @tap="addBusiness" data-target="menuModal">添加商机</button>
 					</view>
 				</view>
 				<view class="cu-list menu">
@@ -34,6 +34,14 @@
 					<view class="cu-form-group">
 						<view class="title">手机号</view>
 						<input placeholder="请输入手机号" v-model="business.mobile" style="text-align: right; padding-right: 40upx;" name="input"></input>
+						<view class="cu-capsule radius">
+							<view class='cu-tag bg-blue '>
+								+86
+							</view>
+							<view class="cu-tag line-blue">
+								中国大陆
+							</view>
+						</view>
 					</view>
 					<view class="cu-form-group">
 						<view class="title">车型</view>
@@ -112,12 +120,9 @@
 </template>
 
 <script>
-	import {
-		getBusinessList, oppFeed
-	} from '@/api/business.js'
-	import {
-		getShopList
-	} from '@/api/business.js'
+	import { getBusinessList, oppFeed } from '@/api/business.js'
+	import { getShopList } from '@/api/business.js'
+	import { getStorageByKey } from '@/common/storage.js'
 	export default {
 		data() {
 			return {
@@ -154,36 +159,31 @@
 				radio: '',
 			}
 		},
-		onLoad(option) {
+		async onLoad(option) {
 			console.log('roleArr', this.$store.getters.roleArr)		
 			if(this.$store.getters.roleArr.indexOf('admin') > -1){
 				this.isAdmin = true
 			}
-			uni.getStorage({
-				key: 'userInfo',
-				success: (res) => {
-					this.business.shopid = res.data.shop_id
-					this.business.rolename = res.data.rolename.split(",")[0]
-					this.init()
-					this.getshop()
-				}
+			await getStorageByKey('userInfo').then(res=>{
+				this.business.shopid = res.shop_id
+				this.business.rolename = res.rolename.split(",")[0]
+				this.init()
+				this.getshop()
 			})
 		},
 		onHide(){
 		  console.log('this.ifOnShow=true')
 		  this.ifOnShow = true
 		},
-		onShow() {
-			if(this.ifOnShow){
-				this.businessList = []
-				uni.getStorage({
-					key: 'userInfo',
-					success: (res) => {
-						this.business.shopid = res.data.shop_id
-						this.business.rolename = res.data.rolename.split(",")[0]
-						this.init()
-						this.getshop()
-					}
+		async onShow() {
+			var _this = this
+			if(_this.ifOnShow){
+				_this.businessList = []
+				await getStorageByKey('userInfo').then(res=>{
+					_this.business.shopid = res.shop_id
+					_this.business.rolename = res.rolename.split(",")[0]
+					_this.init()
+					_this.getshop()
 				})
 			}	
 		},
@@ -236,10 +236,10 @@
 						this.loadingType = "nomore"
 					}
 				}).catch(()=>{
-					uni.showToast({
+					/* uni.showToast({
 						title:'登录超时',
 						icon:'none'
-					})
+					}) */
 				})
 			},
 			textareaAInput(e) {

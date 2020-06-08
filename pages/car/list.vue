@@ -174,7 +174,8 @@
 				this.loadData()
 			}
 		},
-		onLoad(options) {
+		async onLoad(options) {
+			var _this = this
 			console.log('onload')
 			uni.getStorage({
 				key: 'userInfo',

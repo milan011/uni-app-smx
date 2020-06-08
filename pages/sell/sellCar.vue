@@ -189,6 +189,7 @@
 <script>
 	import { editOpp } from '@/api/business.js'
 	import '@/common/utils'
+	import { getStorageByKey } from '@/common/storage.js'
 	export default {
 		data() {
 			const currentDate = this.getDate({
@@ -279,23 +280,26 @@
 				]
 			};
 		},
-		onLoad() {
+		async onLoad() {
 			var _this = this
+			await getStorageByKey('locationCity').then(res=>{
+				_this.oppData.city_name = res
+			})
 			//#ifndef H5
-			uni.getStorage({
-				key: 'city',
+			/* uni.getStorage({
+				key: 'locationCity',
 				success: function(res) {
 					_this.oppData.city_name = res.data
 				}
-			})
+			}) */
 			//#endif
 			//#ifdef H5
-			uni.getStorage({
+			/* uni.getStorage({
 				key: 'citys',
 				success: function(res) {
 					_this.oppData.city_name = res.data
 				}
-			})
+			}) */
 			//#endif
 		},
 		computed: {

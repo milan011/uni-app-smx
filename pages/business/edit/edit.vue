@@ -58,6 +58,7 @@
 		getShopList,
 		opporout
 	} from '@/api/business.js'
+	import { getStorageByKey } from '@/common/storage.js'
 	export default {
 		data() {
 			return {
@@ -78,13 +79,10 @@
 				index:''
 			};
 		},
-		onLoad(options) {
+		async onLoad(options) {
 			this.id = options.id
-			uni.getStorage({
-				key: 'businessInfo',
-				success: (res) => {
-					this.business = res.data
-				}
+			await getStorageByKey('businessInfo').then(res=>{
+				this.business = res
 			})
 			this.getshop()
 		},

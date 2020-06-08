@@ -6,7 +6,7 @@
 			<input placeholder="请输入客户姓名" name="input" v-model="business.name" @blur="verificationName"></input>
 		</view>
 		<view class="cu-form-group">
-			<text style="color: red;    line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
+			<text style="color: red; line-height: 60upx;display: inline-block;padding-right: 10upx;">* &nbsp</text>
 			<view class="title">手机号码</view>
 			<input placeholder="请输入客户手机号" name="input" v-model="business.mobile" @blur="verificationTel"></input>
 			<view class="cu-capsule radius">
@@ -35,6 +35,7 @@
 
 <script>
 	import {edit} from '@/api/business.js'
+	import { getStorageByKey } from '@/common/storage.js'
 	export default {
 		data() {
 			return {
@@ -50,12 +51,9 @@
 				},
 			}
 		},
-		onLoad(options) {
-			uni.getStorage({
-				key:'userInfo',
-				success:(res)=>{
-					this.business.ff_shop = res.data.shop_id
-				}
+		async onLoad(options) {
+			await getStorageByKey('userInfo').then(res=>{
+				this.business.ff_shop = res.shop_id
 			})
 		},
 		methods:{
