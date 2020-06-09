@@ -15,7 +15,6 @@ export function getCarTypeList() {
 }
 export function getCarShopList(data) {
 	const requestUrl = Config.url_config + '/shop/qdpage'
-
 	return http.get(requestUrl,{data})
 }
 export function getCarDetail(data) {

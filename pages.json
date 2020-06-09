@@ -7,7 +7,7 @@
 				"navigationBarTitleText": "驷马先二手车电商平台",
 				"navigationStyle": "custom",
 				// #endif
-				"onReachBottomDistance": 50,
+				"onReachBottomDistance": 1,
 				"enablePullDownRefresh": true
 				// "navigationStyle": "custom"
 				/* "app-plus": {
@@ -317,6 +317,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "驷马先二手车电商平台",
 		"navigationBarBackgroundColor": "#FFFFFF",
+		"onReachBottomDistance": 1,
 		"backgroundColor": "#f8f8f8"
 	},
 	"tabBar": {

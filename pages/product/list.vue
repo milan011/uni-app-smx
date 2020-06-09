@@ -75,12 +75,11 @@
 				filterDropdownValueM: [[0],[0,0],[[]], [[],[],[]]],
 				selectConditions: {},
 				goodsList: [],
-				xiala: 'wo mei xiala',
 				imgUrl: Config.img_url,
 				ifOnShow: false,
 				car: {
 					PageIndex: 1,
-					PageSize: 6,
+					PageSize: 5,
 					CityName: "",
 					CarAges: "",
 					Factory: "",
@@ -113,8 +112,20 @@
 			var _this = this
 			if(_this.ifOnShow){
 				console.log('show')
-				_this.car.P_Shop_Id = await getStorageByKey('pshop') //获取storage:pshop
+				await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+					console.log('当前市场', res)
+					if(res){
+						_this.car.P_Shop_Id = res.id
+					}else{
+						_this.car.P_Shop_Id = ''
+					}
+				})
+				console.log('当前市场', _this.car.P_Shop_Id)
+				await _this.getCarTypelist()
 				await _this.getshoplist(_this.car.P_Shop_Id)
+				_this.menuData = await this.$api.json('menuExam');
+				console.log('筛选菜单', _this.menuData)
+				await _this.selectCondInit()
 				_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
 				_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
 				/* uni.getStorage({
@@ -140,7 +151,14 @@
 			_this.cateId = options.tid
 			
 			//一级市场初始化
-			_this.car.P_Shop_Id = await getStorageByKey('pshop') //获取storage:pshop
+			// _this.car.P_Shop_Id = await getStorageByKey('pshop').id 
+			await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+				console.log('当前市场', res)
+				if(res){
+					_this.car.P_Shop_Id = res.id
+				}
+			})
+			console.log('当前市场', _this.car.P_Shop_Id)
 			/* await getStorageByKey('pshop2').then(res=>{
 				console.log('then',res)
 			}).catch( err => { 
@@ -228,6 +246,7 @@
 			await _this.getshoplist(_this.car.P_Shop_Id)
 			await _this.getCarTypelist()
 			_this.menuData = await _this.$api.json('menuExam');
+			console.log('筛选菜单', _this.menuData)
 			/* console.log('menuData2', this.menuData)
 			console.log('开始初始化') */
 			await _this.selectCondInit()
@@ -256,15 +275,22 @@
 		async onPullDownRefresh() {	
 			var _this = this
 			_this.goodsList = []
-			_this.xiala = 'wo xia la le '
 			// return false
-			console.log('xial?',_this.xiala)
-			_this.car.P_Shop_Id = await getStorageByKey('pshop') //获取storage:pshop
-			_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
-			_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
-			/* const arr = [[0],[0,0],[[]], [[],[],[]]]
-			_this.confirm({index: arr, value: arr}) */
-			uni.stopPullDownRefresh()
+			console.log('xial?')
+			uni.removeStorageSync('selectConditions')
+			await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+				if(res){
+					_this.car.P_Shop_Id = res.id
+				}
+			}).catch(err=>{
+				_this.car.P_Shop_Id = ''
+			})
+			
+			 _this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
+			 _this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
+			const arr = _this.filterDropdownValue
+			_this.confirm({index: arr, value: arr})
+			 uni.stopPullDownRefresh()
 		},
 		onPageScroll(e) {
 			//兼容iOS端下拉时顶部漂移
@@ -276,16 +302,24 @@
 		},
 		//加载更多
 		onReachBottom() {
-			let num = Math.ceil(this.total / this.car.PageSize)
-			if (this.car.PageIndex == num || this.car.PageIndex > num) {
-				return
-			} else {
-				this.car.PageIndex++
-				// console.log(this.car.PageIndex)
-				// console.log('here1')
-				// console.log('load',this.loadingType)
-				this.loadData();
+			var _this = this
+			if(_this.loadingType == "nomore"){
+				return false
+			}else{
+				_this.car.PageIndex++
+				_this.loadData('add')
 			}
+			
+			// let num = Math.ceil(this.total / this.car.PageSize)
+			// if (this.car.PageIndex == num || this.car.PageIndex > num) {
+			// 	return
+			// } else {
+			// 	this.car.PageIndex++
+			// 	// console.log(this.car.PageIndex)
+			// 	// console.log('here1')
+			// 	// console.log('load',this.loadingType)
+			// 	this.loadData('add');
+			// }
 		},
 		methods: {
 			async selectCondInit() {
@@ -340,8 +374,9 @@
 				})
 			},
 			//加载商品 ，带下拉刷新和上滑加载
-			async loadData(type = 'add', loading) {
-				//没有更多直接返回
+			async loadData(type = '', loading) {
+				var _this = this
+				/* //没有更多直接返回
 				if (type === 'add') {
 					if (this.loadingType === 'nomore') {
 						return;
@@ -349,40 +384,56 @@
 					this.loadingType = 'loading';
 				} else {
 					this.loadingType = 'more'
-				}
-				let list = await getCarList({ ...this.car
+				} */
+				_this.loadingType = 'loading'
+				const currentPage = _this.car.PageIndex //当前页
+				let totalPage  = null //共几页
+				
+				let list = await getCarList({ ..._this.car
 				})
 				let goodsList = list.data.Data.DataList
-				this.total = list.data.Data.Total
+				if(type == 'add'){
+					_this.goodsList = _this.goodsList.concat(goodsList)
+				}else{
+					_this.goodsList = goodsList
+				}				
+				_this.total = list.data.Data.Total //总数
+				totalPage  = Math.ceil(_this.total/_this.car.PageSize) //总页数
+				if(currentPage < totalPage){ //未到最后一页
+					_this.loadingType = "more"
+				}else{ //已到最后一页
+					_this.loadingType = "nomore"
+				}
+				console.log('load', _this.loadingType)
 				if (type === 'refresh') {
-					this.goodsList = [];
-				}
-				//筛选，测试数据直接前端筛选了
-				if (this.filterIndex === 1) {
-					goodsList.sort((a, b) => b.sales - a.sales)
-				}
-				if (this.filterIndex === 2) {
-					goodsList.sort((a, b) => {
-						if (this.priceOrder == 1) {
-							return a.price - b.price;
-						}
-						return b.price - a.price;
-					})
-				}
-				if (this.goodsList.length == 0) {
-					this.goodsList = goodsList
-				} else {
-					this.goodsList = this.goodsList.concat(goodsList);
-				}
-				//判断是否还有下一页，有是more  没有是nomore
-				this.loadingType = this.goodsList.length >= this.total ? 'nomore' : 'more';
-				if (type === 'refresh') {
+					_this.goodsList = [];
 					if (loading == 1) {
 						uni.hideLoading()
 					} else {
 						uni.stopPullDownRefresh();
 					}
 				}
+				//筛选，测试数据直接前端筛选了
+				if (_this.filterIndex === 1) {
+					goodsList.sort((a, b) => b.sales - a.sales)
+				}
+				if (_this.filterIndex === 2) {
+					goodsList.sort((a, b) => {
+						if (_this.priceOrder == 1) {
+							return a.price - b.price;
+						}
+						return b.price - a.price;
+					})
+				}
+				
+				/* if (this.goodsList.length == 0) {
+					this.goodsList = goodsList
+				} else {
+					this.goodsList = this.goodsList.concat(goodsList);
+				} */
+				//判断是否还有下一页，有是more  没有是nomore
+				// _this.loadingType = _this.goodsList.length >= _this.total ? 'nomore' : 'more';
+
 			},
 			//筛选点击
 			tabClick(index) {
@@ -565,29 +616,49 @@
 						// console.log('总平台')
 						// console.log(menuExam.menuExam[3].submenu)
 						// console.log(menuExam.menuExam[3].submenu[2])
-						menuExam.menuExam[3].submenu[2] = []
+						menuExam.menuExam[3].submenu[2] = {}
 						// menuExam.menuExam[3].submenu[2].delete()
-						resolve()
-					}
-					if(menuExam.menuExam[3].submenu[2].submenu.length != 0){
 						resolve()
 					}else{
 						getCarShopList({
 							id: pshop
 						}).then(res => {
 							let list = res.data.Data
+							console.log('二级门店', list)
 							list.forEach(ele => {
 								ele.value = ele.id
 								ele.submenu = []
 							})
-							menuExam.menuExam[3].submenu[2].submenu.push(...list)
+							console.log('list', list)
+							//#ifdef MP-WEIXIN
+							// menuExam.menuExam[3].submenu[2].submenu.push(...list)
+							// menuExam.menuExam[3].submenu[2].submenu = list
+							// menuExam.menuExam[3].submenu[2].name = '所属门店'
+							menuExam.menuExam[3].submenu[2] = {name: '所属门店', submenu: list}
+							//#endif
+							//#ifndef MP-WEIXIN 
+							// menuExam.menuExam[3].submenu[2]['submenu'] = list
+							// menuExam.menuExam[3].submenu[2]['name'] = '所属门店'
+							menuExam.menuExam[3].submenu[2] = {name: '所属门店', submenu: list}
+							//#endif
 							resolve()
 						}).catch(err=>{
 							console.log('pshoperr',err)
-							menuExam.menuExam[3].submenu[2].submenu.push([])
+							//#ifdef MP-WEIXIN
+							// menuExam.menuExam[3].submenu[2].submenu.push([])
+							menuExam.menuExam[3].submenu[2]['submenu'] = {}
+							//#endif
+							//#ifndef MP-WEIXIN 
+							menuExam.menuExam[3].submenu[2]['submenu'] = {}
+							//#endif
 							resolve()
 						})
 					}
+					/* if(menuExam.menuExam[3].submenu[2].submenu.length != 0){
+						resolve()
+					}else{
+						
+					} */
 					/* setTimeout(() => {
 						
 					}, 2500) */

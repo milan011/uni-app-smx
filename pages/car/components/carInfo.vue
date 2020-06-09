@@ -243,6 +243,13 @@
 			</view>
 		</view>
 		<!-- 校验信息显示 End -->
+		<!-- vin码获取车型提示 Begain -->
+		<view class="cu-load load-modal" v-if="loadZs">
+			<!-- <view class="cuIcon-emojifill text-orange"></view> -->
+			<image src="/static/load.png" mode="aspectFit"></image>
+			<view class="gray-text">获取车型...</view>
+		</view>
+		<!-- vin码获取车型提示 End -->
 		<!-- vin码拍摄 Begin -->
 		<view style="z-index: 110;" class="cu-modal" :class="modalName=='vinPhoto'?'show':''">
 			<view class="cu-dialog">
@@ -304,6 +311,7 @@
 				vinCarList: [],
 				vinCarCheck: '0',
 				modalName: null,
+				loadZs: false,
 				validateInfo: [],
 				carStatusConfig:[],
 				putOnStatusConfig: [],
@@ -481,30 +489,40 @@
 			},
 			getCarByVin(vinCode) { //根据vin码获取车型信息
 				// const vinCode = event.detail.value
-				if (this.vinChanged) { //vin码有变化
-					if (this.$utils.isRegVin(vinCode)) { //格式校验
+				var _this = this
+				if (_this.vinChanged) { //vin码有变化
+					if (_this.$utils.isRegVin(vinCode)) { //格式校验
+						_this.loadZs = true
 						getCarInfoByWin(vinCode).then(res => {
 							console.log(res)
 							if (res.data.ResultType == 0) {
-								this.vinCarList = res.data.Data
-								this.vinCarCheck = '0'
-								this.modalName = 'vinChose'
+								_this.loadZs = false
+								_this.vinCarList = res.data.Data
+								_this.vinCarCheck = '0'
+								_this.modalName = 'vinChose'
 							} else {
-								this.$api.msg(`您输入的vin码无对应车型,请重新输入或使用手动输入车型`, 2000);
-								this.carData.FullName = ""
+								_this.loadZs = false
+								_this.$api.msg(`您输入的vin码无对应车型,请重新输入或使用手动输入车型`, 2000);
+								_this.carData.FullName = ""
 								setTimeout(() => {
-									this.modalName = 'Manual'
+									_this.modalName = 'Manual'
 								}, 2000)
 							}
-						}).catch(err => {
-							this.$api.msg(`获取数据失败,请刷新重试`);
+						}).catch(err => {		
+							// _this.$api.msg(`获取数据失败,请刷新重试`);
+							_this.loadZs = false
+							_this.$api.msg(`您输入的vin码无对应车型,请重新输入或使用手动输入车型`, 2000);
+							_this.carData.FullName = ""
+							setTimeout(() => {
+								_this.modalName = 'Manual'
+							}, 2000)
 						})
 					} else {
 						console.log('VIN码必须是17位数字字母组成')
-						this.carData.FullName = ""
-						this.$api.msg(`VIN码必须是17位数字字母组成`, 7000);
+						_this.carData.FullName = ""
+						_this.$api.msg(`VIN码必须是17位数字字母组成`, 7000);
 					}
-					this.vinChanged = false
+					_this.vinChanged = false
 				}
 			},
 			DateChangePlate(e) {
