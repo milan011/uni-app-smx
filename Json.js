@@ -82,7 +82,7 @@ const menuExam = [{
 	},
 	{
 		"name": '价格',
-		"type": 'filter',
+		"type": 'radio',
 		"submenu": [{
 			"name": "价格",
 			"type": 'radio',

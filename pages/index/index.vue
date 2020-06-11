@@ -429,7 +429,7 @@
 				this.carList = []
 				this.car.PageIndex = 1
 				console.log('here2')
-				this.loadData()
+				this.getCarList()
 				uni.stopPullDownRefresh()
 			},
 			//上拉加载更多

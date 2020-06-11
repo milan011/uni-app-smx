@@ -10,22 +10,29 @@
 			</swiper>
 			<!-- <image src="../../static/collect.png" mode="" @click="doCollect" class="collect"></image> -->
 		</view>
-
 		<view class="introduce-section">
 			<text class="title">{{ carDetail.cars.FullName }}</text>
-			<text class="cuIcon-favor" :class="'text-' + favorColor" style="margin-left:0.5em" @tap="doCollect"></text>
+			<!-- <text class="cuIcon-favor" :class="'text-' + favorColor" style="margin-left:0.5em" @tap="doCollect"></text> -->
+			<!-- <text class="cuIcon-post" :class="'text-' + favorColor" style="margin-left:0.5em" @tap="doCollect"></text> -->
 			<view class="price-box">
 				<text class="price-tip">¥<text class="price">{{ carDetail.cars.SaleAMT }}万</text></text>
 				<!-- <text class="price">{{ carDetail.cars.SaleAMT }}万</text> -->
-				<view class='cu-tag radius line-green'>{{carDetail.pshopname}}</view>
+				<view>
+					<view class='cu-tag' style="background-color:white">
+					<!-- <text class="cuIcon-post" style="margin-left:0.5em;" @tap="doShare">分享</text> -->
+					<text class="cuIcon-favor" :class="'text-' + favorColor" style="margin-left:0.5em" @tap="doCollect">{{collection}}</text>
+					</view>
+					<view class='cu-tag radius line-green'>{{carDetail.pshopname}}</view>
+				</view>
+				<!-- <view class='cu-tag radius line-green'>{{carDetail.pshopname}}</view> -->
 			</view>
 			<view class="c-list">
 				<view class="c-row b-b">
 					<view class="con-list">
-						<text>销售顾问: {{ carDetail.EvalName?carDetail.EvalName:"暂无数据"}}({{ carDetail.shop.name }})</text>
-						<text>门店地址: {{ carDetail.shop.address? carDetail.shop.address:'暂无数据'}}</text>
-						<text>发布时间: {{ carDetail.CreateDate? carDetail.CreateDate:"暂无数据"}}</text>
-						<text>联系电话: {{ carDetail.Telephone?carDetail.Telephone:"暂无数据"}}</text>
+						<text>销售顾问: {{ carDetail.EvalName?carDetail.EvalName:""}}({{ carDetail.shop.name }})</text>
+						<text>门店地址: {{ carDetail.shop.address? carDetail.shop.address:''}}</text>
+						<text>发布时间: {{ carDetail.CreateDate? carDetail.CreateDate:""}}</text>
+						<text>联系电话: {{ carDetail.Telephone?carDetail.Telephone:""}}</text>
 					</view>
 				</view>
 			</view>
@@ -158,6 +165,7 @@
 </template>
 
 <script>
+	import wxShare from '@/common/wechat.js'
 	import share from '@/components/share';
 	import uniSegmentedControl from "@/components/uni-segmented-control/uni-segmented-control.vue"
 	import listCell from '@/components/mix-list-cell';
@@ -208,6 +216,7 @@
 					"carimages": [],
 				},
 				ispreview: false,
+				collection: '收藏',
 				allParamShow: false,
 				items: ['车辆参数', '发动机参数', '底盘及制动', '其他配置'],
 				itemStatus: ['非常规技术检查', '静态检查', '动态检查'],
@@ -232,6 +241,7 @@
 				}
 			};
 		},
+		mixins: [wxShare],
 		//#ifdef MP-WEIXIN
 		onShareAppMessage(res) {
 		  if (res.from === 'button') {// 来自页面内分享按钮
@@ -245,10 +255,15 @@
 		  }
 		},
 		//#endif
+		
 		async onLoad(options) {
 			var _this = this
-			console.log(options)
-			//接收传值,id里面放的是标题，因为测试数据并没写id 
+			console.log(options) 
+			/* console.log('微信分享', wxShare) 
+			console.log('微信分享', wxShare.methods) 
+			console.log('微信分享', wxShare.methods.wechatShare) */
+			
+			console.log('微信分享方法?', _this.wechatShare) 
 			// 车辆详情
 			this.ispreview = options.ispreview == 1 ? true : false
 			console.log(this.ispreview)
@@ -261,6 +276,9 @@
 				id
 			})
 			this.carDetail = carDetail.data.Data;
+			//#ifdef H5
+			_this.setShare()
+			//#endif
 			console.log(this.carDetail)
 			if (this.carDetail.cars.BuyDate == null) {
 				this.carDetail.cars.BuyDate = ''
@@ -276,9 +294,11 @@
 					console.log('是否收藏', index)
 					if (index == -1) {					
 						_this.favorColor = 'gray'	
+						_this.collection = '收藏'
 						_this.favorite = false
 					} else {
 						_this.favorColor = 'green'
+						_this.collection = '已收藏'
 						_this.favorite = true
 					}
 				},
@@ -439,14 +459,34 @@
 				}
 			},
 			//分享
-			share() {
+			/* share() {
 				this.$refs.share.toggleMask();
-			},
+			}, */
 			navToDetailPage(item) {
 				let id = item.ID;
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
+			},
+			//分享
+			setShare(){
+				var _this = this
+				console.log('分享')
+				/*const share_name = this.shareName 
+				const share_img = this.shareImg */
+				const shareInfo = {
+				 title: `淘车乐二手车`,
+				  desc: _this.carDetail.cars.FullName,
+				  // link: window.location.href.split('#')[0] + '#/cars/cargoodinfo?' + 'cid=' + this.$route.query.cid,
+				  link: window.location.href.split('#')[0]+'#'+window.location.href.split('#')[1],
+				  img: _this.imgUrl + _this.shareImg
+				}
+				// mixins
+				/*console.log('1')
+				console.log(this.shareName)
+				console.log('2')
+				console.log(this.shareImg)*/
+				_this.wechatShare(shareInfo)
 			},
 			// 收藏
 			doCollect() {
@@ -463,6 +503,7 @@
 							collectList.unshift(_this.carDetail)
 							_this.favorColor = 'green'
 							_this.favorite = true
+							_this.collection = '已收藏'
 							uni.setStorage({
 								key: 'collectList',
 								data: collectList,
@@ -478,6 +519,7 @@
 							collectList.splice(index, 1)
 							_this.favorColor = 'gray'
 							_this.favorite = false
+							_this.collection = '收藏'
 							// collectList.unshift(this.carDetail)
 							uni.setStorage({
 								key: 'collectList',
@@ -685,6 +727,9 @@
 		}
 		
 		.cuIcon-favor {
+			font-size: 32upx;
+		}
+		.cuIcon-post {
 			font-size: 32upx;
 		}
 		.price-box {

@@ -272,26 +272,26 @@
 				}
 			})
 		}, */
-		async onPullDownRefresh() {	
-			var _this = this
-			_this.goodsList = []
-			// return false
-			console.log('xial?')
-			uni.removeStorageSync('selectConditions')
-			await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
-				if(res){
-					_this.car.P_Shop_Id = res.id
-				}
-			}).catch(err=>{
-				_this.car.P_Shop_Id = ''
-			})
+		// async onPullDownRefresh() {	
+		// 	var _this = this
+		// 	_this.goodsList = []
+		// 	// return false
+		// 	console.log('xial?')
+		// 	uni.removeStorageSync('selectConditions')
+		// 	await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+		// 		if(res){
+		// 			_this.car.P_Shop_Id = res.id
+		// 		}
+		// 	}).catch(err=>{
+		// 		_this.car.P_Shop_Id = ''
+		// 	})
 			
-			 _this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
-			 _this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
-			const arr = _this.filterDropdownValue
-			_this.confirm({index: arr, value: arr})
-			 uni.stopPullDownRefresh()
-		},
+		// 	 _this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
+		// 	 _this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
+		// 	const arr = _this.filterDropdownValue
+		// 	_this.confirm({index: arr, value: arr})
+		// 	 uni.stopPullDownRefresh()
+		// },
 		onPageScroll(e) {
 			//兼容iOS端下拉时顶部漂移
 			if (e.scrollTop >= 0) {
