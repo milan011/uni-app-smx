@@ -255,15 +255,13 @@
 			// 城市初始化
 			await getStorageByKey('selectCity').then(res => { //用户选择城市
 				console.log('用户选择城市', res)
-				// _this.car.CityName = res
 				_this.listQueryReset({CityName: res})
 				_this.city = res
 			})
-			console.log(_this.car.CityName)
+			// console.log(_this.car.CityName)
 			if(!_this.car.CityName){ //用户没有选择城市
 				await getStorageByKey('locationCity').then(res => {
 					console.log('当前定位城市', res)
-					// _this.car.CityName = res
 					_this.listQueryReset({CityName: res})
 					_this.city = res
 				})
@@ -274,29 +272,28 @@
 			const currentAppId = uni.getAccountInfoSync().miniProgram.appId
 			// const currentAppId = "wx20ge3d96cesedbb2"
 			_this.marketList.forEach(ele=>{
-				console.log('当前小程序', currentAppId)
+				// console.log('当前小程序', currentAppId)
 				if(ele.appid == currentAppId){
-					console.log('啊,是一级市场的小程序',ele)
+					console.log('当前市场load',ele.name)
 					_this.allMarket = false
 					_this.marketCurrent = null
 					_this.notAppId = false
 					uni.setStorageSync('pshop', {id: ele.id, name: ele.name})
 					_this.listQueryReset({P_Shop_Id: ele.id})
-					/* uni.setStorage({
-						key: 'pshop',
-						data: ele.id,
-						success: function() {
-							_this.allMarket = false
-							_this.car.P_Shop_Id = 
-						}
-					}) */	
+					/* uni.setTabBarItem({  
+					  index: 2,  
+					 "pagePath": "pages/sell/sellCar",
+					 "iconPath": "static/tab-cart.png",
+					 "selectedIconPath": "static/tab-cart-current.png",
+					 "text": "卖车"  
+					}) */ 	
 				}	
 			})
 			//#endif
 			//#ifndef MP-WEIXIN
 			await getStorageByKey('pshop').then(res=>{
 				if(res){
-					console.log('当前市场load', res)
+					console.log('当前市场load', res.name)
 					_this.marketCurrent = res.name
 					_this.allMarket = false
 					_this.listQueryReset({P_Shop_Id: res.id})
@@ -306,79 +303,10 @@
 			//一级市场
 			
 			_this.listQueryReset({PageIndex: 1})
-			_this.getCarList()
-			// return false
-			
-			
-			// uni.getStorage({
-			// 	key: 'selectCity',
-			// 	success: function(res) {
-			// 		_this.city = res.data
-			// 		let arr = res.data.split("")
-			// 		let index = arr.length - 1
-			// 		if (arr[index] == "市") {
-			// 			let arr1 = arr.pop()
-			// 			_this.car.CityName = arr.join("")
-			// 		} else {
-			// 			_this.car.CityName = res.data
-			// 		}
-			// 	},
-			// 	fail:function(){
-			// 		//#ifndef H5
-			// 		uni.getStorage({
-			// 			key: 'city',
-			// 			success: function(res) {
-			// 				_this.city = res.data
-			// 				let arr = res.data.split("")
-			// 				let index = arr.length - 1
-			// 				if (arr[index] == "市") {
-			// 					let arr1 = arr.pop()
-			// 					_this.car.CityName = arr.join("")
-			// 				} else {
-			// 					_this.car.CityName = res.data
-			// 				}
-			// 			}
-			// 		});
-			// 		//#endif
-			// 		//#ifdef H5
-			// 		uni.getStorage({
-			// 			key: 'citys',
-			// 			success: function(res) {
-			// 				_this.city = res.data
-			// 				let arr = res.data.split("")
-			// 				let index = arr.length - 1
-			// 				if (arr[index] == "市") {
-			// 					let arr1 = arr.pop()
-			// 					_this.car.CityName = arr.join("")
-			// 				} else {
-			// 					_this.car.CityName = res.data
-			// 				}
-			// 			}
-			// 		});
-			// 		//#endif
-			// 	}
-			// })
-			
-			/* if(!_this.marketCurrent){
-				uni.setStorage({
-					key: 'pshop',
-					data: '',
-					success: function() {
-						_this.car.P_Shop_Id = ''
-						_this.carList = []
-					}
-				})
-			}
-			_this.car.PageIndex = 1
-			
-			_this.loadData() */
-			
+			_this.getCarList()	
 		},
 		methods: {
-			/**
-			 * 请求静态数据只是为了代码不那么乱
-			 * 分次请求未作整合
-			 */
+			/**---**/
 			toSell() {
 				uni.switchTab({
 					url: '../sell/sellCar'
@@ -394,9 +322,6 @@
 						})
 					}
 				})
-				/* uni.switchTab({
-					url: '/pages/product/list'
-				}); */
 			},
 			toCitySelect() {
 				uni.navigateTo({
@@ -418,7 +343,7 @@
 			getMarketList(){
 				var _this = this
 				getMarketShopList({ pid: '0' }).then(res=>{
-					console.log('所有一级市场', res)	
+					// console.log('所有一级市场', res)	
 					_this.marketList = res.data.Data
 				})
 			},
@@ -428,44 +353,19 @@
 				this.loadingType = "loading"
 				this.carList = []
 				this.car.PageIndex = 1
-				console.log('here2')
 				this.getCarList()
 				uni.stopPullDownRefresh()
 			},
 			//上拉加载更多
 			onReachBottom() {
 				var _this = this
-				console.log('哥,你上拉了')
-				console.log(_this.loadingType)
+				console.log('哥,你上拉了',_this.loadingType)
 				if(_this.loadingType == "nomore"){
 					return false
 				}else{
 					_this.car.PageIndex++
 					_this.getCarList('add')
 				}
-				/* console.log('哥,你上拉了')
-				console.log('当前页',this.car.PageIndex)
-				console.log('总数',this.total)
-				console.log('还有吗',this.total/this.car.PageSize)
-				console.log('每页显示条数',this.car.PageSize) */
-				// if(this.total){
-				// 	if (this.car.PageIndex < this.total/this.car.PageSize) {
-				// 		this.loadingType = "loading"
-				// 		// return false
-				// 		let num = Math.ceil(this.total / this.car.PageSize)
-				// 		if (this.car.PageIndex == num || this.car.PageIndex > num) {			
-				// 			return false
-				// 		} else {
-				// 			this.car.PageIndex++
-				// 			console.log('here3')
-				// 			this.loadData('add')
-				// 		}
-				// 	} else {
-				// 		this.loadingType = "nomore"
-				// 	}
-				// }else{
-				// 	return false
-				// }	
 			},
 			loadData(){
 				
@@ -475,8 +375,6 @@
 				// console.log('搜索条件重置', queryObj)
 				Object.keys(queryObj).forEach(function(key){
 					if(_this.car.hasOwnProperty(key)){
-						// console.log(key)
-						// console.log(queryObj[key])
 						_this.car[key] = queryObj[key]
 					}
 				})
@@ -485,7 +383,7 @@
 				var _this = this
 				_this.loadingType = "loading"
 				getCarList(_this.car).then(res=>{
-					console.log(res)
+					// console.log(res)
 					const currentPage = _this.car.PageIndex //当前页
 					let totalPage  = null //共几页
 					
@@ -499,14 +397,8 @@
 					totalPage  = Math.ceil(_this.total/_this.car.PageSize)
 					
 					if(currentPage < totalPage){ //未到最后一页
-						// console.log('当前页', currentPage)
-						// console.log('共几页', totalPage)
-						// console.log('还有')
 						_this.loadingType = "more"
 					}else{ //已到最后一页
-						// console.log('当前页', currentPage)
-						// console.log('共几页', totalPage)
-						// console.log('木有了')
 						_this.loadingType = "nomore"
 					}
 					// console.log('总数',_this.total)
@@ -515,31 +407,6 @@
 					// console.log('共几页', Math.ceil(_this.total/_this.car.PageSize))
 					// console.log('加载状态', _this.loadingType)
 				})
-				
-				/* let params = {
-					...this.car
-				} */
-				// let obj = Qs.stringify(params)
-				// console.log(obj)
-				// let carList = await getCarList({ ...params
-				// })
-				/* if (this.carList.length == 0) {
-					this.carList = carList.data.Data.DataList
-				} else {
-					this.carList = this.carList.concat(carList.data.Data.DataList);
-				} */
-				/* if(type == 'add'){
-					this.carList = this.carList.concat(carList.data.Data.DataList)
-				}else{	
-					this.carList = carList.data.Data.DataList
-				} */
-				// this.carList = this.carList.concat(carList.data.Data.DataList);
-				// this.total = carList.data.Data.Total
-				/* if (this.car.PageIndex < this.total/this.car.pagesize) {
-					this.loadingType = "more"
-				} else {
-					this.loadingType = "nomore"
-				} */
 			},
 			// 去搜索页面
 			toSearch() {
@@ -566,31 +433,13 @@
 				this.titleNViewBackground = this.carouselList[index].background;
 			},
 			returnToSmx(){
-				console.log('去总平台')
+				// console.log('去总平台')
 				var _this = this
 				uni.removeStorageSync('pshop')
 				_this.marketCurrent = null
 				_this.allMarket = true
-				/* _this.car.P_Shop_Id = ''
-				_this.car.PageIndex = 1
-				_this.carList = [] */
 				_this.listQueryReset({P_Shop_Id: '', PageIndex: 1})
-				console.log('here1')
 				_this.getCarList()
-				// uni.setStorage({
-				// 	key: 'pshop',
-				// 	data: '',
-				// 	success: function() {
-				// 		_this.marketCurrent = null
-				// 		_this.allMarket = true
-				// 		/* _this.car.P_Shop_Id = ''
-				// 		_this.car.PageIndex = 1
-				// 		_this.carList = [] */
-				// 		_this.listQueryReset({P_Shop_Id: '', PageIndex: 1})
-				// 		console.log('here1')
-				// 		_this.getCarList()
-				// 	}
-				// })
 			},
 			//一级市场
 			navToMarketPage(pshop){
@@ -609,20 +458,13 @@
 							_this.carList = res.data.Data.DataList
 							_this.total = res.data.Data.Total
 						})
-						console.log(_this.car.PageIndex)
-						// _this.loadData()
-						/* uni.reLaunch({
-							url: `/pages/product/list`
-						}) */
 					}
 				})
 				
 			},
 			//详情页
 			navToDetailPage(item) {
-				//测试数据没有写id，用title代替
-				console.log(item)
-				// return false
+				// console.log(item)
 				let id = item.ID;
 				let VIN = item.VIN
 				uni.navigateTo({
@@ -633,7 +475,6 @@
 				}) */
 			},
 			searchCar() {
-				// alert('sld')
 				uni.navigateTo({
 					url: '/pages/search/search'
 				});

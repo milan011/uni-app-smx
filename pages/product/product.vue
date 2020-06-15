@@ -165,7 +165,9 @@
 </template>
 
 <script>
+	//#ifdef H5
 	import wxShare from '@/common/wechat.js'
+	//#endif
 	import share from '@/components/share';
 	import uniSegmentedControl from "@/components/uni-segmented-control/uni-segmented-control.vue"
 	import listCell from '@/components/mix-list-cell';
@@ -241,13 +243,15 @@
 				}
 			};
 		},
+		//#ifdef H5
 		mixins: [wxShare],
+		//#endif
 		//#ifdef MP-WEIXIN
 		onShareAppMessage(res) {
 		  if (res.from === 'button') {// 来自页面内分享按钮
 		    console.log(res.target)
 		  }
-			console.log('微信分析', res)
+			console.log('微信分享', res)
 			console.log(this.carDetail.cars.FullName)
 		  return {
 		    title: this.carDetail.cars.FullName,
@@ -258,7 +262,7 @@
 		
 		async onLoad(options) {
 			var _this = this
-			console.log(options) 
+			// console.log(options) 
 			/* console.log('微信分享', wxShare) 
 			console.log('微信分享', wxShare.methods) 
 			console.log('微信分享', wxShare.methods.wechatShare) */
@@ -266,7 +270,7 @@
 			console.log('微信分享方法?', _this.wechatShare) 
 			// 车辆详情
 			this.ispreview = options.ispreview == 1 ? true : false
-			console.log(this.ispreview)
+			// console.log(this.ispreview)
 			uni.showLoading({
 				title: "加载中",
 				mask: true
@@ -279,7 +283,7 @@
 			//#ifdef H5
 			_this.setShare()
 			//#endif
-			console.log(this.carDetail)
+			// console.log(this.carDetail)
 			if (this.carDetail.cars.BuyDate == null) {
 				this.carDetail.cars.BuyDate = ''
 			}
@@ -287,11 +291,11 @@
 			uni.getStorage({
 				key: 'collectList',
 				success: (res) => {
-					console.log('收藏列表',res.data)
+					// console.log('收藏列表',res.data)
 					let index = res.data.findIndex(ele => {
 						return _this.carDetail.cars.ID == ele.cars.ID
 					})
-					console.log('是否收藏', index)
+					// console.log('是否收藏', index)
 					if (index == -1) {					
 						_this.favorColor = 'gray'	
 						_this.collection = '收藏'
@@ -314,9 +318,6 @@
 					let index = res.data.findIndex(ele => {
 						return this.carDetail.cars.ID == ele.cars.ID
 					})
-					console.log('index1==>', res.data.findIndex(ele => {
-						return ele.cars.ID == this.carDetail.cars.ID
-					}))
 					if (index == -1) {
 						browseList.unshift(this.carDetail)
 						uni.setStorage({
@@ -540,7 +541,7 @@
 							key: 'collectList',
 							data: collectList,
 							success: () => {
-								console.log('set')
+								// console.log('set')
 							}
 						})
 					}
@@ -548,7 +549,7 @@
 			},
 			goPutOn() {
 				const param = {carid: this.car.Carid, putton:1}
-				console.log(param)
+				// console.log(param)
 				carPutOn(param).then(res=>{
 					// console.log(res.data)
 					if(res.data.ResultType == 0){
@@ -562,7 +563,7 @@
 				})
 			},
 			reEdit() {
-				console.log(this.car.Carid)
+				// console.log(this.car.Carid)
 				const carid = this.car.Carid
 				uni.reLaunch({
 					url: `/pages/car/carEdit?id=` + carid

@@ -105,7 +105,7 @@
 			};
 		},
 		onHide(){
-		  console.log('this.ifOnShow=true')
+		  // console.log('this.ifOnShow=true')
 		  this.ifOnShow = true
 		},
 		async onShow(){
@@ -120,7 +120,7 @@
 						_this.car.P_Shop_Id = ''
 					}
 				})
-				console.log('当前市场', _this.car.P_Shop_Id)
+				// console.log('当前市场', _this.car.P_Shop_Id)
 				await _this.getCarTypelist()
 				await _this.getshoplist(_this.car.P_Shop_Id)
 				_this.menuData = await this.$api.json('menuExam');
@@ -158,7 +158,7 @@
 					_this.car.P_Shop_Id = res.id
 				}
 			})
-			console.log('当前市场', _this.car.P_Shop_Id)
+			// console.log('当前市场', _this.car.P_Shop_Id)
 			/* await getStorageByKey('pshop2').then(res=>{
 				console.log('then',res)
 			}).catch( err => { 
@@ -179,12 +179,12 @@
 			}) */
 			// 城市初始化
 			await getStorageByKey('selectCity').then(res => { //用户选择城市
-				console.log('用户选择城市', res)
+				// console.log('用户选择城市', res)
 				_this.car.CityName = res
 			})	
 			if(!_this.car.CityName){ //用户没有选择城市
 				await getStorageByKey('locationCity').then(res => {
-					console.log('当前定位城市', res)
+					// console.log('当前定位城市', res)
 					_this.car.CityName = res
 				})
 			}
@@ -404,7 +404,7 @@
 				}else{ //已到最后一页
 					_this.loadingType = "nomore"
 				}
-				console.log('load', _this.loadingType)
+				// console.log('load', _this.loadingType)
 				if (type === 'refresh') {
 					_this.goodsList = [];
 					if (loading == 1) {
@@ -610,7 +610,7 @@
 				})
 			},
 			async getshoplist(pshop) {
-				console.log('一级市场', pshop)
+				// console.log('一级市场', pshop)
 				return new Promise(resolve => {
 					if(!pshop){	
 						// console.log('总平台')

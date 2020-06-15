@@ -10,7 +10,7 @@ export function getStorageByKey(storageKey) {
 				resolve(res.data)	
 			},
 			fail: function(err){
-				console.log('额,没找到'+ storageKey,err)
+				// console.log('额,没找到'+ storageKey,err)
 				// reject(err)
 				resolve('')
 			}

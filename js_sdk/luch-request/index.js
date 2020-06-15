@@ -43,6 +43,7 @@ http.validateStatus = (statusCode) => {
 }
 
 http.interceptor.response((response) => { /* 请求之后拦截器 */
+	// console.log('接口返回数据', response.data)
   return response
 }, (response) => { // 请求错误做点什么
   return response
@@ -107,8 +108,7 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
   // if (response.config.custom.verification) { // 演示自定义参数的作用
   //   return response.data
   // }
-	// console.log('200',response.data)
-  // console.log('且慢')
+	// console.log('接口返回数据',response.data)
   // console.log('大圣收了神通吧')
   // return false
   return response

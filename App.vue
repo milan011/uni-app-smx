@@ -36,7 +36,7 @@
 			/* let amapPlugin = new amap.AMapWX({
 				key: '23ebf335166547d686e8383326c7b375'
 			}); */
-			console.log('keyConfig', config.mapKey)
+			// console.log('keyConfig', config.mapKey)
 			/* console.log('定位obj',new txmap({
 				key: config.mapKey
 			})) */
