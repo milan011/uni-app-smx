@@ -145,7 +145,7 @@
 			<view class="title">
 				我们的优势
 			</view>
-			<view class="box">
+			<view class="box" v-if="!saleDom">
 				<view class="left">
 					<view class="titles">
 						价更高
@@ -181,6 +181,9 @@
 					</view>
 				</view>
 			</view>
+			<view v-else v-html="saleDom">
+				
+			</view>
 		</view>
 	</view>
 	</view>
@@ -190,6 +193,7 @@
 	import { editOpp } from '@/api/business.js'
 	import '@/common/utils'
 	import { getStorageByKey } from '@/common/storage.js'
+	import { getMarketDetail } from '@/api/shop.js'
 	export default {
 		data() {
 			const currentDate = this.getDate({
@@ -197,6 +201,9 @@
 			})
 			return {
 				date: '请选择上牌日期',
+				ifOnShow: false,
+				P_Shop_Id: '',
+				saleDom: null,
 				mileage: [],
 				index: 0,
 				TabCur: 0,
@@ -206,7 +213,7 @@
 					name: '卖车游客',
 					mobile: '13645120124',
 					contents: '',
-					shopid: '71',
+					shopid: '',
 					city_name: '',
 					category_name: ''
 				},
@@ -280,10 +287,43 @@
 				]
 			};
 		},
+		onHide(){
+		  // console.log('this.ifOnShow=true')
+		  this.ifOnShow = true 
+		},
+		async onShow(){
+			var _this = this
+			if(_this.ifOnShow){
+				await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+					console.log('当前市场', res)
+					if(res){
+						_this.P_Shop_Id = res.id
+						_this.oppData.shopid = res.id
+						_this.getMarketDetialById()
+					}else{
+						_this.P_Shop_Id = null
+						_this.saleDom = null
+						_this.oppData.shopid = ''
+					}
+				})
+			}
+		},
 		async onLoad() {
 			var _this = this
 			await getStorageByKey('locationCity').then(res=>{
 				_this.oppData.city_name = res
+			})
+			await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+				console.log('当前市场', res)
+				if(res){
+					_this.P_Shop_Id = res.id
+					_this.oppData.shopid = res.id
+					_this.getMarketDetialById()
+				}else{
+					_this.P_Shop_Id = null
+					_this.saleDom = null
+					_this.oppData.shopid = ''
+				}
 			})
 			//#ifndef H5
 			/* uni.getStorage({
@@ -322,6 +362,14 @@
 				month = month > 9 ? month : '0' + month;;
 				day = day > 9 ? day : '0' + day;
 				return `${year}-${month}-${day}`;
+			},
+			getMarketDetialById(){
+				var _this = this
+				console.log('当前门店id', _this.P_Shop_Id)
+				getMarketDetail(_this.P_Shop_Id).then(res=>{
+					console.log('一级市场信息', res)
+					_this.saleDom = res.data.Data.shop.saleydinfo
+				})
 			},
 			oppSend(){
 				console.log(this.oppData.mobile)
@@ -373,12 +421,12 @@
 				this.transfer[index].isShow = !this.transfer[index].isShow
 			}
 		},
-		onShow() {
+		/* onShow() {
 			for (let i = 1; i <= 50; i++) {
 				this.mileage.push(i + "万")
 			}
 			this.mileage.push("50万+")
-		}
+		} */
 	}
 </script>
 

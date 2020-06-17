@@ -33,6 +33,9 @@
 		<view class="list-cell log-out-btn" @click="toLogout">
 			<text class="cell-tit">退出登录</text>
 		</view>
+		<view class="list-cell log-out-btn" @click="userChange">
+			<text class="cell-tit">切换账号</text>
+		</view>
 	</view>
 </template>
 
@@ -40,11 +43,15 @@
 	import {  
 	    mapMutations  
 	} from 'vuex';
+	import { userChangeLogin } from '@/api/user.js'
 	export default {
 		data() {
 			return {
-				
+				currentUser: '',
 			};
+		},
+		onLoad(){
+			this.currentUser = uni.getStorageSync('userInfo') || ''
 		},
 		methods:{
 			...mapMutations(['logout']),
@@ -65,6 +72,28 @@
 				    	}
 				    }
 				});
+			},
+			async userChange(){
+				var _this = this	
+				uni.showModal({
+				    content: '确定要切换账号么',
+				    success: (e)=>{
+				    	if(e.confirm){
+								console.log(_this.currentUser)
+				    		userChangeLogin(_this.currentUser.id).then(res=>{
+									console.log('切换账号', res)
+									if(res.data.ResultType == 0){
+										this.logout()
+										uni.navigateTo({
+											url: `/pages/public/login`
+										})
+									}
+								})
+								setTimeout(()=>{
+				    		}, 200)
+				    	}
+				    }
+				})
 			},
 			//switch
 			switchChange(e){

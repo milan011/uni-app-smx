@@ -8,6 +8,11 @@ export function getcustomerList(data) {
 	const requestUrl = Config.url_config + '/customer/pagecustomer'
 	return httpApi.get(requestUrl, {data})
 }
+// 切换用户
+export function userChangeLogin(userid) {
+	const requestUrl = Config.url_config + '/user/clearopenid?userid=' + userid
+	return httpApi.get(requestUrl)
+}
 // 获取用户详情
 export function getCustomerDetail(data) {
 	const requestUrl = Config.url_config + '/customer/detail'

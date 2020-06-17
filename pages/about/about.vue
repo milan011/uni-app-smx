@@ -1,5 +1,13 @@
 <template>
-	<view class="about-main">
+	<view class="container">
+	<view v-if="aboutDom" class="about-main" v-html='aboutDom'>
+		
+	</view>
+	<view v-else class="about-main">
+		关于驷马先!
+	</view>
+	</view>
+	<!-- <view class="about-main">
 		<image class="banner" src="../../static/about/banner.jpg" mode=""></image>
 		<view class="content">
 			<view class="title">关于淘车乐</view>
@@ -17,22 +25,63 @@
 			<view class="main">3. 宣传广业务广：2016年公司与中国银行深度合作开展二手车分期业务，为国有银行开展二手车业务树立了标杆。在宣传上公司还与河北电视台、河北交通广播（FM99.2）、石家庄交通广播（FM94.6）、河北农民广播（FM98.1）、燕赵晚报、二手车之家、淘车网、第一车网、华夏二手车网、搜狐汽车、58同城、赶集网等多家媒体和网站进行深度合作，得到业内人士及广大客户的认可 。</view>
 			<view class="main">4.线下店面多信息多：公司网点已经有60多家，每天都有许多咨询加盟的客户。业务开展到各个社区及县城，能够实现信息共享充分体现信息价值。</view>
 		</view>
-	</view>
+	</view> -->
 </template>
 
 <script>
+	import { getStorageByKey } from '@/common/storage.js'
+	import { getMarketDetail } from '@/api/shop.js'
 	export default {
 		data() {
 			return {
-				
+				ifOnShow: false,
+				P_Shop_Id: '',
+				aboutDom: null,
 			};
+		},
+		onHide(){
+		  // console.log('this.ifOnShow=true')
+		  this.ifOnShow = true 
+		},
+		async onShow(){
+			var _this = this
+			if(_this.ifOnShow){
+				await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+					console.log('当前市场', res)
+					if(res){
+						_this.P_Shop_Id = res.id
+						_this.getMarketDetialById()
+					}
+				})
+			}
+		},
+		async onLoad(){
+			var _this = this
+			await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+				console.log('当前市场', res)
+				if(res){
+					_this.P_Shop_Id = res.id
+					_this.getMarketDetialById()
+				}
+			})
+		},
+		methods: {
+			getMarketDetialById(){
+				var _this = this
+				console.log('当前门店id', _this.P_Shop_Id)
+				getMarketDetail(_this.P_Shop_Id).then(res=>{
+					console.log('一级市场信息', res)
+					_this.aboutDom = res.data.Data.shop.aboutusyd
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
 	.about-main {
-		text-align: center;
+		text-align: left;
+		padding: 30rpx;
 
 		.banner {
 			width: 100%;

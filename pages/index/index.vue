@@ -132,10 +132,10 @@
 						<image style="height: 100upx;" :src="imgUrl+item.shoplogo" mode="aspectFit"></image>
 						<text class="title clamp">{{item.name}}</text>
 					</view>
-					<view class="more">
+					<!-- <view class="more">
 						<text>查看全部</text>
 						<text>More+</text>
-					</view>
+					</view> -->
 				</view>
 			</scroll-view>
 		</view>
@@ -224,14 +224,18 @@
 		},
 		onHide(){
 		  console.log('this.ifOnShow=true')
+		  console.log('hide')
 		  this.ifOnShow = true
 		},
 		async onShow(){
+			console.log('showle',this.ifOnShow)
 			var _this = this
-			if(_this.ifOnShow){
-				await getStorageByKey('pshop').then(res=>{			
+			// if(_this.ifOnShow){
+				await getStorageByKey('pshop').then(res=>{
+					console.log('showle', res)
 					if(res){
 						_this.allMarket = false
+						_this.marketCurrent = res.name
 						_this.car.P_Shop_Id = res.id
 						_this.car.PageIndex = 1
 						getCarList(_this.car).then(res=>{
@@ -240,7 +244,7 @@
 						})
 					}
 				})
-			}	
+			// }	
 		},
 		async onLoad() {
 			var _this = this	
@@ -333,7 +337,7 @@
 				uni.setStorage({
 					key: 'selectConditions',
 					data: conditions,
-					success: function() {
+					success: function() {		
 						uni.reLaunch({
 							url: `/pages/product/list`
 						})
