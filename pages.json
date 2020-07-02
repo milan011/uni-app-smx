@@ -325,6 +325,7 @@
 		"onReachBottomDistance": 1,
 		"backgroundColor": "#f8f8f8"
 	},
+	"sitemapLocation":"sitemap.json",
 	"tabBar": {
 		"color": "#C0C4CC",
 		"selectedColor": "#fa436a",

@@ -32,7 +32,7 @@
 						<text>销售顾问: {{ carDetail.cars.CreateName?carDetail.cars.CreateName:""}}({{ carDetail.shop.name }})</text>
 						<text>门店地址: {{ carDetail.shop.address? carDetail.shop.address:''}}</text>
 						<text>发布时间: {{ carDetail.cars.CreateDate? carDetail.cars.CreateDate.split('T')[0]:""}}</text>
-						<text @click="dialPhoneNumber()">联系电话: {{ carDetail.Telephone?carDetail.Telephone:""}}</text>
+						<text class='cuIcon-dianhua text-orange' style="font-size: 16px;" @click="dialPhoneNumber()">联系电话: {{ carDetail.Telephone?carDetail.Telephone:""}}</text>
 					</view>
 				</view>
 			</view>
@@ -548,8 +548,20 @@
 				})
 			},
 			dialPhoneNumber(){ //点击号码拨打电话
-				console.log('大电话')
-				window.location.href = "tel:" + this.carDetail.Telephone;
+				console.log('打电话')
+				var _this = this
+				uni.makePhoneCall({	 	
+				 	// 手机号
+				    phoneNumber: _this.carDetail.Telephone, 
+					// 成功回调
+					success: (res) => {
+						console.log('调用成功!')	
+					},
+					// 失败回调
+					fail: (res) => {
+						console.log('调用失败!')
+					}	
+				});
 			},
 			goPutOn() {
 				const param = {carid: this.car.Carid, putton:1}
