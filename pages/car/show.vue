@@ -33,7 +33,7 @@
 			</view> 
 		</view>
 		<view class="order-section">
-			<view class="order-item" @tap="showModal" data-target="ModalAssess" hover-class="common-hover" :hover-stay-time="50">
+			<view v-if="pgShow" class="order-item" @tap="showModal" data-target="ModalAssess" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-yishouhuo"></text>
 				<text>评估</text>
 			</view>
@@ -213,6 +213,7 @@
 				coverTransform: 'translateY(0px)',
 				coverTransition: '0s',
 				moving: false,
+				pgShow: false,
 				modalName:null,
 				carId: null,
 				loadingType: 'loading', //加载更多状态
@@ -245,11 +246,15 @@
 			}
 		},
 		onLoad(options) {
-			console.log(options)
+			// console.log(options)
 			console.log('user', uni.getStorageSync('userInfo'))
 			let user = uni.getStorageSync('userInfo')
 			/* this.carStatusConfig = this.$api.config('carStatusConfig');
 			this.inputStatusConfig = this.$api.config('inputStatusConfig'); */
+			// console.log('用户角色列表',user.rolenameArr)
+			if(user.rolenameArr.indexOf('hq_appraiser') > -1){
+				this.pgShow = true
+			}
 			this.carId = options.carId
 			this.quickFollow.id = options.carId
 			this.assessInfo.ID = options.carId

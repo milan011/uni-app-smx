@@ -2,14 +2,16 @@ let url_config = ""
 let img_url = null
 if (process.env.NODE_ENV === 'development') {
 	// 开发环境
-	url_config = 'https://testapi.simaxian.com/api'
-	// url_config = 'http://10.20.30.111/api'
-	img_url = 'https://testapi.simaxian.com'
+	/* url_config = 'https://testapi.simaxian.com/api'
+	img_url = 'https://testapi.simaxian.com' */
+	url_config = 'https://yanshiapi.simaxian.com/api'
+	img_url = 'https://yanshiapi.simaxian.com'
 } else {
 	// 生产环境
-	// url_config = 'http://10.20.30.111/api'
-	url_config = 'https://testapi.simaxian.com/api'
-	img_url = 'https://testapi.simaxian.com'
+	/* url_config = 'https://testapi.simaxian.com/api'
+	img_url = 'https://testapi.simaxian.com' */
+	url_config = 'https://yanshiapi.simaxian.com/api'
+	img_url = 'https://yanshiapi.simaxian.com'
 }
 
 //地图定位Key

@@ -31,7 +31,8 @@
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular autoplay="true" @change="swiperChange">
-				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
+				<!-- <swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})"> -->
+				<swiper-item v-for="(item, index) in carouselListUrl" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
 					<image :src="item.src" />
 				</swiper-item>
 			</swiper>
@@ -187,6 +188,23 @@
 				swiperCurrent: 0,
 				swiperLength: 0,
 				carouselList: [],
+				carouselListUrl: [
+					{
+						// src: "/static/temp/smx_banner1.jpg",
+						src: Config.img_url + '/Upload/yd/smx_banner1.jpg',
+						background: "rgb(203, 87, 60)",
+					},
+					{
+						src: Config.img_url + '/Upload/yd/smx_banner2.jpg' ,
+						// src: "/static/temp/smx_banner2.jpg",
+						background: "rgb(205, 215, 218)",
+					},
+					{
+						src: Config.img_url + '/Upload/yd/smx_banner3.jpg',
+						// src: "/static/temp/smx_banner3.jpg",
+						background: "rgb(183, 73, 69)",
+					}
+				],
 				carList: [],
 				marketList: [],
 				marketCurrent: null,
@@ -223,16 +241,15 @@
 			};
 		},
 		onHide(){
-		  console.log('this.ifOnShow=true')
-		  console.log('hide')
+		  // console.log('this.ifOnShow=true')
 		  this.ifOnShow = true
 		},
 		async onShow(){
-			console.log('showle',this.ifOnShow)
+			// console.log('showle',this.ifOnShow)
 			var _this = this
 			// if(_this.ifOnShow){
 				await getStorageByKey('pshop').then(res=>{
-					console.log('showle', res)
+					// console.log('showle', res)
 					if(res){
 						_this.allMarket = false
 						_this.marketCurrent = res.name
@@ -278,7 +295,7 @@
 			_this.marketList.forEach(ele=>{
 				// console.log('当前小程序', currentAppId)
 				if(ele.appid == currentAppId){
-					console.log('当前市场load',ele.name)
+					// console.log('当前市场load',ele.name)
 					_this.allMarket = false
 					_this.marketCurrent = null
 					_this.notAppId = false
@@ -297,7 +314,7 @@
 			//#ifndef MP-WEIXIN
 			await getStorageByKey('pshop').then(res=>{
 				if(res){
-					console.log('当前市场load', res.name)
+					// console.log('当前市场load', res.name)
 					_this.marketCurrent = res.name
 					_this.allMarket = false
 					_this.listQueryReset({P_Shop_Id: res.id})
@@ -363,7 +380,7 @@
 			//上拉加载更多
 			onReachBottom() {
 				var _this = this
-				console.log('哥,你上拉了',_this.loadingType)
+				// console.log('哥,你上拉了',_this.loadingType)
 				if(_this.loadingType == "nomore"){
 					return false
 				}else{
@@ -447,7 +464,7 @@
 			},
 			//一级市场
 			navToMarketPage(pshop){
-				console.log('去一级市场', pshop)
+				// console.log('去一级市场', pshop)
 				var _this = this
 				uni.setStorage({
 					key: 'pshop',

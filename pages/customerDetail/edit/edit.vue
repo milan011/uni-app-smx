@@ -88,21 +88,23 @@
 				success:function(res){
 					that.userInfo.name = res.data.name
 					that.userInfo.telephone = res.data.telephone
-					that.userInfo.address = res.data.address
-					that.userInfo.indentily_card = res.data.indentily_card
-					that.userInfo.qq_number = res.data.qq_number
-					that.userInfo.wx_number = res.data.wx_number
-					that.userInfo.remark = res.data.remark
-					that.userInfo.customer_res = res.data.customer_res
-					that.userInfo.creater_id = res.data.creater_id
-					that.userInfo.shopid = res.data.shop_id
-					that.userInfo.status = res.data.status
+					that.userInfo.address = res.data.address ? res.data.address : ''
+					that.userInfo.indentily_card = res.data.indentily_card ? res.data.indentily_card : ''
+					that.userInfo.qq_number = res.data.qq_number ? res.data.qq_number : ''
+					that.userInfo.wx_number = res.data.wx_number ? res.data.wx_number : ''
+					that.userInfo.remark = res.data.remark ? res.data.remark : ''
+					that.userInfo.customer_res = res.data.customer_res ? res.data.customer_res : ''
+					that.userInfo.creater_id = res.data.creater_id ? res.data.creater_id : ''
+					that.userInfo.shopid = res.data.shop_id ? res.data.shop_id : ''
+					that.userInfo.status = res.data.status ? res.data.status : ''
 				}
 			})
 		},
 		methods: {
 			PickerChange(e) {
-				this.userInfo.customer_res = e.detail.value + 1
+				console.log(e.detail.value)
+				console.log(e.detail.value + 1)
+				this.userInfo.customer_res = parseInt(e.detail.value)
 			},
 			textareaAInput(e) {
 				this.textareaAValue = e.detail.value

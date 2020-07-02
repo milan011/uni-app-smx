@@ -180,7 +180,7 @@
 		</view>
 		<!-- vin码返回信息选择End -->
 		<!-- 手动输入车型 Begin -->
-		<view style="z-index: 110;" class="cu-modal" :class="modalName=='Manual'?'show':''">
+		<view class="cu-modal" :class="modalName=='NoVinCar'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
 					<view class="content">车型输入</view>
@@ -191,23 +191,23 @@
 				<view class="padding-xl">
 					<view class="cu-form-group">
 						<view class="title">品牌</view>
-						<input v-model="manualData.brand" style="text-align: right;margin-right: 1em;" placeholder="奥迪" name="input"></input>
+						<input v-if="modalName=='NoVinCar'" v-model="manualData.brand" style="text-align: right;margin-right: 1em;" placeholder="奥迪" name="input"></input>
 					</view>	
 					<view class="cu-form-group">
 						<view class="title">车系</view>
-						<input v-model="manualData.category" style="text-align: right;margin-right: 1em;" placeholder="奥迪A4L" name="input"></input>
+						<input v-if="modalName=='NoVinCar'" v-model="manualData.category" style="text-align: right;margin-right: 1em;" placeholder="奥迪A4L" name="input"></input>
 					</view>	
 					<view class="cu-form-group">
 						<view class="title">车型名称</view>
-						<input v-model="manualData.name" style="text-align: right;margin-right: 1em;" placeholder="35 TFSI 时尚动感型 " name="input"></input>
+						<input v-if="modalName=='NoVinCar'" v-model="manualData.name" style="text-align: right;margin-right: 1em;" placeholder="35 TFSI 时尚动感型 " name="input"></input>
 					</view>
 					<view class="cu-form-group">
 						<view class="title">年款</view>
-						<input v-model="manualData.year" style="text-align: right;margin-right: 1em;" placeholder="2020" name="input"></input>
+						<input v-if="modalName=='NoVinCar'" v-model="manualData.year" style="text-align: right;margin-right: 1em;" placeholder="2020" name="input"></input>
 					</view>
 					<view class="cu-form-group">
 						<view class="title">排量</view>
-						<input v-model="manualData.Transmission" style="text-align: right;margin-right: 1em;" placeholder="2.0L" name="input"></input>
+						<input v-if="modalName=='NoVinCar'" v-model="manualData.Transmission" style="text-align: right;margin-right: 1em;" placeholder="2.0L" name="input"></input>
 					</view>
 				</view>
 				<view class="cu-bar bg-white justify-end">
@@ -251,18 +251,13 @@
 		</view>
 		<!-- vin码获取车型提示 End -->
 		<!-- vin码拍摄 Begin -->
+		<!-- #ifndef H5 -->
 		<view style="z-index: 110;" class="cu-modal" :class="modalName=='vinPhoto'?'show':''">
 			<view class="cu-dialog">
 				<scan-frame v-if="vinScanShow" v-on:vinPhotoDel="vinPhotoDel"></scan-frame>
 			</view>
-			<!-- <view class="cu-dialog">
-				<camera device-position="back" flash="auto" @error="error" style="width: 100%; height: 500upx;">
-					<cover-image src="../../static/scan-img.png" class="scan-img"></cover-image>
-				</camera>
-				<view class="scan-text">请将XXX放置白色框内</view>
-				<button type="primary" @click="takePhoto">拍照</button>
-			</view> -->
 		</view>
+		<!-- #endif -->
 		<!-- vin码拍摄 End -->
 		
 	</view>
@@ -286,7 +281,9 @@
 		maintainingConfig,
 		safetypeConfig, 
 	} from '@/common/appConfig.js'
+	// #ifndef H5
 	import ScanFrame from '@/components/scan-frame.vue'
+	// #endif
 	import { imgUpload } from '@/api/carManage.js'
 	import { getAllProvince, getCityByProvince } from '@/api/city.js'
 	import '@/common/utils'
@@ -300,9 +297,11 @@
 				default: ''
 			}, // 标题
 		},
+		// #ifndef H5
 		components: {
 			ScanFrame
 		},
+		// #endif
 		data() {
 			return {
 				vinChanged: false,
@@ -335,7 +334,7 @@
 				},
 				carData: {
 					ID: '0',
-					VIN: 'LFV2A2BS3F4590091',
+					VIN: '',
 					FullName: '',
 					plevelid: '',
 					Capacity: '',
@@ -358,8 +357,8 @@
 					Safe_type: 1,
 					Mileage: '',
 					Sale_number: 0,
-					Description: '客户说',
-					XS_description: '销售说',
+					Description: '',
+					XS_description: '',
 					Customer_Id: null,
 					CreateID: '',
 					CreateName: '',
@@ -505,7 +504,7 @@
 								_this.$api.msg(`您输入的vin码无对应车型,请重新输入或使用手动输入车型`, 2000);
 								_this.carData.FullName = ""
 								setTimeout(() => {
-									_this.modalName = 'Manual'
+									_this.modalName = 'NoVinCar'
 								}, 2000)
 							}
 						}).catch(err => {		
@@ -514,7 +513,7 @@
 							_this.$api.msg(`您输入的vin码无对应车型,请重新输入或使用手动输入车型`, 2000);
 							_this.carData.FullName = ""
 							setTimeout(() => {
-								_this.modalName = 'Manual'
+								_this.modalName = 'NoVinCar'
 							}, 2000)
 						})
 					} else {

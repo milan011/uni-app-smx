@@ -130,6 +130,7 @@
 				immediate: true
 			},
 			defaultSelected(newVal) {
+				console.log('默认筛选条件', newVal)
 				if(newVal.length==0){
 					return;
 				}

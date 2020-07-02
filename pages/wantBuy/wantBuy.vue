@@ -13,14 +13,15 @@
 				</view>
 				<view class="cu-list menu">
 					<view v-for="(item, index) in cartList" :key="index" class="cu-item" :class="menuArrow?'arrow':''">
-						<navigator class="content" hover-class="none" :url="'./show/show?carId='+item.want.id" open-type="navigate">
+						<navigator class="content" hover-class="none" :url="'./show/show?wantId='+item.want.id" open-type="navigate">
 							<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
 							<text class="text-grey">{{ item.want.carcate }}</text>
 						</navigator>
-						<navigator hover-class="none" :url="'./show/show?carId='+item.want.id" open-type="navigate">
+						<navigator hover-class="none" :url="'./show/show?wantId='+item.want.id" open-type="navigate">
 							<view class="action">
 								<!-- <view class="cu-tag round bg-orange light">正常</view> -->
-								<view class="cu-tag round bg-olive light">{{item.want.want_status1}}</view>
+								<view v-if="item.want.want_status == 1" class="cu-tag round bg-olive light">{{item.want.want_status1}}</view>
+								<view  v-if="item.want.want_status == 0" class="cu-tag round bg-red light">{{item.want.want_status1}}</view>
 								<view class="cu-tag round bg-blue light">{{item.want.created_at}}</view>
 							</view>
 						</navigator>
@@ -39,7 +40,7 @@
 							</view>
 							<view class="padding bg-white" style="display: flex;justify-content: space-between;">
 								<view class='cu-tag radius' :class="want.wantstatus===1?'bg-orange':''" @click="changeType(1)">正常</view>
-								<view class='cu-tag radius' :class="want.wantstatus===0?'bg-orange':''" @click="changeType(0)">废弃</view>
+								<view class='cu-tag radius' :class="want.wantstatus===0?'bg-red':''" @click="changeType(0)">废弃</view>
 								<view class='cu-tag radius' :class="want.wantstatus===4?'bg-orange':''" @click="changeType(4)">已交易</view>
 							</view>
 							<view class="cu-bar bg-white">
@@ -166,7 +167,11 @@
 				success: (res) => {
 					this.want.shopid = res.data.shop_id;
 					this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
-					this.want.userid = res.data.id;
+					if((res.data.rolename.indexOf('admin') > -1) || res.data.rolename.indexOf('md_leader') > -1){
+						this.want.userid = 0
+					}else{
+						this.want.userid = res.data.id
+					}
 					this.loadData();
 				}
 			})
@@ -183,8 +188,13 @@
 						this.cartList = []
 						this.want.shopid = res.data.shop_id;
 						this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
-						this.want.userid = res.data.id;
-						this.loadingType = 'loading'
+						if((res.data.rolename.indexOf('admin') > -1) || res.data.rolename.indexOf('md_leader') > -1){
+							this.want.userid = 0
+						}else{
+							this.want.userid = res.data.id
+						}
+						this.loadData()
+						/* this.loadingType = 'loading'
 						getWantList({ ...this.want
 						}).then(res => {
 							this.cartList = res.data.Data.DataList
@@ -206,7 +216,7 @@
 							} else {
 								this.loadingType = "nomore"
 							}
-						})
+						}) */
 					}
 				})
 			}

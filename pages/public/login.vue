@@ -70,8 +70,8 @@
 	export default{
 		data(){
 			return {
-				mobile: 'yz',
-				password: '123456',
+				mobile: '',
+				password: '',
 				ifOnShow: false,
 				isMpWeiXin: false,
 				isAuthor: false,

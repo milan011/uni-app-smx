@@ -214,6 +214,11 @@
 				"navigationBarTitleText": "我要卖车"
 			}
 		}, {
+			"path": "pages/activity/activity",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},{
 			"path": "pages/myTransaction/transaction",
 			"style": {
 				"enablePullDownRefresh": true,

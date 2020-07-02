@@ -200,9 +200,10 @@
 				</uni-collapse-item>
 			</uni-collapse>			
 			<!-- 评估图片描述 Begin -->
-			<view style="z-index: 110;" class="cu-modal" :class="modalName=='Comment'?'show':''">
+			<view class="cu-modal" :class="modalName=='Comment'?'show':''">
 				<view class="cu-dialog">
-					<view class="bg-img" :style="{backgroundImage: 'url(' + pgBackImg + ')' }" style="height:200px">
+					<!-- <view class="bg-img" :style="{backgroundImage: 'url(' + pgBackImg + ')' }" style="height:200px"> -->
+					<view class="bg-img" :style="{backgroundImage: 'url(' + imgUrlHost + pgBackImgTemp + ')' }" style="height:200px">
 						<view class="cu-bar justify-end text-white">
 							<view class="action" @tap="hideModal">
 								<text class="cuIcon-close "></text>
@@ -240,6 +241,7 @@
 </template>
 
 <script>
+	import Config from '@/common/config.js'
 	import { imgUpload, imgAdd, imgDelete, imgDeleteById } from '@/api/carManage.js'
 	import {pgPartFConfig, pgPartJConfig, pgPartDConfig} from '@/common/appConfig.js'
 	import uniRate from '@/components/uni-rate/uni-rate.vue'
@@ -268,6 +270,7 @@
 				loadModal: false,
 				isEdit: false,
 				imgPgPart: '',
+				imgUrlHost: Config.img_url,
 				modalName: null,
 				pgPartFConfig: [],
 				pgPartJConfig: [],
@@ -294,6 +297,7 @@
 					ImageContent: ''
 				},
 				pgBackImg: '',
+				pgBackImgTemp: '',
 				imgList: [],
 				imgListPaper: [],
 				imgListOther: [],
@@ -637,6 +641,7 @@
 								imgUpload(imgParam).then(resImg => {			
 									_this.imgPgData.ImageUrl = resImg.data.LogMessage
 									_this.imgPgData.ImageContent = ''
+									_this.pgBackImgTemp = resImg.data.LogMessage
 									console.log('图片上传',resImg.data)
 									console.log(_this.imgPgData)
 									_this.modalName = 'Comment'

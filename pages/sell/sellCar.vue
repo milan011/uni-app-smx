@@ -211,7 +211,7 @@
 				preOppData:{},
 				oppData:{
 					name: '卖车游客',
-					mobile: '13645120124',
+					mobile: '',
 					contents: '',
 					shopid: '',
 					city_name: '',
@@ -303,7 +303,7 @@
 					}else{
 						_this.P_Shop_Id = null
 						_this.saleDom = null
-						_this.oppData.shopid = ''
+						_this.oppData.shopid = 0
 					}
 				})
 			}
@@ -322,7 +322,7 @@
 				}else{
 					_this.P_Shop_Id = null
 					_this.saleDom = null
-					_this.oppData.shopid = ''
+					_this.oppData.shopid = 0
 				}
 			})
 			//#ifndef H5

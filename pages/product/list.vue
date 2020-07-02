@@ -1,7 +1,12 @@
 <template>
 	<view class="content">
-		<HMfilterDropdown :filterData="menuData" ref="filterDropdown" :defaultSelected="filterDropdownValue" :updateMenuName="true"
-		 @confirm="confirm"></HMfilterDropdown>
+		<HMfilterDropdown 
+		:filterData="menuData" 
+		ref="filterDropdown" 
+		:defaultSelected="filterDropdownValue" 
+		:updateMenuName="true"
+		 @confirm="confirm">
+		</HMfilterDropdown>
 		 <view class='padding-sm flex flex-wrap'>
 		 	<view v-if="item.content" class="padding-xs" v-for="(item,index) in condTagList" :key="index">
 		 		<view class='cu-tag line-blue'>{{item.content}}</view>
@@ -106,79 +111,55 @@
 		},
 		onHide(){
 		  // console.log('this.ifOnShow=true')
+			uni.removeStorage({
+				key: 'selectConditions',
+				success: (res) => {
+					
+				}
+			})
 		  this.ifOnShow = true
 		},
 		async onShow(){
 			var _this = this
 			if(_this.ifOnShow){
-				console.log('show')
-				await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
-					console.log('当前市场', res)
-					if(res){
-						_this.car.P_Shop_Id = res.id
-					}else{
-						_this.car.P_Shop_Id = ''
-					}
-				})
-				// console.log('当前市场', _this.car.P_Shop_Id)
-				await _this.getCarTypelist()
-				await _this.getshoplist(_this.car.P_Shop_Id)
-				_this.menuData = await this.$api.json('menuExam');
-				console.log('筛选菜单', _this.menuData)
-				await _this.selectCondInit()
-				_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
-				_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
-				/* uni.getStorage({
-					key: 'pshop',
-					success: function(res) {
-						console.log('市场3', res)
-						_this.car.P_Shop_Id = res.data
-						_this.getshoplist(_this.car.P_Shop_Id)
-						// await this.getshoplist(_this.car.P_Shop_Id)
-						_this.filterDropdownValue = [[0],[0,0],[[]], [[],[],[]]]
-						_this.$refs.filterDropdown.selectHierarchyMenu(1,0,0,null)
-					}
-				}) */
-				
-				/* this.menuData = await this.$api.json('menuExam');
-				await this.selectCondInit()		
+				await _this.pageInit()
+				const valCond = _this.condDell(_this.filterDropdownValueM)
 				_this.filterDropdownValue = _this.filterDropdownValueM
-				_this.$refs.filterDropdown.selectHierarchyMenu(1,_this.filterDropdownValue[1][0],_this.filterDropdownValue[1][1],null) */				
+				_this.confirm(valCond)
 			}
 		},
 		async onLoad(options) {
 			let _this = this
 			_this.cateId = options.tid
-			
+			// 调试筛选 Begain
+			/* await _this.getCarTypelist()
+			await _this.getshoplist(_this.car.P_Shop_Id)
+			_this.menuData = await this.$api.json('menuExam'); */
+			// _this.filterDropdownValueM = [[0],[4,2],[[1]], [[3],[1],[]]]
+			// _this.filterDropdownValueM = [[0],[4,2],[[]], [[],[],[]]]
+			/* const valCond = {
+				index: _this.filterDropdownValueM,
+				value: [],
+			} */
+			await _this.pageInit()
+			const valCond = _this.condDell(_this.filterDropdownValueM)
+			_this.filterDropdownValue = _this.filterDropdownValueM
+			_this.confirm(valCond)
+			// _this.filterDropdownValue = _this.filterDropdownValueM
+			// _this.$refs.filterDropdown.selectHierarchyMenu(1,_this.filterDropdownValue[1][0],_this.filterDropdownValue[1][1],null)
+			// return false
+			// 调试筛选 End
 			//一级市场初始化
 			// _this.car.P_Shop_Id = await getStorageByKey('pshop').id 
-			await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
-				console.log('当前市场', res)
+			/* await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+				// console.log('当前市场', res)
 				if(res){
 					_this.car.P_Shop_Id = res.id
 				}
-			})
-			// console.log('当前市场', _this.car.P_Shop_Id)
-			/* await getStorageByKey('pshop2').then(res=>{
-				console.log('then',res)
-			}).catch( err => { 
-				console.log('catch',err)
-			})
-			console.log('一级市场id',pShopId)
-			return false */
-			
-			// console.log('xiala==>?',_this.xiala)
-			//是否选择了一级市场
-			/* uni.getStorage({
-				key: 'pshop',
-				success: function(res) {
-					console.log('市场2', res)
-					_this.car.P_Shop_Id = res.data
-					// console.log(_this.car)
-				}
 			}) */
+			// console.log('当前市场', _this.car.P_Shop_Id)
 			// 城市初始化
-			await getStorageByKey('selectCity').then(res => { //用户选择城市
+			/* await getStorageByKey('selectCity').then(res => { //用户选择城市
 				// console.log('用户选择城市', res)
 				_this.car.CityName = res
 			})	
@@ -187,91 +168,23 @@
 					// console.log('当前定位城市', res)
 					_this.car.CityName = res
 				})
-			}
-			console.log('筛选车源城市',_this.car.CityName)
-			/* const selectCity = await getStorageByKey('selectCity')
-			const locationCity = await getStorageByKey('locationCity')
-			
-			console.log('选择城市', selectCity)
-			console.log('定位城市', locationCity) */
-			// return false
-			// uni.getStorage({
-			// 	key: 'selectCity',
-			// 	success: function(res) {
-			// 		_this.city = res.data
-			// 		let arr = res.data.split("")
-			// 		let index = arr.length - 1
-			// 		if (arr[index] == "市") {
-			// 			let arr1 = arr.pop()
-			// 			_this.car.CityName = arr.join("")
-			// 		} else {
-			// 			_this.car.CityName = res.data
-			// 		}
-			// 	},
-			// 	fail:function(){
-			// 		//#ifndef H5
-			// 		uni.getStorage({
-			// 			key: 'city',
-			// 			success: function(res) {
-			// 				_this.city = res.data
-			// 				let arr = res.data.split("")
-			// 				let index = arr.length - 1
-			// 				if (arr[index] == "市") {
-			// 					let arr1 = arr.pop()
-			// 					_this.car.CityName = arr.join("")
-			// 				} else {
-			// 					_this.car.CityName = res.data
-			// 				}
-			// 			}
-			// 		});
-			// 		//#endif
-			// 		//#ifdef H5
-			// 		uni.getStorage({
-			// 			key: 'citys',
-			// 			success: function(res) {
-			// 				_this.city = res.data
-			// 				let arr = res.data.split("")
-			// 				let index = arr.length - 1
-			// 				if (arr[index] == "市") {
-			// 					let arr1 = arr.pop()
-			// 					_this.car.CityName = arr.join("")
-			// 				} else {
-			// 					_this.car.CityName = res.data
-			// 				}
-			// 			}
-			// 		});
-			// 		//#endif
-			// 	}
-			// })
-			await _this.getshoplist(_this.car.P_Shop_Id)
+			} */
+			// console.log('筛选车源城市',_this.car.CityName)
+			/* await _this.getshoplist(_this.car.P_Shop_Id)
 			await _this.getCarTypelist()
 			_this.menuData = await _this.$api.json('menuExam');
-			console.log('筛选菜单', _this.menuData)
+			console.log('筛选菜单', _this.menuData) */
 			/* console.log('menuData2', this.menuData)
 			console.log('开始初始化') */
-			await _this.selectCondInit()
-
+			/* await _this.selectCondInit()
 			// console.log('4', _this.filterDropdownValueM)
-
 			_this.filterDropdownValue = _this.filterDropdownValueM
-			_this.$refs.filterDropdown.selectHierarchyMenu(1,_this.filterDropdownValue[1][0],_this.filterDropdownValue[1][1],null)
-			/* console.log('搜索初始化完成',this.car)
-			console.log('end') */
+			_this.$refs.filterDropdown.selectHierarchyMenu(1,_this.filterDropdownValue[1][0],_this.filterDropdownValue[1][1],null) */
+
 		},
-		// onShow() {
-		// 	this.$refs.filterDropdown.selectHierarchyMenu(1,1,2)
-		// },
 		mounted() {
 			
 		},
-		/* onHide(){
-			uni.removeStorage({
-				key: 'selectConditions',
-				success: (res) => {
-					
-				}
-			})
-		}, */
 		// async onPullDownRefresh() {	
 		// 	var _this = this
 		// 	_this.goodsList = []
@@ -309,19 +222,38 @@
 				_this.car.PageIndex++
 				_this.loadData('add')
 			}
-			
-			// let num = Math.ceil(this.total / this.car.PageSize)
-			// if (this.car.PageIndex == num || this.car.PageIndex > num) {
-			// 	return
-			// } else {
-			// 	this.car.PageIndex++
-			// 	// console.log(this.car.PageIndex)
-			// 	// console.log('here1')
-			// 	// console.log('load',this.loadingType)
-			// 	this.loadData('add');
-			// }
 		},
 		methods: {
+			async pageInit(){
+				var _this = this
+				//一级市场初始化
+				// _this.car.P_Shop_Id = await getStorageByKey('pshop').id 
+				await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
+					// console.log('当前市场', res)
+					if(res){
+						_this.car.P_Shop_Id = res.id
+					}
+				})
+				// 城市初始化
+				await getStorageByKey('selectCity').then(res => { //用户选择城市
+					// console.log('用户选择城市', res)
+					_this.car.CityName = res
+				})	
+				if(!_this.car.CityName){ //用户没有选择城市
+					await getStorageByKey('locationCity').then(res => {
+						// console.log('当前定位城市', res)
+						_this.car.CityName = res
+					})
+				}
+				// console.log('筛选车源城市',_this.car.CityName)
+				await _this.getshoplist(_this.car.P_Shop_Id) //市场门店
+				await _this.getCarTypelist() //车型菜单
+				_this.menuData = await _this.$api.json('menuExam'); //筛选菜单
+				await _this.selectCondInit() //筛选条件
+				/* setTimeout(() => {
+					console.log('筛选菜单', _this.menuData)
+				}, 10000) */		
+			},
 			async selectCondInit() {
 				var _this = this
 				let condArr = [[0],[0,0],[[]], [[],[],[]]]
@@ -332,11 +264,12 @@
 					uni.getStorage({
 						key: 'selectConditions',
 						success: function(res) {
-							// console.log('首页参数', res.data)
+							console.log('首页参数', res.data)
 							// console.log('筛选菜单',_this.menuData)
 							if (res.data.price) {
 								let arr = res.data.price.split("-")
 								let condName = res.data.cont
+								console.log(arr)
 								_this.car.SaleAMTMin = arr[0]
 								_this.car.SaleAMTMax = arr[1]
 								// console.log(_this.menuData[2].submenu[0].submenu)
@@ -346,7 +279,8 @@
 										condArr[2][0] = [index]
 									}
 								})
-								// console.log(condArr)
+								// condArr[2][0][0] = res.data.price
+								console.log('222',condArr)
 							} else {		
 								if (res.data.factory === true) {
 									_this.car.Factory = ''
@@ -364,10 +298,11 @@
 								}
 							}				
 							_this.filterDropdownValueM = condArr
-							_this.filterDropdownValue = _this.filterDropdownValueM
+							// _this.filterDropdownValue = _this.filterDropdownValueM
 							resolve()
 						},
 						fail: function() {
+							_this.filterDropdownValueM = [[0],[0,0],[[]], [[],[],[]]]
 							resolve()
 						}
 					});				
@@ -450,7 +385,6 @@
 					duration: 300,
 					scrollTop: 0
 				})
-				console.log('here2')
 				this.loadData('refresh', 1);
 				uni.showLoading({
 					title: '正在加载'
@@ -479,9 +413,54 @@
 					title: '正在加载'
 				})
 			},
+			condDell(data){ //处理筛选条件,生成confirm需要的对象
+				var _this = this
+				let returnArr = {index: [], value: []} //返回处理结果
+				let sortArr = [] //排序条件
+				let brandArr = [] //品牌条件
+				let priceArr = [[]] //价格条件
+				let otherArr = [[],[],[]] //其他筛选
+				console.log('传入的条件数组', data)
+				console.log('筛选菜单', _this.menuData)
+				//处理排序条件
+				sortArr[0] = _this.menuData[0]['submenu'][data[0]]['name']
+				console.log('排序条件', sortArr)
+				//处理品牌条件
+				brandArr[0] = _this.menuData[1]['submenu'][data[1][0]]['submenu'][data[1][1]]['letter']
+				brandArr[1] = _this.menuData[1]['submenu'][data[1][0]]['submenu'][data[1][1]]['name']
+				console.log('品牌条件', brandArr)
+				// console.log(_this.menuData[1]['submenu'][data[1][0]]['submenu'][data[1][1]])
+				//处理价格条件
+				if(data[2][0].length > 0){
+					priceArr[0] = [_this.menuData[2]['submenu'][0]['submenu'][data[2][0][0]]['value']]
+				}
+				
+				console.log('价格条件', priceArr)
+				//处理其他筛选条件
+				if(data[3][0].length > 0){
+					otherArr[0] = _this.menuData[3]['submenu'][0]['submenu'][data[3][0][0]]['value']
+				}
+				if(data[3][1].length > 0){
+					otherArr[1] = _this.menuData[3]['submenu'][1]['submenu'][data[3][1][0]]['value']
+				}
+				if(data[3][2].length > 0){
+					otherArr[2] = _this.menuData[3]['submenu'][2]['submenu'][data[3][2][0]]['value']
+				}
+				console.log('其他条件', otherArr)
+				returnArr['index'] = data
+				returnArr['value'] = [sortArr,brandArr,priceArr,otherArr]
+				console.log('返回结果', returnArr)
+				return returnArr
+				// oarr[2] = _this.menuData[3]['submenu'][2]['submenu'][data[3][2][0]]['name']
+				// console.log('价格条件', _this.menuData[2]['submenu'][0]['submenu'][data[2][0][0]]['value'])
+				/* data.forEach((ele,index)=>{
+					console.log(index, '-->', ele)
+					console.log('对应菜单-->', _this.menuData[index])
+				}) */
+			},
 			confirm(val) {
 				var _this = this
-				// console.log('条件数组', val)
+				console.log('条件数组', val)
 				// console.log('筛选菜单', this.menuData)
 				// console.log('品牌', this.menuData[1]['submenu'][val['index'][1][0]]['BrandLst'][val['index'][1][1]])
 				// console.log('品牌index', val['index'][1])
@@ -515,6 +494,8 @@
 					condTags[4]['content'] = this.menuData[3]['submenu'][2]['submenu'][val['index'][3][2][0]]['name']
 				}
 				_this.condTagList = condTags
+				console.log('筛选条件content', condTags)
+				// return false
 				/* {
 					品牌: '',
 					价格: '',
@@ -624,12 +605,12 @@
 							id: pshop
 						}).then(res => {
 							let list = res.data.Data
-							console.log('二级门店', list)
+							// console.log('二级门店', list)
 							list.forEach(ele => {
 								ele.value = ele.id
 								ele.submenu = []
 							})
-							console.log('list', list)
+							// console.log('list', list)
 							//#ifdef MP-WEIXIN
 							// menuExam.menuExam[3].submenu[2].submenu.push(...list)
 							// menuExam.menuExam[3].submenu[2].submenu = list
@@ -643,9 +624,8 @@
 							//#endif
 							resolve()
 						}).catch(err=>{
-							console.log('pshoperr',err)
+							// console.log('pshoperr',err)
 							//#ifdef MP-WEIXIN
-							// menuExam.menuExam[3].submenu[2].submenu.push([])
 							menuExam.menuExam[3].submenu[2]['submenu'] = {}
 							//#endif
 							//#ifndef MP-WEIXIN 
@@ -654,14 +634,6 @@
 							resolve()
 						})
 					}
-					/* if(menuExam.menuExam[3].submenu[2].submenu.length != 0){
-						resolve()
-					}else{
-						
-					} */
-					/* setTimeout(() => {
-						
-					}, 2500) */
 				})
 			}
 		},

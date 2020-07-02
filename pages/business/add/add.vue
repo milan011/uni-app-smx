@@ -47,13 +47,14 @@
 					provence_id:"",
 					area:"",
 					ff_shop:'',
+					shopid: 0,
 					id:0
 				},
 			}
 		},
 		async onLoad(options) {
 			await getStorageByKey('userInfo').then(res=>{
-				this.business.ff_shop = res.shop_id
+				this.business.shopid = res.shop_id
 			})
 		},
 		methods:{

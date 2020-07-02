@@ -22,7 +22,8 @@
 			</view>
 			<view class="order-item" @tap="showModal" data-target="ModalScrap" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-daifukuan"></text>
-				<text>废弃</text>
+				<text v-if="status == 1">废弃</text>
+				<text v-if="status == 0">激活</text>
 			</view>
 			<view class="order-item" @tap="showModal" data-target="ModalFollow" hover-class="common-hover" :hover-stay-time="50">
 				<text class="yticon icon-shouhoutuikuan"></text>
@@ -55,18 +56,28 @@
 		<view class="cu-modal" :class="modalName=='ModalScrap'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
-					<view class="content">废弃车源</view>
+					<view v-if="status == 1" class="content">废弃求购</view>
+					<view v-if="status == 0" class="content">激活求购</view>
 					<view class="action" @tap="hideModal">
 						<text class="cuIcon-close text-red"></text>
 					</view>
 				</view>
-				<view class="padding-xl">
-					您确定要废弃该车源吗
-				</view>
-				<view class="cu-bar bg-white justify-end">
+				<view v-if="status == 1" class="padding-xl">
+					您确定要废弃该求购吗
+				</view>				
+				<view v-if="status == 1" class="cu-bar bg-white justify-end">
 					<view class="action">
 						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-						<button class="cu-btn bg-green margin-left" @tap="doSave">确定</button>
+						<button class="cu-btn bg-green margin-left" @tap="doSaveF">确定</button>
+					</view>
+				</view>
+				<view v-if="status == 0" class="padding-xl">
+					您确定要激活该求购吗
+				</view>
+				<view v-if="status == 0" class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="doSaveJ">确定</button>
 					</view>
 				</view>
 			</view>
@@ -161,7 +172,7 @@
 			}
 		},
 		onLoad(options) {
-			this.Id = options.carId;
+			this.Id = options.wantId;
 			this.getInfo();
 			this.getFollow();
 		},
@@ -218,19 +229,54 @@
 					this.user_id = res.data.Data[0].user_id
 				})
 			},
-			// 废弃车源
-			doSave() {
+			// 废弃求购
+			doSaveF() {
 				statusWant({
 					Id: this.Id,
 					status: 0
 				}).then(res => {
-
-					this.hideModal()
+					if(res.data.ResultType == 0){
+						// 
+						this.modalName = null
+						this.$api.msg(`求购已废弃`);
+						uni.navigateBack()
+						/* this.getCarDetailById()
+						this.getCarFollowById() */
+					}else{
+						this.$api.msg(res.data.Message);
+						this.modalName = null
+					}
+					/* this.hideModal()
 					uni.showToast({
 						title: "操作成功",
 						icon: "none",
 						duration: 1500
-					})
+					}) */
+				})
+			},
+			//激活求购
+			doSaveJ() {
+				statusWant({
+					Id: this.Id,
+					status: 1
+				}).then(res => {
+					if(res.data.ResultType == 0){
+						// 
+						this.modalName = null
+						this.$api.msg(`求购已激活`);
+						uni.navigateBack()
+						/* this.getCarDetailById()
+						this.getCarFollowById() */
+					}else{
+						this.$api.msg(res.data.Message);
+						this.modalName = null
+					}
+					/* this.hideModal()
+					uni.showToast({
+						title: "操作成功",
+						icon: "none",
+						duration: 1500
+					}) */
 				})
 			},
 			// 添加跟进

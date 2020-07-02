@@ -70,6 +70,9 @@
 						key: 'locationCity',
 						data: res.result.address_component.city.split("市")[0]
 					})
+					uni.reLaunch({
+						url: `/pages/index/index`
+					})
 				},
 				fail: function(error) {
 					uni.showToast({
@@ -139,10 +142,10 @@
 			//#endif
 		},
 		onShow: function() {
-			console.log('App Show')
+			// console.log('App Show')
 		},
 		onHide: function() {
-			console.log('App Hide')
+			// console.log('App Hide')
 		},
 	}
 </script>

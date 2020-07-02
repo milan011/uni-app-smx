@@ -20,30 +20,48 @@
 		 @touchend="coverTouchend">
 			<image class="arc" src="/static/arc.png"></image>
 			<!-- 信息展示 Begain -->
+			<view class="tj-sction">
+				<view class="tj-item">
+					<text>车源</text>
+					<text class="num">{{ userGeneralInfo.MyCar }}</text>
+					
+				</view>
+				<view class="tj-item">
+					<text>求购</text>
+					<text class="num">{{ userGeneralInfo.MyWant }}</text>
+					
+				</view>
+				<view class="tj-item">
+					<text>交易</text>
+					<text class="num">{{ userGeneralInfo.MyTrancation }}</text>	
+				</view>
+			</view>
+			<!-- 信息展示 End -->
+			<!-- 待跟进信息展示 Begain -->
 			<view class="tj-sction" v-if="hasLogin">
 				<view class="tj-item">
 					<!-- <text>车源 | {{ userGeneralInfo.MyCar }}</text> -->
 					<view @tap="toRemindCar" class='cu-tag radius line-green'>
-						车源 | {{ userGeneralInfo.MyCar }}
+						待跟进车源 | {{ userGeneralInfo.CarRemind }}
 						<view v-if="userGeneralInfo.CarRemind > 0" class="cu-tag badge"></view>
 					</view>
 				</view>
 				<view class="tj-item">
 					<!-- <text>求购 | {{ userGeneralInfo.MyWant }}</text> -->
 					<view @tap="toRemindWant"  class='cu-tag radius line-olive'>
-						求购 | {{ userGeneralInfo.MyWant }}
+						待跟进求购 | {{ userGeneralInfo.WantRemind }}
 						<view v-if="userGeneralInfo.WantRemind > 0" class="cu-tag badge"></view>
 					</view>
 				</view>
-				<view class="tj-item">
-					<!-- <text>交易 | {{ userGeneralInfo.MyTrancation }}</text> -->
+				<!-- <view class="tj-item">
+					<text>交易 | {{ userGeneralInfo.MyTrancation }}</text>
 					<view class='cu-tag radius line-cyan'>
 						交易 | {{ userGeneralInfo.MyTrancation }}
 						<view v-if="userGeneralInfo.TranRemind > 0" class="cu-tag badge"></view>
 					</view>
-				</view>
+				</view> -->
 			</view>
-			<!-- 信息展示 End -->
+			<!-- 待跟进信息展示 End -->
 			<!-- 操作菜单 Begain -->
 			<view v-if="hasLogin" class="order-section">
 				<view class="order-item" @click="navTo('/pages/car/list')" hover-class="common-hover" :hover-stay-time="50">

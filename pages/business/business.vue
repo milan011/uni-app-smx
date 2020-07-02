@@ -15,11 +15,11 @@
 					<view v-for="(item, index) in businessList" :key="index" class="cu-item">
 						<view class="content" hover-class="none" @click="toInfo(item)">
 							<!-- <text class="cuIcon-discoverfill text-orange"></text> -->
-							<text class="text-grey">{{ item.category_name }}</text>
+							<text class="text-grey">{{item.name}}</text>
 						</view>
 						<view class="action">
 							<!-- <view class="cu-tag round bg-orange light">正常</view> -->
-							<view class="cu-tag round bg-olive light">{{item.name}}</view>
+							<view v-if="item.category_name" class="cu-tag round bg-olive light">{{ item.category_name }}</view>
 							<view class="cu-tag round bg-blue light">{{item.mobile}}</view>
 							<view v-show="isAdmin" class="cu-tag round bg-green light">{{item.status==1?'未分发':'已分发'}}</view>
 						</view>

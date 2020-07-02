@@ -18,9 +18,14 @@
 			</view>
 			<view class="cu-form-group">
 				<view class="title">变速箱</view>
-				<picker @change="PickerChange" :value="carTypeIndex" :range="carType">
+				<!-- <picker @change="PickerChange" :value="carTypeIndex" :range="carType">
 					<view class="picker">
 						{{carType[form.gearbox]}}
+					</view>
+				</picker> -->
+				<picker @change="PickerTransChange" :value="Number(form.gearbox)" :range="transmissionConfig" range-key="name">
+					<view class="picker">
+						{{transmissionConfig[form.gearbox].name}}
 					</view>
 				</picker>
 			</view>
@@ -52,6 +57,19 @@
 	import EvanFormItem from '@/components/evan-form/evan-form-item.vue'
 	import uniCollapse from '@/components/uni-collapse/uni-collapse.vue'
 	import uniCollapseItem from '@/components/uni-collapse-item/uni-collapse-item.vue'
+	import {
+		transmissionConfig,
+		carStatusConfig, 
+		putOnStatusConfig, 
+		carTypeConfig,
+		insidecolorConfig,
+		outcolorConfig,
+		saleNumConfig,
+		carUseConfig,
+		useconditionsConfig,
+		maintainingConfig,
+		safetypeConfig, 
+	} from '@/common/appConfig.js'
 	// import utils from '@/components/evan-form/utils.js'
 	import {
 		getWant,
@@ -69,6 +87,7 @@
 			return {
 				carTypeIndex: -1,
 				carType: ['不限', '手动', '自动'],
+				transmissionConfig: [],
 				modalName: null,
 				textareaAValue: '',
 				multiIndex: [0, 0],
@@ -112,6 +131,9 @@
 				}
 			};
 		},
+		created() {	
+			this.transmissionConfig = transmissionConfig
+		},
 		onLoad(options) {
 			this.id = options.id
 			console.log(options)
@@ -126,8 +148,8 @@
 					let data = res.data.Data
 					this.form.id = this.id;
 					this.form.carcate = data.want.carcate;
-					this.form.alternate_car = data.want.alternate_car;
-					this.form.alternate_car_another = data.want.alternate_car_another;
+					this.form.alternate_car = data.want.alternate_car ? data.want.alternate_car : '';
+					this.form.alternate_car_another = data.want.alternate_car_another ? data.want.alternate_car_another : '';
 					this.form.gearbox = data.want.gearbox;
 					this.form.bottom_price = data.want.bottom_price;
 					this.form.top_price = data.want.top_price;
@@ -148,8 +170,8 @@
 					this.form.shop_name = data.shopname
 				})
 			},
-			PickerChange(e) {
-				this.carTypeIndex = e.detail.value
+			PickerTransChange(e) {
+				this.form.gearbox = e.detail.value
 			},
 			MultiChange(e) {
 				this.multiIndex = e.detail.value

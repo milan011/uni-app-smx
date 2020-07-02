@@ -93,8 +93,8 @@
 				// 表单的内容必须初始化
 				customer: {
 					id: null,
-					name: 'wcg',
-					telephone: '13731080174',
+					name: '',
+					telephone: '',
 					creater_id: null,
 					customer_res: 1,
 					shop_id: null,
