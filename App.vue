@@ -65,7 +65,7 @@
 				//get_poi: 1, //是否返回周边POI列表：1.返回；0不返回(默认),非必须参数
 				success: function(res) { //成功后的回调
 					// console.log('定位返回',res)
-					console.log('小程序定位城市',res.result.address_component.city)
+					console.log('小程序定位城市', res.result.address_component.city)
 					uni.setStorage({
 						key: 'locationCity',
 						data: res.result.address_component.city.split("市")[0]
@@ -87,7 +87,29 @@
 				}
 			})
 			console.log(uni.getAccountInfoSync().miniProgram.appId) //小程序appId
-			/*  */
+			/* 小程序更新提示 */
+			const updateManager = uni.getUpdateManager();
+
+			updateManager.onCheckForUpdate(function(res) {
+				// 请求完新版本信息的回调
+				console.log(res.hasUpdate);
+			});
+			updateManager.onUpdateReady(function(res) {
+				uni.showModal({
+					title: '更新提示',
+					content: '新版本已经准备好，是否重启应用？',
+					success(res) {
+						if (res.confirm) {
+							// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+							updateManager.applyUpdate();
+						}
+					}
+				});
+			});
+			updateManager.onUpdateFailed(function(res) {
+				// 新的版本下载失败
+
+			})
 			//#endif
 			//#ifdef APP-PLUS
 			amapPlugin.getRegeo({
@@ -102,9 +124,9 @@
 				fail: function(info) {
 					//失败回调
 					uni.showToast({
-						title:"定位失败,请点击右上角手动选择",
-						icon:"none",
-						duration:1500
+						title: "定位失败,请点击右上角手动选择",
+						icon: "none",
+						duration: 1500
 					})
 					uni.setStorage({
 						key: 'locationCity',
@@ -112,6 +134,30 @@
 					})
 				}
 			})
+			/* APP版本更新提示 Begain */
+			// var server = "https://www.example.com/update"; //检查更新地址  
+			// var req = { //升级检测数据  
+			// 	"appid": plus.runtime.appid,
+			// 	"version": plus.runtime.version
+			// };
+			// uni.request({
+			// 	url: server,
+			// 	data: req,
+			// 	success: (res) => {
+			// 		if (res.statusCode == 200 && res.data.status === 1) {
+			// 			uni.showModal({ //提醒用户更新  
+			// 				title: "更新提示",
+			// 				content: res.data.note,
+			// 				success: (e) => {
+			// 					if (e.confirm) {
+			// 						plus.runtime.openURL(res.data.url); //打开web下载安装
+			// 					}
+			// 				}
+			// 			})
+			// 		}
+			// 	}
+			// })
+			/*APP版本更新提示 End */
 			//#endif
 			//#ifdef H5
 			uni.request({
@@ -121,7 +167,7 @@
 				},
 				method: "GET",
 				success: (res) => {
-					console.log('H5定位',res.data);
+					console.log('H5定位', res.data);
 					uni.setStorage({
 						key: 'locationCity',
 						data: res.data.city.split("市")[0]
