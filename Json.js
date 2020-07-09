@@ -36,12 +36,14 @@ const carouselList = [{
 const activity = [
 	{
 		name: 'buyCar',
+		enrollType: '1',
 		title: '买车咨询',
 		img: '/Upload/activity/buy.jpg',
 		content: '请输入您的手机号码并提交。我们工作人员会在24小时内联系您，淘车乐平台认证车辆，无泡水、无火烧、无事故！价格透明、还原真实车况！让您买的放心、用的放心！',
 	},
 	{
 		name: 'join',
+		enrollType: '6',
 		title: '加盟咨询',
 		img: '/Upload/activity/join.jpg',
 		content: '您好，淘车乐竭诚为您服务，填写个人 信息，点击下方提交按钮，我们工作人员24小时内会跟您联系！',
@@ -49,11 +51,13 @@ const activity = [
 	{
 		name: 'loan',
 		title: '贷款咨询',
+		enrollType: '3',
 		img: '/Upload/activity/loan.jpg',
 		content: '您知道吗？购买二手车也可以像购买新车一样分期付款了，淘车 乐分期业务，首付少、利息低、手续简单、放款快、让您购车无忧！您可通过我司的分期付款业务，自由自在的购车，随时随地分享分期购车带来的快乐生活！',
 	},
 	{
 		name: 'insurance',
+		enrollType: '4',
 		title: '保险咨询',
 		img: '/Upload/activity/insurance.png',
 		content: '请输入您的手机号码并提交。我们工作人员会在24小时内联系您，淘车乐平台认证车辆，无泡水、无火烧、无事故！价格透明、还原真实车况！让您买的放心、用的放心！只需发送行车本，身份证，保单邮寄到家，省时、省心、省力！专业保险顾问解惑答疑（险种、理赔）温馨提示：如您有购买车险的需要，请点击报名按钮，我们的工作人员会在24小时内联系您。',
@@ -61,12 +65,14 @@ const activity = [
 	{
 		name: 'saleCar',
 		title: '卖车咨询',
+		enrollType: '2',
 		img: '/Upload/activity/sale.jpg',
 		content: '二手车帮卖平台，点击报名，填写您的爱车信息，提交资料后，我们会有专人与您联系！全程免费帮您出售，快来体验吧。',
 	},
 	{
 		name: 'assessment',
 		title: '评估咨询',
+		enrollType: '5',
 		img: '/Upload/activity/assessment.jpg',
 		content: '二手车帮卖平台，点击报名，填写您的爱车信息，提交资料后，我们会有专人与您联系！全程免费帮您出售，快来体验吧。',
 	},

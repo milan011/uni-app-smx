@@ -9,9 +9,12 @@ export function getCarList(data) {
 //获取车源详情
 export function getCarDetail(carId) {
 	
-	const requestUrl = Config.url_config + '/car/htdetail'
-	return httpApi.get(
+	const requestUrl = Config.url_config + '/car/ht?id=' + carId
+	/* return httpApi.get(
 		requestUrl, { params: { id: carId } }
+	) */
+	return httpApi.post(
+		requestUrl, { id: carId }
 	)
 }
 //车源基本信息保存
@@ -146,11 +149,11 @@ export function carFollow(data) {
 }
 
 //vin码是否重复
-export function vinRepeatCheck(vinCode) {
+export function vinRepeatCheck(objVin) {
 	
 	const requestUrl = Config.url_config + '/car/validatevin'
 	return httpApi.get(
-		requestUrl, { params: { vin: vinCode } }
+		requestUrl, { params: { ...objVin } }
 	)
 }
 

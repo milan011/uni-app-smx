@@ -33,7 +33,7 @@
 </template>
 
 <script>
-	import { edit } from '@/api/business.js'
+	import { editOpp } from '@/api/business.js'
 	import { getStorageByKey } from '@/common/storage.js'
 	import { getMarketDetail } from '@/api/shop.js'
 	
@@ -47,6 +47,8 @@
 				business:{
 					name:"",
 					mobile:"",
+					enroll_type: '6',
+					city_name: '',
 					contents:"",
 					shopid: -1 
 				},
@@ -72,6 +74,9 @@
 		},
 		async onLoad(){
 			var _this = this
+			await getStorageByKey('locationCity').then(res=>{
+				_this.business.city_name = res
+			})
 			await getStorageByKey('pshop').then(res=>{ //获取storage:pshop
 				console.log('当前市场', res)
 				if(res){
@@ -121,7 +126,7 @@
 					});
 					return false
 				} else {
-					edit({ ...this.business
+					editOpp({ ...this.business
 					}).then(res => {
 						uni.showToast({
 							title: '系统已经记录您的信息,驷马先客服会尽快跟你联系,期待您的加盟',

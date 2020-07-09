@@ -117,9 +117,16 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
 	if(response.data.ResultType == 4 || response.data.ResultType == 8){
 		//token过期
 		store.dispatch('logout')
-		uni.navigateTo({
-			url: '/pages/public/login'
-		});
+		uni.showToast({
+			title: "请先登录",
+			icon: "none",
+			duration: 1500
+		})
+		setTimeout(()=>{
+			uni.navigateTo({
+				url: '/pages/public/login'
+			});
+		}, 1500)
 	}
   return response
 }),(error => {

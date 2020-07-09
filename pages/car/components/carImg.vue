@@ -228,11 +228,13 @@
 				</view>
 			</view>
 			<!-- 评估图片描述 End -->
+			<!-- 图片上传状态提示 Begain -->
 			<view class="cu-load load-modal" v-if="loadModal">
 				<!-- <view class="cuIcon-emojifill text-orange"></view> -->
 				<image src="/static/load.png" mode="aspectFit"></image>
 				<view class="gray-text">图片上传中...</view>
 			</view>
+			<!-- 图片上传状态提示 End -->
 			<view class="padding flex flex-direction">
 				<button v-if="isEdit" class="cu-btn bg-olive lg" @click="confirmImg">提交修改</button>
 				<button v-else class="cu-btn bg-olive lg" @click="confirmImg">预览上架</button>	

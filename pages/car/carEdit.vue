@@ -19,6 +19,13 @@
 			<car-img v-on:goPreviewForm="goPreview" ref="carImgSon"></car-img>
 		</view>	
 		<!-- 车源图片编辑End -->
+		<!-- 获取数据状态提示 Begain -->
+		<view class="cu-load load-modal" v-if="loadModal">
+			<!-- <view class="cuIcon-emojifill text-orange"></view> -->
+			<image src="/static/load.png" mode="aspectFit"></image>
+			<view class="gray-text">获取车源...</view>
+		</view>
+		<!-- 获取数据状态提示 End -->
 	</scroll-view>
 	</view>
 </template>
@@ -59,6 +66,8 @@
 				carInfoEdit: false,
 				carImgEdit: false,
 				vinReturnModal: true,
+				loadModal: false,
+				carCompleted: false,
 				modalName: null,
 				textareaAValue: '',
 				TabCur: 0,
@@ -107,11 +116,23 @@
 			this.getCarImgsExt()
 			// this.getCarImgsCer()
 			this.getCarImgsAsse()
+			this.loadModalDel()
 			// console.log((Math.pow(1.03, 10)*10000).toFixed(0))
 			// console.log((Math.pow(1.05, 10)*10000).toFixed(0))
 		},
 		computed: {
-
+			listenDateComplete () {
+			  const {carCompleted} = this
+			  return {carCompleted}
+			}
+		},
+		watch: {
+		  listenDateComplete (val) {
+		  	console.log('listenChange :', val)
+				if (val.carCompleted) {
+		      this.$set(this,'loadModal',false)
+		    }
+		  }
 		},
 		onLoad(options) {
 			console.log(options)
@@ -121,6 +142,19 @@
 		methods: {
 			tabSelect(e) { //标签切换
 				this.TabCur = e.currentTarget.dataset.id;
+			},
+			loadModalDel(){
+				setTimeout(() => {
+					if(!this.carCompleted){
+						this.loadModal = true
+					}
+				}, 1500)
+				setTimeout(() => {
+					if(!this.carCompleted){
+						this.$api.msg(`获取数据失败,请返回重试`);
+					}
+					this.loadModal = false
+				}, 8000)
 			},
 			scanVin() {
 				console.log('gan jin sao')
@@ -136,12 +170,13 @@
 							
 					this.$refs.carInfoSon.carData = car_data
 					this.$refs.carInfoSon.carAreaDell(car_data.ProvenceId, car_data.Area); 
+					this.carCompleted = true
 					/* this.detail = res.data.Data
 					this.carImgExt = res.data.Data.carimages */
 					// this.loadingType = 'loading'
-				}).catch(err => {
+				})/* .catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
+				}) */
 			},
 			getCarImgsNormal(){ //获取车源基本图片
 			  var _this = this

@@ -19,7 +19,9 @@
 						</view>
 						<view class="action">
 							<!-- <view class="cu-tag round bg-orange light">正常</view> -->
-							<view v-if="item.category_name" class="cu-tag round bg-olive light">{{ item.category_name }}</view>
+							<view v-if="item.category_name" class="cu-tag round bg-olive light">
+								<text class="text2-grey">{{ item.category_name }}</text>
+							</view>
 							<view class="cu-tag round bg-blue light">{{item.mobile}}</view>
 							<view v-show="isAdmin" class="cu-tag round bg-green light">{{item.status==1?'未分发':'已分发'}}</view>
 						</view>
@@ -138,7 +140,7 @@
 					starttime: "",
 					endtime: "",
 					rolename: "",
-					status: 1
+					status: '2'
 				},
 				oppData: {
 					id: null,
@@ -163,6 +165,7 @@
 			console.log('roleArr', this.$store.getters.roleArr)		
 			if(this.$store.getters.roleArr.indexOf('admin') > -1){
 				this.isAdmin = true
+				this.business.status = '1'
 			}
 			await getStorageByKey('userInfo').then(res=>{
 				this.business.shopid = res.shop_id
@@ -195,7 +198,7 @@
 			this.business.enrooltype = ''
 			this.business.starttime = ''
 			this.business.endtime = ''
-			this.business.status = 1
+			// this.business.status = 1
 			this.startdate = '请选择开始时间'
 			this.endData = '请选择结束时间'
 			this.typeIndex = 0
@@ -352,7 +355,14 @@
 <style lang='scss'>
 	.text-grey {
 		display: inline-block;
-		width: 220upx;
+		width: 230upx;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.text2-grey {
+		display: inline-block;
+		max-width: 240upx;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;

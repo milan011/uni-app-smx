@@ -23,7 +23,7 @@
 						<text class="text-grey">名称</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.FullName}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.FullName}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -41,7 +41,7 @@
 						<text class="text-grey">车架号</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.VIN}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.VIN}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -59,7 +59,7 @@
 						<text class="text-grey">期望价格(万)</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.BasePrice}}-{{detail.cars.SaleAMT}}</text>
+						<text v-if="detail.cars.BasePrice" class="text-grey text-sm">{{detail.cars.BasePrice}}-{{detail.cars.SaleAMT}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -68,7 +68,7 @@
 						<text class="text-grey">指导价(万)</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.InitPrice/10000}}</text>
+						<text v-if="detail.cars.InitPrice" class="text-grey text-sm">{{detail.cars.InitPrice/10000}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -77,7 +77,7 @@
 						<text class="text-grey">评估价(万)</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.EvalAMT?detail.cars.EvalAMT:'暂无评估价'}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.EvalAMT?detail.cars.EvalAMT:'暂无评估价'}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -95,7 +95,7 @@
 						<text class="text-grey">过户次数</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.Sale_number}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.Sale_number}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -104,7 +104,7 @@
 						<text class="text-grey">行驶里程(万公里)</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.Mileage}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.Mileage}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -122,7 +122,7 @@
 						<text class="text-grey">排量</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.Capacity}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.Capacity}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -140,7 +140,7 @@
 						<text class="text-grey">上牌城市</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.CityName}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.CityName}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -194,7 +194,7 @@
 						<text class="text-grey">所属门店</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.shop.name}}</text>
+						<text v-if="detail.shop" class="text-grey text-sm">{{detail.shop.name}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -203,7 +203,7 @@
 						<text class="text-grey">负责人</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.CreateName}} | {{detail.Telephone}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.CreateName}} | {{detail.Telephone}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
@@ -222,7 +222,7 @@
 						<text class="text-grey">评估师描述</text>
 					</view>
 					<view class="action">
-						<text class="text-grey text-sm">{{detail.cars.Pg_description ? detail.cars.Pg_description : '暂无'}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.Pg_description ? detail.cars.Pg_description : '暂无'}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow" @click="showModal" data-target="Modal">
@@ -231,7 +231,7 @@
 						<text class="text-grey">客户描述</text>
 					</view>
 					<view class="action text-cut">
-						<text style="margin: 1.2em;" class="text-grey text-sm">{{detail.cars.Description}}</text>
+						<text v-if="detail.cars" style="margin: 1.2em;" class="text-grey text-sm">{{detail.cars.Description}}</text>
 					</view>
 				</view>
 				<view class="cu-item arrow" @click="showModal" data-target="ModalS" >
@@ -240,7 +240,7 @@
 						<text class="text-grey">销售顾问描述</text>
 					</view>
 					<view class="action text-cut">
-						<text class="text-grey text-sm">{{detail.cars.XS_description}}</text>
+						<text v-if="detail.cars" class="text-grey text-sm">{{detail.cars.XS_description}}</text>
 					</view>
 				</view>
 			</view>
@@ -449,6 +449,13 @@
 				</view>
 			</view>
 		</view>
+		<!-- 获取数据状态提示 Begain -->
+		<view class="cu-load load-modal" v-if="loadModal">
+			<!-- <view class="cuIcon-emojifill text-orange"></view> -->
+			<image src="/static/load.png" mode="aspectFit"></image>
+			<view class="gray-text">获取车源...</view>
+		</view>
+		<!-- 获取数据状态提示 End -->
 	</view>
 </template>
 
@@ -479,6 +486,9 @@
 				imgList: ['http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg'],
 				currentUserId: null,
 				carId: null,
+				loadModal: false,
+				carCompleted: false,
+				followCompleted: false,
 				nowYear:new Date().getFullYear() - 0 + 1,
 				imgUrl: Config.img_url,
 				detail: {
@@ -501,6 +511,20 @@
 				carImgAsse: [],
 				followInfo: {}
 			}
+		},
+		computed: {
+			listenDateComplete () {
+			  const {carCompleted,followCompleted} = this
+			  return {carCompleted,followCompleted}
+			}
+		},
+		watch: {
+		  listenDateComplete (val) {
+		  	console.log('listenChange :', val)
+				if (val.carCompleted && val.followCompleted) {
+		      this.$set(this,'loadModal',false)
+		    }
+		  }
 		},
 		async onLoad(options){
 			let userInfo = uni.getStorageSync('userInfo') || '';
@@ -525,6 +549,7 @@
 			// this.getCarImgsExt()
 			this.getCarImgsCer()
 			this.getCarImgsAsse()
+			this.loadModalDel()
 			// this.loadData();
 		},
 		methods: {
@@ -536,19 +561,19 @@
 					console.log('carDetail',res.data)
 					this.detail = res.data.Data
 					this.carImgExt = res.data.Data.carimages
-					// this.loadingType = 'loading'
-				}).catch(err => {
+					this.carCompleted = true
+				})/* .catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
+				}) */
 			},
 			getCarFollowById(){ //获取跟踪信息
 				getCarFollow(this.carId).then(res => {
 					console.log('carfollow',res.data)
 					this.followInfo = res.data.Data
-					// this.loadingType = 'loading'
-				}).catch(err => {
+					this.followCompleted = true
+				})/* .catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
+				}) */
 			},
 			getCarImgsNormal(){ //获取车源基本图片
 				getCarImgsNormal(this.carId).then(res => {
@@ -556,36 +581,49 @@
 					this.carImgNormal = res.data.Data
 					console.log(this.carImgNormal)
 					// this.loadingType = 'loading'
-				}).catch(err => {
+				})/* .catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
+				}) */
 			},
 			getCarImgsCer(){ //获取车源证件图片
 				getCarImgsCer(this.carId).then(res => {
 					console.log('carimg_normal',res.data)
 					this.carImgCer = res.data.Data
 					// this.loadingType = 'loading'
-				}).catch(err => {
+				})/* .catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
+				}) */
 			},
 			getCarImgsExt(){ //获取车源附加图片
 				getCarImgsExt(this.carId).then(res => {
 					console.log('carimg_pg',res.data)
 					this.carImgExt = res.data.Data
 					// this.loadingType = 'loading'
-				}).catch(err => {
+				})/* .catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
+				}) */
 			},
 			getCarImgsAsse(){ //获取车源评估图片
 				getCarImgsAsse(this.carId).then(res => {
 					console.log('carimg_pg',res.data)
 					this.carImgAsse = res.data.Data
 					// this.loadingType = 'loading'
-				}).catch(err => {
+				})/* .catch(err => {
 					this.$api.msg(`获取数据失败,请刷新重试`);
-				})
+				}) */
+			},
+			loadModalDel(){
+				setTimeout(() => {
+					if(!(this.carCompleted && this.followCompleted)){
+						this.loadModal = true
+					}
+				}, 1500)
+				setTimeout(() => {
+					if(!(this.carCompleted && this.followCompleted)){
+						this.$api.msg(`获取数据失败,请返回重试`);
+					}
+					this.loadModal = false
+				}, 8000)
 			},
 			tabSelect(e) { //标签切换
 				this.TabCur = e.currentTarget.dataset.id;

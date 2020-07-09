@@ -155,6 +155,7 @@
 			return {
 				modalName: null,
 				Id: '',
+				ifOnShow: false,
 				wantInfo: {
 					want: {
 						carcate: ""
@@ -176,9 +177,15 @@
 			this.getInfo();
 			this.getFollow();
 		},
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
 		onShow() {
-			this.getInfo();
-			this.getFollow();
+			if(this.ifOnShow){
+				this.getInfo();
+				this.getFollow();
+			}
 		},
 		computed: {
 			...mapState(['hasLogin', 'userInfo'])

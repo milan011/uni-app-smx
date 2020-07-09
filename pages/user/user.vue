@@ -20,7 +20,7 @@
 		 @touchend="coverTouchend">
 			<image class="arc" src="/static/arc.png"></image>
 			<!-- 信息展示 Begain -->
-			<view class="tj-sction">
+			<view class="tj-sction" v-if="hasLogin">
 				<view class="tj-item">
 					<text>车源</text>
 					<text class="num">{{ userGeneralInfo.MyCar }}</text>
@@ -39,14 +39,14 @@
 			<!-- 信息展示 End -->
 			<!-- 待跟进信息展示 Begain -->
 			<view class="tj-sction" v-if="hasLogin">
-				<view class="tj-item">
+				<view v-if="userGeneralInfo.CarRemind" class="tj-item">
 					<!-- <text>车源 | {{ userGeneralInfo.MyCar }}</text> -->
 					<view @tap="toRemindCar" class='cu-tag radius line-green'>
 						待跟进车源 | {{ userGeneralInfo.CarRemind }}
 						<view v-if="userGeneralInfo.CarRemind > 0" class="cu-tag badge"></view>
 					</view>
 				</view>
-				<view class="tj-item">
+				<view v-if="userGeneralInfo.WantRemind" class="tj-item">
 					<!-- <text>求购 | {{ userGeneralInfo.MyWant }}</text> -->
 					<view @tap="toRemindWant"  class='cu-tag radius line-olive'>
 						待跟进求购 | {{ userGeneralInfo.WantRemind }}
@@ -111,6 +111,7 @@
 	} from 'vuex';
 	import Config from '@/common/config.js'
 	import { getUserGeneral } from '@/api/user.js'
+	import store from '@/store'
 	let startY = 0,
 		moveY = 0,
 		pageAtTop = true;
@@ -138,36 +139,48 @@
 			console.log('是否登录',this.hasLogin)
 			if(this.hasLogin){ //登录用户
 				this.userGeneral()
-			}
+			}/* else{
+				uni.navigateTo({
+					url: '/pages/public/login'
+				})
+			} */
+		},
+		onHide(){
+		  // console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
 		},
 		onShow() {
-			let imgList = []
-			uni.getStorage({
-				key: 'browseList',
-				success: (res => {
-					res.data.forEach(ele => {
-						if(ele.carimages[1]){
-							let params = {
-								url: ele.carimages[1].filename,
-								id: ele.cars.ID
+			if(this.ifOnShow){
+				let imgList = []
+				uni.getStorage({
+					key: 'browseList',
+					success: (res => {
+						res.data.forEach(ele => {
+							if(ele.carimages[1]){
+								let params = {
+									url: ele.carimages[1].filename,
+									id: ele.cars.ID
+								}
+								this.imgList.push(params)
 							}
-							this.imgList.push(params)
-						}
-					})
-					for (var i = 0; i < this.imgList.length; i++) {
-						for (var j = i + 1; j < this.imgList.length; j++) {
-							if (this.imgList[i].id == this.imgList[j].id) { //第一个等同于第二个，splice方法删除第二个
-								this.imgList.splice(j, 1);
-								j--;
+						})
+						for (var i = 0; i < this.imgList.length; i++) {
+							for (var j = i + 1; j < this.imgList.length; j++) {
+								if (this.imgList[i].id == this.imgList[j].id) { //第一个等同于第二个，splice方法删除第二个
+									this.imgList.splice(j, 1);
+									j--;
+								}
 							}
 						}
+					}),
+					fail:()=> {
+						console.log('尚无浏览历史')
 					}
-				}),
-				fail:()=> {
-					console.log('尚无浏览历史')
+				})
+				if(this.hasLogin){ //登录用户
+					this.userGeneral()
 				}
-			})
-
+			}
 		},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {
@@ -190,13 +203,24 @@
 		},
 		// #endif
 		computed: {
-			...mapState(['hasLogin', 'userInfo'])
+			...mapState(['hasLogin', 'userInfo', 'logout'])
 		},
 		methods: {
 			userGeneral(){
+				var _this = this
 				getUserGeneral().then(res=>{
 					console.log('uGen',res.data)
-					this.userGeneralInfo = res.data.Data
+					if(res.data.ResultType == 0){
+						this.userGeneralInfo = res.data.Data
+					}/* else{
+						_this.logout()
+						_this.$api.msg(`登录过期,请重新登录`, 2000)
+						setTimeout(() => {
+							uni.navigateTo({
+								url: '/pages/public/login'
+							});
+						}, 2000)
+					} */
 				})
 			},
 			/**

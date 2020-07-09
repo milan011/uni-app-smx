@@ -4,7 +4,8 @@
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in carDetail.carimages" :key="index">
 					<view class="image-wrapper">
-						<image :src="imgUrl + item.filename" class="loaded" mode="aspectFit"></image>
+						<!-- <image :src="imgUrl + item.filename" class="loaded" mode="aspectFit"></image> -->
+						<image :src="imgUrl + item.filename" class="loaded" mode="scaleToFill"></image>
 					</view>
 				</swiper-item>
 			</swiper>
@@ -15,7 +16,7 @@
 			<!-- <text class="cuIcon-favor" :class="'text-' + favorColor" style="margin-left:0.5em" @tap="doCollect"></text> -->
 			<!-- <text class="cuIcon-post" :class="'text-' + favorColor" style="margin-left:0.5em" @tap="doCollect"></text> -->
 			<view class="price-box">
-				<text class="price-tip">¥<text class="price">{{ carDetail.cars.SaleAMT }}万</text></text>
+				<text v-if="carDetail.cars.SaleAMT" class="price-tip">¥<text class="price">{{ carDetail.cars.SaleAMT }}万</text></text>
 				<!-- <text class="price">{{ carDetail.cars.SaleAMT }}万</text> -->
 				<view>
 					<view class='cu-tag' style="background-color:white">
@@ -29,7 +30,7 @@
 			<view class="c-list">
 				<view class="c-row b-b">
 					<view class="con-list">
-						<text>销售顾问: {{ carDetail.cars.CreateName?carDetail.cars.CreateName:""}}({{ carDetail.shop.name }})</text>
+						<text>销售顾问: {{ carDetail.cars.CreateName?carDetail.cars.CreateName:""}}({{ carDetail.shop.name?carDetail.shop.name:"" }})</text>
 						<text>门店地址: {{ carDetail.shop.address? carDetail.shop.address:''}}</text>
 						<text>发布时间: {{ carDetail.cars.CreateDate? carDetail.cars.CreateDate.split('T')[0]:""}}</text>
 						<text class='cuIcon-dianhua text-orange' style="font-size: 16px;" @click="dialPhoneNumber()">联系电话: {{ carDetail.Telephone?carDetail.Telephone:""}}</text>
@@ -118,7 +119,8 @@
 					<view class="guess-section">
 						<view v-for="(item, index) in recomList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 							<view class="image-wrapper">
-								<image :src="imgUrl+item.filename" mode="aspectFit"></image>
+								<!-- <image :src="imgUrl+item.filename" mode="aspectFit"></image> -->
+								<image :src="imgUrl+item.filename" mode="scaleToFill"></image>
 							</view>
 							<!-- <text class="title clamp">{{item.FullName}}</text> -->
 							<view>{{item.FullName}}</view>
@@ -248,18 +250,28 @@
 		//#endif
 		//#ifdef MP-WEIXIN
 		onShareAppMessage(res) {
+			const currentUser = uni.getStorageSync('userInfo') || ''
+			const currentUrl = '/pages/product/product?id=' + this.carDetail.cars.ID
 		  if (res.from === 'button') {// 来自页面内分享按钮
 		    console.log(res.target)
 		  }
 			console.log('微信分享', res)
 			console.log(this.carDetail.cars.FullName)
+			console.log('分享用户', currentUser)
+			console.log('分享链接', currentUrl)
 		  return {
 		    title: this.carDetail.cars.FullName,
-		    path: '/pages/product/product?id=' + this.carDetail.cars.ID
+		    path: currentUrl
 		  }
 		},
 		//#endif
-		
+		onBackPress(){
+			console.log('fanhui')
+			/* uni.navigateTo({
+				url: '/pages/car/list'
+			});
+			return true */
+		},
 		async onLoad(options) {
 			var _this = this
 			// console.log(options) 
@@ -267,9 +279,9 @@
 			console.log('微信分享', wxShare.methods) 
 			console.log('微信分享', wxShare.methods.wechatShare) */
 			
-			console.log('微信分享方法?', _this.wechatShare) 
+			console.log('微信分享方法?', _this.wechatShare) 	
 			// 车辆详情
-			this.ispreview = options.ispreview == 1 ? true : false
+			_this.ispreview = options.ispreview == 1 ? true : false
 			// console.log(this.ispreview)
 			uni.showLoading({
 				title: "加载中",
@@ -279,13 +291,16 @@
 			let carDetail = await getCarDetail({
 				id
 			})
+			if(options.shareUser){ //授权分享
+				
+			}
 			this.carDetail = carDetail.data.Data;
 			//#ifdef H5
 			_this.setShare()
 			//#endif
 			// console.log(this.carDetail)
-			if (this.carDetail.cars.BuyDate == null) {
-				this.carDetail.cars.BuyDate = ''
+			if (_this.carDetail.cars.BuyDate == null) {
+				_this.carDetail.cars.BuyDate = ''
 			}
 			//是否收藏
 			uni.getStorage({
@@ -398,19 +413,18 @@
 			this.car.Carid = options.id
 			this.car.SaleAMTMin = await this.carDetail.cars.SaleAMT - 5 > 0 ? this.carDetail.cars.SaleAMT - 5 : 1
 			this.car.SaleAMTMax = await this.carDetail.cars.SaleAMT + 5
-			var that = this
 			//#ifndef H5
 			uni.getStorage({
 				key: 'city',
 				success: function(res) {
-					that.city = res.data
+					_this.city = res.data
 					let arr = res.data.split("")
 					let index = arr.length - 1
 					if (arr[index] == "市") {
 						let arr1 = arr.pop()
-						that.car.city_name = arr.join("")
+						_this.car.city_name = arr.join("")
 					} else {
-						that.car.city_name = res.data
+						_this.car.city_name = res.data
 					}
 				}
 			});
@@ -419,23 +433,23 @@
 			uni.getStorage({
 				key: 'citys',
 				success: function(res) {
-					that.city = res.data
+					_this.city = res.data
 					let arr = res.data.split("")
 					let index = arr.length - 1
 					if (arr[index] == "市") {
 						let arr1 = arr.pop()
-						that.car.city_name = arr.join("")
+						_this.car.city_name = arr.join("")
 					} else {
-						that.car.city_name = res.data
+						_this.car.city_name = res.data
 					}
 				}
 			});
 			//#endif
+			await uni.hideLoading()
 			let recomList = await getCarList({ ...this.car
 			});
 			this.recomList = recomList.data.Data.DataList
 			this.transmissionConfig = transmissionConfig;
-			await uni.hideLoading()
 		},
 		methods: {
 			//规格弹窗开关
@@ -472,15 +486,21 @@
 			//分享
 			setShare(){
 				var _this = this
-				console.log('分享')
+				const currentUser = uni.getStorageSync('userInfo') || ''
+				let currentUrl = window.location.href.split('#')[0]+'#'+window.location.href.split('#')[1]
+				console.log('分享用户', currentUser)
+				console.log('分享链接', currentUrl)
+				if(currentUser){
+					currentUrl += '?shareUser=' + currentUser.id
+				}
 				/*const share_name = this.shareName 
 				const share_img = this.shareImg */
 				const shareInfo = {
 				 title: `淘车乐二手车`,
 				  desc: _this.carDetail.cars.FullName,
-				  // link: window.location.href.split('#')[0] + '#/cars/cargoodinfo?' + 'cid=' + this.$route.query.cid,
-				  link: window.location.href.split('#')[0]+'#'+window.location.href.split('#')[1],
-				  img: _this.imgUrl + _this.shareImg
+				  // link: window.location.href.split('#')[0]+'#'+window.location.href.split('#')[1],
+					link: currentUrl,
+				  img: _this.imgUrl +'/'+ _this.carDetail.carimages[0].filename
 				}
 				// mixins
 				/*console.log('1')
@@ -611,7 +631,7 @@
 
 	page {
 		background: $page-color-base;
-		padding-bottom: 160upx;
+		/* padding-bottom: 160upx; */
 	}
 
 	uni-page-body {
@@ -683,7 +703,7 @@
 	}
 
 	.carousel {
-		height: 722upx;
+		height: 500upx;
 		position: relative;
 
 		.collect {
@@ -959,7 +979,7 @@
 			flex-direction: column;
 			font-size: $font-base;
 			color: $font-color-base;
-			padding-left: 26upx;
+			/* padding-left: 26upx; */
 
 			.con {
 				font-size: $font-base;
@@ -1290,7 +1310,7 @@
 
 		.image-wrapper {
 			width: 100%;
-			height: 330upx;
+			height: 230upx;
 			border-radius: 3px;
 			overflow: hidden;
 

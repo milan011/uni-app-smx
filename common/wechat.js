@@ -23,7 +23,7 @@ export default {
         console.log(res)*/
         const wechatInfo = res.data.Data
         wx.config({
-            debug: false,
+            debug: true,
             /*appId: 'wx195ad83501ef1dab', // 必填，公众号的唯一标识
             timestamp: 1577695466, // 必填，生成签名的时间戳
             nonceStr: 'sdfsdkfsdfksjoeigerk', // 必填，生成签名的随机串
@@ -36,6 +36,8 @@ export default {
               'previewImage',
               'hideAllNonBaseMenuItem',
               'showMenuItems',
+							"updateAppMessageShareData",
+							"updateTimeLineShareData",
               'onMenuShareTimeline',
               'onMenuShareAppMessage',
               'chooseWXPay',

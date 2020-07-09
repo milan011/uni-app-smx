@@ -49,8 +49,9 @@
 				activityData: null,
 				oppData:{
 					name: '卖车游客',
-					mobile: '13645120124',
+					mobile: '',
 					contents: '',
+					enroll_type: '',
 					shopid: 1,
 					city_name: '',
 					category_name: ''
@@ -91,6 +92,7 @@
 						_this.actDom = item.content
 						_this.imgUrl = Config.img_url + item.img
 						_this.oppData.name = item.title
+						_this.oppData.enroll_type = item.enrollType
 						console.log(_this.title)
 						console.log(_this.actDom)
 						console.log(_this.imgUrl)

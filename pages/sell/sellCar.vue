@@ -214,6 +214,7 @@
 					mobile: '',
 					contents: '',
 					shopid: '',
+					enroll_type: '2',
 					city_name: '',
 					category_name: ''
 				},

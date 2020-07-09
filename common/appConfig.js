@@ -81,6 +81,15 @@ const carUseConfig = [
 	{key: 2, name: '公用/商务'},
 	{key: 3, name: '运营'},
 ]
+//商机类型 
+const enrollTypeConfig = [
+	{key: 1, name: '买车'},
+	{key: 2, name: '卖车'},
+	{key: 3, name: '贷款'},
+	{key: 4, name: '保险'},
+	{key: 5, name: '评估'},
+	{key: 6, name: '加盟'},
+]
 //使用条件
 const useconditionsConfig = [
 	{key: 0, name: '未知'},
@@ -211,6 +220,7 @@ export {
 	carUseConfig,
 	useconditionsConfig,
 	maintainingConfig,
+	enrollTypeConfig,
 	inputStatusConfig,
 	pgPartFConfig,
 	pgPartJConfig,

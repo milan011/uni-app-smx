@@ -84,7 +84,7 @@
 				ifOnShow: false,
 				car: {
 					PageIndex: 1,
-					PageSize: 5,
+					PageSize: 16,
 					CityName: "",
 					CarAges: "",
 					Factory: "",
@@ -111,22 +111,22 @@
 		},
 		onHide(){
 		  // console.log('this.ifOnShow=true')
-			uni.removeStorage({
+			/* uni.removeStorage({
 				key: 'selectConditions',
 				success: (res) => {
 					
 				}
 			})
-		  this.ifOnShow = true
+		  this.ifOnShow = true */
 		},
 		async onShow(){
-			var _this = this
+			/* var _this = this
 			if(_this.ifOnShow){
 				await _this.pageInit()
 				const valCond = _this.condDell(_this.filterDropdownValueM)
 				_this.filterDropdownValue = _this.filterDropdownValueM
 				_this.confirm(valCond)
-			}
+			} */
 		},
 		async onLoad(options) {
 			let _this = this
@@ -640,6 +640,11 @@
 	}
 </script>
 <style>
+	/* #ifdef H5 */
+	.HMfilterDropdown{
+		top:0px;
+	}
+	/* #endif */
 	.cu-card.article>.cu-item .content {
 		padding: 0px;
 	}

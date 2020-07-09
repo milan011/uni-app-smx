@@ -475,7 +475,15 @@
 			},
 			handlerVin(event) {
 				const vinCode = event.detail.value
-				vinRepeatCheck(vinCode).then(res => {
+				const currentUser = uni.getStorageSync('userInfo')
+				const userShop = currentUser.pshop_id
+				const objVin = {
+					vin: vinCode,
+					pid: currentUser.pshop_id
+				}
+				// console.log('mend', userShop)
+				// return false
+				vinRepeatCheck(objVin).then(res => {
 					if (res.data.Data) {
 						this.$api.msg(`您输入的vin码已存在`, 2000)
 					} else {

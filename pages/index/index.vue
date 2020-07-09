@@ -172,7 +172,7 @@
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
-	import { getMarketShopList, getMarketByAppid } from '@/api/shop.js'
+	import { getMarketShopList, getMarketByAppid, getMarketByDomain } from '@/api/shop.js'
 	import { getStorageByKey } from '@/common/storage.js'
 	const Qs = require('qs');
 	export default {
@@ -213,7 +213,7 @@
 				imgUrl: Config.img_url,
 				car: {
 					PageIndex: 1,
-					PageSize: 4,
+					PageSize: 16,
 					CityName: "",
 					CarAges: "",
 					Factory: "",
@@ -234,6 +234,7 @@
 					P_Shop_Id: '',
 					Sale_number: -1
 				},
+				marketDomain: null,
 				ifOnShow: false,
 				city: "",
 				total: "",
@@ -247,7 +248,7 @@
 		async onShow(){
 			// console.log('showle',this.ifOnShow)
 			var _this = this
-			// if(_this.ifOnShow){
+			if(_this.ifOnShow){
 				await getStorageByKey('pshop').then(res=>{
 					// console.log('showle', res)
 					if(res){
@@ -261,7 +262,7 @@
 						})
 					}
 				})
-			// }	
+			}	
 		},
 		async onLoad() {
 			var _this = this	
@@ -287,7 +288,22 @@
 					_this.city = res
 				})
 			}
-			
+			//#ifdef H5
+			// H5确定pshop
+			_this.marketDomain = window.location.host.split(".")[0]
+			console.log('当前子域名',_this.marketDomain)
+			getMarketByDomain({shopurl: _this.marketDomain}).then(res=>{
+				if(res.data.Data.shop){
+					const currentMarket = res.data.Data.shop
+					console.log(res.data.Data.shop)
+					_this.allMarket = false
+					_this.marketCurrent = null
+					_this.notAppId = false
+					uni.setStorageSync('pshop', {id: currentMarket.id, name: currentMarket.name})
+					_this.listQueryReset({P_Shop_Id: currentMarket.id})
+				}
+			})
+			//#endif
 			//#ifdef MP-WEIXIN
 			//小程序appId确定pshop
 			const currentAppId = uni.getAccountInfoSync().miniProgram.appId
@@ -466,6 +482,7 @@
 			navToMarketPage(pshop){
 				// console.log('去一级市场', pshop)
 				var _this = this
+				//#ifdef MP-WEIXIN
 				uni.setStorage({
 					key: 'pshop',
 					data: {id:pshop.id, name: pshop.name},
@@ -480,8 +497,14 @@
 							_this.total = res.data.Data.Total
 						})
 					}
-				})
-				
+				})	
+				//#endif
+				//#ifdef H5
+				console.log(_this.marketDomain + 'simaxian.com')
+				// let url = 'https://' + _this.marketDomain + 'simaxian.com'
+				let url = 'http://h5.simaxian.com/#/'
+				window.location.href = url
+				//#endif
 			},
 			//详情页
 			navToDetailPage(item) {

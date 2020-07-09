@@ -174,6 +174,13 @@
 			</view>
 		</view>
 		<!-- 跟进modal End -->
+		<!-- 获取数据状态提示 Begain -->
+		<view class="cu-load load-modal" v-if="loadModal">
+			<!-- <view class="cuIcon-emojifill text-orange"></view> -->
+			<image src="/static/load.png" mode="aspectFit"></image>
+			<view class="gray-text">获取车源...</view>
+		</view>
+		<!-- 获取数据状态提示 End -->
 		<!-- <uni-load-more :status="loadingType"></uni-load-more> -->
 	</view>
 </template>
@@ -216,6 +223,9 @@
 				pgShow: false,
 				modalName:null,
 				carId: null,
+				loadModal: false,
+				carCompleted: false,
+				followCompleted: false,
 				loadingType: 'loading', //加载更多状态
 				detail: {
 					cars: {
@@ -263,8 +273,9 @@
 			this.carStatusConfig = carStatusConfig
 			this.putOnStatusConfig = putOnStatusConfig
 			console.log('status_config',carStatusConfig)
-			this.getCarDetailById()
 			this.getCarFollowById()
+			this.getCarDetailById()	
+			this.loadModalDel()
 		},
 		onBackPress(){
 			console.log('fanhui')
@@ -295,7 +306,19 @@
 		
 		// #endif
 		computed: {
-			...mapState(['hasLogin', 'userInfo'])
+			...mapState(['hasLogin', 'userInfo']),
+			listenDateComplete () {
+			  const {carCompleted,followCompleted} = this
+			  return {carCompleted,followCompleted}
+			}
+		},
+		watch: {
+		  listenDateComplete (val) {
+		  	console.log('listenChange :', val)
+				if (val.carCompleted && val.followCompleted) {
+		      this.$set(this,'loadModal',false)
+		    }
+		  }
 		},
 		methods: {
 			getCarDetailById(){ //获取车源详情
@@ -303,19 +326,16 @@
 					console.log('carDetail',res.data)
 					this.detail = res.data.Data
 					this.assessInfo.InitPrice = res.data.Data.cars.InitPrice
+					this.carCompleted = true
 					// this.loadingType = 'loading'
-				}).catch(err => {
-					this.$api.msg(`获取车源数据失败,请刷新重试`);
 				})
 			},
 			getCarFollowById(){ //获取跟踪信息
 				getCarFollow(this.carId).then(res => {
 					console.log('carfollow',res.data)
 					this.followInfo = res.data.Data[0]
+					this.followCompleted = true
 					// this.loadingType = 'loading'
-				}).catch(err => {
-					// console.log(err)
-					this.$api.msg(`获取跟踪数据失败,请刷新重试`);
 				})
 			},
 			carPutOnDel(){
@@ -393,6 +413,19 @@
 							this.modalName = null
 						}
 					})
+			},
+			loadModalDel(){
+				setTimeout(() => {
+					if(!(this.carCompleted && this.followCompleted)){
+						this.loadModal = true
+					}
+				}, 1500)
+				setTimeout(() => {
+					if(!(this.carCompleted && this.followCompleted)){
+						this.$api.msg(`获取数据失败,请返回重试`);
+					}
+					this.loadModal = false
+				}, 8000)
 			},
 			/**
 			 * 统一跳转接口,拦截未登录路由

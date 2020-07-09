@@ -61,11 +61,17 @@
 					this.getUserList()
 				},
 				fail: () => {
+					console.log('登录失效')
 					uni.showToast({
 						title: "请先登录",
 						icon: "none",
 						duration: 1500
 					})
+					setTimeout(()=>{
+						uni.navigateTo({
+							url: '/pages/public/login'
+						})
+					}, 1500)			
 				}
 			})
 		},

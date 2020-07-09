@@ -93,23 +93,34 @@
 			updateManager.onCheckForUpdate(function(res) {
 				// 请求完新版本信息的回调
 				console.log(res.hasUpdate);
+				if(res.hasUpdate){
+					updateManager.onUpdateReady(function(res) {
+						uni.showModal({
+							title: '更新提示',
+							content: '新版本已经准备好，是否重启应用？',
+							success(res) {
+								if (res.confirm) {
+									// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+									updateManager.applyUpdate();
+								}
+							}
+						});
+					});
+					updateManager.onUpdateFailed(function(res) {
+						// 新的版本下载失败
+						uni.showModal({
+							title: '已有新版本~~',
+							content: '新版本已经上线,请删除当前小程序重新扫码或搜索打开',
+						})
+					})
+				}/* else{
+					uni.showModal({
+						title: '提示',
+						content: '当前小程序版本较低,请您升级最新版本可获得更好体验',
+					})
+				} */
 			});
-			updateManager.onUpdateReady(function(res) {
-				uni.showModal({
-					title: '更新提示',
-					content: '新版本已经准备好，是否重启应用？',
-					success(res) {
-						if (res.confirm) {
-							// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-							updateManager.applyUpdate();
-						}
-					}
-				});
-			});
-			updateManager.onUpdateFailed(function(res) {
-				// 新的版本下载失败
-
-			})
+			
 			//#endif
 			//#ifdef APP-PLUS
 			amapPlugin.getRegeo({
@@ -212,7 +223,9 @@
 		/* src: url('https://at.alicdn.com/t/font_1078604_w4kpxh0rafi.ttf') format('truetype'); */
 		src: url('~@/static/font_1078604_w4kpxh0rafi.ttf') format('truetype');
 	}
-
+	/* #ifdef H5 */
+	  uni-page-head { display: none; }
+	 /* #endif */
 	.yticon {
 		font-family: "yticon" !important;
 		font-size: 16px;
