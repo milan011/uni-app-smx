@@ -232,6 +232,7 @@
 				tabCurrentIndex: 0,
 				recomList: [],
 				favorite: false,
+				currentUser: '',
 				car: {
 					PageIndex: 1,
 					PageSize: 4,
@@ -252,11 +253,14 @@
 		onShareAppMessage(res) {
 			const currentUser = uni.getStorageSync('userInfo') || ''
 			const currentUrl = '/pages/product/product?id=' + this.carDetail.cars.ID
-		  if (res.from === 'button') {// 来自页面内分享按钮
+		  /* if (res.from === 'button') {// 来自页面内分享按钮
 		    console.log(res.target)
-		  }
+		  } */
+			if(_this.currentUser){
+				currentUrl += '?shareUser=' + _this.currentUser.id
+			}
 			console.log('微信分享', res)
-			console.log(this.carDetail.cars.FullName)
+			console.log(_this.carDetail.cars.FullName)
 			console.log('分享用户', currentUser)
 			console.log('分享链接', currentUrl)
 		  return {
@@ -278,7 +282,7 @@
 			/* console.log('微信分享', wxShare) 
 			console.log('微信分享', wxShare.methods) 
 			console.log('微信分享', wxShare.methods.wechatShare) */
-			
+			_this.currentUser = uni.getStorageSync('userInfo') || ''
 			console.log('微信分享方法?', _this.wechatShare) 	
 			// 车辆详情
 			_this.ispreview = options.ispreview == 1 ? true : false
@@ -292,7 +296,7 @@
 				id
 			})
 			if(options.shareUser){ //授权分享
-				
+				console.log('授权用户分享', options.shareUser)
 			}
 			this.carDetail = carDetail.data.Data;
 			//#ifdef H5
@@ -486,12 +490,11 @@
 			//分享
 			setShare(){
 				var _this = this
-				const currentUser = uni.getStorageSync('userInfo') || ''
 				let currentUrl = window.location.href.split('#')[0]+'#'+window.location.href.split('#')[1]
 				console.log('分享用户', currentUser)
 				console.log('分享链接', currentUrl)
-				if(currentUser){
-					currentUrl += '?shareUser=' + currentUser.id
+				if(_this.currentUser){
+					currentUrl += '?shareUser=' + _this.currentUser.id
 				}
 				/*const share_name = this.shareName 
 				const share_img = this.shareImg */

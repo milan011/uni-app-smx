@@ -345,8 +345,10 @@
 			},
 			{
 				"pagePath": "pages/sell/sellCar",
-				"iconPath": "static/tab-cart.png",
-				"selectedIconPath": "static/tab-cart-current.png",
+				"iconPath": "static/tab-sale-car.png",
+				"selectedIconPath": "static/tab-sale-car-current.png",
+				/* "iconPath": "static/tab-cart.png",
+				"selectedIconPath": "static/tab-cart-current.png", */
 				"text": "卖车"
 				// "text": "加盟"
 			},

@@ -263,9 +263,9 @@
 		methods: {
 			//请求数据
 			loadData() {
+				console.log('begain')
 				this.loadingType = 'loading'
-				getCarList({ ...this.car
-				}).then(res => {
+				getCarList({ ...this.car }).then(res => {
 					if (this.cartList.length == 0) {
 						this.cartList = res.data.Data.DataList;
 					} else {
@@ -288,8 +288,15 @@
 						this.loadingType = "nomore"
 						console.log('nomore')
 					}
+				}).catch(err=>{
+					uni.showToast({
+						title:'获取车源超时,您可以尝试重新登录系统',
+						icon:'none'
+					})
+					setTimeout(()=>{
+						uni.hideToast()
+					}, 2000)
 				})
-
 			},
 			//添加车源
 			createCar() {

@@ -46,19 +46,19 @@
 		<!-- 分类 -->
 		<view class="cate-section">
 			<view class="cate-item" @click="toBuy">
-				<image src="/static/temp/c3.png"></image>
+				<image src="/static/temp/buyCar.png"></image>
 				<text>我要买车</text>
 			</view>
 			<view class="cate-item" @click="toSell">
-				<image src="/static/temp/c5.png"></image>
+				<image src="/static/temp/saleCar.png"></image>
 				<text>我要卖车</text>
 			</view>
 			<view class="cate-item" @click="toJoin">
-				<image src="/static/temp/c6.png"></image>
+				<image src="/static/temp/join.png"></image>
 				<text>我要加盟</text>
 			</view>
 			<view class="cate-item" @click="toAbout">
-				<image src="/static/temp/c7.png"></image>
+				<image src="/static/temp/about.png"></image>
 				<text>关于我们</text>
 			</view>
 		</view>

@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="user-section">
-			<image class="bg" src="/static/user-bg.jpg"></image>
+			<image class="bg" src="/static/user-bg.png"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
 					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
@@ -124,6 +124,7 @@
 				coverTransform: 'translateY(0px)',
 				coverTransition: '0s',
 				moving: false,
+				currentUser: '',
 				ifOnShow: false,
 				imgList: [],
 				userGeneralInfo: {
@@ -135,8 +136,11 @@
 			}
 		},
 		
-		onLoad() {
+		onLoad() {		
+			this.currentUser = uni.getStorageSync('userInfo') || ''
 			console.log('是否登录',this.hasLogin)
+			console.log('登录用户',this.userInfo)
+			console.log('登录用户?',this.currentUser)
 			if(this.hasLogin){ //登录用户
 				this.userGeneral()
 			}/* else{
@@ -151,6 +155,9 @@
 		},
 		onShow() {
 			if(this.ifOnShow){
+				/* console.log('是否登录',this.hasLogin)
+				console.log('登录用户',this.userInfo)
+				console.log('登录用户?',this.currentUser) */
 				let imgList = []
 				uni.getStorage({
 					key: 'browseList',

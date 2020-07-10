@@ -80,9 +80,21 @@ httpApi.interceptor.request((config, cancel) => { /* 请求之前拦截器 */
   
   if (!store.state.userInfo.token) { // 如果token不存在，调用cancel 会取消本次请求，但是该函数的catch() 仍会执行
     // alert('token none')
-    cancel('token 不存在') // 接收一个参数，会传给catch((err) => {}) err.errMsg === 'token 不存在'
-  }
-  
+    // cancel('token 不存在') // 接收一个参数，会传给catch((err) => {}) err.errMsg === 'token 不存在'
+		store.dispatch('logout')
+		uni.showToast({
+			title: "请先登录",
+			icon: "none",
+			duration: 1500
+		})
+		setTimeout(()=>{
+			uni.navigateTo({
+				url: '/pages/public/login'
+			});
+		}, 1500)
+  }else{
+		console.log('token存在')
+	}
   return config
 })
 
