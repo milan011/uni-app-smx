@@ -234,13 +234,33 @@
 					P_Shop_Id: '',
 					Sale_number: -1
 				},
+				shareUserInfoId: null,
 				marketDomain: null,
 				ifOnShow: false,
 				city: "",
 				total: "",
 				loadingType: 'loading', //参数loading加载,nomore
 			};
+		},	
+		//#ifdef MP-WEIXIN
+		onShareAppMessage(resault) {
+			const currentUrl = '/pages/index/index'
+			var shareTitle = '驷马先买车宝'
+			var shareImg = '/static/logo-smx.png'
+			getStorageByKey('pshop').then(res=>{
+				if(res){
+					shareTitle = res.name
+					shareImg = res.logo
+				}
+			})
+			console.log('微信分享', resault)
+		  return {
+		    title: shareTitle,
+				imageUrl: shareImg,
+		    path: currentUrl
+		  }
 		},
+		//#endif
 		onHide(){
 		  // console.log('this.ifOnShow=true')
 		  this.ifOnShow = true
@@ -280,6 +300,11 @@
 				_this.listQueryReset({CityName: res})
 				_this.city = res
 			})
+			// 分享用户初始化
+			await getStorageByKey('shareUserInfo').then(res => { 
+				console.log('是否是销售顾问分享', res)
+				_this.shareUserInfoId = res.Uid
+			})	
 			// console.log(_this.car.CityName)
 			if(!_this.car.CityName){ //用户没有选择城市
 				await getStorageByKey('locationCity').then(res => {
@@ -307,7 +332,9 @@
 			//#ifdef MP-WEIXIN
 			//小程序appId确定pshop
 			const currentAppId = uni.getAccountInfoSync().miniProgram.appId
+			// console.log('小程序信息',uni.getAccountInfoSync())
 			// const currentAppId = "wx20ge3d96cesedbb2"
+			/* */
 			_this.marketList.forEach(ele=>{
 				// console.log('当前小程序', currentAppId)
 				if(ele.appid == currentAppId){
@@ -315,7 +342,7 @@
 					_this.allMarket = false
 					_this.marketCurrent = null
 					_this.notAppId = false
-					uni.setStorageSync('pshop', {id: ele.id, name: ele.name})
+					uni.setStorageSync('pshop', {id: ele.id, name: ele.name, logo: ele.shoplogo})
 					_this.listQueryReset({P_Shop_Id: ele.id})
 					/* uni.setTabBarItem({  
 					  index: 2,  
@@ -511,9 +538,16 @@
 				// console.log(item)
 				let id = item.ID;
 				let VIN = item.VIN
-				uni.navigateTo({
-					url: `/pages/product/product?id=${id} `
-				})
+				let shareUser = this.shareUserInfoId ? this.shareUserInfoId : ''
+				if(shareUser){
+					uni.navigateTo({
+						url: `/pages/product/product?id=${id}&shareUser=${shareUser}`
+					})
+				}else{
+					uni.navigateTo({
+						url: `/pages/product/product?id=${id}`
+					})
+				}	
 				/* uni.redirectTo({ //使用redirectTo跳转到页面会显示tabBar
 					url: `/pages/product/product?id=${id}`
 				}) */

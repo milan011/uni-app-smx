@@ -175,6 +175,7 @@
 	import listCell from '@/components/mix-list-cell';
 	import vinCar from './components/vin-car';
 	import statusCar from './components/status-car';
+	import { getShareUserInfo } from '@/api/user.js'
 	import {
 		getCarDetail,
 		getCarCheckStatus,
@@ -233,6 +234,7 @@
 				recomList: [],
 				favorite: false,
 				currentUser: '',
+				shareUser: '',
 				car: {
 					PageIndex: 1,
 					PageSize: 4,
@@ -292,13 +294,32 @@
 				mask: true
 			})
 			let id = options.id;
-			let carDetail = await getCarDetail({
+			var carDetail = await getCarDetail({
 				id
 			})
+			console.log('车源详情', carDetail)
 			if(options.shareUser){ //授权分享
 				console.log('授权用户分享', options.shareUser)
+				await getShareUserInfo( options.shareUser).then(res=>{ //获取授权用户信息
+					_this.shareUser = res.data.Data
+					uni.setStorageSync('shareUserInfo', res.data.Data)
+				})
+				/* _this.shareUser = {
+					Uid: 3,
+					UserName: 'wcg',
+					UserPhone: '13731080174',
+					ShopName:'分享店',
+					ShopAddr: '石家庄一条街'
+				} */
+				carDetail.data.Data.cars.CreateName = _this.shareUser.UserName
+				carDetail.data.Data.shop.name = _this.shareUser.ShopName
+				carDetail.data.Data.shop.address = _this.shareUser.ShopAddr
+				carDetail.data.Data.Telephone = _this.shareUser.UserPhone
+			}else{
+				uni.removeStorageSync('shareUserInfo')
 			}
-			this.carDetail = carDetail.data.Data;
+			_this.carDetail = carDetail.data.Data;
+			console.log('chey', _this.carDetail)
 			//#ifdef H5
 			_this.setShare()
 			//#endif
@@ -482,16 +503,26 @@
 				this.$refs.share.toggleMask();
 			}, */
 			navToDetailPage(item) {
-				let id = item.ID;
-				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
-				})
+				var _this = this
+				let id = item.ID;	
+				let shareUserId = _this.shareUser.Uid
+				if(shareUserId){
+					let toUrl = `/pages/product/product?id=${id}&shareUser=${shareUserId}`
+					uni.navigateTo({
+						url: toUrl
+					})
+				}else{
+					let toUrl = `/pages/product/product?id=${id}`
+					uni.navigateTo({
+						url: toUrl
+					})
+				}	
 			},
 			//分享
 			setShare(){
 				var _this = this
 				let currentUrl = window.location.href.split('#')[0]+'#'+window.location.href.split('#')[1]
-				console.log('分享用户', currentUser)
+				console.log('分享用户', _this.currentUser)
 				console.log('分享链接', currentUrl)
 				if(_this.currentUser){
 					currentUrl += '?shareUser=' + _this.currentUser.id

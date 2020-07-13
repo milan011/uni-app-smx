@@ -82,6 +82,7 @@
 				goodsList: [],
 				imgUrl: Config.img_url,
 				ifOnShow: false,
+				shareUserInfoId: null,
 				car: {
 					PageIndex: 1,
 					PageSize: 16,
@@ -234,6 +235,11 @@
 						_this.car.P_Shop_Id = res.id
 					}
 				})
+				// 分享用户初始化
+				await getStorageByKey('shareUserInfo').then(res => { 
+					console.log('是否是销售顾问分享', res)
+					_this.shareUserInfoId = res.Uid
+				})	
 				// 城市初始化
 				await getStorageByKey('selectCity').then(res => { //用户选择城市
 					// console.log('用户选择城市', res)
@@ -407,7 +413,7 @@
 					duration: 300,
 					scrollTop: 0
 				})
-				console.log('here3')
+				// console.log('here3')
 				this.loadData('refresh', 1);
 				uni.showLoading({
 					title: '正在加载'
@@ -557,9 +563,19 @@
 			navToDetailPage(item) {
 				//测试数据没有写id，用title代替
 				let id = item.ID
-				uni.navigateTo({
-					url: `/pages/product/product?id=${id}&VIN=${item.VIN}`
-				})
+				let shareUser = this.shareUserInfoId ? this.shareUserInfoId : ''
+				/* if(this.shareUserInfoId){
+					let shareUser = this.shareUserInfoId
+				} */
+				if(shareUser){
+					uni.navigateTo({
+						url: `/pages/product/product?id=${id}&VIN=${item.VIN}&shareUser=${shareUser}`
+					})
+				}else{
+					uni.navigateTo({
+						url: `/pages/product/product?id=${id}&VIN=${item.VIN}`
+					})
+				}		
 			},
 			stopPrevent() {},
 			// 获取车型列表
@@ -569,19 +585,22 @@
 						resolve()	
 					}else{
 						getCarTypeList().then(res => {
-							let list = res.data.Data
-							list.forEach(ele => {
-								ele.name = ele.CarTypeMark
-								ele.value = ele.CarTypeMark
-								ele.submenu = ele.BrandLst
-								ele.submenu.forEach(i => {
-									i.name = i.brand
-									i.value = i.brand
+							if(res.data.Data){
+								let list = res.data.Data
+								list.forEach(ele => {
+									ele.name = ele.CarTypeMark
+									ele.value = ele.CarTypeMark
+									ele.submenu = ele.BrandLst
+									ele.submenu.forEach(i => {
+										i.name = i.brand
+										i.value = i.brand
+									})
 								})
-							})
-							// console.log('有品牌吗',menuExam.menuExam[1].submenu.length)
-							menuExam.menuExam[1].submenu.push(...list)	
-							// console.log('cartyep')
+								// console.log('有品牌吗',menuExam.menuExam[1].submenu.length)
+								menuExam.menuExam[1].submenu.push(...list)	
+								// console.log('cartyep')
+								// resolve()
+							}		
 							resolve()
 						})
 					}

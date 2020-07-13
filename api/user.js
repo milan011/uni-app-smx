@@ -33,3 +33,8 @@ export function getUserGeneral() {
 	const requestUrl = Config.url_config + '/user/sysinfo'
 	return httpApi.get(requestUrl)
 }
+// 获取用户详情(分享用)
+export function getShareUserInfo(userId) {
+	const requestUrl = Config.url_config + '/user/userinfo?id=' + userId
+	return httpApi.get(requestUrl)
+}
