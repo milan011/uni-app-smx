@@ -77,7 +77,7 @@
 				menuData: [],
 				condTagList: [],
 				filterDropdownValue: [],
-				filterDropdownValueM: [[0],[0,0],[[]], [[],[],[]]],
+				filterDropdownValueM: [[0],[0,0],[[]], [[],[],[],[]]],
 				selectConditions: {},
 				goodsList: [],
 				imgUrl: Config.img_url,
@@ -285,7 +285,7 @@
 			},
 			async selectCondInit() {
 				var _this = this
-				let condArr = [[0],[0,0],[[]], [[],[],[]]]
+				let condArr = [[0],[0,0],[[]], [[],[],[],[]]]
 				let topIndex = 1
 				let firIndex = 0
 				let senIndex = 0
@@ -331,7 +331,7 @@
 							resolve()
 						},
 						fail: function() {
-							_this.filterDropdownValueM = [[0],[0,0],[[]], [[],[],[]]]
+							_this.filterDropdownValueM = [[0],[0,0],[[]], [[],[],[],[]]]
 							resolve()
 						}
 					});				
@@ -448,7 +448,7 @@
 				let sortArr = [] //排序条件
 				let brandArr = [] //品牌条件
 				let priceArr = [[]] //价格条件
-				let otherArr = [[],[],[]] //其他筛选
+				let otherArr = [[],[],[],[]] //其他筛选
 				console.log('传入的条件数组', data)
 				console.log('筛选菜单', _this.menuData)
 				//处理排序条件
@@ -475,6 +475,9 @@
 				if(data[3][2].length > 0){
 					otherArr[2] = _this.menuData[3]['submenu'][2]['submenu'][data[3][2][0]]['value']
 				}
+				if(data[3][3].length > 0){
+					otherArr[3] = _this.menuData[3]['submenu'][3]['submenu'][data[3][3][0]]['value']
+				}
 				console.log('其他条件', otherArr)
 				returnArr['index'] = data
 				returnArr['value'] = [sortArr,brandArr,priceArr,otherArr]
@@ -500,7 +503,8 @@
 					{name: '价格', content: ''},
 					{name: '车辆类型', content: ''},
 					{name: '变速箱', content: ''},
-					{name: '门店', content: ''},
+					{name: '车龄', content: ''},
+					{name: '门店', content: ''},		
 				]
 				if(val['index'][1][0] > 0){
 					// console.log('品牌', this.menuData[1]['submenu'][val['index'][1][0]]['BrandLst'][val['index'][1][1]]['name'])
@@ -519,8 +523,12 @@
 					condTags[3]['content'] = this.menuData[3]['submenu'][1]['submenu'][val['index'][3][1][0]]['name']
 				}
 				if(val['index'][3][2].length > 0){
-					// console.log('门店index', val['index'][3][2])
+					// console.log('车龄index', val['index'][3][2])
 					condTags[4]['content'] = this.menuData[3]['submenu'][2]['submenu'][val['index'][3][2][0]]['name']
+				}
+				if(val['index'][3][3].length > 0){
+					// console.log('门店index', val['index'][3][2])
+					condTags[5]['content'] = this.menuData[3]['submenu'][3]['submenu'][val['index'][3][3][0]]['name']
 				}
 				_this.condTagList = condTags
 				console.log('筛选条件content', condTags)
@@ -572,7 +580,12 @@
 					this.car.Transmission = ""
 				}
 				if (value[3][2][0]) {
-					this.car.Shop_Id = value[3][2][0]
+					this.car.CarAges = value[3][2][0]
+				} else {
+					this.car.CarAges = ""
+				}
+				if (value[3][3][0]) {
+					this.car.Shop_Id = value[3][3][0]
 				} else {
 					this.car.Shop_Id = ""
 				}
