@@ -117,17 +117,40 @@
 				success: (res) => {
 					
 				}
-			})
-		  this.ifOnShow = true */
+			})*/
+		  this.ifOnShow = true 
 		},
 		async onShow(){
-			/* var _this = this
+			var _this = this
 			if(_this.ifOnShow){
-				await _this.pageInit()
+				getStorageByKey('pshop').then(res => { //一级市场更换		
+					/* console.log('缓存pshopid', res.id)
+					console.log('当前pshopid', _this.car.P_Shop_Id) */
+					if(_this.car.P_Shop_Id){ //当前为某一级市场
+						if(res.id !== _this.car.P_Shop_Id){ //切换了市场
+							console.log('换市场了', _this.car.P_Shop_Id + 'to' + res.id)
+							_this.car.P_Shop_Id = res.id
+							_this.getshoplist(res.id)
+							const valCond = _this.condDell(_this.filterDropdownValueM)
+							_this.filterDropdownValue = _this.filterDropdownValueM
+							_this.confirm(valCond)
+						}
+					}else{ //当前为总平台
+						if(res.id){ //选择了市场
+							console.log('第一次选择市场', res.id)
+							_this.car.P_Shop_Id = res.id
+							_this.getshoplist(res.id)
+							const valCond = _this.condDell(_this.filterDropdownValueM)
+							_this.filterDropdownValue = _this.filterDropdownValueM
+							_this.confirm(valCond)
+						}
+					}
+				})
+				/* await _this.pageInit()
 				const valCond = _this.condDell(_this.filterDropdownValueM)
 				_this.filterDropdownValue = _this.filterDropdownValueM
-				_this.confirm(valCond)
-			} */
+				_this.confirm(valCond) */
+			}
 		},
 		async onLoad(options) {
 			let _this = this
@@ -616,7 +639,7 @@
 						// console.log('总平台')
 						// console.log(menuExam.menuExam[3].submenu)
 						// console.log(menuExam.menuExam[3].submenu[2])
-						menuExam.menuExam[3].submenu[2] = {}
+						menuExam.menuExam[3].submenu[3] = {}
 						// menuExam.menuExam[3].submenu[2].delete()
 						resolve()
 					}else{
@@ -634,21 +657,21 @@
 							// menuExam.menuExam[3].submenu[2].submenu.push(...list)
 							// menuExam.menuExam[3].submenu[2].submenu = list
 							// menuExam.menuExam[3].submenu[2].name = '所属门店'
-							menuExam.menuExam[3].submenu[2] = {name: '所属门店', submenu: list}
+							menuExam.menuExam[3].submenu[3] = {name: '所属门店', submenu: list}
 							//#endif
 							//#ifndef MP-WEIXIN 
 							// menuExam.menuExam[3].submenu[2]['submenu'] = list
 							// menuExam.menuExam[3].submenu[2]['name'] = '所属门店'
-							menuExam.menuExam[3].submenu[2] = {name: '所属门店', submenu: list}
+							menuExam.menuExam[3].submenu[3] = {name: '所属门店', submenu: list}
 							//#endif
 							resolve()
 						}).catch(err=>{
 							// console.log('pshoperr',err)
 							//#ifdef MP-WEIXIN
-							menuExam.menuExam[3].submenu[2]['submenu'] = {}
+							menuExam.menuExam[3].submenu[3]['submenu'] = {}
 							//#endif
 							//#ifndef MP-WEIXIN 
-							menuExam.menuExam[3].submenu[2]['submenu'] = {}
+							menuExam.menuExam[3].submenu[3]['submenu'] = {}
 							//#endif
 							resolve()
 						})

@@ -315,44 +315,54 @@
 			}
 			//#ifdef H5
 			// H5确定pshop
-			_this.marketDomain = window.location.host.split(".")[0]
-			console.log('当前子域名',_this.marketDomain)
-			getMarketByDomain({shopurl: _this.marketDomain}).then(res=>{
-				if(res.data.Data.shop){
-					const currentMarket = res.data.Data.shop
-					console.log(res.data.Data.shop)
+			await getStorageByKey('pshop').then(res=>{
+				if(res){
+					// console.log('当前市场load', res.name)
+					_this.marketCurrent = res.name
 					_this.allMarket = false
-					_this.marketCurrent = null
-					_this.notAppId = false
-					uni.setStorageSync('pshop', {id: currentMarket.id, name: currentMarket.name})
-					_this.listQueryReset({P_Shop_Id: currentMarket.id})
+					_this.listQueryReset({P_Shop_Id: res.id})
+				}else{
+					_this.marketDomain = window.location.host.split(".")[0]
+					console.log('当前子域名',_this.marketDomain)
+					getMarketByDomain({shopurl: _this.marketDomain}).then(res=>{
+						if(res.data.Data.shop){
+							const currentMarket = res.data.Data.shop
+							console.log(res.data.Data.shop)
+							_this.allMarket = false
+							_this.marketCurrent = null
+							_this.notAppId = false
+							uni.setStorageSync('pshop', {id: currentMarket.id, name: currentMarket.name})
+							_this.listQueryReset({P_Shop_Id: currentMarket.id})
+						}
+					})
 				}
 			})
 			//#endif
 			//#ifdef MP-WEIXIN
 			//小程序appId确定pshop
-			const currentAppId = uni.getAccountInfoSync().miniProgram.appId
-			// console.log('小程序信息',uni.getAccountInfoSync())
-			// const currentAppId = "wx20ge3d96cesedbb2"
-			/* */
-			_this.marketList.forEach(ele=>{
-				// console.log('当前小程序', currentAppId)
-				if(ele.appid == currentAppId){
-					// console.log('当前市场load',ele.name)
+			await getStorageByKey('pshop').then(res=>{
+				if(res){
+					_this.marketCurrent = res.name
 					_this.allMarket = false
-					_this.marketCurrent = null
-					_this.notAppId = false
-					uni.setStorageSync('pshop', {id: ele.id, name: ele.name, logo: ele.shoplogo})
-					_this.listQueryReset({P_Shop_Id: ele.id})
-					/* uni.setTabBarItem({  
-					  index: 2,  
-					 "pagePath": "pages/sell/sellCar",
-					 "iconPath": "static/tab-cart.png",
-					 "selectedIconPath": "static/tab-cart-current.png",
-					 "text": "卖车"  
-					}) */ 	
-				}	
-			})
+					_this.listQueryReset({P_Shop_Id: res.id})
+				}else{
+					const currentAppId = uni.getAccountInfoSync().miniProgram.appId
+					// console.log('小程序信息',uni.getAccountInfoSync())
+					// const currentAppId = "wx20ge3d96cesedbb2"
+					/* */
+					_this.marketList.forEach(ele=>{
+						// console.log('当前小程序', currentAppId)
+						if(ele.appid == currentAppId){
+							// console.log('当前市场load',ele.name)
+							_this.allMarket = false
+							_this.marketCurrent = null
+							_this.notAppId = false
+							uni.setStorageSync('pshop', {id: ele.id, name: ele.name, logo: ele.shoplogo})
+							_this.listQueryReset({P_Shop_Id: ele.id})
+						}	
+					})
+				}
+			})	
 			//#endif
 			//#ifndef MP-WEIXIN
 			await getStorageByKey('pshop').then(res=>{
