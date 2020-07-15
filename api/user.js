@@ -1,7 +1,7 @@
 import Config from '@/common/config.js'
 // import uniRequest from 'uni-request'
 import {
-	httpApi
+	httpApi, http
 } from '@/js_sdk/luch-request/index.js';
 // 获取用户列表
 export function getcustomerList(data) {
@@ -36,5 +36,5 @@ export function getUserGeneral() {
 // 获取用户详情(分享用)
 export function getShareUserInfo(userId) {
 	const requestUrl = Config.url_config + '/user/userinfo?id=' + userId
-	return httpApi.get(requestUrl)
+	return http.get(requestUrl)
 }

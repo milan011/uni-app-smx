@@ -26,3 +26,10 @@ export function getMarketDetail(p_shop_id) {
   // return http.get(requestUrl, { params: { pid: '0' } })
   return http.get(requestUrl)
 }
+
+//根据小程序id获取一级市场信息:logo,关于我们等
+export function getMarketDetailByAppId(appId) {
+	const requestUrl = urlConfig.url_config + '/shop/shopbyappid?appid=' + appId
+  // return http.get(requestUrl, { params: { pid: '0' } })
+  return http.get(requestUrl)
+}

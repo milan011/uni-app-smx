@@ -29,7 +29,7 @@
 				</view>
 			</view>
 		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
+		<uni-load-more :contentText="loadContentText" :status="loadingType"></uni-load-more>
 
 		<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask">
 			<view class="cate-content" @click.stop.prevent="stopPrevent" @touchmove.stop.prevent="stopPrevent">
@@ -70,6 +70,11 @@
 				headerPosition: "fixed",
 				headerTop: "0px",
 				loadingType: 'loading', //加载更多状态
+				loadContentText:{ //加载提示
+					contentdown: "上拉查看更多车源",
+					contentrefresh: "正在加载...",
+					contentnomore: "没有更多车源了"
+				},
 				filterIndex: 0,
 				cateId: 0, //已选三级分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低

@@ -206,7 +206,7 @@
 			"path": "pages/product/list",
 			"style": {
 				// "enablePullDownRefresh": true,
-				"navigationBarTitleText": "车源列表"
+				"navigationBarTitleText": "精品车源"
 			}
 		}, {
 			"path": "pages/sell/sellCar",
@@ -320,7 +320,8 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "驷马先二手车电商平台",
+		// "navigationBarTitleText": "驷马先二手车电商平台",
+		"navigationBarTitleText": "淘车乐二手车电商平台",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"onReachBottomDistance": 1,
 		"backgroundColor": "#f8f8f8"

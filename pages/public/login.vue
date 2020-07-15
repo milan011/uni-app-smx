@@ -168,7 +168,7 @@
 				var _this = this
 				_this.loadModal = true
 				console.log('微信授权登录',code)
-				const sendData = { WxCode: code }
+				const sendData = { WxCode: code, AppId: uni.getAccountInfoSync().miniProgram.appId}
 				/* const sendData = {
 					UserPhone: this.mobile,
 					NewPassword: this.password,
@@ -248,6 +248,7 @@
 						sendData.WxCode = res
 					}) */
 					sendData.WxCode = await _this.getUserWxCode()
+					sendData.AppId =  uni.getAccountInfoSync().miniProgram.appId
 					loginByUserWithCode(sendData).then(res => {
 						console.log('微信登录了',res)
 						if(res.data.ResultType === 0){ //登录成功

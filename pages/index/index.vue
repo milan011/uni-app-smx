@@ -11,7 +11,7 @@
 		<!-- #endif -->
 		<view class="header-search">
 			<view class="cu-bar search bg-white">
-				<view v-if="!allMarket&&notAppId" class="action">
+				<view v-if="(!customizedMarket)&&(!allMarket)" class="action">
 					<text class="cuIcon-back text-gray" @tap="returnToSmx"></text> {{marketCurrent}}
 				</view>
 				<view class="search-form round">
@@ -31,8 +31,8 @@
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular autoplay="true" @change="swiperChange">
-				<!-- <swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})"> -->
-				<swiper-item v-for="(item, index) in carouselListUrl" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
+				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
+				<!-- <swiper-item v-for="(item, index) in carouselListUrl" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})"> -->
 					<image :src="item.src" />
 				</swiper-item>
 			</swiper>
@@ -114,7 +114,7 @@
 		</view>
 		<!-- 快捷筛选 End-->
 		<!-- 一级平台展示 Begain -->
-		<view v-if="allMarket" class="f-header m-t">
+		<view v-if="!customizedMarket" class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
 				<text class="tit">一级平台</text>
@@ -122,7 +122,7 @@
 			</view>
 			<!-- <text class="yticon icon-you"></text> -->
 		</view>
-		<view v-if="allMarket" class="hot-floor">
+		<view v-if="!customizedMarket" class="hot-floor">
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
 					<view 
@@ -159,12 +159,13 @@
 				<text class="price">￥{{item.SaleAMT}}万</text>
 			</view>
 		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
+		<uni-load-more :contentText="loadContentText" :status="loadingType"></uni-load-more>
 	</view>
 </template>
 
 <script>
 	import Config from '@/common/config.js'
+	import { getMarketDetailByAppId } from '@/api/shop.js'
 	import {
 		getCarList
 	} from '@/api/car.js'
@@ -192,17 +193,17 @@
 					{
 						// src: "/static/temp/smx_banner1.jpg",
 						src: Config.img_url + '/Upload/yd/smx_banner1.jpg',
-						background: "rgb(203, 87, 60)",
+						// background: "rgb(203, 87, 60)",
 					},
 					{
 						src: Config.img_url + '/Upload/yd/smx_banner2.jpg' ,
 						// src: "/static/temp/smx_banner2.jpg",
-						background: "rgb(205, 215, 218)",
+						// background: "rgb(205, 215, 218)",
 					},
 					{
 						src: Config.img_url + '/Upload/yd/smx_banner3.jpg',
 						// src: "/static/temp/smx_banner3.jpg",
-						background: "rgb(183, 73, 69)",
+						// background: "rgb(183, 73, 69)",
 					}
 				],
 				carList: [],
@@ -235,28 +236,39 @@
 					Sale_number: -1
 				},
 				shareUserInfoId: null,
+				customizedMarket: false, //是否定制市场
 				marketDomain: null,
 				ifOnShow: false,
 				city: "",
 				total: "",
+				loadContentText:{ //加载提示
+					contentdown: "上拉查看更多车源",
+					contentrefresh: "正在加载...",
+					contentnomore: "没有更多车源了"
+				},
 				loadingType: 'loading', //参数loading加载,nomore
 			};
 		},	
 		//#ifdef MP-WEIXIN
 		onShareAppMessage(resault) {
 			const currentUrl = '/pages/index/index'
-			var shareTitle = '驷马先买车宝'
-			var shareImg = '/static/logo-smx.png'
+			var shareTitle = ''
+			var shareImg = ''
 			getStorageByKey('pshop').then(res=>{
 				if(res){
 					shareTitle = res.name
-					shareImg = res.logo
+					// shareImg = res.logo
+					// shareImg = '/static/logo-smx.png'
+				}else{
+					shareTitle = '驷马先买车宝'
+					// shareImg = '/static/logo-smx.png'
 				}
 			})
 			console.log('微信分享', resault)
 		  return {
 		    title: shareTitle,
-				imageUrl: shareImg,
+				// imageUrl: shareImg,
+				// imageUrl: '/static/logo-smx.png',
 		    path: currentUrl
 		  }
 		},
@@ -270,7 +282,7 @@
 			var _this = this
 			if(_this.ifOnShow){
 				await getStorageByKey('pshop').then(res=>{
-					// console.log('showle', res)
+					console.log('showle', res)
 					if(res){
 						_this.allMarket = false
 						_this.marketCurrent = res.name
@@ -288,12 +300,43 @@
 			var _this = this	
 			//获取所有市场列表
 			_this.getMarketList()
-			// 轮播图初始化
-			let carouselList = await this.$api.json('carouselList');
-			this.titleNViewBackground = carouselList[0].background;
-			this.swiperLength = carouselList.length;
-			this.carouselList = carouselList;
-			
+			/* 小程序单独部署 Begain */
+			console.log(uni.getAccountInfoSync().miniProgram.appId) //小程序appId
+			const wechatAppId = uni.getAccountInfoSync().miniProgram.appId //小程序appId
+			await getMarketDetailByAppId(wechatAppId).then(res=>{
+				if(res.data.Data.shop){ //单独部署小程序customizedMarket
+					console.log('单独部署的小程序',res)
+					const market = res.data.Data.shop
+					const bannerImg = res.data.Data.ydshopimage	
+					var bannerImgArr = []
+					if(bannerImg.length > 0){
+						bannerImg.forEach(function(value,index){
+							// console.log(value)
+							bannerImgArr[index] = value.imageurl
+						})
+					}
+					_this.customizedMarket = true
+					// uni.setStorageSync('customizedMarket', true)
+					// uni.setStorageSync('bannerImg', bannerImgArr)
+					uni.setStorageSync('pshop', {
+						id: market.id, name: market.name, logo: market.shoplogo
+					})
+					bannerImgArr.forEach(function(value,index){
+						// console.log(value)
+						// console.log(Config.img_url)
+						_this.carouselList[index] = {src:Config.img_url + value}
+						// _this.carouselList[index]['src'] = Config.img_url + '/Upload/yd/smx_banner3.jpg'
+						console.log('轮播图列表',_this.carouselList)
+					})	
+					_this.swiperLength = bannerImgArr.length;
+				}else{
+					let carouselList = _this.carouselListUrl;
+					_this.titleNViewBackground = carouselList[0].background;
+					_this.swiperLength = carouselList.length;
+					_this.carouselList = carouselList;
+				}
+			})
+			/* 小程序单独部署 End */
 			// 城市初始化
 			await getStorageByKey('selectCity').then(res => { //用户选择城市
 				console.log('用户选择城市', res)
@@ -318,6 +361,7 @@
 			await getStorageByKey('pshop').then(res=>{
 				if(res){
 					// console.log('当前市场load', res.name)
+					
 					_this.marketCurrent = res.name
 					_this.allMarket = false
 					_this.listQueryReset({P_Shop_Id: res.id})
@@ -340,29 +384,49 @@
 			//#endif
 			//#ifdef MP-WEIXIN
 			//小程序appId确定pshop
-			await getStorageByKey('pshop').then(res=>{
+			/* await getStorageByKey('customizedMarket').then(res=>{
+				console.log('是否单独部署', res)
 				if(res){
-					_this.marketCurrent = res.name
-					_this.allMarket = false
-					_this.listQueryReset({P_Shop_Id: res.id})
-				}else{
-					const currentAppId = uni.getAccountInfoSync().miniProgram.appId
-					// console.log('小程序信息',uni.getAccountInfoSync())
-					// const currentAppId = "wx20ge3d96cesedbb2"
-					/* */
-					_this.marketList.forEach(ele=>{
-						// console.log('当前小程序', currentAppId)
-						if(ele.appid == currentAppId){
-							// console.log('当前市场load',ele.name)
-							_this.allMarket = false
-							_this.marketCurrent = null
-							_this.notAppId = false
-							uni.setStorageSync('pshop', {id: ele.id, name: ele.name, logo: ele.shoplogo})
-							_this.listQueryReset({P_Shop_Id: ele.id})
-						}	
-					})
+					_this.customizedMarket = true
 				}
-			})	
+			}) */
+			await getStorageByKey('pshop').then(res=>{
+			 	console.log('pshop', res)
+			 	if(res){
+			 		_this.marketCurrent = res.name
+			 		_this.allMarket = false
+			 		_this.listQueryReset({P_Shop_Id: res.id})
+			 		console.log('是否定制市场', _this.customizedMarket)
+			 		console.log('全部市场?', _this.allMarket)
+			 	}
+			})
+			// await getStorageByKey('pshop').then(res=>{
+			// 	console.log('pshop', res)
+			// 	if(res){
+			// 		_this.marketCurrent = res.name
+			// 		_this.allMarket = false
+			// 		_this.listQueryReset({P_Shop_Id: res.id})
+			// 		console.log('是否定制市场', _this.customizedMarket)
+			// 		console.log('全部市场?', _this.allMarket)
+			// 	}else{
+			// 		const currentAppId = uni.getAccountInfoSync().miniProgram.appId
+			// 		// console.log('小程序信息',uni.getAccountInfoSync())
+			// 		// const currentAppId = "wx20ge3d96cesedbb2"
+			// 		/* */
+			// 		_this.marketList.forEach(ele=>{
+			// 			// console.log('当前小程序', currentAppId)
+			// 			if(ele.appid == currentAppId){
+			// 				// console.log('当前市场load',ele.name)
+			// 				_this.customizedMarket = true
+			// 				_this.allMarket = false
+			// 				_this.marketCurrent = null
+			// 				_this.notAppId = false
+			// 				uni.setStorageSync('pshop', {id: ele.id, name: ele.name, logo: ele.shoplogo})
+			// 				_this.listQueryReset({P_Shop_Id: ele.id})
+			// 			}	
+			// 		})
+			// 	}
+			// })	
 			//#endif
 			//#ifndef MP-WEIXIN
 			await getStorageByKey('pshop').then(res=>{
@@ -375,7 +439,24 @@
 			})
 			//#endif
 			//一级市场
-			
+			// 轮播图初始化
+			/* await getStorageByKey('bannerImg').then(res => { //单独部署小程序轮播图
+				if(res){
+					_this.swiperLength = res.length;
+					res.forEach(function(value,index){
+						console.log(value)
+						console.log(Config.img_url)
+						_this.carouselList[index] = {src:Config.img_url + value}
+						// _this.carouselList[index]['src'] = Config.img_url + '/Upload/yd/smx_banner3.jpg'
+						console.log('轮播图列表',_this.carouselList)
+					})		
+				}else{
+					let carouselList = _this.carouselListUrl;
+					_this.titleNViewBackground = carouselList[0].background;
+					_this.swiperLength = carouselList.length;
+					_this.carouselList = carouselList;
+				}
+			}) */
 			_this.listQueryReset({PageIndex: 1})
 			_this.getCarList()	
 		},

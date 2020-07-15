@@ -199,6 +199,30 @@
 		safetypeConfig, 
 	} from '@/common/appConfig.js'
 	export default {
+		//#ifdef MP-WEIXIN
+		onShareAppMessage(res) {
+		  /* if (res.from === 'button') {// 来自页面内分享按钮
+		    console.log(res.target)
+		  } */
+			const currentUser = uni.getStorageSync('userInfo') || ''
+			const imgUrlShare = this.imgUrl + this.carDetail.carimages[0].filename
+			var currentUrl = '/pages/product/product?id=' + this.carDetail.cars.ID 
+			if(this.currentUser){
+				currentUrl = currentUrl + '&shareUser=' + this.currentUser.id
+			}
+		  return {		
+				title: this.carDetail.cars.FullName,
+				path: currentUrl,
+				imageUrl: imgUrlShare,
+				success(res){
+					console.log('微信分享', res)
+					/* console.log(_this.carDetail.cars.FullName)
+					console.log('分享用户', currentUser)
+					console.log('分享链接', currentUrl) */
+				},
+		  }
+		},
+		//#endif
 		components: {
 			share,
 			uniSegmentedControl,
@@ -251,26 +275,6 @@
 		//#ifdef H5
 		mixins: [wxShare],
 		//#endif
-		//#ifdef MP-WEIXIN
-		onShareAppMessage(res) {
-			const currentUser = uni.getStorageSync('userInfo') || ''
-			const currentUrl = '/pages/product/product?id=' + this.carDetail.cars.ID
-		  /* if (res.from === 'button') {// 来自页面内分享按钮
-		    console.log(res.target)
-		  } */
-			if(_this.currentUser){
-				currentUrl += '?shareUser=' + _this.currentUser.id
-			}
-			console.log('微信分享', res)
-			console.log(_this.carDetail.cars.FullName)
-			console.log('分享用户', currentUser)
-			console.log('分享链接', currentUrl)
-		  return {
-		    title: this.carDetail.cars.FullName,
-		    path: currentUrl
-		  }
-		},
-		//#endif
 		onBackPress(){
 			console.log('fanhui')
 			/* uni.navigateTo({
@@ -285,7 +289,7 @@
 			console.log('微信分享', wxShare.methods) 
 			console.log('微信分享', wxShare.methods.wechatShare) */
 			_this.currentUser = uni.getStorageSync('userInfo') || ''
-			console.log('微信分享方法?', _this.wechatShare) 	
+			// console.log('微信分享方法?', _this.wechatShare) 	
 			// 车辆详情
 			_this.ispreview = options.ispreview == 1 ? true : false
 			// console.log(this.ispreview)

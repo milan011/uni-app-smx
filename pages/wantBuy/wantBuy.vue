@@ -35,7 +35,7 @@
 						<view class="cu-list menu text-left">
 							<view class="cu-bar bg-white">
 								<view class='action'>
-									<text class='cuIcon-title text-blue'></text>车辆状态
+									<text class='cuIcon-title text-blue'></text>求购状态
 								</view>
 							</view>
 							<view class="padding bg-white" style="display: flex;justify-content: space-between;">

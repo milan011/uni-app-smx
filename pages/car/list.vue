@@ -29,7 +29,7 @@
 					</view>
 				</view>
 				<!-- 车源列表 End -->
-				<uni-load-more :status="loadingType"></uni-load-more>
+				<uni-load-more :contentText="loadContentText" :status="loadingType"></uni-load-more>
 			</scroll-view>
 			<!-- 筛选Mode Begain -->
 			<view class="cu-modal" :class="modalName=='RadioModal'?'show':''" @tap="hideModal">
@@ -121,6 +121,11 @@
 			return {
 				index: 0,
 				loadingType: 'more', //参数loading加载,nomore
+				loadContentText:{ //加载提示
+					contentdown: "上拉查看更多车源",
+					contentrefresh: "正在加载...",
+					contentnomore: "没有更多车源了"
+				},
 				cartList: [],
 				menuArrow: true,
 				carSt: "",

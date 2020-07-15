@@ -3,7 +3,7 @@
 	<view v-if="aboutDom" class="about-main" v-html='aboutDom'>
 		
 	</view>
-	<view v-else class="about-main">
+	<view v-if="(smxShow)&&(!aboutDom)" class="about-main">
 		<image style="height: 500upx;width:100%" :src="img" mode="scaleToFill"></image>
 		<text style="text-indent: 2em;">上海驷马先教育科技有限公司是一家专注于中国汽车后市场职业教育与岗位培训的网络平台提供商。涵盖汽车服务岗位能力人才培养方案，汽车后市场服务平台提供商，校企合作与资源整合提供商。已为全国超过六万家汽车后市场企业提供运营管理，电商平台搭建和人力培训等相关服务。
 		驷马先教育为用户提供完整的售前方案咨询辅导、售中校企共建项目精准落地扶植、本地化的售后服务支持，确保每一个项目快捷、完整交付。</text>
@@ -38,6 +38,7 @@
 			return {
 				ifOnShow: false,
 				P_Shop_Id: '',
+				smxShow: false,
 				aboutDom: null,
 				img: '/static/temp/smx_banner2.jpg'
 			};
@@ -73,8 +74,12 @@
 				var _this = this
 				console.log('当前门店id', _this.P_Shop_Id)
 				getMarketDetail(_this.P_Shop_Id).then(res=>{
-					console.log('一级市场信息', res)
-					_this.aboutDom = res.data.Data.shop.aboutusyd
+					console.log('一级市场信息', res)	
+					if(res){
+						_this.aboutDom = res.data.Data.shop.aboutusyd
+					}else{
+						_this.smxShow = true
+					}
 				})
 			}
 		}

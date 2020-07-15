@@ -84,12 +84,15 @@
 						key: 'locationCity',
 						data: '石家庄'
 					})
+					/* setTimeout(()=>{
+						uni.reLaunch({
+							url: `/pages/index/index`
+						})
+					}, 1500) */
 				}
-			})
-			console.log(uni.getAccountInfoSync().miniProgram.appId) //小程序appId
+			})	
 			/* 小程序更新提示 */
 			const updateManager = uni.getUpdateManager();
-
 			updateManager.onCheckForUpdate(function(res) {
 				// 请求完新版本信息的回调
 				console.log(res.hasUpdate);

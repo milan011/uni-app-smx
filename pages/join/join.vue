@@ -3,7 +3,7 @@
 	<view v-if="joinDom" class="join-main" v-html='joinDom'>
 		
 	</view>
-	<view v-else class="join-main">
+	<view v-if="(smxShow)&&(!joinDom)" class="join-main">
 		<!--  -->
 		<image style="height: 500upx;width:100%" :src="img" mode="scaleToFill"></image>
 		<view style="text-align: left;font-size: 46rpx;text-indent: 2em;">
@@ -43,6 +43,7 @@
 				ifOnShow: false,
 				P_Shop_Id: '',
 				joinDom: null,
+				smxShow: false,
 				zxphone: '021-52563428',
 				business:{
 					name:"",
@@ -91,8 +92,12 @@
 				var _this = this
 				console.log('当前门店id', _this.P_Shop_Id)
 				getMarketDetail(_this.P_Shop_Id).then(res=>{
-					console.log('一级市场信息', res)
-					_this.joinDom = res.data.Data.shop.wantjoinyd
+					// console.log('一级市场信息', res)
+					if(res){
+						_this.joinDom = res.data.Data.shop.wantjoinyd
+					}else{
+						_this.smxShow = true
+					}			
 					// _this.zxphone = res.data.Data.shop.telephone
 				})
 			},
@@ -129,7 +134,7 @@
 					editOpp({ ...this.business
 					}).then(res => {
 						uni.showToast({
-							title: '系统已经记录您的信息,驷马先客服会尽快跟你联系,期待您的加盟',
+							title: '系统已经记录您的信息,客服会尽快跟你联系,期待您的加盟',
 							icon: 'none',
 							duration: 1500
 						})
