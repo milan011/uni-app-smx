@@ -46,8 +46,9 @@
 				<!-- <view class="title">客户描述</view> -->
 				<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaAInput" :value="textareaAValue" placeholder="客户描述"></textarea>
 			</view>
-			<text class="mix-btn" @click="confirmInfo">提交修改</text>
-			<!-- 车源图片编辑End -->
+			<!-- <text class="mix-btn" @click="confirmInfo">提交修改</text> -->
+			<button style="width: 100%;" :disabled="sendingWantInfo" class="cu-btn bg-olive lg" @click="confirmInfo">完成</button>
+			<!-- 基本信息编辑End -->
 		</scroll-view>
 	</view>
 </template>
@@ -91,6 +92,7 @@
 				modalName: null,
 				textareaAValue: '',
 				multiIndex: [0, 0],
+				sendingWantInfo: false,
 				id: "",
 				// 表单的内容必须初始化	
 				form: {
@@ -190,26 +192,39 @@
 				}
 			},
 			confirmInfo() {
+				var _this = this
+				_this.sendingWantInfo = true
 				if (this.form.carcate =='' || this.form.top_price ==='' || this.form.bottom_price === '') {
 					uni.showToast({
-						title: '请输入带 * 号的必填项',
+						title: '请填写意向车型,求购价格',
 						icon: "none",
 						duration: 1000
 					});
+					_this.sendingWantInfo = false
 					return false
 				} else {
 					aveWant({ ...this.form
 					}).then(res => {
-						uni.showToast({
-							title: '提交成功',
-							icon: "none",
-							duration: 1500
-						})
-						setTimeout(() => {
-							uni.navigateBack({
-								delta: 1
+						
+						if(res.data.ResultType == 0){
+							uni.showToast({
+								title: '修改成功',
+								icon: "none",
+								duration: 1500
 							})
-						}, 1500)
+							setTimeout(() => {
+								uni.navigateBack({
+									delta: 1
+								})
+							}, 1500)
+						}else{
+							uni.showToast({
+								title: '修改失败,请重试',
+								icon: "none",
+								duration: 1500
+							})
+							_this.sendingWantInfo = false
+						}	
 					})
 				}
 			}

@@ -169,6 +169,7 @@
 	import {
 		getCarList
 	} from '@/api/car.js'
+	import { getShareUserInfo } from '@/api/user.js'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
 	import uniTag from "@/components/uni-tag/uni-tag.vue"
@@ -235,6 +236,7 @@
 					P_Shop_Id: '',
 					Sale_number: -1
 				},
+				shareUser: '',
 				shareUserInfoId: null,
 				customizedMarket: false, //是否定制市场
 				marketDomain: null,
@@ -251,20 +253,19 @@
 		},	
 		//#ifdef MP-WEIXIN
 		onShareAppMessage(resault) {
-			const currentUrl = '/pages/index/index'
+			const currentUser = uni.getStorageSync('userInfo') || ''
+			const currentMarket = uni.getStorageSync('pshop') || ''
+			var currentUrl = '/pages/index/index'
 			var shareTitle = ''
 			var shareImg = ''
-			getStorageByKey('pshop').then(res=>{
-				if(res){
-					shareTitle = res.name
-					// shareImg = res.logo
-					// shareImg = '/static/logo-smx.png'
-				}else{
-					shareTitle = '驷马先买车宝'
-					// shareImg = '/static/logo-smx.png'
-				}
-			})
-			console.log('微信分享', resault)
+			if(currentUser){
+				currentUrl = currentUrl + '?shareUser=' + currentUser.id
+			}
+			if(currentMarket){
+				// shareImg = Config.img_url + currentMarket.logo
+				shareTitle = currentMarket.name
+			}
+			console.log('微信分享', currentUrl)
 		  return {
 		    title: shareTitle,
 				// imageUrl: shareImg,
@@ -296,8 +297,18 @@
 				})
 			}	
 		},
-		async onLoad() {
+		async onLoad(options) {
 			var _this = this	
+			if(options.shareUser){ //授权分享
+				console.log('授权用户分享', options.shareUser)
+				await getShareUserInfo( options.shareUser).then(res=>{ //获取授权用户信息
+					_this.shareUser = res.data.Data
+					_this.shareUserInfoId = res.data.Data.id
+					uni.setStorageSync('shareUserInfo', res.data.Data)
+				})
+			}else{
+				uni.removeStorageSync('shareUserInfo')
+			}
 			//获取所有市场列表
 			_this.getMarketList()
 			//#ifdef MP-WEIXIN

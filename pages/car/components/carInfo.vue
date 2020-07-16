@@ -566,11 +566,11 @@
 					editCarInfo(this.carData).then(res => {
 						// console.log(res)
 						if(res.data.ResultType == 0){
-							this.$api.msg(res.data.Message);
+							// this.$api.msg(res.data.Message);
 							// this.imgData.Carid = res.data.Data.ID
 							this.$emit("goImgForm", res.data.Data.ID);
 							uni.hideLoading()
-							this.sendingCarInfo = false
+							// this.sendingCarInfo = false
 						}else{
 							uni.hideLoading()
 							this.sendingCarInfo = false

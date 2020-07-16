@@ -207,8 +207,8 @@
 			const currentUser = uni.getStorageSync('userInfo') || ''
 			const imgUrlShare = this.imgUrl + this.carDetail.carimages[0].filename
 			var currentUrl = '/pages/product/product?id=' + this.carDetail.cars.ID 
-			if(this.currentUser){
-				currentUrl = currentUrl + '&shareUser=' + this.currentUser.id
+			if(currentUser){
+				currentUrl = currentUrl + '&shareUser=' + currentUser.id
 			}
 		  return {		
 				title: this.carDetail.cars.FullName,

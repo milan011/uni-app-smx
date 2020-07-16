@@ -55,6 +55,7 @@
 		getCarTypeList,
 		getCarShopList
 	} from '@/api/car.js'
+	import { getShareUserInfo } from '@/api/user.js'
 	import { getStorageByKey } from '@/common/storage.js'
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import HMfilterDropdown from '@/components/HM-filterDropdown/HM-filterDropdown.vue';
@@ -117,26 +118,26 @@
 		},
 		//#ifdef MP-WEIXIN
 		onShareAppMessage(resault) {
-			const currentUrl = '/pages/product/list'
+			const currentMarket = uni.getStorageSync('pshop') || ''
+			const currentUser = uni.getStorageSync('userInfo') || ''
+			var currentUrl = '/pages/product/list'
 			var shareTitle = ''
 			var shareImg = ''
-			getStorageByKey('pshop').then(res=>{
-				if(res){
-					shareTitle = res.name
-					// shareImg = res.logo
-					// shareImg = '/static/logo-smx.png'
-				}else{
-					shareTitle = '驷马先买车宝'
-					// shareImg = '/static/logo-smx.png'
-				}
-			})
-			console.log('微信分享', resault)
-		  return {
-		    title: shareTitle,
-				// imageUrl: shareImg,
-				// imageUrl: '/static/logo-smx.png',
-		    path: currentUrl
-		  }
+			if(currentUser){
+				currentUrl = currentUrl + '?shareUser=' + currentUser.id
+			}
+			if(currentMarket){
+				// shareImg = Config.img_url + currentMarket.logo
+				shareTitle = currentMarket.name
+			}
+			console.log('微信分享标题', shareTitle)
+			console.log('微信分享图片',  shareImg)
+			console.log('微信分享链接', currentUrl)
+			return {
+			  title: shareTitle,
+				imageUrl: shareImg,
+			  path: currentUrl
+			}
 		},
 		//#endif
 		onHide(){
@@ -194,6 +195,16 @@
 				index: _this.filterDropdownValueM,
 				value: [],
 			} */
+			if(options.shareUser){ //授权分享
+				console.log('授权用户分享', options.shareUser)
+				await getShareUserInfo( options.shareUser).then(res=>{ //获取授权用户信息
+					_this.shareUser = res.data.Data
+					_this.shareUserInfoId = res.data.Data.id
+					uni.setStorageSync('shareUserInfo', res.data.Data)
+				})
+			}else{
+				uni.removeStorageSync('shareUserInfo')
+			}
 			await _this.pageInit()
 			const valCond = _this.condDell(_this.filterDropdownValueM)
 			_this.filterDropdownValue = _this.filterDropdownValueM

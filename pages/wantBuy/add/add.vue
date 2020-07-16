@@ -75,7 +75,8 @@
 				<textarea maxlength="-1" :disabled="modalName!=null" v-model="wantInfo.xs_remark" @input="textareaAInput"
 				 placeholder="客户描述"></textarea>
 			</view>
-			<text class="mix-btn" @click="confirmInfo">完成</text>
+			<!-- <text class="mix-btn" @click="confirmInfo">完成</text> -->
+			<button style="width: 100%;" :disabled="sendingWantInfo" class="cu-btn bg-olive lg" @click="confirmInfo">完成</button>
 		</view>
 		<!-- 基本信息编辑End -->
 		<!-- 完成 -->
@@ -114,6 +115,7 @@
 				carInfoEdit: false,
 				selectEdit: false,
 				carTypeIndex: -1,
+				sendingWantInfo: false,
 				carType: ['不限', '手动', '自动'],
 				date: '2018-12-25',
 				modalName: null,
@@ -210,7 +212,7 @@
 				this.$refs.customerform.validate((res) => {
 					if (res) {
 						uni.showToast({
-							title: '验证通过',
+							title: '添加客户成功',
 						})
 						editCustomer({ ...this.customer
 						}).then(res => {
@@ -227,33 +229,53 @@
 				})
 			},
 			confirmInfo() {
-				console.log(this.wantInfo.bottom_price , this.wantInfo.top_price)
-				if (this.wantInfo.bottom_price-0 >= this.wantInfo.top_price-0) {
+				var _this = this
+				console.log(_this.wantInfo.bottom_price , _this.wantInfo.top_price)
+				_this.sendingWantInfo = true
+				if((!_this.wantInfo.bottom_price) || (!_this.wantInfo.top_price) || (!_this.wantInfo.carcate)){
 					uni.showToast({
-						title: '输入的最低价格不能大于最高价格',
+						title: '请填写意向车型,求购价格',
 						icon: 'none'
 					})
-					return
-				} else {
-					saveWant({ ...this.wantInfo
-					}).then(res => {
-						this.customerEdit = false
-						this.carInfoEdit = false
-						this.selectEdit = true
-						this.basics = 2
-						uni.showToast({
-							title: '已完成将返回上一级',
-							duration: 2000,
-							icon: "none"
-						})
-						setTimeout(() => {
-							uni.navigateBack({
-								delta: 1
-							})
-						}, 2000)
-					})
+					setTimeout(() => {
+						_this.sendingWantInfo = false
+						uni.hideLoading()
+					}, 2000)
+					return false
 				}
-
+				uni.showLoading({
+					title: "信息保存中...",
+					mask: true
+				})
+					if (_this.wantInfo.bottom_price-0 > _this.wantInfo.top_price-0) {
+						uni.showToast({
+							title: '输入的最低价格不能大于最高价格',
+							icon: 'none'
+						})
+						_this.sendingWantInfo = false
+						uni.hideLoading()
+						return
+					} else {
+						saveWant({ ..._this.wantInfo
+						}).then(res => {
+							_this.customerEdit = false
+							_this.carInfoEdit = false
+							_this.selectEdit = true
+							_this.basics = 2
+							// _this.sendingWantInfo = false
+							uni.hideLoading()
+							uni.showToast({
+								title: '添加求购成功',
+								duration: 2000,
+								icon: "none"
+							})
+							setTimeout(() => {
+								uni.navigateBack({
+									delta: 1
+								})
+							}, 2000)
+						})
+					}
 			},
 			isMobile(rule, value, callback) {
 				if (this.$utils.isMobilePhone(value)) {
