@@ -300,6 +300,7 @@
 			var _this = this	
 			//获取所有市场列表
 			_this.getMarketList()
+			//#ifdef MP-WEIXIN
 			/* 小程序单独部署 Begain */
 			console.log(uni.getAccountInfoSync().miniProgram.appId) //小程序appId
 			const wechatAppId = uni.getAccountInfoSync().miniProgram.appId //小程序appId
@@ -337,6 +338,7 @@
 				}
 			})
 			/* 小程序单独部署 End */
+			//#endif
 			// 城市初始化
 			await getStorageByKey('selectCity').then(res => { //用户选择城市
 				console.log('用户选择城市', res)

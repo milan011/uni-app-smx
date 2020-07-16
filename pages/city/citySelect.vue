@@ -7,6 +7,7 @@
 
 <script>
 	import citys from './citys.js'
+	import { getCityWhichHaveShop } from '@/api/city.js'
 	import citySelect from '@/components/city-select/city-select.vue'
 	import { getStorageByKey } from '@/common/storage.js'
 	// import amap from '../../common/._amap-wx.js';
@@ -22,14 +23,20 @@
 					cityName: ''
 				},
 				//热门城市
-				hotCity: [{
-						cityName: '南京',
-						cityCode: 110100
-					},
-					{
-						cityName: '北京',
-						cityCode: 110102
-					}
+				hotCity: [/* {
+            'cityCode': '130100',
+            'cityName': '石家庄'
+        }, 
+				{
+            'cityCode': '130400',
+            'cityName': '邯郸'
+        }, {
+            'cityCode': '130500',
+            'cityName': '邢台'
+        }, {
+            'cityCode': '130600',
+            'cityName': '保定'
+        }, */
 				],
 				//显示的城市数据
 				obtainCitys: citys,
@@ -53,8 +60,25 @@
 				console.log('catch',err)
 				_this.activeCity.cityName = '石家庄'
 			}) 
+			_this.getHotCitys()
 		},
 		methods: {
+			getHotCitys(){
+				var _this = this
+				getCityWhichHaveShop().then(res=>{			
+					if(res.data.Data){
+						console.log('有门店', res.data)
+						var cityList = []
+						res.data.Data.forEach(function(value,index){
+							cityList[index] = {
+								'cityCode': '',
+								'cityName': value.CityName[0]
+							}
+						})
+						_this.hotCity = cityList
+					}
+				})
+			},
 			cityClick(item) {
 				console.log(item)
 				let city = item.cityName

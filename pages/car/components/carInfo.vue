@@ -154,8 +154,8 @@
 			<textarea v-model="carData.XS_description" maxlength="-1" :disabled="modalName!=null" @input="xsInput" placeholder="销售描述"></textarea>
 		</view> 
 		<view class="padding flex flex-direction">
-			<button v-if="isEdit" class="cu-btn bg-olive lg" @click="confirmInfo">提交修改</button>
-			<button v-else class="cu-btn bg-olive lg" @click="confirmInfo">添加图片</button>	
+			<button :disabled="sendingCarInfo" v-if="isEdit" class="cu-btn bg-olive lg" @click="confirmInfo">提交修改</button>
+			<button :disabled="sendingCarInfo" v-else class="cu-btn bg-olive lg" @click="confirmInfo">添加图片</button>	
 		</view>
 		<!-- <text class="mix-btn"  v-if="isEdit" @click="confirmInfo">提交修改</text>
 		<text class="mix-btn" v-else @click="confirmInfo">添加图片</text> -->
@@ -307,6 +307,7 @@
 				vinChanged: false,
 				isEdit: false,
 				vinScanShow:false,
+				sendingCarInfo: false,
 				vinCarList: [],
 				vinCarCheck: '0',
 				modalName: null,
@@ -545,12 +546,19 @@
 				this.carData.Safe_end = e.detail.value
 			},
 			confirmInfo() {
-				console.log(this.carData)
+				this.sendingCarInfo = true
+				// console.log(this.carData)
+				uni.showLoading({
+					title: "信息保存中...",
+					mask: true
+				})
 				const checkValidate = this.$utils.carInfoLegitimate(this.carData)
 				console.log('validate',checkValidate)
 				if(checkValidate.validateType == false){ //校验失败
 					this.validateInfo = checkValidate.validateInfo
 					this.modalName = 'validateModal'
+					uni.hideLoading()
+					this.sendingCarInfo = false
 				}else{
 					if(this.carData.Mileage > 200 || this.carData.BasePrice > 200 || this.carData.SaleAMT > 200){
 						this.$api.msg(`您输入的里程或价格过高,请确认`, 3000);
@@ -561,10 +569,16 @@
 							this.$api.msg(res.data.Message);
 							// this.imgData.Carid = res.data.Data.ID
 							this.$emit("goImgForm", res.data.Data.ID);
+							uni.hideLoading()
+							this.sendingCarInfo = false
 						}else{
+							uni.hideLoading()
+							this.sendingCarInfo = false
 							this.$api.msg(`车源信息添加失败,请刷新重试`);
 						}
 					}).catch(err => {
+						uni.hideLoading()
+						this.sendingCarInfo = false
 						this.$api.msg(`车源信息添加失败,请刷新重试`);
 					})
 				}

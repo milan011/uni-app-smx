@@ -115,6 +115,30 @@
 				total: ""
 			};
 		},
+		//#ifdef MP-WEIXIN
+		onShareAppMessage(resault) {
+			const currentUrl = '/pages/product/list'
+			var shareTitle = ''
+			var shareImg = ''
+			getStorageByKey('pshop').then(res=>{
+				if(res){
+					shareTitle = res.name
+					// shareImg = res.logo
+					// shareImg = '/static/logo-smx.png'
+				}else{
+					shareTitle = '驷马先买车宝'
+					// shareImg = '/static/logo-smx.png'
+				}
+			})
+			console.log('微信分享', resault)
+		  return {
+		    title: shareTitle,
+				// imageUrl: shareImg,
+				// imageUrl: '/static/logo-smx.png',
+		    path: currentUrl
+		  }
+		},
+		//#endif
 		onHide(){
 		  // console.log('this.ifOnShow=true')
 			/* uni.removeStorage({

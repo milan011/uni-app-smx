@@ -19,9 +19,9 @@
 			<view class="action">
 				<text class="cuIcon-title text-orange"></text> 推荐求购
 			</view>
-			<view class="action">
+			<!-- <view class="action">
 				<button class="cu-btn bg-blue shadow" @tap="showModal" data-target="RadioModal">搜索</button>
-			</view>
+			</view> -->
 		</view>
 		<!-- 求购搜索 End -->
 		<!-- 求购列表 Begain -->

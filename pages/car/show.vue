@@ -223,6 +223,7 @@
 				pgShow: false,
 				modalName:null,
 				carId: null,
+				userPshop: '',
 				loadModal: false,
 				carCompleted: false,
 				followCompleted: false,
@@ -266,6 +267,7 @@
 				this.pgShow = true
 			}
 			this.carId = options.carId
+			this.userPshop = user.pshop_id
 			this.quickFollow.id = options.carId
 			this.assessInfo.ID = options.carId
 			this.quickFollow.username = user.nick_name
@@ -383,7 +385,7 @@
 			},
 			abandActivF(){ //废弃激活		
 				console.log('废弃', this.detail.cars.ID)
-				const param = {id: this.detail.cars.ID, status: 0}
+				const param = {id: this.detail.cars.ID, status: 0, pid: this.userPshop}
 				abandOrActiv(param).then(res=>{
 					if(res.data.ResultType == 0){
 						// 
@@ -399,7 +401,7 @@
 				})
 			},
 			abandActivJ(){//激活
-					const param = {id: this.detail.cars.ID, status: 1}
+					const param = {id: this.detail.cars.ID, status: 1, pid: this.userPshop}
 					abandOrActiv(param).then(res=>{
 						if(res.data.ResultType == 0){
 							// 
