@@ -79,6 +79,7 @@
 				empty: false, //空白页现实  true|false
 				wantList: [],
 				modalName: null,
+				ifOnShow: false,
 				startDate: "请选择开始日期",
 				endDate: "请选择结束日期",
 				want: {
@@ -121,40 +122,46 @@
 				}
 			})
 		},
+		onHide(){
+		  console.log('this.ifOnShow=true')
+		  this.ifOnShow = true
+		},
 		onShow() {
 			// this.want.pageIndex = 1
-			uni.getStorage({
-				key: 'userInfo',
-				success: (res) => {
-					this.wantList = []
-					this.want.shopid = res.data.shop_id;
-					this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
-					this.want.userid = res.data.id;
-					this.loadingType = 'loading'
-					getWantList({ ...this.want
-					}).then(res => {
-						this.wantList = res.data.Data.DataList
-						this.wantList.forEach(ele => {
-							if (ele.want.want_status === '0') {
-								ele.want.want_status1 = "废弃"
-							} else if (ele.want.want_status === '1') {
-								ele.want.want_status1 = "正常"
+			if(this.ifOnShow){
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.wantList = []
+						this.want.shopid = res.data.shop_id;
+						this.want.rolename = res.data.rolename.substring(0, res.data.rolename.length - 1);
+						this.want.userid = res.data.id;
+						this.loadingType = 'loading'
+						getWantList({ ...this.want
+						}).then(res => {
+							this.wantList = res.data.Data.DataList
+							this.wantList.forEach(ele => {
+								if (ele.want.want_status === '0') {
+									ele.want.want_status1 = "废弃"
+								} else if (ele.want.want_status === '1') {
+									ele.want.want_status1 = "正常"
+								} else {
+									ele.want.want_status1 = "已交易"
+								}
+								if (ele.want.created_at) {
+									ele.want.created_at = ele.want.created_at.split('T')[0]
+								}
+							})
+							this.total = res.data.Data.Total;
+							if (this.want.pageIndex < this.total / this.want.PageSize) {
+								this.loadingType = "more"
 							} else {
-								ele.want.want_status1 = "已交易"
-							}
-							if (ele.want.created_at) {
-								ele.want.created_at = ele.want.created_at.split('T')[0]
+								this.loadingType = "nomore"
 							}
 						})
-						this.total = res.data.Data.Total;
-						if (this.want.pageIndex < this.total / this.want.PageSize) {
-							this.loadingType = "more"
-						} else {
-							this.loadingType = "nomore"
-						}
-					})
-				}
-			})
+					}
+				})
+			}	
 		},
 		//下拉刷新
 		onPullDownRefresh() {

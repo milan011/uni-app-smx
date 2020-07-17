@@ -130,15 +130,15 @@ httpApi.interceptor.response((response) => { /* 请求之后拦截器 */
 		//token过期
 		store.dispatch('logout')
 		uni.showToast({
-			title: "请先登录",
+			title: "登录信息超时,请重新登录",
 			icon: "none",
-			duration: 1500
+			duration: 3000
 		})
 		setTimeout(()=>{
 			uni.navigateTo({
 				url: '/pages/public/login'
 			});
-		}, 1500)
+		}, 3000)
 	}
   return response
 }),(error => {

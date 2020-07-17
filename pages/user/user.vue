@@ -4,10 +4,10 @@
 			<image class="bg" src="/static/user-bg.png"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
-					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
+					<image class="portrait" :src="currentUser.portrait || '/static/missing-face.png'"></image>
 				</view>
 				<view class="info-box">
-					<text class="username">{{userInfo.nick_name || '游客'}}</text>
+					<text class="username">{{currentUser.nick_name || '游客'}}</text>
 				</view>
 			</view>
 		</view>
@@ -20,7 +20,7 @@
 		 @touchend="coverTouchend">
 			<image class="arc" src="/static/arc.png"></image>
 			<!-- 信息展示 Begain -->
-			<view class="tj-sction" v-if="hasLogin">
+			<view class="tj-sction" v-if="currentUser">
 				<view class="tj-item">
 					<text>车源</text>
 					<text class="num">{{ userGeneralInfo.MyCar }}</text>
@@ -38,7 +38,7 @@
 			</view>
 			<!-- 信息展示 End -->
 			<!-- 待跟进信息展示 Begain -->
-			<view class="tj-sction" v-if="hasLogin">
+			<view class="tj-sction" v-if="currentUser">
 				<view v-if="userGeneralInfo.CarRemind" class="tj-item">
 					<!-- <text>车源 | {{ userGeneralInfo.MyCar }}</text> -->
 					<view @tap="toRemindCar" class='cu-tag radius line-green'>
@@ -63,7 +63,7 @@
 			</view>
 			<!-- 待跟进信息展示 End -->
 			<!-- 操作菜单 Begain -->
-			<view v-if="hasLogin" class="order-section">
+			<view v-if="currentUser" class="order-section">
 				<view class="order-item" @click="navTo('/pages/car/list')" hover-class="common-hover" :hover-stay-time="50">
 					<text class="yticon icon-shouye"></text>
 					<text>车源管理</text>
@@ -95,11 +95,11 @@
 					 mode="scaleToFill"></image>
 				</scroll-view>
 				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" showYt iconColor="#54b4ef" @eventClick="navToCollect" title="我的收藏"></list-cell>
-				<list-cell v-if="hasLogin" icon="icon-dizhi" showYt iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')
+				<list-cell v-if="currentUser" icon="icon-dizhi" showYt iconColor="#5fcda2" title="商机" @eventClick="navTo('/pages/business/business')
 				
 				"></list-cell>
-				<list-cell v-if="hasLogin" icon="icon-pinglun-copy" showYt iconColor="#ee883b" title="协议管理" @eventClick="navTo('/pages/protocol/protocol')"></list-cell>
-				<list-cell icon="icon-shezhi1" showYt iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
+				<list-cell v-if="currentUser" icon="icon-pinglun-copy" showYt iconColor="#ee883b" title="协议管理" @eventClick="navTo('/pages/protocol/protocol')"></list-cell>
+				<list-cell icon="icon-shezhi1" showYt iconColor="#e07472" :title="utitle" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>
 	</view>
@@ -126,6 +126,7 @@
 				moving: false,
 				currentUser: '',
 				ifOnShow: false,
+				utitle: '登录',
 				imgList: [],
 				userGeneralInfo: {
 					MyCar: '',
@@ -138,16 +139,15 @@
 		
 		onLoad() {		
 			this.currentUser = uni.getStorageSync('userInfo') || ''
-			console.log('是否登录',this.hasLogin)
+			/* console.log('是否登录',this.hasLogin)
 			console.log('登录用户',this.userInfo)
-			console.log('登录用户?',this.currentUser)
-			if(this.hasLogin){ //登录用户
+			console.log('登录用户?',this.currentUser) */
+			if(this.currentUser){ //登录用户
 				this.userGeneral()
-			}/* else{
-				uni.navigateTo({
-					url: '/pages/public/login'
-				})
-			} */
+				this.utitle = '设置'
+			}else{
+				this.utitle = '登录'
+			}
 		},
 		onHide(){
 		  // console.log('this.ifOnShow=true')
@@ -155,6 +155,7 @@
 		},
 		onShow() {
 			if(this.ifOnShow){
+				this.currentUser = uni.getStorageSync('userInfo') || ''
 				/* console.log('是否登录',this.hasLogin)
 				console.log('登录用户',this.userInfo)
 				console.log('登录用户?',this.currentUser) */
@@ -184,8 +185,11 @@
 						console.log('尚无浏览历史')
 					}
 				})
-				if(this.hasLogin){ //登录用户
+				if(this.currentUser){ //登录用户
 					this.userGeneral()
+					this.utitle = '设置'
+				}else{
+					this.utitle = '登录'
 				}
 			}
 		},
@@ -219,23 +223,27 @@
 					console.log('uGen',res.data)
 					if(res.data.ResultType == 0){
 						this.userGeneralInfo = res.data.Data
-					}/* else{
+					}
+					
+				})/* .catch(err=>{
+					console.log(err)
+					if(err.data.ResultType == 8){
 						_this.logout()
-						_this.$api.msg(`登录过期,请重新登录`, 2000)
+						// _this.$api.msg(`登录过期,请重新登录`, 2000)
 						setTimeout(() => {
 							uni.navigateTo({
 								url: '/pages/public/login'
 							});
 						}, 2000)
-					} */
-				})
+					}
+				}) */
 			},
 			/**
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view
 			 */
 			navTo(url) {		
-				if (!this.hasLogin) {
+				if (!this.currentUser) {
 					url = '/pages/public/login';
 				}
 				uni.navigateTo({

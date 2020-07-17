@@ -226,6 +226,7 @@
 			async toLogin(){
 				var _this = this
 				_this.logining = true;
+				_this.loadModal = true
 				const {mobile, password} = _this;
 				/* 数据验证模块
 				if(!this.$api.match({
@@ -259,9 +260,13 @@
 							});
 						}else{ //登录失败
 							_this.$api.msg(res.data.Message);
+							_this.logining = false;
+							_this.loadModal = false
 						}
 					}).catch(err => {
 						_this.$api.msg('登录失败,请刷新后重试');
+						_this.logining = false;
+						_this.loadModal = false
 					})
 				}else{
 					const sendData = {
@@ -278,9 +283,13 @@
 							});
 						}else{ //登录失败
 							_this.$api.msg(res.data.Message);
+							_this.logining = false;
+							_this.loadModal = false
 						}
 					}).catch(err => {
 						_this.$api.msg('登录失败,请刷新后重试');
+						_this.logining = false;
+						_this.loadModal = false
 					})
 				}
 				console.log('登录信息',sendData)
