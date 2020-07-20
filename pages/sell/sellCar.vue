@@ -151,21 +151,20 @@
 						价更高
 					</view>
 					<view class="text">
-						大数据精准定价
+						真正的C2C
 					</view>
 					<view class="text">
-						高于市场价的5%
+						高于市场价的5%左右
 					</view>
 					<image src="../../static/sell/car.jpg" mode=""></image>
 				</view>
 				<view class="right">
 					<view class="top">
 						<view class="titles">
-							拿钱快
+							费用透明
 						</view>
 						<view class="text">
-							当天上架
-							50%车款
+							不赚差价,服务佣金收费标准化
 						</view>
 						<image src="../../static/sell/jinbi.jpg" mode=""></image>
 					</view>
@@ -248,7 +247,7 @@
 					},
 					{
 						questions: "谁来给我评估车辆?都评估什么内容?",
-						answers: "平台将指派专业评估技师为您评估车辆,评估师主要对车辆的基本信息,车况信息,车浪照片以及卖家信息等内容进行评估",
+						answers: "平台将指派专业评估技师为您评估车辆,评估师主要对车辆的基本信息,车况信息,车辆照片以及卖家信息等内容进行评估",
 						isShow: false
 					},
 				],
@@ -277,7 +276,7 @@
 					},
 					{
 						questions: "过户手续怎么办?",
-						answers: `在过户前请及时检查:1.车辆年检期限;2.按揭车完成解压;3.违章处理完毕;4.交强险是否过期.避免因以上因素无法过户.车辆过户需买家和卖家携带材料到车管所去办理.`,
+						answers: `在过户前请及时检查:1.车辆年检期限;2.按揭车完成解抵;3.违章处理完毕;4.交强险是否过期.避免因以上因素无法过户.车辆过户需买家和卖家携带材料到车管所去办理.`,
 						isShow: false
 					},
 					{

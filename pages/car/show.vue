@@ -344,6 +344,7 @@
 				var _this = this
 				console.log(_this.detail.carimages)
 				if(_this.detail.carimages.length < 9){
+					_this.modalName = null
 					_this.$api.msg(`请完善车源基础图片后再上架`);
 				}else{
 					carPutOn({carid: _this.detail.cars.ID , putton: 1}).then(res=>{

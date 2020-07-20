@@ -2,6 +2,8 @@
   "dependencies": {
     "async-validator": "^3.2.4",
     "axios": "^0.19.2",
+    "browserslist": "^4.13.0",
+    "caniuse-lite": "^1.0.30001104",
     "dsbridge": "^3.1.4",
     "moment": "^2.24.0",
     "prettier": "^2.0.4",
