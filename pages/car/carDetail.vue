@@ -230,8 +230,8 @@
 						<text class="cuIcon-message text-green"></text>
 						<text class="text-grey">客户描述</text>
 					</view>
-					<view class="action text-cut">
-						<text v-if="detail.cars" style="margin: 1.2em;" class="text-grey text-sm">{{detail.cars.Description}}</text>
+					<view class="action text-cut" style="margin-left:10rpx">
+						<rich-text v-if="detail.cars" style="margin: 1.2em;" class="text-grey text-sm">{{detail.cars.Description}}</rich-text>
 					</view>
 				</view>
 				<view class="cu-item arrow" @click="showModal" data-target="ModalS" >
@@ -431,7 +431,7 @@
 						<text class="cuIcon-close text-red"></text>
 					</view>
 				</view>
-				<view class="padding-xl">
+				<view class="padding-xl" style="padding-top: 10rpx;">
 					{{detail.cars.Description}}
 				</view>
 			</view>

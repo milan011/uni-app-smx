@@ -148,10 +148,10 @@
 			<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 		</view>
 		<view class="cu-form-group margin-top">
-			<textarea v-model="carData.Description" maxlength="-1" :disabled="modalName!=null" @input="dsInput" placeholder="客户描述"></textarea>
+			<textarea v-model="carData.Description" auto-height="true" maxlength="-1" :disabled="modalName!=null" @input="dsInput" placeholder="客户描述"></textarea>
 		</view>
 		<view class="cu-form-group margin-top">
-			<textarea v-model="carData.XS_description" maxlength="-1" :disabled="modalName!=null" @input="xsInput" placeholder="销售描述"></textarea>
+			<textarea auto-height="true" v-model="carData.XS_description" maxlength="-1" :disabled="modalName!=null" @input="xsInput" placeholder="销售描述"></textarea>
 		</view> 
 		<view class="padding flex flex-direction">
 			<button :disabled="sendingCarInfo" v-if="isEdit" class="cu-btn bg-olive lg" @click="confirmInfo">提交修改</button>

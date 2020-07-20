@@ -622,7 +622,8 @@
 				// return false
 				uni.chooseImage({
 					count: 1, //默认9
-					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					// sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera', 'album'], //从相册选择
 					success: (res) => {
 						uni.getImageInfo({
@@ -746,7 +747,8 @@
 				// return false
 				uni.chooseImage({
 					count: 1, //默认9
-					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					// sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera', 'album'], //从相册选择
 					success: (res) => {
 						_this.loadModal = true
@@ -806,7 +808,8 @@
 				// return false
 				uni.chooseImage({
 					count: 1, //默认9
-					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					// sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera', 'album'], //从相册选择
 					success: (res) => {
 						_this.loadModal = true
@@ -818,7 +821,7 @@
 								console.log(image.width/image.height)
 								if(image.width/image.height < 1){
 									_this.loadModal = false
-									_this.$api.msg(`请上传横拍图片`, 2000);		
+									_this.$api.msg(`请上传横拍图片`, 2000);
 									return false
 								}			
 								const imgParam = {
