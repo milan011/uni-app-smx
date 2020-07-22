@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="carousel">
-			<swiper indicator-dots circular=true duration="400">
+			<swiper indicator-dots circular autoplay="true" duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in carDetail.carimages" :key="index">
 					<view class="image-wrapper">
 						<!-- <image :src="imgUrl + item.filename" class="loaded" mode="aspectFit"></image> -->
@@ -305,8 +305,16 @@
 			if(options.shareUser){ //授权分享
 				console.log('授权用户分享', options.shareUser)
 				await getShareUserInfo( options.shareUser).then(res=>{ //获取授权用户信息
-					_this.shareUser = res.data.Data
-					uni.setStorageSync('shareUserInfo', res.data.Data)
+					if(res.data.Data.Uid){
+						_this.shareUser = res.data.Data
+						uni.setStorageSync('shareUserInfo', res.data.Data)
+						carDetail.data.Data.cars.CreateName = _this.shareUser.UserName
+						carDetail.data.Data.shop.name = _this.shareUser.ShopName
+						carDetail.data.Data.shop.address = _this.shareUser.ShopAddr
+						carDetail.data.Data.Telephone = _this.shareUser.UserPhone
+					}else{
+						uni.removeStorageSync('shareUserInfo')
+					}			
 				})
 				/* _this.shareUser = {
 					Uid: 3,
@@ -315,13 +323,10 @@
 					ShopName:'分享店',
 					ShopAddr: '石家庄一条街'
 				} */
-				carDetail.data.Data.cars.CreateName = _this.shareUser.UserName
-				carDetail.data.Data.shop.name = _this.shareUser.ShopName
-				carDetail.data.Data.shop.address = _this.shareUser.ShopAddr
-				carDetail.data.Data.Telephone = _this.shareUser.UserPhone
-			}else{
+				
+			}/* else{
 				uni.removeStorageSync('shareUserInfo')
-			}
+			} */
 			_this.carDetail = carDetail.data.Data;
 			console.log('chey', _this.carDetail)
 			//#ifdef H5

@@ -198,13 +198,15 @@
 			if(options.shareUser){ //授权分享
 				console.log('授权用户分享', options.shareUser)
 				await getShareUserInfo( options.shareUser).then(res=>{ //获取授权用户信息
-					_this.shareUser = res.data.Data
-					_this.shareUserInfoId = res.data.Data.id
-					uni.setStorageSync('shareUserInfo', res.data.Data)
+					if(res.data.Data.Uid){
+						_this.shareUser = res.data.Data
+						_this.shareUserInfoId = res.data.Data.id
+						uni.setStorageSync('shareUserInfo', res.data.Data)
+					}else{
+						uni.removeStorageSync('shareUserInfo')
+					}
 				})
-			}else{
-				uni.removeStorageSync('shareUserInfo')
-			}
+			}/*  */
 			await _this.pageInit()
 			const valCond = _this.condDell(_this.filterDropdownValueM)
 			_this.filterDropdownValue = _this.filterDropdownValueM

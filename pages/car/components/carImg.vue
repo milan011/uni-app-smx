@@ -244,7 +244,7 @@
 
 <script>
 	import Config from '@/common/config.js'
-	import { imgUpload, imgAdd, imgDelete, imgDeleteById } from '@/api/carManage.js'
+	import { imgUpload, imgAdd, imgDelete, imgDeleteById, imgZip } from '@/api/carManage.js'
 	import {pgPartFConfig, pgPartJConfig, pgPartDConfig} from '@/common/appConfig.js'
 	import uniRate from '@/components/uni-rate/uni-rate.vue'
 	export default {
@@ -309,8 +309,8 @@
 				imgListPgCurrentJ: [],
 				imgListPgCurrentD: [],
 				imgUser: {
-					shop_id: '72',
-					pshop_id: '71',
+					shop_id: '',
+					pshop_id: '',
 				},
 			}
 		},
@@ -666,7 +666,7 @@
 				}
 				_this.loadModal = true
 				imgAdd(_this.imgPgData).then(resImgAdd => {
-					console.log('图片添加',resImgAdd.data)
+					console.log('图片添加',resImgAdd.data)					
 					const imgReturn = [{
 						imgUrl: _this.pgBackImg,
 						carpart: resImgAdd.data.Data.carpart,
@@ -702,11 +702,12 @@
 					_this.showBageDel(imgReturn[0].ImageType)
 					_this.loadModal = false
 					_this.modalName = null
+					imgZip(_this.imgData.imgPgData)
 				}).catch(err => {
 					console.log('err=>',err)
 					_this.modalName = null
 					_this.loadModal = false
-					_this.$api.msg(`图片添加失败,请刷新重试`);
+					_this.$api.msg(`图片添加失败,请重试`);
 				})
 			},
 			showBageDel(ImageType){ //showBage 红点处理
@@ -770,6 +771,7 @@
 									_this.imgData.ImageUrl = resImg.data.LogMessage
 									imgAdd(_this.imgData).then(resImgAdd => {
 										console.log('图片添加',resImgAdd.data)
+										
 										const imgReturn = [{
 											imgUrl: res.tempFilePaths[0],
 											carpart: resImgAdd.data.Data.carpart,
@@ -783,15 +785,16 @@
 										}
 										console.log('imlist', _this.imgListOther)
 										_this.loadModal = false
+										imgZip(_this.imgData.ImageUrl)
 									}).catch(err => {
 										console.log('1',err)
 										_this.loadModal = false
-										_this.$api.msg(`图片添加失败,请刷新重试`);
+										_this.$api.msg(`图片添加失败,请重试`);
 									})
 								}).catch(err => {
 									// console.log('2',err)
 									_this.loadModal = false
-									_this.$api.msg(`图片上传失败,请刷新重试`);
+									_this.$api.msg(`图片上传失败,请重试`);
 								})
 							}
 						})
@@ -830,10 +833,11 @@
 									pshopid: _this.imgUser.pshop_id,
 								}
 								imgUpload(imgParam).then(resImg => {
-									console.log('图片上传',resImg.data)
+									console.log('图片上传成功',resImg.data)
 									_this.imgData.ImageUrl = resImg.data.LogMessage
 									imgAdd(_this.imgData).then(resImgAdd => {
-										console.log('图片添加',resImgAdd.data)
+										
+										console.log('图片添加成功',resImgAdd.data)
 										const imgReturn = [{
 											imgUrl: res.tempFilePaths[0],
 											carpart: resImgAdd.data.Data.carpart
@@ -861,12 +865,13 @@
 										console.log('imlist', _this.imgList)
 										_this.imgUpShow[resImgAdd.data.Data.carpart] = false
 										_this.loadModal = false
+										imgZip(_this.imgData.ImageUrl)
 									}).catch(err => {
-										_this.$api.msg(`图片添加失败,请刷新重试`);
+										_this.$api.msg(`图片添加失败,请重试`);
 										_this.loadModal = false
 									})
 								}).catch(err => {
-									_this.$api.msg(`图片上传失败,请刷新重试`);
+									_this.$api.msg(`图片上传失败,请重试`);
 									_this.loadModal = false
 								})
 							}

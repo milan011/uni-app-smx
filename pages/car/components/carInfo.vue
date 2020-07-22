@@ -100,7 +100,7 @@
 		</view>
 		<view class="cu-form-group">
 			<text class="cuIcon-require text-red"></text>
-			<view class="title">到捡日期</view>
+			<view class="title">到检日期</view>
 			<picker mode="date" :value="carData.InspectionTime" :start="pickerStart" :end="pickerEnd" @change="DateChangeCheck">
 				<view class="picker">
 					{{carData.InspectionTime}}
@@ -633,7 +633,7 @@
 				const choseInfo = e.detail.value 
 				this.carData.ProvenceId = this.multiArray[0][choseInfo[0]].id
 				this.carData.CityName = this.multiArray[1][choseInfo[1]].name
-				this.carData.Area = this.multiArray[1][choseInfo[1]].id
+				this.carData.Area = '' + this.multiArray[1][choseInfo[1]].id
 				console.log(e.detail.value)
 				console.log('省',this.multiArray[0][choseInfo[0]])
 				console.log('市',this.multiArray[1][choseInfo[1]])

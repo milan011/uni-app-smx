@@ -54,6 +54,14 @@ export function imgAdd(data) {
 		requestUrl, { ...data }
 	)
 }
+//车源图片压缩
+export function imgZip(imgUrl) {
+	
+	const requestUrl = Config.url_config + '/car/ysimg?imgpath=' + imgUrl
+	return httpApi.get(
+		requestUrl
+	)
+}
 //车源图片删除
 export function imgDelete(data) {
 	

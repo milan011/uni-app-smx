@@ -108,6 +108,8 @@
 			this.$refs.carImgSon.isEdit = true
 			this.$refs.carImgSon.imgData.Carid = this.carId
 			this.$refs.carImgSon.imgPgData.Carid = this.carId
+			this.$refs.carImgSon.imgUser.shop_id = this.currentUser.shop_id
+			this.$refs.carImgSon.imgUser.pshop_id = this.currentUser.pshop_id
 			/* console.log(this.$refs.carInfoSon)
 			console.log(this.$refs.carImgSon) */
 			// console.log(this.carId)
@@ -137,6 +139,9 @@
 		onLoad(options) {
 			console.log(options)
 			this.carId = options.id
+			this.currentUser = uni.getStorageSync('userInfo') || ''
+			this.customer.creater_id = this.currentUser.id
+			this.customer.shop_id = this.currentUser.shop_id
 		},
 
 		methods: {
