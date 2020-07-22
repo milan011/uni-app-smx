@@ -702,7 +702,7 @@
 					_this.showBageDel(imgReturn[0].ImageType)
 					_this.loadModal = false
 					_this.modalName = null
-					imgZip(_this.imgData.imgPgData)
+					imgZip(_this.imgPgData.ImageUrl)
 				}).catch(err => {
 					console.log('err=>',err)
 					_this.modalName = null
