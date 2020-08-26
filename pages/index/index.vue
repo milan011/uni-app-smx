@@ -241,7 +241,7 @@
 				customizedMarket: false, //是否定制市场
 				marketDomain: null,
 				ifOnShow: false,
-				city: "",
+				city: "石家庄",
 				total: "",
 				loadContentText:{ //加载提示
 					contentdown: "上拉查看更多车源",
@@ -299,6 +299,22 @@
 		},
 		async onLoad(options) {
 			var _this = this	
+			if(options.weChatMenu){ //微信公众号菜单链接处理
+				console.log('公众号菜单', options.weChatMenu)
+				if(options.weChatMenu == 'list'){
+					//跳转买车页面
+					uni.switchTab({
+					   url: '/pages/product/list'
+					});
+				}
+				if(options.weChatMenu == 'activity'){
+					//跳转商机页面
+					const activityType = options.type ? options.type : 'buyCar'
+					uni.navigateTo({
+					    url: '/pages/activity/activity?aname=' + activityType
+					});
+				}
+			}
 			if(options.shareUser){ //授权分享
 				console.log('授权用户分享', options.shareUser)
 				await getShareUserInfo( options.shareUser).then(res=>{ //获取授权用户信息

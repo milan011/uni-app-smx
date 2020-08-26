@@ -1,13 +1,13 @@
 <template>
 	<view class="container">
-		<view class="left-bottom-sign"></view>
+		<!-- <view class="left-bottom-sign">CopyRight © 上海驷马先教育科技有限公司</view> -->
 		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack"></view>
-		<view class="right-top-sign"></view>
+		<!-- <view class="right-top-sign"></view> -->
 		<!-- 设置白色背景防止软键盘把下部绝对定位元素顶上来盖住输入框等 -->
 		<view v-if="isAuthor" class="wrapper">
-			<view class="left-top-sign">LOGIN</view>
+			<!-- <view class="left-top-sign">LOGIN</view> -->
 			<view class="welcome">
-				欢迎回来！
+				<!-- 欢迎回来！ -->
 			</view>
 			<view class="input-content">
 				<view class="input-item">
@@ -36,7 +36,7 @@
 			</view>
 			<button class="confirm-btn" @click="toLogin" :disabled="logining">登录</button>
 			<!-- <view class="forget-section">
-				忘记密码?
+				CopyRight © 上海驷马先教育科技有限公司
 			</view> -->
 		</view>
 		<!-- #ifdef MP-WEIXIN -->
@@ -59,6 +59,9 @@
 			还没有账号?
 			<text @click="toRegist">马上注册</text>
 		</view> -->
+		<view class="forget-section">
+			技术支持 © 上海驷马先教育科技有限公司
+		</view> 
 	</view>
 </template>
 
@@ -314,7 +317,7 @@
 		background: #fff;
 	}
 	.container{
-		padding-top: 115px;
+		/* padding-top: 115px; */
 		position:relative;
 		width: 100vw;
 		height: 100vh;
@@ -377,8 +380,11 @@
 	}
 	.welcome{
 		position:relative;
-		left: 50upx;
-		top: -90upx;
+		padding: 0 60upx;
+		height: 500upx;
+		background-color: gray;
+		/* left: 50upx; */
+		/* top: -90upx; */
 		font-size: 46upx;
 		color: #555;
 		text-shadow: 1px 0px 1px rgba(0,0,0,.3);
