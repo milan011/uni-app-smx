@@ -5,20 +5,32 @@ if (process.env.NODE_ENV === 'development') {
 	// url_config = 'http://10.20.30.111/api'
 	/* url_config = 'https://testapi.simaxian.com/api'
 	img_url = 'https://testapi.simaxian.com' */
+<<<<<<< HEAD
 	 url_config = 'https://yanshiapi.simaxian.com/api'
 	img_url = 'https://yanshiapi.simaxian.com' 
+=======
+	/* url_config = 'https://yanshiapi.simaxian.com/api'
+	img_url = 'https://yanshiapi.simaxian.com' */
+>>>>>>> a6b35d5a5903af7e62131533ead3d9adc85a2d0d
 	
-	/* url_config = 'https://api.simaxian.com/api'
-	img_url = 'https://api.simaxian.com' */
+	url_config = 'https://api.simaxian.com/api'
+	img_url = 'https://api.simaxian.com'
 } else {
 	// 生产环境
 	/* url_config = 'https://testapi.simaxian.com/api'
 	img_url = 'https://testapi.simaxian.com' */
 	
+<<<<<<< HEAD
 	/* url_config = 'https://api.simaxian.com/api'
 	img_url = 'https://api.simaxian.com' */
 	url_config = 'https://yanshiapi.simaxian.com/api'
 	img_url = 'https://yanshiapi.simaxian.com'
+=======
+	url_config = 'https://api.simaxian.com/api'
+	img_url = 'https://api.simaxian.com'
+	/* url_config = 'https://yanshiapi.simaxian.com/api'
+	img_url = 'https://yanshiapi.simaxian.com' */
+>>>>>>> a6b35d5a5903af7e62131533ead3d9adc85a2d0d
 }
 
 //地图定位Key

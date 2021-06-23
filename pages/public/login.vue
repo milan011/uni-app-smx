@@ -1,17 +1,24 @@
 <template>
 	<view class="container">
 		<!-- <view class="left-bottom-sign">CopyRight © 上海驷马先教育科技有限公司</view> -->
+<<<<<<< HEAD
 		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack">
 			<!-- <image :src="imgUrl + item.filename" mode="scaleToFill"></image> -->
 			<!-- <image src="/static/temp/smx_banner3.jpg" mode="scaleToFill"></image> -->
 		</view>
+=======
+		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack"></view>
+>>>>>>> a6b35d5a5903af7e62131533ead3d9adc85a2d0d
 		<!-- <view class="right-top-sign"></view> -->
 		<!-- 设置白色背景防止软键盘把下部绝对定位元素顶上来盖住输入框等 -->
 		<view v-if="isAuthor" class="wrapper">
 			<!-- <view class="left-top-sign">LOGIN</view> -->
 			<view class="welcome">
 				<!-- 欢迎回来！ -->
+<<<<<<< HEAD
 				<image style="width:100%;height:100%" src="/static/temp/smx_banner3.jpg" mode="scaleToFill"></image>
+=======
+>>>>>>> a6b35d5a5903af7e62131533ead3d9adc85a2d0d
 			</view>
 			<view class="input-content">
 				<view class="input-item">
@@ -63,7 +70,11 @@
 			还没有账号?
 			<text @click="toRegist">马上注册</text>
 		</view> -->
+<<<<<<< HEAD
 		<view v-if="isAuthor" class="forget-section">
+=======
+		<view class="forget-section">
+>>>>>>> a6b35d5a5903af7e62131533ead3d9adc85a2d0d
 			技术支持 © 上海驷马先教育科技有限公司
 		</view> 
 	</view>
@@ -384,12 +395,20 @@
 	}
 	.welcome{
 		position:relative;
+<<<<<<< HEAD
 		/* padding: 0 60upx; */
 		height: 400upx;
 		/* background-color: gray; */
 		/* left: 50upx; */
 		/* top: -90upx; */
 		margin-top: 150upx;
+=======
+		padding: 0 60upx;
+		height: 500upx;
+		background-color: gray;
+		/* left: 50upx; */
+		/* top: -90upx; */
+>>>>>>> a6b35d5a5903af7e62131533ead3d9adc85a2d0d
 		font-size: 46upx;
 		color: #555;
 		text-shadow: 1px 0px 1px rgba(0,0,0,.3);
