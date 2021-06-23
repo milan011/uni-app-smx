@@ -210,13 +210,14 @@
 			if(currentUser){
 				currentUrl = currentUrl + '&shareUser=' + currentUser.id
 			}
+			console.log('分享链接', currentUrl)
 		  return {		
 				title: this.carDetail.cars.FullName,
 				path: currentUrl,
 				imageUrl: imgUrlShare,
 				success(res){
-					console.log('微信分享', res)
-					/* console.log(_this.carDetail.cars.FullName)
+					/* console.log('微信分享', res)
+					console.log(_this.carDetail.cars.FullName)
 					console.log('分享用户', currentUser)
 					console.log('分享链接', currentUrl) */
 				},
@@ -301,10 +302,11 @@
 			var carDetail = await getCarDetail({
 				id
 			})
-			console.log('车源详情', carDetail)
+			// console.log('车源详情', carDetail)
 			if(options.shareUser){ //授权分享
 				console.log('授权用户分享', options.shareUser)
 				await getShareUserInfo( options.shareUser).then(res=>{ //获取授权用户信息
+					console.log('授权用户',res)
 					if(res.data.Data.Uid){
 						_this.shareUser = res.data.Data
 						uni.setStorageSync('shareUserInfo', res.data.Data)
@@ -328,7 +330,7 @@
 				uni.removeStorageSync('shareUserInfo')
 			} */
 			_this.carDetail = carDetail.data.Data;
-			console.log('chey', _this.carDetail)
+			// console.log('chey', _this.carDetail)
 			//#ifdef H5
 			_this.setShare()
 			//#endif
@@ -373,7 +375,7 @@
 							key: 'browseList',
 							data: browseList,
 							success: () => {
-								console.log('set')
+								// console.log('set')
 							}
 						})
 					} else {
@@ -392,7 +394,7 @@
 						key: 'browseList',
 						data: browseList,
 						success: () => {
-							console.log('set')
+							// console.log('set')
 						}
 					})
 				}
@@ -400,7 +402,7 @@
 			// 全部参数配置 
 			let plevelid = "";
 			if (this.carDetail.cars.plevelid) {
-				console.log(plevelid)
+				// console.log(plevelid)
 				plevelid = this.carDetail.cars.plevelid
 			} else {
 				await getCarTypeByVin({
@@ -427,7 +429,7 @@
 			let carVin = await getCarModelConfigByTid({
 				tid: plevelid
 			})
-			console.log('vin码返回',carVin.data)
+			// console.log('vin码返回',carVin.data)
 			if(carVin.data.ResultType == 0){ //有vin码返回值
 				if (JSON.parse(carVin.data.LogMessage).result[0]) {
 					this.carVin = JSON.parse(carVin.data.LogMessage).result[0]
@@ -531,8 +533,8 @@
 			setShare(){
 				var _this = this
 				let currentUrl = window.location.href.split('#')[0]+'#'+window.location.href.split('#')[1]
-				console.log('分享用户', _this.currentUser)
-				console.log('分享链接', currentUrl)
+				// console.log('分享用户', _this.currentUser)
+				// console.log('分享链接', currentUrl)
 				if(_this.currentUser){
 					currentUrl += '?shareUser=' + _this.currentUser.id
 				}
@@ -611,14 +613,14 @@
 				})
 			},
 			dialPhoneNumber(){ //点击号码拨打电话
-				console.log('打电话')
+				// console.log('打电话')
 				var _this = this
 				uni.makePhoneCall({	 	
 				 	// 手机号
 				    phoneNumber: _this.carDetail.Telephone, 
 					// 成功回调
 					success: (res) => {
-						console.log('调用成功!')	
+						// console.log('调用成功!')	
 					},
 					// 失败回调
 					fail: (res) => {

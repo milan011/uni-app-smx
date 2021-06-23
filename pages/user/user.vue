@@ -101,7 +101,13 @@
 				<list-cell v-if="currentUser" icon="icon-pinglun-copy" showYt iconColor="#ee883b" title="协议管理" @eventClick="navTo('/pages/protocol/protocol')"></list-cell>
 				<list-cell icon="icon-shezhi1" showYt iconColor="#e07472" :title="utitle" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
+			<view v-if="currentUser" class="forget-section">
+				技术支持 © 上海驷马先教育科技有限公司
+			</view> 
 		</view>
+		<view v-if="!currentUser" class="forget-section-user">
+			技术支持 © 上海驷马先教育科技有限公司
+		</view> 
 	</view>
 </template>
 <script>
@@ -529,5 +535,23 @@
 				border-radius: 10upx;
 			}
 		}
+	}
+	.forget-section{
+		font-size: $font-sm+2upx;
+		color: $font-color-spec;
+		text-align: center;
+		margin-top: 20upx;
+		/* position: absolute;
+		bottom: 1%;
+		left: 16%; */
+	}
+	.forget-section-user{
+		font-size: $font-sm+2upx;
+		color: $font-color-spec;
+		text-align: center;
+		margin-top: 20upx;
+		position: absolute;
+		bottom: 1%;
+		left: 16%;
 	}
 </style>

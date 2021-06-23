@@ -320,8 +320,8 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		// "navigationBarTitleText": "驷马先二手车电商平台",
-		"navigationBarTitleText": "淘车乐二手车交易网",
+		"navigationBarTitleText": "驷马先二手车电商平台",
+		// "navigationBarTitleText": "淘车乐二手车交易网",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"onReachBottomDistance": 1,
 		"backgroundColor": "#f8f8f8"

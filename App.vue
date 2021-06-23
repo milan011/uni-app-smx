@@ -70,9 +70,9 @@
 						key: 'locationCity',
 						data: res.result.address_component.city.split("市")[0]
 					})
-					uni.reLaunch({
+					/* uni.reLaunch({
 						url: `/pages/index/index`
-					})
+					}) */
 				},
 				fail: function(error) {
 					uni.showToast({

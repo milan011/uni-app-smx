@@ -1,5 +1,5 @@
 {
-    "name" : "淘车乐二手车",
+    "name" : "驷马先买车宝",
     "appid" : "__UNI__B1D7D68",
     "description" : "",
     "uniStatistics" : {
@@ -64,7 +64,7 @@
     "mp-weixin" : {
         /* 小程序特有相关 */
         "usingComponents" : true,
-        "appid" : "wxa17eb388cf287fd5",
+        "appid" : "wx20489d96ce494bb7",
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "请求获取您的地理位置"

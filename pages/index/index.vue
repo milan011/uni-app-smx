@@ -241,7 +241,7 @@
 				customizedMarket: false, //是否定制市场
 				marketDomain: null,
 				ifOnShow: false,
-				city: "",
+				city: "石家庄",
 				total: "",
 				loadContentText:{ //加载提示
 					contentdown: "上拉查看更多车源",
@@ -299,6 +299,22 @@
 		},
 		async onLoad(options) {
 			var _this = this	
+			if(options.weChatMenu){ //微信公众号菜单链接处理
+				console.log('公众号菜单', options.weChatMenu)
+				if(options.weChatMenu == 'list'){
+					//跳转买车页面
+					uni.switchTab({
+					   url: '/pages/product/list'
+					});
+				}
+				if(options.weChatMenu == 'activity'){
+					//跳转商机页面
+					const activityType = options.type ? options.type : 'buyCar'
+					uni.navigateTo({
+					    url: '/pages/activity/activity?aname=' + activityType
+					});
+				}
+			}
 			if(options.shareUser){ //授权分享
 				console.log('授权用户分享', options.shareUser)
 				await getShareUserInfo( options.shareUser).then(res=>{ //获取授权用户信息
@@ -355,8 +371,10 @@
 			// 城市初始化
 			await getStorageByKey('selectCity').then(res => { //用户选择城市
 				console.log('用户选择城市', res)
-				_this.listQueryReset({CityName: res})
-				_this.city = res
+				if(res){
+					_this.listQueryReset({CityName: res})
+					_this.city = res
+				}
 			})
 			// 分享用户初始化
 			await getStorageByKey('shareUserInfo').then(res => { 
@@ -365,10 +383,16 @@
 			})	
 			// console.log(_this.car.CityName)
 			if(!_this.car.CityName){ //用户没有选择城市
-				await getStorageByKey('locationCity').then(res => {
-					console.log('当前定位城市', res)
-					_this.listQueryReset({CityName: res})
-					_this.city = res
+				await getStorageByKey('locationCity').then(res => {			
+					if(res){
+						console.log('当前定位城市1', res)
+						_this.listQueryReset({CityName: res})
+						_this.city = res
+					}else{
+						console.log('当前定位城市2', res)
+						_this.listQueryReset({CityName: '石家庄'})
+						_this.city = '石家庄'
+					}
 				})
 			}
 			//#ifdef H5
@@ -1158,7 +1182,8 @@
 			font-size: $font-sm+2upx;
 			color: $font-color-dark;
 			line-height: 1.8;
-
+			text-align: center;
+			
 			image {
 				width: 180upx;
 				height: 180upx;

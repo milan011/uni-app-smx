@@ -483,7 +483,7 @@
 			return {
 				TabCur: 0,
 				modalName: null,
-				imgList: ['http://tclapi.simaxian.com//Upload/b17f66b5-78ee-40b2-8a16-3fddfbd25985.jpg'],
+				imgList: ['https://yanshiapi.simaxian.com/Upload/2021-06/9e619808-766c-4d9d-a0ce-36371525177d.jpg'],
 				currentUserId: null,
 				carId: null,
 				loadModal: false,
@@ -637,7 +637,8 @@
 			},
 			ViewImage(e) {
 				uni.previewImage({
-					urls: this.imgList,
+					// urls: this.imgList,
+					urls: [e.currentTarget.dataset.url],
 					current: e.currentTarget.dataset.url
 				});
 			},

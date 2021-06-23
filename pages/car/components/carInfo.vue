@@ -5,7 +5,7 @@
 			<text class="cuIcon-require text-red"></text>
 			<view class="title">VIN码</view>
 			<input @blur="handlerVin" @input="vinChange" :disabled="isEdit"  v-model="carData.VIN" style="text-align: right;margin-right: 1em;"
-			 placeholder="请扫描或输入VIN码" name="input"></input>
+			 placeholder="请输入VIN码" name="input"></input>
 			<!-- <text v-if="!isEdit" @tap="scanVin" class='cuIcon-scan text-orange' style="font-size: x-large"></text> -->
 		</view>
 		<view class="cu-form-group">
@@ -132,19 +132,19 @@
 		<view class="cu-form-group nu-style">
 			<text class="cuIcon-require text-red"></text>
 			<view class="title">行驶里程(万)</view>
-			<input v-model="carData.Mileage" style="text-align: right;" type="number" placeholder="请输入行驶里程" name="input"></input>
+			<input v-model="carData.Mileage" style="text-align: right;" type="digit" placeholder="请输入行驶里程" name="input"></input>
 			<text class='cuIcon-taxi text-orange' style="font-size: x-large"></text>
 		</view>
 		<view class="cu-form-group nu-style">
 			<text class="cuIcon-require text-red"></text>
 			<view class="title">期望底价(万)</view>
-			<input v-model="carData.BasePrice" style="text-align: right;" type="number" placeholder="请输入期望价格" name="input"></input>
+			<input v-model="carData.BasePrice" style="text-align: right;" type="digit" placeholder="请输入期望价格" name="input"></input>
 			<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 		</view>
 		<view class="cu-form-group nu-style">
 			<text class="cuIcon-require text-red"></text>
 			<view class="title">期望高价(万)</view>
-			<input v-model="carData.SaleAMT" style="text-align: right;" type="number" placeholder="请输入期望价格" name="input"></input>
+			<input v-model="carData.SaleAMT" style="text-align: right;" type="digit" placeholder="请输入期望价格" name="input"></input>
 			<text class='cuIcon-moneybag text-orange' style="font-size: x-large"></text>
 		</view>
 		<view class="cu-form-group margin-top">
@@ -395,7 +395,7 @@
 			this.dateSafe = nowTime.format('YYYY-MM-DD')
 			this.dateCheck = nowTime.format('YYYY-MM-DD') */
 			this.pickerStart = moment().add(-20, 'y').format('YYYY-MM-DD')
-			this.pickerEnd = moment().add(466, 'd').format('YYYY-MM-DD')
+			this.pickerEnd = moment().add(3, 'y').format('YYYY-MM-DD')
 			this.getProvince()
 			// console.log(this.carTypeConfig)
 		},
