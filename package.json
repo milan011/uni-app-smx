@@ -5,7 +5,7 @@
     "browserslist": "^4.13.0",
     "caniuse-lite": "^1.0.30001104",
     "dsbridge": "^3.1.4",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "prettier": "^2.0.4",
     "qs": "^6.9.3"
   },
